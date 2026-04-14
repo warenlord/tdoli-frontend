@@ -159,7 +159,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
       <div class="otp-hint" style="margin-bottom:16px;">Code envoye a <strong id="otp-email-display" style="color:var(--text)"></strong></div>
       <div class="otp-wrap">
-        <input class="otp-digit" type="tel" maxlength="1" id="otp0" oninput="otpInput(0)">
+        <input class="otp-digit" type="tel" maxlength="1" id="otp0" oninput="otpInput(0)" onpaste="handleOtpPaste(event)">
         <input class="otp-digit" type="tel" maxlength="1" id="otp1" oninput="otpInput(1)">
         <input class="otp-digit" type="tel" maxlength="1" id="otp2" oninput="otpInput(2)">
         <input class="otp-digit" type="tel" maxlength="1" id="otp3" oninput="otpInput(3)">
@@ -279,6 +279,19 @@ function otpInput(idx){
   if(val&&idx<5)document.getElementById('otp'+(idx+1)).focus();
   const code=[0,1,2,3,4,5].map(i=>document.getElementById('otp'+i).value).join('');
   if(code.length===6)loginStep2();
+}
+function handleOtpPaste(e){
+  e.preventDefault();
+  const pasted=(e.clipboardData||window.clipboardData).getData('text');
+  const digits=pasted.replace(/\D/g,'').slice(0,6);
+  if(digits.length===0)return;
+  digits.split('').forEach((d,i)=>{
+    const input=document.getElementById('otp'+i);
+    if(input)input.value=d;
+  });
+  const lastIdx=Math.min(digits.length-1,5);
+  document.getElementById('otp'+lastIdx)?.focus();
+  if(digits.length===6)setTimeout(loginStep2,200);
 }
 
 function startResendTimer(){
