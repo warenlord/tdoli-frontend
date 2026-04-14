@@ -81,6 +81,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .redirect-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));animation:loadBar 1s cubic-bezier(0.4,0,0.2,1) forwards;}
 @keyframes loadBar{from{width:0%;}to{width:100%;}}
 .redirect-text{font-size:12px;color:var(--text-3);letter-spacing:1px;text-transform:uppercase;}
+
+.topbar-logo img { height: 32px; width: auto; display: block; }
 </style>
 
   <link rel="manifest" href="/manifest.json">
@@ -102,14 +104,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <body>
 <div class="bg-mesh"></div>
 <div class="redirect-overlay" id="redirectOverlay">
-  <div class="redirect-logo">TDOLI</div>
+  <img src="/TDOLI_APP.png" alt="TDOLI" style="width:80px;height:80px;animation:breathe 1.2s ease infinite;">
+  <img src="/TD_LI.png" alt="TDOLI" style="height:36px;width:auto;animation:breathe 1.2s ease infinite;">
   <div class="redirect-bar"><div class="redirect-bar-fill"></div></div>
   <div class="redirect-text">Connexion en cours</div>
 </div>
 <div class="wrap">
   <div class="header">
-    <div class="logo-ring"><div class="logo-ring-text">T</div></div>
-    <div class="logo-text">TDOLI</div>
+    <img src="/TDOLI_APP.png" alt="TDOLI" style="width:72px;height:72px;margin:0 auto 12px;display:block;">
+    <img src="/TD_LI.png" alt="TDOLI" style="height:40px;width:auto;margin:0 auto;display:block;">
     <div class="tagline">Transfert Diaspora · P2P</div>
   </div>
   <div class="tabs">
