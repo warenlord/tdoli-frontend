@@ -15,11 +15,7 @@ function buildTopbar(activePage) {
   <div class="topbar-left">
     <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a>
   </div>
-  <div style="flex:1;display:flex;justify-content:center;">
-    <svg height="24" viewBox="0 0 90 24" xmlns="http://www.w3.org/2000/svg">
-      <text y="21" font-family="Arial,sans-serif" font-weight="900" font-size="24" letter-spacing="-2" fill="#00c97a">TDOLI</text>
-    </svg>
-  </div>
+  <div style="flex:1;"></div>
   <div class="topbar-right">
     <button class="share-btn" onclick="shareApp()">🎁 Parrainer</button>
   </div>
