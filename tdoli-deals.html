@@ -170,10 +170,9 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 <body>
 <div class="bg-mesh"></div>
 <div class="topbar">
-  <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a>
-  <div style="flex:1;"></div>
-  <button class="share-btn" onclick="shareApp()">🎁 Parrainer</button>
-</div>
+  <div class="topbar-left">
+    <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a>
+  </div>
   <div style="flex:1;"></div>
   <div class="topbar-right">
     <button class="share-btn" onclick="shareApp()">🎁 Parrainer</button>
@@ -418,6 +417,26 @@ async function submitRating(dealId){const score=selectedRatings[dealId];if(!scor
 
 function showMsgEl(id,text,type){const el=document.getElementById(id);if(el){el.className='msg '+(type||'error')+' show';el.textContent=text;}}
 loadDeals();setInterval(loadDeals,30000);
+
+function initAvatar(){
+  const firstName=localStorage.getItem('tdoli_firstname')||'';
+  const lastName=localStorage.getItem('tdoli_lastname')||'';
+  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
+  let initials='?';
+  if(firstName&&lastName) initials=(firstName[0]+lastName[0]).toUpperCase();
+  else if(username) initials=username.substring(0,2).toUpperCase();
+  const btn=document.getElementById('avatarBtn');
+  if(btn){btn.textContent=initials;}
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAvatar);}
+else{initAvatar();}
+window.addEventListener('storage',initAvatar);
+function shareApp(){
+  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
+  const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
+  if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
+  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+}
 </script>
 </body>
 </html>
