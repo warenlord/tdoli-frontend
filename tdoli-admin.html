@@ -230,15 +230,12 @@ function closeViewer(){document.getElementById('imgViewer').classList.remove('op
 setInterval(()=>{if(adminToken)loadDisputes();},60000);
 
 function initAvatar(){
-  const username=localStorage.getItem('tdoli_username')||'';
-  const email=localStorage.getItem('tdoli_email')||'';
+  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
   let initials='?';
   if(username){
-    const parts=username.trim().split(/[\\s_]+/);
+    const parts=username.trim().split(' ').filter(p=>p.length>0);
     if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
     else initials=username.substring(0,2).toUpperCase();
-  } else if(email){
-    initials=email.substring(0,2).toUpperCase();
   }
   const btn=document.getElementById('avatarBtn');
   if(btn){btn.textContent=initials;}

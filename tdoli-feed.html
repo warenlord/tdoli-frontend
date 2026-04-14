@@ -273,7 +273,7 @@ function renderList(data){
   return data.map((t,i)=>{
     const isOwn=t.sender===email;
     const displayName=t.senderUsername||t.sender?.split('@')[0]||'Inconnu';
-    const initials=displayName.substring(0,2).toUpperCase();
+    const parts=displayName.trim().split(' ').filter(p=>p.length>0);const initials=parts.length>=2?(parts[0][0]+parts[parts.length-1][0]).toUpperCase():displayName.substring(0,2).toUpperCase();
     const eurVal=convertToEur(t.amount,t.currency);
     const euroLabel=t.currency!=='EUR'?'≈'+eurVal.toFixed(0)+'€':'';
     return '<div class="annonce-item'+(isOwn?' mine':'')+'" style="animation-delay:'+(i*0.03)+'s" onclick="openDetail(\''+t._id+'\')">'+
@@ -291,7 +291,7 @@ function openDetail(id){
   const t=allTransfers.find(x=>x._id===id);if(!t)return;
   const isOwn=t.sender===email;
   const displayName=t.senderUsername||t.sender?.split('@')[0]||'Inconnu';
-  const initials=displayName.substring(0,2).toUpperCase();
+  const parts=displayName.trim().split(' ').filter(p=>p.length>0);const initials=parts.length>=2?(parts[0][0]+parts[parts.length-1][0]).toUpperCase():displayName.substring(0,2).toUpperCase();
   const eurVal=convertToEur(t.amount,t.currency);
   const euroLabel=t.currency!=='EUR'?'≈ '+eurVal.toFixed(0)+' EUR':'';
   const matchAmt=formatMatchAmount(t.amount,t.currency,t.toCountry);
@@ -391,18 +391,14 @@ async function submitAnnonce(){
   btn.disabled=false;btn.innerHTML='Publier';
 }
 loadFeed();setInterval(()=>loadFeed(true),30000);
-setTimeout(()=>alert('username:'+localStorage.getItem('tdoli_username')+'\nfirstname:'+localStorage.getItem('tdoli_firstname')+'\nlastname:'+localStorage.getItem('tdoli_lastname')+'\nemail:'+localStorage.getItem('tdoli_email')),2000);
 
 function initAvatar(){
-  const username=localStorage.getItem('tdoli_username')||'';
-  const email=localStorage.getItem('tdoli_email')||'';
+  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
   let initials='?';
   if(username){
-    const parts=username.trim().split(/[\s_]+/);
+    const parts=username.trim().split(' ').filter(p=>p.length>0);
     if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
     else initials=username.substring(0,2).toUpperCase();
-  } else if(email){
-    initials=email.substring(0,2).toUpperCase();
   }
   const btn=document.getElementById('avatarBtn');
   if(btn){btn.textContent=initials;}
