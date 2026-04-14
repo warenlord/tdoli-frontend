@@ -109,6 +109,12 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:7px;}
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:500;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.topbar-logo img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
 </style>
 
   <link rel="manifest" href="/manifest.json">
@@ -130,7 +136,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 <body>
 <div class="bg-mesh"></div>
 <div class="topbar">
-  <div class="topbar-logo"><span class="l1">T</span><span class="l2">D</span><span class="l3">O</span><span class="l4">L</span><span class="l5">I</span></div>
+  <div class="topbar-logo"><img src="/TD_LI.png" alt="TDOLI"></div>
   <div class="topbar-right">
     <div class="user-chip"><div class="user-avatar-sm" id="avatarSm">?</div><div class="user-name-sm" id="userChip">—</div></div>
 

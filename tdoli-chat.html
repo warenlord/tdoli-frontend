@@ -83,6 +83,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 @keyframes spin{to{transform:rotate(360deg);}}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
+
+.topbar-logo img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
 </style>
 
   <link rel="manifest" href="/manifest.json">
@@ -105,7 +111,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 <div class="conn-status" id="connStatus"></div>
 <div class="topbar">
   <a class="back-btn" href="/tdoli-deals.html">←</a>
-  <div class="topbar-logo"><span class="l1">T</span><span class="l2">D</span><span class="l3">O</span><span class="l4">L</span><span class="l5">I</span></div>
+  <div class="topbar-logo"><img src="/TD_LI.png" alt="TDOLI"></div>
   <div class="chat-header">
     <div class="chat-title" id="chatTitle">Messagerie</div>
     <div class="chat-sub" id="chatSub"><div class="online-dot" id="onlineDot" style="display:none"></div><span id="chatSubText">Connexion...</span></div>

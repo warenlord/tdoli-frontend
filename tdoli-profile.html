@@ -100,6 +100,12 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .loader{width:22px;height:22px;position:relative;}
 .loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
 .loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
+
+.topbar-logo img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
 </style>
 
   <link rel="manifest" href="/manifest.json">
@@ -120,7 +126,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 </head>
 <body>
 <div class="topbar">
-  <div class="topbar-logo"><span class="l1">T</span><span class="l2">D</span><span class="l3">O</span><span class="l4">L</span><span class="l5">I</span></div>
+  <div class="topbar-logo"><img src="/TD_LI.png" alt="TDOLI"></div>
   <div class="topbar-title">Profil</div>
 </div>
 <div class="content"><div id="profileContent"><div class="loading-wrap"><div class="loader"></div></div></div></div>
