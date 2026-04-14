@@ -110,6 +110,22 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:500;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
+
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#060d09">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TDOLI">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(r => console.log('[SW] Enregistre'))
+          .catch(e => console.error('[SW] Erreur:', e));
+      });
+    }
+  </script>
 </head>
 <body>
 <div class="bg-mesh"></div>

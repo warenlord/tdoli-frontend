@@ -84,6 +84,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
 </style>
+
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#060d09">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TDOLI">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(r => console.log('[SW] Enregistre'))
+          .catch(e => console.error('[SW] Erreur:', e));
+      });
+    }
+  </script>
 </head>
 <body>
 <div class="conn-status" id="connStatus"></div>

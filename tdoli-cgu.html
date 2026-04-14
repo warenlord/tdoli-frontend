@@ -34,6 +34,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .badge-verified{display:inline-block;background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
 .badge-level1{display:inline-block;background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
 </style>
+
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#060d09">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TDOLI">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(r => console.log('[SW] Enregistre'))
+          .catch(e => console.error('[SW] Erreur:', e));
+      });
+    }
+  </script>
 </head>
 <body>
 <div class="topbar">

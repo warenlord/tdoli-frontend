@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="refresh" content="0;url=/auth">
-<script>window.location.href='/auth';</script>
+const fs = require('fs');
 
+const pwaHead = `
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#060d09">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +15,19 @@
           .catch(e => console.error('[SW] Erreur:', e));
       });
     }
-  </script>
-</head>
-<body></body>
-</html>
+  <\/script>`;
+
+const files = fs.readdirSync('.').filter(f => f.endsWith('.html'));
+
+files.forEach(file => {
+  let content = fs.readFileSync(file, 'utf8');
+  if (!content.includes('manifest.json')) {
+    content = content.replace('</head>', pwaHead + '\n</head>');
+    fs.writeFileSync(file, content);
+    console.log('Modifie:', file);
+  } else {
+    console.log('Deja fait:', file);
+  }
+});
+
+console.log('Termine !');
