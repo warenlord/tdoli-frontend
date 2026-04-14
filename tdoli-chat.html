@@ -416,12 +416,16 @@ loadInitialMessages();
 connectSocket();
 
 function initAvatar(){
-  const firstName=localStorage.getItem('tdoli_firstname')||'';
-  const lastName=localStorage.getItem('tdoli_lastname')||'';
-  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
+  const username=localStorage.getItem('tdoli_username')||'';
+  const email=localStorage.getItem('tdoli_email')||'';
   let initials='?';
-  if(firstName&&lastName) initials=(firstName[0]+lastName[0]).toUpperCase();
-  else if(username) initials=username.substring(0,2).toUpperCase();
+  if(username){
+    const parts=username.trim().split(/[\\s_]+/);
+    if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
+    else initials=username.substring(0,2).toUpperCase();
+  } else if(email){
+    initials=email.substring(0,2).toUpperCase();
+  }
   const btn=document.getElementById('avatarBtn');
   if(btn){btn.textContent=initials;}
 }
