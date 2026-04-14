@@ -391,6 +391,7 @@ async function submitAnnonce(){
   btn.disabled=false;btn.innerHTML='Publier';
 }
 loadFeed();setInterval(()=>loadFeed(true),30000);
+setTimeout(()=>alert('username:'+localStorage.getItem('tdoli_username')+'\nfirstname:'+localStorage.getItem('tdoli_firstname')+'\nlastname:'+localStorage.getItem('tdoli_lastname')+'\nemail:'+localStorage.getItem('tdoli_email')),2000);
 
 function initAvatar(){
   const username=localStorage.getItem('tdoli_username')||'';
