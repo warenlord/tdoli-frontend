@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TDOLI — Nouveau mot de passe</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.3);--red:#ff4444;--r:16px;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(0,180,90,0.08) 0%,transparent 60%);}
+.wrap{position:relative;z-index:1;width:100%;max-width:420px;}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--green);text-align:center;margin-bottom:8px;}
+.subtitle{font-size:13px;color:var(--text-3);text-align:center;margin-bottom:28px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;}
+.card-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px;}
+.card-sub{font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:7px;letter-spacing:1.2px;text-transform:uppercase;}
+.input-wrap{position:relative;}
+.form-input{width:100%;padding:13px 44px 13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;transition:all 0.2s;-webkit-appearance:none;}
+.form-input.no-icon{padding-right:14px;}
+.form-input:focus{outline:none;border-color:var(--green);background:rgba(0,201,122,0.04);box-shadow:0 0 0 3px var(--green-glow);}
+.form-input::placeholder{color:var(--text-3);opacity:0.5;}
+.input-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;background:none;border:none;padding:4px;}
+.strength-bar{display:flex;gap:4px;margin-top:8px;}
+.strength-seg{flex:1;height:2px;border-radius:1px;background:var(--border);transition:background 0.3s;}
+.strength-seg.weak{background:var(--red);}.strength-seg.ok{background:var(--yellow);}.strength-seg.strong{background:var(--green);}
+.requirements{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
+.req-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-3);margin-bottom:6px;}
+.req-item:last-child{margin-bottom:0;}
+.req-item.ok{color:var(--green);}
+.req-dot{width:6px;height:6px;border-radius:50%;background:var(--text-3);flex-shrink:0;}
+.req-item.ok .req-dot{background:var(--green);}
+.btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s;}
+.btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
+.btn-primary:active{transform:scale(0.97);}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.msg{display:none;padding:12px 14px;border-radius:10px;font-size:13px;margin-top:12px;}
+.msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6b6b;}
+.msg.success{background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);color:var(--green);}
+.msg.show{display:block;}
+.back-link{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--text-3);text-decoration:none;}
+.back-link:hover{color:var(--green);}
+</style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="wrap">
+  <div class="logo">TDOLI</div>
+  <div class="subtitle">Transfert Diaspora · P2P</div>
+  <div class="card" id="resetCard">
+    <div class="card-title">Nouveau mot de passe</div>
+    <div class="card-sub">Choisis un mot de passe fort pour sécuriser ton compte.</div>
+    <div class="form-group">
+      <label class="form-label">Nouveau mot de passe</label>
+      <div class="input-wrap">
+        <input class="form-input" type="password" id="new-password" placeholder="Minimum 8 caractères" oninput="checkStrength(this.value)">
+        <button class="input-toggle" onclick="togglePw('new-password',this)" type="button">Voir</button>
+      </div>
+      <div class="strength-bar"><div class="strength-seg" id="s1"></div><div class="strength-seg" id="s2"></div><div class="strength-seg" id="s3"></div><div class="strength-seg" id="s4"></div></div>
+    </div>
+    <div class="requirements">
+      <div class="req-item" id="req-length"><div class="req-dot"></div>Minimum 8 caractères</div>
+      <div class="req-item" id="req-upper"><div class="req-dot"></div>Au moins 1 majuscule</div>
+      <div class="req-item" id="req-number"><div class="req-dot"></div>Au moins 1 chiffre</div>
+      <div class="req-item" id="req-special"><div class="req-dot"></div>Au moins 1 caractère spécial (!@#$...)</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Confirmer le mot de passe</label>
+      <div class="input-wrap">
+        <input class="form-input" type="password" id="confirm-password" placeholder="Répète le mot de passe">
+        <button class="input-toggle" onclick="togglePw('confirm-password',this)" type="button">Voir</button>
+      </div>
+    </div>
+    <button class="btn-primary" id="btn-reset" onclick="doReset()">Enregistrer le mot de passe</button>
+    <div class="msg" id="msg-reset"></div>
+    <a href="/tdoli-auth.html" class="back-link">← Retour à la connexion</a>
+  </div>
+</div>
+<script>
+const API='https://tdoli-backend.onrender.com';
+const params=new URLSearchParams(window.location.search);
+const token=params.get('token');
+const email=params.get('email');
+
+if(!token||!email){
+  document.getElementById('resetCard').innerHTML='<div style="text-align:center;padding:20px"><div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;margin-bottom:8px;color:#ff6b6b">Lien invalide</div><div style="font-size:13px;color:#5a7560">Ce lien est invalide ou a expiré.</div><a href="/tdoli-auth.html" style="display:block;margin-top:16px;color:#00c97a;font-size:13px;text-decoration:none">← Retour à la connexion</a></div>';
+}
+
+function togglePw(inputId,btn){const inp=document.getElementById(inputId);if(inp.type==='password'){inp.type='text';btn.textContent='Cacher';}else{inp.type='password';btn.textContent='Voir';}}
+
+function checkStrength(val){
+  const segs=['s1','s2','s3','s4'];segs.forEach(s=>document.getElementById(s).className='strength-seg');
+
+  const hasLength=val.length>=8;
+  const hasUpper=/[A-Z]/.test(val);
+  const hasNumber=/[0-9]/.test(val);
+  const hasSpecial=/[^A-Za-z0-9]/.test(val);
+
+  document.getElementById('req-length').className='req-item'+(hasLength?' ok':'');
+  document.getElementById('req-upper').className='req-item'+(hasUpper?' ok':'');
+  document.getElementById('req-number').className='req-item'+(hasNumber?' ok':'');
+  document.getElementById('req-special').className='req-item'+(hasSpecial?' ok':'');
+
+  let score=[hasLength,hasUpper,hasNumber,hasSpecial].filter(Boolean).length;
+  const cls=score<=1?'weak':score<=2?'ok':'strong';
+  for(let i=0;i<score;i++)document.getElementById(segs[i]).classList.add(cls);
+}
+
+async function doReset(){
+  const password=document.getElementById('new-password').value;
+  const confirm=document.getElementById('confirm-password').value;
+
+  if(!password){showMsg('Saisis un mot de passe','error');return;}
+  if(password.length<8){showMsg('Minimum 8 caractères','error');return;}
+  if(!/[A-Z]/.test(password)){showMsg('Au moins 1 majuscule requise','error');return;}
+  if(!/[0-9]/.test(password)){showMsg('Au moins 1 chiffre requis','error');return;}
+  if(!/[^A-Za-z0-9]/.test(password)){showMsg('Au moins 1 caractère spécial requis','error');return;}
+  if(password!==confirm){showMsg('Les mots de passe ne correspondent pas','error');return;}
+
+  const btn=document.getElementById('btn-reset');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
+  try{
+    const res=await fetch(API+'/auth/reset-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,token,password})});
+    const data=await res.json();
+    if(res.ok){
+      showMsg('Mot de passe mis à jour ! Redirection...','success');
+      setTimeout(()=>{window.location.href='/tdoli-auth.html';},2000);
+    }else showMsg(data.message||'Erreur','error');
+  }catch(e){showMsg('Serveur inaccessible','error');}
+  btn.disabled=false;btn.innerHTML='Enregistrer le mot de passe';
+}
+
+function showMsg(text,type){const el=document.getElementById('msg-reset');el.className='msg '+type+' show';el.textContent=text;}
+</script>
+</body>
+</html>

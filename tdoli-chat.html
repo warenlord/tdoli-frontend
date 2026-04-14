@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TDOLI — Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<style>
+:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
+.topbar{flex-shrink:0;background:rgba(6,13,9,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 16px 12px;display:flex;align-items:center;gap:12px;}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;text-decoration:none;}
+.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.5px;flex-shrink:0;}
+.topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
+.chat-header{flex:1;min-width:0;}
+.chat-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chat-sub{font-size:11px;color:var(--text-3);margin-top:2px;display:flex;align-items:center;gap:5px;}
+.online-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);}
+.deal-summary{flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;}
+.deal-sum-label{font-size:10px;color:var(--text-3);}
+.deal-sum-val{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green);margin-top:2px;}
+.mm-bar{flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;}
+.btn-mm{width:100%;padding:10px 16px;background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.25);border-radius:10px;color:var(--yellow);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;}
+.btn-mm:active{background:rgba(252,209,22,0.15);}
+.messages-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px;display:flex;flex-direction:column;gap:8px;}
+.empty-chat{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;gap:8px;}
+.empty-chat-icon{font-size:32px;opacity:0.4;}
+.empty-chat-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
+.empty-chat-hint{font-size:12px;color:var(--text-3);line-height:1.6;max-width:260px;}
+.msg-wrap{display:flex;flex-direction:column;animation:msgIn 0.2s cubic-bezier(0.19,1,0.22,1);}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg-wrap.mine{align-items:flex-end;}
+.msg-wrap.theirs{align-items:flex-start;}
+.msg-sender{font-size:10px;color:var(--text-3);margin-bottom:3px;padding:0 4px;}
+.msg-bubble{max-width:80%;padding:10px 13px;border-radius:16px;font-size:14px;line-height:1.5;word-break:break-word;}
+.msg-bubble.mine{background:linear-gradient(135deg,var(--green-dim),var(--blue));color:#fff;border-bottom-right-radius:4px;}
+.msg-bubble.theirs{background:var(--card);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px;}
+.msg-bubble.mm-card{background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.25);color:var(--text);border-radius:12px;max-width:90%;}
+.msg-time{font-size:10px;opacity:0.55;margin-top:4px;padding:0 4px;}
+/* Indicateur de frappe */
+.typing-indicator{display:none;align-items:center;gap:6px;padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:16px;border-bottom-left-radius:4px;max-width:80px;}
+.typing-indicator.show{display:flex;}
+.typing-dot{width:5px;height:5px;border-radius:50%;background:var(--text-3);animation:typingBounce 1.2s ease infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-4px);}}
+/* Statut connexion */
+.conn-status{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;z-index:200;display:none;gap:6px;align-items:center;}
+.conn-status.show{display:flex;}
+.conn-status.reconnecting{color:var(--yellow);border-color:rgba(252,209,22,0.3);}
+.conn-status.connected{color:var(--green);border-color:rgba(0,201,122,0.3);}
+.input-area{flex-shrink:0;background:rgba(6,13,9,0.98);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:8px;}
+.msg-input{flex:1;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;resize:none;max-height:80px;overflow-y:auto;line-height:1.4;transition:border-color 0.2s;-webkit-appearance:none;}
+.msg-input:focus{outline:none;border-color:var(--green);}
+.msg-input::placeholder{color:var(--text-3);opacity:0.6;}
+.send-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;}
+.send-btn:active{transform:scale(0.9);}
+.send-btn:disabled{opacity:0.35;}
+/* Sheet Mobile Money */
+.overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
+.overlay.open{display:flex;}
+.sheet{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.sheet-handle-row{padding:16px 0 18px;display:flex;justify-content:center;}
+.sheet-handle{width:34px;height:3px;border-radius:2px;background:var(--border);}
+.sheet-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;}
+.sheet-sub{font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.form-input-field,.form-select-field{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
+.form-input-field:focus,.form-select-field:focus{outline:none;border-color:var(--green);}
+.btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;position:relative;overflow:hidden;}
+.btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
+.btn-primary:disabled{opacity:0.35;}
+.btn-cancel{width:100%;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+.loader-wrap{display:flex;align-items:center;justify-content:center;padding:30px;gap:10px;color:var(--text-3);font-size:13px;}
+.loader{width:22px;height:22px;position:relative;}
+.loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
+.loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
+</style>
+</head>
+<body>
+<div class="conn-status" id="connStatus"></div>
+<div class="topbar">
+  <a class="back-btn" href="/tdoli-deals.html">←</a>
+  <div class="topbar-logo"><span class="l1">T</span><span class="l2">D</span><span class="l3">O</span><span class="l4">L</span><span class="l5">I</span></div>
+  <div class="chat-header">
+    <div class="chat-title" id="chatTitle">Messagerie</div>
+    <div class="chat-sub" id="chatSub"><div class="online-dot" id="onlineDot" style="display:none"></div><span id="chatSubText">Connexion...</span></div>
+  </div>
+</div>
+<div class="deal-summary" id="dealSummary" style="display:none">
+  <div><div class="deal-sum-label">Montant</div><div class="deal-sum-val" id="dealAmt">—</div></div>
+  <div style="text-align:right"><div class="deal-sum-label">Sens</div><div class="deal-sum-val" id="dealDir">—</div></div>
+</div>
+<div class="mm-bar">
+  <button class="btn-mm" onclick="openMMSheet()">💳 Partager mes infos Mobile Money</button>
+</div>
+<div class="messages-area" id="messagesArea">
+  <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
+</div>
+<div class="input-area">
+  <textarea class="msg-input" id="msgInput" placeholder="Ecris ton message..." rows="1" onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
+  <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+    <svg viewBox="0 0 24 24" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+  </button>
+</div>
+<!-- Sheet Mobile Money -->
+<div class="overlay" id="mmOverlay" onclick="closeMMOnOverlay(event)">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title">💳 Infos Mobile Money</div>
+    <div class="sheet-sub">Ces informations seront envoyées dans le chat.</div>
+    <div class="form-group">
+      <label class="form-label">Nom du bénéficiaire</label>
+      <input class="form-input-field" type="text" id="mm-name" placeholder="Ex: Warren Lord Ngadi">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Numéro Mobile Money</label>
+      <input class="form-input-field" type="tel" id="mm-number" placeholder="Ex: +241 06 XX XX XX">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Opérateur</label>
+      <select class="form-select-field" id="mm-operator">
+        <option value="Airtel Money">Airtel Money</option>
+        <option value="Moov Money">Moov Money</option>
+        <option value="Orange Money">Orange Money</option>
+        <option value="Wave">Wave</option>
+        <option value="MTN Mobile Money">MTN Mobile Money</option>
+      </select>
+    </div>
+    <button class="btn-primary" id="btn-send-mm" onclick="sendMMInfo()">Envoyer dans le chat</button>
+    <button class="btn-cancel" onclick="closeSheet('mmOverlay')">Annuler</button>
+  </div>
+</div>
+<script>
+const API = 'https://tdoli-backend.onrender.com';
+const token = localStorage.getItem('tdoli_token');
+const email = localStorage.getItem('tdoli_email');
+if (!token) window.location.href = '/tdoli-auth.html';
+
+const params = new URLSearchParams(window.location.search);
+const dealId = params.get('deal');
+if (!dealId) window.location.href = '/tdoli-deals.html';
+
+let socket = null;
+let typingTimer = null;
+let isTyping = false;
+let otherEmail = '';
+
+// ─── CONNEXION SOCKET ─────────────────────────────────────────────────────────
+
+function connectSocket() {
+  socket = io(API, {
+    auth: { token },
+    transports: ['websocket', 'polling'],
+    reconnectionAttempts: 5,
+    reconnectionDelay: 2000
+  });
+
+  socket.on('connect', () => {
+    console.log('Socket connecté');
+    socket.emit('join_deal', dealId);
+    showConnStatus('Connecté', 'connected');
+    setTimeout(() => hideConnStatus(), 2000);
+    document.getElementById('onlineDot').style.display = 'block';
+    document.getElementById('chatSubText').textContent = 'En ligne';
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Socket déconnecté');
+    document.getElementById('onlineDot').style.display = 'none';
+    document.getElementById('chatSubText').textContent = 'Déconnecté';
+  });
+
+  socket.on('connect_error', (err) => {
+    console.error('Erreur socket:', err.message);
+    showConnStatus('Reconnexion...', 'reconnecting');
+    document.getElementById('chatSubText').textContent = 'Reconnexion...';
+  });
+
+  socket.on('reconnect', () => {
+    socket.emit('join_deal', dealId);
+    showConnStatus('Reconnecté', 'connected');
+    setTimeout(() => hideConnStatus(), 2000);
+  });
+
+  // Nouveau message reçu en temps réel
+  socket.on('new_message', (msg) => {
+    appendMessage(msg);
+    const area = document.getElementById('messagesArea');
+    area.scrollTop = area.scrollHeight;
+  });
+
+  // Indicateur de frappe
+  socket.on('user_typing', ({ email: typingEmail, isTyping: typing }) => {
+    if (typingEmail !== email) {
+      const indicator = document.getElementById('typingIndicator');
+      if (indicator) {
+        indicator.className = 'typing-indicator' + (typing ? ' show' : '');
+      }
+    }
+  });
+
+  socket.on('message_error', ({ error }) => {
+    console.error('Erreur message:', error);
+  });
+}
+
+function showConnStatus(text, type) {
+  const el = document.getElementById('connStatus');
+  el.textContent = text;
+  el.className = 'conn-status show ' + type;
+}
+function hideConnStatus() {
+  document.getElementById('connStatus').className = 'conn-status';
+}
+
+// ─── CHARGEMENT INITIAL DES MESSAGES ─────────────────────────────────────────
+
+async function loadDealInfo() {
+  try {
+    const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+    const deals = await res.json();
+    const deal = deals.find(d => d._id === dealId);
+    if (deal) {
+      const isSender = deal.sender === email;
+      otherEmail = isSender ? deal.receiverEmail : deal.sender;
+      const otherName = otherEmail ? otherEmail.split('@')[0] : '...';
+      document.getElementById('chatTitle').textContent = 'Chat avec ' + otherName;
+      document.getElementById('dealAmt').textContent = Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
+      document.getElementById('dealDir').textContent = deal.fromCountry + ' → ' + deal.toCountry;
+      document.getElementById('dealSummary').style.display = 'flex';
+    }
+  } catch (e) {}
+}
+
+async function loadInitialMessages() {
+  try {
+    const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
+    const msgs = await res.json();
+    const area = document.getElementById('messagesArea');
+
+    if (!Array.isArray(msgs) || msgs.length === 0) {
+      area.innerHTML = `
+        <div class="empty-chat">
+          <div class="empty-chat-icon">💬</div>
+          <div class="empty-chat-title">Aucun message</div>
+          <div class="empty-chat-hint">Commence la conversation et partage tes infos Mobile Money.</div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+          <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+        </div>`;
+      return;
+    }
+
+    area.innerHTML = msgs.map(m => buildMessageHTML(m)).join('') +
+      '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+    area.scrollTop = area.scrollHeight;
+  } catch (e) {
+    document.getElementById('messagesArea').innerHTML = '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
+  }
+}
+
+function formatTime(dateStr) {
+  return new Date(dateStr).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+}
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+function isMM(text) { return text.startsWith('💳 Infos Mobile Money'); }
+function renderMMCard(text) {
+  const lines = text.split('\n');
+  return '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:8px;">'+escHtml(lines[0])+'</div>' +
+    lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">'+escHtml(l)+'</div>').join('');
+}
+
+function buildMessageHTML(m) {
+  const isMine = m.sender === email;
+  const name = m.sender ? m.sender.split('@')[0] : '?';
+  if (isMM(m.text)) {
+    return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+      ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
+      <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div>
+      <div class="msg-time">${formatTime(m.createdAt)}</div>
+    </div>`;
+  }
+  return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+    ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
+    <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div>
+    <div class="msg-time">${formatTime(m.createdAt)}</div>
+  </div>`;
+}
+
+function appendMessage(m) {
+  const area = document.getElementById('messagesArea');
+  // Supprimer le empty-chat si présent
+  const emptyChat = area.querySelector('.empty-chat');
+  if (emptyChat) emptyChat.remove();
+
+  // Insérer avant l'indicateur de frappe
+  const typingIndicator = document.getElementById('typingIndicator');
+  const div = document.createElement('div');
+  div.innerHTML = buildMessageHTML(m);
+  const msgEl = div.firstElementChild;
+  if (typingIndicator) {
+    area.insertBefore(msgEl, typingIndicator);
+  } else {
+    area.appendChild(msgEl);
+  }
+}
+
+// ─── ENVOI DE MESSAGE ─────────────────────────────────────────────────────────
+
+function sendMessage() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text || !socket) return;
+
+  socket.emit('send_message', { dealId, text });
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Arrêter l'indicateur de frappe
+  stopTyping();
+}
+
+function handleInput(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+
+  // Indicateur de frappe
+  if (!isTyping && socket) {
+    isTyping = true;
+    socket.emit('typing', { dealId, isTyping: true });
+  }
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(stopTyping, 2000);
+}
+
+function stopTyping() {
+  if (isTyping && socket) {
+    isTyping = false;
+    socket.emit('typing', { dealId, isTyping: false });
+  }
+  clearTimeout(typingTimer);
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+// ─── MOBILE MONEY ─────────────────────────────────────────────────────────────
+
+function openMMSheet() {
+  document.getElementById('mmOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('mm-name').focus(), 300);
+}
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+function closeMMOnOverlay(e) { if (e.target === document.getElementById('mmOverlay')) closeSheet('mmOverlay'); }
+
+function sendMMInfo() {
+  const name = document.getElementById('mm-name').value.trim();
+  const number = document.getElementById('mm-number').value.trim();
+  const operator = document.getElementById('mm-operator').value;
+  if (!name || !number) { alert('Remplis le nom et le numéro'); return; }
+  const text = '💳 Infos Mobile Money\nNom : ' + name + '\nNumero : ' + number + '\nOperateur : ' + operator;
+  if (socket) socket.emit('send_message', { dealId, text });
+  closeSheet('mmOverlay');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+window.addEventListener('resize', () => {
+  setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 100);
+});
+document.getElementById('msgInput').addEventListener('focus', () => {
+  setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 300);
+});
+
+window.addEventListener('beforeunload', () => {
+  if (socket) { socket.emit('leave_deal', dealId); socket.disconnect(); }
+});
+
+loadDealInfo();
+loadInitialMessages();
+connectSocket();
+</script>
+</body>
+</html>

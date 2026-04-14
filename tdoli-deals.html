@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TDOLI — Mes Deals</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);--r:16px;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,180,90,0.07) 0%,transparent 60%);}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;}
+.topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
+.topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
+.filter-tabs{display:flex;gap:8px;padding:14px 20px 0;overflow-x:auto;scrollbar-width:none;position:relative;z-index:1;}
+.filter-tabs::-webkit-scrollbar{display:none;}
+.filter-tab{flex-shrink:0;padding:7px 16px;background:var(--surface);border:1px solid var(--border);border-radius:24px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.filter-tab.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
+.content{position:relative;z-index:1;padding:14px 20px;max-width:480px;margin:0 auto;}
+.deal-list{display:flex;flex-direction:column;gap:8px;}
+.deal-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;position:relative;overflow:hidden;}
+@keyframes cardIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.deal-item:active{background:var(--surface);}
+.deal-item.matched::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--yellow),var(--green));}
+.deal-item.completed::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--green);}
+.deal-item.dispute::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--red);}
+.deal-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
+.deal-body{flex:1;min-width:0;}
+.deal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
+.deal-ref{font-size:10px;color:var(--text-3);font-family:'Syne',sans-serif;}
+.deal-badge-sm{font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
+.deal-badge-sm.matched{background:rgba(252,209,22,0.1);color:var(--yellow);}
+.deal-badge-sm.completed{background:rgba(0,201,122,0.1);color:var(--green);}
+.deal-badge-sm.dispute{background:rgba(255,68,68,0.1);color:var(--red);}
+.deal-mid{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
+.deal-amount-sm{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;}
+.deal-other{font-size:11px;color:var(--text-3);}
+.deal-bottom{display:flex;align-items:center;justify-content:space-between;}
+.deal-dir{font-size:11px;color:var(--text-3);}
+.deal-action-hint{font-size:10px;color:var(--yellow);font-weight:600;}
+.deal-arrow{font-size:14px;color:var(--text-3);flex-shrink:0;}
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.empty-sub{font-size:13px;color:var(--text-3);line-height:1.6;}
+.empty-cta{display:inline-block;margin-top:18px;padding:11px 22px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;text-decoration:none;}
+.loading-wrap{display:flex;justify-content:center;padding:50px;}
+.loader{width:30px;height:30px;position:relative;}
+.loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
+.loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(6,13,9,0.94);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-item.active{color:var(--green);}
+.nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
+.overlay.open{display:flex;}
+.sheet{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);max-height:90vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.sheet-handle-row{padding:16px 0 18px;display:flex;justify-content:center;position:sticky;top:0;background:var(--card);z-index:1;}
+.sheet-handle{width:34px;height:3px;border-radius:2px;background:var(--border);}
+.detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.detail-ref{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;}
+.detail-badge{font-size:12px;font-weight:700;font-family:'Syne',sans-serif;padding:5px 14px;border-radius:20px;}
+.detail-badge.matched{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
+.detail-badge.completed{background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.detail-badge.dispute{background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);}
+.detail-parties{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.party{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
+.party-label{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;font-weight:500;margin-bottom:4px;}
+.party-name{font-size:13px;font-weight:500;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.you-tag{font-size:9px;background:var(--green-glow);color:var(--green);border-radius:4px;padding:1px 5px;font-weight:700;}
+.vs-sep{font-size:14px;color:var(--text-3);flex-shrink:0;}
+.detail-amount-row{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.detail-amt{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.detail-cur{font-size:13px;color:var(--text-3);margin-left:4px;}
+.detail-eur{font-size:12px;color:var(--green);background:var(--green-glow);border-radius:6px;padding:3px 8px;}
+.stepper{display:flex;align-items:flex-start;margin-bottom:16px;}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;}
+.step:not(:last-child)::after{content:'';position:absolute;top:11px;left:50%;right:-50%;height:1px;background:var(--border);z-index:0;}
+.step.done:not(:last-child)::after{background:var(--green);opacity:0.4;}
+.step-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;z-index:1;position:relative;}
+.step-dot.done{background:var(--green);color:#000;}
+.step-dot.active{background:var(--yellow);color:#000;animation:stepGlow 1.5s ease infinite;}
+.step-dot.pending{background:var(--surface);color:var(--text-3);border:1px solid var(--border);}
+@keyframes stepGlow{0%,100%{box-shadow:0 0 6px rgba(252,209,22,0.4);}50%{box-shadow:0 0 14px rgba(252,209,22,0.7);}}
+.step-label{font-size:9px;color:var(--text-3);text-align:center;line-height:1.3;max-width:56px;}
+.instruction-box{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.instruction-title{font-size:11px;font-weight:700;font-family:'Syne',sans-serif;color:var(--yellow);margin-bottom:4px;}
+.instruction-text{font-size:13px;color:var(--text-2);line-height:1.5;}
+.dispute-status-box{background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.dispute-status-title{font-size:11px;font-weight:700;font-family:'Syne',sans-serif;color:var(--red);margin-bottom:4px;}
+.dispute-status-text{font-size:13px;color:var(--text-2);line-height:1.5;}
+/* Proof upload */
+.proof-section{background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px;margin-bottom:14px;}
+.proof-title{font-size:11px;font-weight:700;font-family:'Syne',sans-serif;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
+.proof-hint{font-size:12px;color:var(--text-3);margin-bottom:10px;line-height:1.5;}
+.proof-upload-btn{width:100%;padding:12px;background:var(--card);border:2px dashed var(--border-active);border-radius:10px;color:var(--green);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;}
+.proof-upload-btn:active{background:var(--green-glow);}
+.proof-preview{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--border-active);border-radius:10px;margin-top:8px;}
+.proof-preview img{width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.proof-preview-name{font-size:12px;color:var(--green);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.proof-remove{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;flex-shrink:0;}
+.deal-actions{display:flex;gap:8px;margin-bottom:12px;}
+.btn-confirm{flex:1;padding:13px;background:linear-gradient(135deg,var(--green-dim),#004d2a);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.btn-confirm:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-dispute{padding:13px 16px;background:transparent;color:var(--red);border:1px solid rgba(255,68,68,0.25);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.chat-link{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;text-decoration:none;}
+.chat-link-left{display:flex;align-items:center;gap:10px;}
+.chat-icon{width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;}
+.chat-text{font-size:13px;font-weight:500;color:var(--text);}
+.chat-sub{font-size:11px;color:var(--text-3);margin-top:2px;}
+.chat-arrow{color:var(--text-3);}
+.rating-section{padding-top:14px;border-top:1px solid var(--border);}
+.rating-title{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px;}
+.stars{display:flex;gap:6px;margin-bottom:12px;}
+.star{font-size:24px;cursor:pointer;filter:grayscale(1) opacity(0.3);transition:transform 0.15s,filter 0.15s;}
+.star.active{filter:none;transform:scale(1.1);}
+.rating-comment{width:100%;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:10px;resize:none;height:65px;}
+.rating-comment:focus{outline:none;border-color:var(--green);}
+.btn-rate{width:100%;padding:12px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.rated-done{padding:10px 12px;font-size:13px;color:var(--green);background:var(--green-glow);border-radius:8px;border:1px solid var(--border-active);text-align:center;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.form-textarea{width:100%;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;height:90px;transition:border-color 0.2s;}
+.form-textarea:focus{outline:none;border-color:var(--red);}
+.upload-area{border:2px dashed rgba(255,68,68,0.25);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:14px;}
+.upload-area:active{background:rgba(255,68,68,0.04);}
+.files-preview{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.file-preview{position:relative;width:70px;height:70px;}
+.file-preview img{width:70px;height:70px;border-radius:8px;object-fit:cover;border:1px solid var(--border);}
+.file-remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;position:relative;overflow:hidden;}
+.btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-primary.dispute-btn{background:linear-gradient(135deg,#c0392b,#8e1a1a);}
+.btn-cancel{width:100%;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+.msg{display:none;padding:11px 14px;border-radius:10px;font-size:13px;margin-top:10px;}
+.msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6b6b;}
+.msg.show{display:block;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:400;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="topbar">
+  <div class="topbar-logo"><span class="l1">T</span><span class="l2">D</span><span class="l3">O</span><span class="l4">L</span><span class="l5">I</span></div>
+  <div class="topbar-title">Mes Deals</div>
+</div>
+<div class="filter-tabs">
+  <div class="filter-tab active" onclick="setFilter('all',this)">Tous</div>
+  <div class="filter-tab" onclick="setFilter('matched',this)">En cours</div>
+  <div class="filter-tab" onclick="setFilter('completed',this)">Completes</div>
+  <div class="filter-tab" onclick="setFilter('dispute',this)">Litiges</div>
+</div>
+<div class="content"><div id="dealsList"><div class="loading-wrap"><div class="loader"></div></div></div></div>
+<nav class="bottom-nav">
+  <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
+  <a class="nav-item active" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
+  <a class="nav-item" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
+</nav>
+<!-- Sheet détail deal -->
+<div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')">
+  <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
+</div>
+<!-- Sheet preuve de paiement -->
+<div class="overlay" id="proofOverlay" onclick="closeOnOverlay(event,'proofOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Preuve de paiement</div>
+    <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Fournis une capture d'écran ou un reçu prouvant que tu as bien envoyé les fonds.</div>
+    <div class="proof-section" style="background:rgba(252,209,22,0.04);border-color:rgba(252,209,22,0.2);">
+      <div style="font-size:12px;color:var(--yellow);font-family:'Syne',sans-serif;font-weight:700;margin-bottom:6px;">EXEMPLES ACCEPTÉS</div>
+      <div style="font-size:12px;color:var(--text-3);line-height:1.7;">
+        ✓ Capture écran virement bancaire<br>
+        ✓ Reçu Airtel Money / Moov / Orange<br>
+        ✓ Confirmation PayPal / Lydia / Virement<br>
+        ✗ Photos floues ou illisibles refusées
+      </div>
+    </div>
+    <div onclick="document.getElementById('proof-file-input').click()" style="width:100%;padding:20px;background:var(--surface);border:2px dashed var(--border-active);border-radius:12px;text-align:center;cursor:pointer;margin-bottom:12px;" id="proof-upload-area">
+      <div style="font-size:28px;margin-bottom:8px;">📎</div>
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--green);">Ajouter une preuve</div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:4px;">Photo, capture d'écran ou PDF — max 10MB</div>
+    </div>
+    <input type="file" id="proof-file-input" accept="image/*,.pdf" style="display:none" onchange="previewProof(this)">
+    <div id="proof-preview-container"></div>
+    <button class="btn-primary" id="btn-submit-proof" onclick="submitProof()" disabled>Confirmer la réception</button>
+    <button class="btn-cancel" onclick="closeSheet('proofOverlay')">Annuler</button>
+    <div class="msg" id="msg-proof"></div>
+  </div>
+</div>
+<!-- Sheet formulaire litige -->
+<div class="overlay" id="disputeOverlay" onclick="closeOnOverlay(event,'disputeOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;color:var(--red);">Signaler un litige</div>
+    <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Décris le problème et joins des justificatifs.</div>
+    <div class="form-group">
+      <label class="form-label">Description du problème</label>
+      <textarea class="form-textarea" id="dispute-description" placeholder="Ex: J'ai envoyé les fonds mais l'autre partie ne confirme pas..."></textarea>
+    </div>
+    <label class="form-label">Justificatifs (optionnel)</label>
+    <div class="upload-area" onclick="document.getElementById('dispute-files').click()">
+      <div style="font-size:24px;margin-bottom:6px;">📎</div>
+      <div style="font-size:13px;color:var(--text-3);">Ajouter des preuves</div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:4px;opacity:0.7;">Photos, reçus — max 5 fichiers</div>
+    </div>
+    <input type="file" id="dispute-files" multiple accept="image/*,.pdf" style="display:none" onchange="previewFiles(this)">
+    <div class="files-preview" id="files-preview"></div>
+    <button class="btn-primary dispute-btn" id="btn-submit-dispute" onclick="submitDispute()">Envoyer le litige</button>
+    <button class="btn-cancel" onclick="closeSheet('disputeOverlay')">Annuler</button>
+    <div class="msg" id="msg-dispute"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const API='https://tdoli-backend.onrender.com';
+const token=localStorage.getItem('tdoli_token');
+const email=localStorage.getItem('tdoli_email');
+if(!token)window.location.href='/tdoli-auth.html';
+
+let allDeals=[],currentFilter='all',selectedRatings={},ratedDeals=new Set();
+let currentDisputeId=null,currentProofDealId=null,selectedFiles=[],proofFile=null,proofUrl=null;
+
+function showToast(msg,color){const t=document.getElementById('toast');t.textContent=msg;t.style.background=color||'var(--green-dim)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function getSteps(deal){const isSender=deal.sender===email;const myConf=isSender?deal.confirmedBySender:deal.confirmedByReceiver;const theirConf=isSender?deal.confirmedByReceiver:deal.confirmedBySender;return[deal.status!=='open'?'done':'pending',myConf?'done':(deal.status==='matched'?'active':'pending'),theirConf?'done':(myConf?'active':'pending'),deal.status==='completed'?'done':'pending'];}
+function renderStepper(deal){const states=getSteps(deal);const labels=['Matche','Ta conf.','Leur conf.','Termine'];return '<div class="stepper">'+states.map((st,i)=>'<div class="step '+st+'"><div class="step-dot '+st+'">'+(st==='done'?'✓':(i+1))+'</div><div class="step-label">'+labels[i]+'</div></div>').join('')+'</div>';}
+
+function renderListItem(deal,idx){
+  const isSender=deal.sender===email;const other=isSender?deal.receiverEmail:deal.sender;const otherName=other?other.split('@')[0]:'Inconnu';
+  const otherInitials=otherName.substring(0,2).toUpperCase();const status=deal.status||'matched';
+  const badgeText={matched:'En cours',completed:'Complete',dispute:'Litige'}[status]||status;
+  const myConf=isSender?deal.confirmedBySender:deal.confirmedByReceiver;const needsAction=status==='matched'&&!myConf;
+  return '<div class="deal-item '+status+'" style="animation-delay:'+(idx*0.04)+'s" onclick="openDetail(\''+deal._id+'\')">'+
+    '<div class="deal-avatar">'+otherInitials+'</div>'+
+    '<div class="deal-body">'+
+      '<div class="deal-top"><span class="deal-ref">REF '+deal._id.slice(-6).toUpperCase()+'</span><span class="deal-badge-sm '+status+'">'+badgeText+'</span></div>'+
+      '<div class="deal-mid"><span class="deal-amount-sm">'+Number(deal.amount).toLocaleString('fr-FR')+' '+deal.currency+'</span><span class="deal-other">'+(isSender?'→ '+otherName:'← '+otherName)+'</span></div>'+
+      '<div class="deal-bottom"><span class="deal-dir">'+deal.fromCountry+' → '+deal.toCountry+'</span>'+(needsAction?'<span class="deal-action-hint">Action requise !</span>':'<span></span>')+'</div>'+
+    '</div><div class="deal-arrow">›</div></div>';
+}
+
+function openDetail(id){
+  const deal=allDeals.find(d=>d._id===id);if(!deal)return;
+  const isSender=deal.sender===email;const other=isSender?deal.receiverEmail:deal.sender;
+  const otherName=other?other.split('@')[0]:'Inconnu';const myName=email?email.split('@')[0]:'Moi';
+  const status=deal.status||'matched';
+  const euroLabel=deal.currency!=='EUR'&&deal.amountEuro?'≈ '+Number(deal.amountEuro).toFixed(0)+' EUR':'';
+  const badgeText={matched:'En cours',completed:'Complete',dispute:'Litige'}[status]||status;
+  const myConf=isSender?deal.confirmedBySender:deal.confirmedByReceiver;
+  const canConfirm=status==='matched'&&!myConf;const isRated=ratedDeals.has(id);
+
+  let instruction='';
+  if(status==='matched'&&!myConf)instruction='<div class="instruction-box"><div class="instruction-title">Action requise</div><div class="instruction-text">Confirme que tu as bien reçu les fonds. Une <strong>preuve de paiement</strong> sera demandée.</div></div>';
+  else if(status==='matched'&&myConf)instruction='<div class="instruction-box"><div class="instruction-title">En attente</div><div class="instruction-text">En attente de la confirmation de <strong>'+otherName+'</strong>.</div></div>';
+
+  let disputeBox='';
+  if(status==='dispute')disputeBox='<div class="dispute-status-box"><div class="dispute-status-title">⚠ Litige en cours</div><div class="dispute-status-text">Ce deal fait l\'objet d\'un litige. L\'équipe TDOLI examine le dossier.</div></div>';
+
+  let ratingHtml='';
+  if(status==='completed'){
+    if(isRated)ratingHtml='<div class="rating-section"><div class="rated-done">✓ Note envoyée</div></div>';
+    else ratingHtml='<div class="rating-section"><div class="rating-title">Noter ce deal</div><div class="stars" id="stars-'+id+'">'+[1,2,3,4,5].map(n=>'<span class="star" data-val="'+n+'" onclick="selectStar(\''+id+'\','+n+')">★</span>').join('')+'</div><textarea class="rating-comment" id="comment-'+id+'" placeholder="Ton avis (optionnel)"></textarea><button class="btn-rate" onclick="submitRating(\''+id+'\')">Envoyer la note</button><div class="msg" id="msg-rating-'+id+'"></div></div>';
+  }
+
+  document.getElementById('detailContent').innerHTML=
+    '<div class="detail-header"><div class="detail-ref">REF '+deal._id.slice(-6).toUpperCase()+'</div><div class="detail-badge '+status+'">'+badgeText+'</div></div>'+
+    '<div class="detail-parties"><div class="party"><div class="party-label">Envoyeur</div><div class="party-name">'+(isSender?myName:otherName)+(isSender?'<span class="you-tag">Toi</span>':'')+'</div></div><div class="vs-sep">⇄</div><div class="party"><div class="party-label">Receveur</div><div class="party-name">'+(!isSender?myName:otherName)+(!isSender?'<span class="you-tag">Toi</span>':'')+'</div></div></div>'+
+    '<div class="detail-amount-row"><div><span class="detail-amt">'+Number(deal.amount).toLocaleString('fr-FR')+'</span><span class="detail-cur">'+deal.currency+'</span></div>'+(euroLabel?'<span class="detail-eur">'+euroLabel+'</span>':'')+'</div>'+
+    renderStepper(deal)+instruction+disputeBox+
+    (status==='matched'?'<a class="chat-link" href="/tdoli-chat.html?deal='+deal._id+'"><div class="chat-link-left"><div class="chat-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Communiquer avec '+otherName+'</div></div></div><div class="chat-arrow">→</div></a>':'')+
+    (status==='matched'?'<div class="deal-actions">'+
+      (canConfirm?'<button class="btn-confirm" onclick="openProofSheet(\''+deal._id+'\')">📎 Confirmer avec preuve</button>':'<button class="btn-confirm" disabled>En attente</button>')+
+      '<button class="btn-dispute" onclick="openDisputeForm(\''+deal._id+'\')">Litige</button>'+
+    '</div><div class="msg" id="msg-deal-'+deal._id+'"></div>':'')+
+    ratingHtml;
+
+  if(selectedRatings[id])updateStars(id,selectedRatings[id]);
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+// ─── PROOF ───────────────────────────────────────────────────────────────────
+function openProofSheet(id){
+  currentProofDealId=id;proofFile=null;proofUrl=null;
+  document.getElementById('proof-preview-container').innerHTML='';
+  document.getElementById('btn-submit-proof').disabled=true;
+  document.getElementById('msg-proof').className='msg';
+  document.getElementById('proof-upload-area').style.display='block';
+  closeSheet('detailOverlay');
+  document.getElementById('proofOverlay').classList.add('open');
+}
+
+function previewProof(input){
+  const file=input.files[0];if(!file)return;
+  proofFile=file;
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    const preview=document.getElementById('proof-preview-container');
+    preview.innerHTML='<div class="proof-preview">'+
+      '<img src="'+e.target.result+'" onerror="this.style.display=\'none\'">'+
+      '<div class="proof-preview-name">'+file.name+'</div>'+
+      '<button class="proof-remove" onclick="removeProof()">✕</button>'+
+    '</div>';
+    document.getElementById('btn-submit-proof').disabled=false;
+    document.getElementById('proof-upload-area').style.display='none';
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function removeProof(){
+  proofFile=null;proofUrl=null;
+  document.getElementById('proof-preview-container').innerHTML='';
+  document.getElementById('btn-submit-proof').disabled=true;
+  document.getElementById('proof-upload-area').style.display='block';
+}
+
+async function submitProof(){
+  if(!proofFile){showMsgEl('msg-proof','Ajoute une preuve de paiement','error');return;}
+  const btn=document.getElementById('btn-submit-proof');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Upload...';
+
+  try{
+    // 1. Upload la preuve
+    const formData=new FormData();formData.append('proof',proofFile);
+    const uploadRes=await fetch(API+'/deal/proof',{method:'POST',headers:{'Authorization':'Bearer '+token},body:formData});
+    const uploadData=await uploadRes.json();
+    if(!uploadRes.ok){showMsgEl('msg-proof',uploadData.message||'Erreur upload','error');btn.disabled=false;btn.innerHTML='Confirmer la réception';return;}
+
+    proofUrl=uploadData.url;
+
+    // 2. Confirmer le deal avec l'URL de la preuve
+    const confirmRes=await fetch(API+'/deal/'+currentProofDealId+'/confirm',{
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({proofUrl})
+    });
+    const confirmData=await confirmRes.json();
+
+    if(confirmRes.ok){
+      closeSheet('proofOverlay');
+      showToast(confirmData.status==='completed'?'🎉 Deal complété !':'Confirmation enregistrée');
+      setTimeout(()=>loadDeals(),500);
+    }else{showMsgEl('msg-proof',confirmData.message||'Erreur','error');}
+
+  }catch(e){showMsgEl('msg-proof','Serveur inaccessible','error');}
+  btn.disabled=false;btn.innerHTML='Confirmer la réception';
+}
+
+// ─── DISPUTE ─────────────────────────────────────────────────────────────────
+function openDisputeForm(id){currentDisputeId=id;selectedFiles=[];document.getElementById('dispute-description').value='';document.getElementById('files-preview').innerHTML='';document.getElementById('msg-dispute').className='msg';closeSheet('detailOverlay');document.getElementById('disputeOverlay').classList.add('open');}
+function previewFiles(input){const files=Array.from(input.files);if(selectedFiles.length+files.length>5){alert('Maximum 5 fichiers');return;}selectedFiles=[...selectedFiles,...files];renderFilePreviews();input.value='';}
+function renderFilePreviews(){const preview=document.getElementById('files-preview');preview.innerHTML=selectedFiles.map((f,i)=>{const url=URL.createObjectURL(f);return '<div class="file-preview"><img src="'+url+'" onerror="this.parentNode.style.background=\'#111e15\'"><button class="file-remove" onclick="removeFile('+i+')">✕</button></div>';}).join('');}
+function removeFile(idx){selectedFiles.splice(idx,1);renderFilePreviews();}
+async function submitDispute(){
+  const description=document.getElementById('dispute-description').value.trim();
+  if(!description){showMsgEl('msg-dispute','Décris le problème','error');return;}
+  const btn=document.getElementById('btn-submit-dispute');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Envoi...';
+  try{const formData=new FormData();formData.append('transferId',currentDisputeId);formData.append('description',description);selectedFiles.forEach(f=>formData.append('justificatifs',f));
+    const res=await fetch(API+'/dispute',{method:'POST',headers:{'Authorization':'Bearer '+token},body:formData});const data=await res.json();
+    if(res.ok){closeSheet('disputeOverlay');showToast('Litige enregistré','#ff4444');setTimeout(()=>loadDeals(),500);}
+    else{showMsgEl('msg-dispute',data.message||'Erreur','error');}
+  }catch(e){showMsgEl('msg-dispute','Serveur inaccessible','error');}
+  btn.disabled=false;btn.innerHTML='Envoyer le litige';
+}
+
+function closeOnOverlay(e,id){if(e.target===document.getElementById(id))closeSheet(id);}
+function closeSheet(id){document.getElementById(id).classList.remove('open');}
+function setFilter(filter,el){currentFilter=filter;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderDeals();}
+function renderDeals(){
+  const filtered=currentFilter==='all'?allDeals:allDeals.filter(d=>d.status===currentFilter);
+  const list=document.getElementById('dealsList');
+  if(filtered.length===0){const msgs={all:{title:'Aucun deal',sub:'Crée ou matche une annonce.'},matched:{title:'Aucun deal en cours'},completed:{title:'Aucun deal complété'},dispute:{title:'Aucun litige'}};const m=msgs[currentFilter]||msgs.all;list.innerHTML='<div class="empty-state"><div class="empty-title">'+m.title+'</div><div class="empty-sub">'+(m.sub||'')+'</div>'+(currentFilter==='all'?'<a class="empty-cta" href="/tdoli-feed.html">Voir le feed</a>':'')+'</div>';return;}
+  list.innerHTML='<div class="deal-list">'+filtered.map((d,i)=>renderListItem(d,i)).join('')+'</div>';
+}
+async function loadDeals(){try{const res=await fetch(API+'/deals/mine',{headers:{'Authorization':'Bearer '+token}});const data=await res.json();allDeals=Array.isArray(data)?data:[];renderDeals();}catch(e){document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Serveur inaccessible</div></div>';}}
+
+function selectStar(dealId,val){selectedRatings[dealId]=val;updateStars(dealId,val);}
+function updateStars(dealId,val){document.querySelectorAll('#stars-'+dealId+' .star').forEach(s=>{s.classList.toggle('active',parseInt(s.dataset.val)<=val);});}
+async function submitRating(dealId){const score=selectedRatings[dealId];if(!score){const el=document.getElementById('msg-rating-'+dealId);if(el){el.className='msg error show';el.textContent='Sélectionne une note';}return;}
+  const comment=document.getElementById('comment-'+dealId)?.value||'';
+  try{const res=await fetch(API+'/rate/'+dealId,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({score,comment})});const data=await res.json();
+    if(res.ok){ratedDeals.add(dealId);showToast('Note envoyée — '+data.averageRating+'/5');openDetail(dealId);}
+    else{const el=document.getElementById('msg-rating-'+dealId);if(el){el.className='msg error show';el.textContent=data.message||'Erreur';}}
+  }catch(e){}
+}
+
+function showMsgEl(id,text,type){const el=document.getElementById(id);if(el){el.className='msg '+(type||'error')+' show';el.textContent=text;}}
+loadDeals();setInterval(loadDeals,30000);
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+/auth        /tdoli-auth.html     200
+/feed        /tdoli-feed.html     200
+/deals       /tdoli-deals.html    200
+/chat        /tdoli-chat.html     200
+/profile     /tdoli-profile.html  200
+/admin       /tdoli-admin.html    200

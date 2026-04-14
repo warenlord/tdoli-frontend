@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TDOLI — Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);--r:16px;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,180,90,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 20% 90%,rgba(26,79,255,0.07) 0%,transparent 60%);}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.5px;}
+.topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.user-chip{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:6px 12px 6px 7px;font-size:12px;color:var(--text-2);max-width:140px;}
+.user-avatar-sm{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;color:#fff;flex-shrink:0;}
+.user-name-sm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logout-btn{width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--text-3);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;}
+.content{position:relative;z-index:1;padding:16px 20px;max-width:480px;margin:0 auto;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.section-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
+.badge{background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);font-size:12px;font-weight:700;font-family:'Syne',sans-serif;border-radius:20px;padding:3px 11px;}
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;}
+.filter-bar::-webkit-scrollbar{display:none;}
+.filter-chip{flex-shrink:0;padding:7px 16px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.filter-chip.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
+.annonce-list{display:flex;flex-direction:column;gap:8px;}
+.annonce-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;position:relative;overflow:hidden;}
+@keyframes cardIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.annonce-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green),var(--blue));}
+.annonce-item.mine::before{background:var(--green);}
+.annonce-item:active{background:var(--surface);}
+.item-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
+.item-body{flex:1;min-width:0;}
+.item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
+.item-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
+.item-amount{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;}
+.item-bottom{display:flex;align-items:center;justify-content:space-between;}
+.item-dir{font-size:11px;color:var(--text-3);}
+.item-meta{display:flex;align-items:center;gap:6px;}
+.item-rating{font-size:10px;color:var(--yellow);}
+.item-time{font-size:10px;color:var(--text-3);}
+.item-currency{font-size:11px;color:var(--text-3);margin-left:2px;}
+.mine-tag{font-size:9px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:4px;padding:1px 6px;font-family:'Syne',sans-serif;font-weight:700;}
+.status-dot-sm{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.empty-sub{font-size:13px;color:var(--text-3);line-height:1.6;}
+.loading-wrap{display:flex;justify-content:center;padding:50px;}
+.loader{width:30px;height:30px;position:relative;}
+.loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
+.loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,158,96,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
+.fab:active{transform:scale(0.9);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(6,13,9,0.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-item.active{color:var(--green);}
+.nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+.nav-icon-wrap{position:relative;}
+.deals-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--yellow);color:#000;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
+.deals-badge.show{display:flex;}
+svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
+.overlay.open{display:flex;}
+.sheet{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);box-shadow:0 -8px 40px rgba(0,0,0,0.5);max-height:90vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.sheet-handle-row{padding:16px 0 18px;display:flex;justify-content:center;position:sticky;top:0;background:var(--card);z-index:1;}
+.sheet-handle{width:34px;height:3px;border-radius:2px;background:var(--border);}
+.sheet-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px;}
+.detail-hero{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+.detail-user{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.detail-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff;border:1px solid var(--border-active);}
+.detail-uname{font-size:14px;font-weight:600;}
+.detail-rating{font-size:11px;color:var(--yellow);margin-top:2px;}
+.detail-flow{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.detail-country{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:500;text-align:center;}
+.detail-arrow{width:24px;height:24px;border-radius:50%;background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--yellow);flex-shrink:0;}
+.detail-amount{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;}
+.detail-currency{font-size:14px;color:var(--text-3);margin-left:6px;}
+.detail-eur{font-size:12px;color:var(--green);background:var(--green-glow);border-radius:6px;padding:3px 8px;margin-left:auto;}
+.match-info{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
+.match-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+.match-row:last-child{margin-bottom:0;}
+.match-label{color:var(--text-3);}
+.match-val{font-weight:600;}
+.my-actions{display:flex;gap:8px;margin-bottom:12px;}
+.btn-edit{flex:1;padding:12px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+.btn-delete{padding:12px 16px;background:transparent;color:var(--red);border:1px solid rgba(255,68,68,0.25);border-radius:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.form-input,.form-select{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
+.form-row{display:flex;gap:10px;}.form-row .form-group{flex:1;}
+.conv-preview{background:var(--surface);border:1px solid var(--border-active);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;min-height:44px;}
+.conv-hint{font-size:12px;color:var(--text-3);}
+.conv-amount{font-family:'Syne',sans-serif;font-weight:700;color:var(--green);font-size:14px;}
+.btn-primary{width:100%;padding:16px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s,opacity 0.15s;}
+.btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
+.btn-primary:active{transform:scale(0.97);}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-cancel{width:100%;padding:13px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+.msg{display:none;padding:11px 14px;border-radius:10px;font-size:13px;margin-top:12px;}
+.msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6b6b;}
+.msg.show{display:block;}
+.spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:7px;}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:500;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="topbar">
+  <div class="topbar-logo"><span class="l1">T</span><span class="l2">D</span><span class="l3">O</span><span class="l4">L</span><span class="l5">I</span></div>
+  <div class="topbar-right">
+    <div class="user-chip"><div class="user-avatar-sm" id="avatarSm">?</div><div class="user-name-sm" id="userChip">—</div></div>
+
+  </div>
+</div>
+<div class="content">
+  <div class="section-header">
+    <div class="section-title">Annonces</div>
+    <div class="badge" id="countBadge">—</div>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div>
+    <div class="filter-chip" onclick="setFilter('EUR',this)">EUR</div>
+    <div class="filter-chip" onclick="setFilter('XAF',this)">XAF</div>
+    <div class="filter-chip" onclick="setFilter('USD',this)">USD</div>
+    <div class="filter-chip" onclick="setFilter('CAD',this)">CAD</div>
+    <div class="filter-chip" onclick="setFilter('mine',this)">Mes annonces</div>
+  </div>
+  <div id="feedList"><div class="loading-wrap"><div class="loader"></div></div></div>
+</div>
+<button class="fab" onclick="openCreateSheet()">+</button>
+<nav class="bottom-nav">
+  <a class="nav-item active" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
+  <a class="nav-item" href="/tdoli-deals.html">
+    <div class="nav-icon-wrap"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div><div class="deals-badge" id="dealsBadge">!</div></div>Deals
+  </a>
+  <a class="nav-item" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
+</nav>
+<!-- Sheet détail annonce -->
+<div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')">
+  <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
+</div>
+<!-- Sheet créer annonce -->
+<div class="overlay" id="createOverlay" onclick="closeOnOverlay(event,'createOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title">Nouvelle annonce</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="ann-amount" placeholder="500" inputmode="numeric" oninput="updatePreview('create')"></div>
+      <div class="form-group"><label class="form-label">Devise</label>
+        <select class="form-select" id="ann-currency" onchange="updatePreview('create')">
+          <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">De</label>
+        <select class="form-select" id="ann-from" onchange="syncCountries()">
+          <option value="France">🇫🇷 France</option>
+          <option value="Gabon">🇬🇦 Gabon</option>
+          <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
+          <option value="Canada">🇨🇦 Canada</option>
+          <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+          <option value="Belgique">🇧🇪 Belgique</option>
+          <option value="Suisse">🇨🇭 Suisse</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Vers</label>
+        <select class="form-select" id="ann-to">
+          <option value="Gabon">🇬🇦 Gabon</option>
+          <option value="France">🇫🇷 France</option>
+          <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
+          <option value="Canada">🇨🇦 Canada</option>
+          <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+          <option value="Belgique">🇧🇪 Belgique</option>
+          <option value="Suisse">🇨🇭 Suisse</option>
+        </select>
+      </div>
+    </div>
+    <div class="conv-preview" id="convPreview-create"><span class="conv-hint">Saisis un montant</span></div>
+    <button class="btn-primary" id="btn-submit" onclick="submitAnnonce()">Publier</button>
+    <button class="btn-cancel" onclick="closeSheet('createOverlay')">Annuler</button>
+    <div class="msg" id="msg-create"></div>
+  </div>
+</div>
+<!-- Sheet modifier annonce -->
+<div class="overlay" id="editOverlay" onclick="closeOnOverlay(event,'editOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title">Modifier l'annonce</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="edit-amount" inputmode="numeric" oninput="updatePreview('edit')"></div>
+      <div class="form-group"><label class="form-label">Devise</label>
+        <select class="form-select" id="edit-currency" onchange="updatePreview('edit')">
+          <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
+        </select>
+      </div>
+    </div>
+    <div class="conv-preview" id="convPreview-edit"><span class="conv-hint">Saisis un montant</span></div>
+    <button class="btn-primary" id="btn-edit-submit" onclick="submitEdit()">Enregistrer</button>
+    <button class="btn-cancel" onclick="closeSheet('editOverlay')">Annuler</button>
+    <div class="msg" id="msg-edit"></div>
+  </div>
+</div>
+<!-- Sheet confirmer match -->
+<div class="overlay" id="confirmOverlay" onclick="closeOnOverlay(event,'confirmOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title">Confirmer le match</div>
+    <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Verifie les details avant de confirmer.</div>
+    <div id="confirmDetail" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:20px;"></div>
+    <button class="btn-primary" id="btn-confirm-match" onclick="executeMatch()">Confirmer le match</button>
+    <button class="btn-cancel" onclick="closeSheet('confirmOverlay')">Annuler</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const API='https://tdoli-backend.onrender.com';
+const token=localStorage.getItem('tdoli_token');
+const email=localStorage.getItem('tdoli_email');
+const username=localStorage.getItem('tdoli_username')||email?.split('@')[0]||'?';
+const RATE=655.957;
+if(!token)window.location.href='/tdoli-auth.html';
+if(username){document.getElementById('userChip').textContent=username;document.getElementById('avatarSm').textContent=username.substring(0,2).toUpperCase();}
+
+let allTransfers=[],currentFilter='all',pendingMatch=null,editingId=null;
+
+function logout(){localStorage.clear();window.location.href='/tdoli-auth.html';}
+function showToast(msg,color){const t=document.getElementById('toast');t.textContent=msg;t.style.background=color||'var(--green-dim)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+function timeAgo(dateStr){if(!dateStr)return'';const diff=Date.now()-new Date(dateStr).getTime();const m=Math.floor(diff/60000);if(m<1)return"A l'instant";if(m<60)return m+' min';const h=Math.floor(m/60);if(h<24)return h+'h';return Math.floor(h/24)+'j';}
+function renderStars(r){if(!r||r===0)return'';const f=Math.round(r);return'★'.repeat(f)+'☆'.repeat(5-f)+' '+r.toFixed(1);}
+function convertToEur(amount,currency){const rates={EUR:1,XAF:1/655.957,USD:0.92,CAD:0.68};return amount*(rates[currency]||1);}
+function formatMatchAmount(amount,currency,toCountry){
+  const eur=convertToEur(amount,currency);
+  if(toCountry==='Gabon'||toCountry==='Burkina Faso')return Math.round(eur*655.957).toLocaleString('fr-FR')+' XAF';
+  if(toCountry==='Etats-Unis')return (eur/0.92).toFixed(0)+' USD';
+  if(toCountry==='Canada')return (eur/0.68).toFixed(0)+' CAD';
+  return eur.toFixed(0)+' EUR';
+}
+
+function renderList(data){
+  return data.map((t,i)=>{
+    const isOwn=t.sender===email;
+    const displayName=t.senderUsername||t.sender?.split('@')[0]||'Inconnu';
+    const initials=displayName.substring(0,2).toUpperCase();
+    const eurVal=convertToEur(t.amount,t.currency);
+    const euroLabel=t.currency!=='EUR'?'≈'+eurVal.toFixed(0)+'€':'';
+    return '<div class="annonce-item'+(isOwn?' mine':'')+'" style="animation-delay:'+(i*0.03)+'s" onclick="openDetail(\''+t._id+'\')">'+
+      '<div class="item-avatar">'+initials+'</div>'+
+      '<div class="item-body">'+
+        '<div class="item-top"><span class="item-name">'+(isOwn?'<span class="mine-tag">Moi</span> ':'')+displayName+'</span>'+
+        '<span class="item-amount">'+Number(t.amount).toLocaleString('fr-FR')+'<span class="item-currency"> '+t.currency+'</span></span></div>'+
+        '<div class="item-bottom"><span class="item-dir">'+t.fromCountry+' → '+t.toCountry+(euroLabel?' · <span style="color:var(--green)">'+euroLabel+'</span>':'')+'</span>'+
+        '<span class="item-meta">'+(t.senderRating>0?'<span class="item-rating">★'+t.senderRating.toFixed(1)+'</span>':'')+'<span class="item-time">'+timeAgo(t.createdAt)+'</span><div class="status-dot-sm"></div></span></div>'+
+      '</div></div>';
+  }).join('');
+}
+
+function openDetail(id){
+  const t=allTransfers.find(x=>x._id===id);if(!t)return;
+  const isOwn=t.sender===email;
+  const displayName=t.senderUsername||t.sender?.split('@')[0]||'Inconnu';
+  const initials=displayName.substring(0,2).toUpperCase();
+  const eurVal=convertToEur(t.amount,t.currency);
+  const euroLabel=t.currency!=='EUR'?'≈ '+eurVal.toFixed(0)+' EUR':'';
+  const matchAmt=formatMatchAmount(t.amount,t.currency,t.toCountry);
+  let html='<div class="detail-hero">'+
+    '<div class="detail-user"><div class="detail-avatar">'+initials+'</div>'+
+    '<div><div class="detail-uname">'+(isOwn?'Mon annonce':displayName)+'</div>'+
+    (t.senderRating>0?'<div class="detail-rating">'+renderStars(t.senderRating)+'</div>':'<div style="font-size:11px;color:var(--text-3)">Nouveau</div>')+'</div></div>'+
+    '<div class="detail-flow"><div class="detail-country">'+t.fromCountry+'</div><div class="detail-arrow">→</div><div class="detail-country">'+t.toCountry+'</div></div>'+
+    '<div style="display:flex;align-items:baseline;gap:6px"><span class="detail-amount">'+Number(t.amount).toLocaleString('fr-FR')+'</span><span class="detail-currency">'+t.currency+'</span>'+(euroLabel?'<span class="detail-eur">'+euroLabel+'</span>':'')+'</div></div>';
+  if(!isOwn){
+    html+='<div class="match-info"><div class="match-row"><span class="match-label">Tu envoies</span><span class="match-val">'+matchAmt+'</span></div><div class="match-row"><span class="match-label">Sens</span><span class="match-val">'+t.toCountry+' → '+t.fromCountry+'</span></div></div>'+
+    '<button class="btn-primary" onclick="showConfirm(\''+t._id+'\',\''+t.fromCountry+'\',\''+t.toCountry+'\',\''+t.currency+'\','+t.amount+',\''+matchAmt+'\')">Matcher cette annonce</button>';
+  }else{
+    html+='<div class="my-actions"><button class="btn-edit" onclick="openEdit(\''+t._id+'\','+t.amount+',\''+t.currency+'\')">✏ Modifier</button><button class="btn-delete" onclick="deleteAnnonce(\''+t._id+'\')">🗑 Supprimer</button></div>';
+  }
+  document.getElementById('detailContent').innerHTML=html;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function openEdit(id,amount,currency){editingId=id;closeSheet('detailOverlay');document.getElementById('edit-amount').value=amount;document.getElementById('edit-currency').value=currency;updatePreview('edit');document.getElementById('editOverlay').classList.add('open');}
+async function deleteAnnonce(id){if(!confirm('Supprimer cette annonce ?'))return;try{const res=await fetch(API+'/transfer/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token}});const data=await res.json();if(res.ok){closeSheet('detailOverlay');showToast('Annonce supprimee');loadFeed(true);}else showToast(data.message||'Erreur','#ff4444');}catch(e){showToast('Erreur','#ff4444');}}
+async function submitEdit(){const amount=document.getElementById('edit-amount').value;const currency=document.getElementById('edit-currency').value;if(!amount||Number(amount)<=0){showMsg('msg-edit','Montant invalide');return;}const btn=document.getElementById('btn-edit-submit');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';try{const res=await fetch(API+'/transfer/'+editingId,{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({amount:Number(amount),currency})});const data=await res.json();if(res.ok){closeSheet('editOverlay');showToast('Annonce modifiee');loadFeed(true);}else showMsg('msg-edit',data.message||'Erreur');}catch(e){showMsg('msg-edit','Serveur inaccessible');}btn.disabled=false;btn.innerHTML='Enregistrer';}
+
+function showConfirm(id,fromCountry,toCountry,currency,amount,matchAmount){
+  closeSheet('detailOverlay');
+  let targetCurrency='EUR';
+  if(toCountry==='Gabon'||toCountry==='Burkina Faso')targetCurrency='XAF';
+  else if(toCountry==='Etats-Unis')targetCurrency='USD';
+  else if(toCountry==='Canada')targetCurrency='CAD';
+  pendingMatch={fromCountry:toCountry,toCountry:fromCountry,currency:targetCurrency,amount:parseFloat(matchAmount.replace(/[^\d.]/g,''))};
+  document.getElementById('confirmDetail').innerHTML=
+    '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--text-3)">Annonce</span><span style="font-weight:600">'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</span></div>'+
+    '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--text-3)">Tu envoies</span><span style="font-weight:600">'+matchAmount+'</span></div>'+
+    '<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-3)">Sens</span><span style="font-weight:600">'+toCountry+' → '+fromCountry+'</span></div>';
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+
+async function executeMatch(){
+  if(!pendingMatch)return;
+  const btn=document.getElementById('btn-confirm-match');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Matching...';
+  try{const res=await fetch(API+'/transfer',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(pendingMatch)});const data=await res.json();closeSheet('confirmOverlay');
+    if(res.ok&&data.message&&data.message.includes('Match')){showToast('Match confirme !','var(--yellow)');setTimeout(()=>{window.location.href='/tdoli-deals.html';},2000);}
+    else if(res.ok){showToast('Annonce publiee');loadFeed(true);}else showToast(data.message||'Erreur','#ff4444');
+  }catch(e){showToast('Serveur inaccessible','#ff4444');closeSheet('confirmOverlay');}
+  btn.disabled=false;btn.innerHTML='Confirmer le match';
+}
+
+function setFilter(filter,el){currentFilter=filter;document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderFeed();}
+function renderFeed(){
+  let data=allTransfers;
+  if(currentFilter==='mine')data=data.filter(t=>t.sender===email);
+  else if(currentFilter!=='all')data=data.filter(t=>t.currency===currentFilter);
+  const list=document.getElementById('feedList');const badge=document.getElementById('countBadge');
+  if(data.length===0){badge.textContent='0';list.innerHTML='<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';return;}
+  badge.textContent=data.length;list.innerHTML='<div class="annonce-list">'+renderList(data)+'</div>';
+}
+async function loadFeed(silent){
+  if(!silent)document.getElementById('feedList').innerHTML='<div class="loading-wrap"><div class="loader"></div></div>';
+  try{const res=await fetch(API+'/transfers',{headers:{'Authorization':'Bearer '+token}});allTransfers=await res.json();if(!Array.isArray(allTransfers))allTransfers=[];renderFeed();checkActiveDeals();}
+  catch(e){if(!silent)document.getElementById('feedList').innerHTML='<div class="empty-state"><div class="empty-title">Serveur inaccessible</div></div>';}
+}
+async function checkActiveDeals(){
+  try{const res=await fetch(API+'/deals/mine',{headers:{'Authorization':'Bearer '+token}});const deals=await res.json();
+    if(Array.isArray(deals)){const active=deals.filter(d=>d.status==='matched').length;const badge=document.getElementById('dealsBadge');if(active>0){badge.textContent=active;badge.classList.add('show');}else badge.classList.remove('show');}
+  }catch(e){}
+}
+function openCreateSheet(){document.getElementById('createOverlay').classList.add('open');}
+function closeSheet(id){document.getElementById(id).classList.remove('open');}
+function closeOnOverlay(e,id){if(e.target===document.getElementById(id))closeSheet(id);}
+function showMsg(id,text){const el=document.getElementById(id);el.className='msg error show';el.textContent=text;}
+function updatePreview(mode){
+  const amountEl=document.getElementById(mode==='create'?'ann-amount':'edit-amount');
+  const currencyEl=document.getElementById(mode==='create'?'ann-currency':'edit-currency');
+  const preview=document.getElementById('convPreview-'+mode);
+  if(!amountEl||!currencyEl||!preview)return;
+  const amount=parseFloat(amountEl.value);const currency=currencyEl.value;
+  if(!amount||isNaN(amount)){preview.innerHTML='<span class="conv-hint">Saisis un montant</span>';return;}
+  const eur=convertToEur(amount,currency);
+  if(currency==='EUR')preview.innerHTML='<span class="conv-hint">Equivalent</span><span class="conv-amount">'+Math.round(eur*RATE).toLocaleString('fr-FR')+' XAF</span>';
+  else if(currency==='XAF')preview.innerHTML='<span class="conv-hint">Equivalent</span><span class="conv-amount">≈ '+eur.toFixed(2)+' EUR</span>';
+  else preview.innerHTML='<span class="conv-hint">Equivalent</span><span class="conv-amount">≈ '+eur.toFixed(2)+' EUR</span>';
+}
+function syncCountries(){const from=document.getElementById('ann-from').value;const to=document.getElementById('ann-to');for(let opt of to.options){if(opt.value!==from){to.value=opt.value;break;}}}
+async function submitAnnonce(){
+  const amount=document.getElementById('ann-amount').value;const currency=document.getElementById('ann-currency').value;
+  const fromCountry=document.getElementById('ann-from').value;const toCountry=document.getElementById('ann-to').value;
+  if(!amount||Number(amount)<=0){showMsg('msg-create','Montant invalide');return;}
+  if(fromCountry===toCountry){showMsg('msg-create','Pays identiques');return;}
+  const btn=document.getElementById('btn-submit');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Publication...';
+  try{const res=await fetch(API+'/transfer',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({amount:Number(amount),currency,fromCountry,toCountry})});
+    const data=await res.json();
+    if(res.ok){closeSheet('createOverlay');document.getElementById('ann-amount').value='';
+      if(data.message&&data.message.includes('Match')){showToast('Match trouve !','var(--yellow)');setTimeout(()=>{window.location.href='/tdoli-deals.html';},2000);}
+      else{showToast('Annonce publiee');loadFeed(true);}}
+    else showMsg('msg-create',data.message||'Erreur');
+  }catch(e){showMsg('msg-create','Serveur inaccessible');}
+  btn.disabled=false;btn.innerHTML='Publier';
+}
+loadFeed();setInterval(()=>loadFeed(true),30000);
+</script>
+</body>
+</html>
