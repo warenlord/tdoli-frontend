@@ -387,29 +387,25 @@ function renderStars(r) {
 function calcAirtelFees(xafAmount) {
   if (xafAmount <= 0) return 0;
   if (xafAmount < 200000) {
-    // 3 000 FCFA par tranche de 100 000 (arrondi au supérieur)
-    const tranches = Math.ceil(xafAmount / 100000);
-    return tranches * 3000;
+    return Math.ceil(xafAmount / 100000) * 3000;
   }
-  if (xafAmount <= 500000) {
-    return 5000; // forfait
-  }
-  // Au-delà de 500 000 : 1% (à confirmer — valeur provisoire)
+  if (xafAmount <= 500000) return 5000;
   return Math.round(xafAmount * 0.01);
 }
 
-function renderAirtelPreview(amount, currency, toCountry, feesMode) {
-  // feesMode: 'sender' = frais à charge envoyeur, 'receiver' = frais à charge receveur
+function renderAirtelPreview(amount, currency, toCountry) {
   if (!amount || isNaN(amount) || amount <= 0) return '';
+  const isGabon = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
+  if (!isGabon) return '';
   const RATE = 655.957;
 
-  if (currency === 'XAF' && (toCountry === 'Gabon' || toCountry === 'Burkina Faso')) {
+  if (currency === 'XAF') {
     const fees = calcAirtelFees(amount);
     const deposit = amount + fees;
     const eur = (amount / RATE).toFixed(0);
     return '<div class="airtel-box">'+
-      '<div class="airtel-row"><span class="airtel-lbl">Montant annonce</span><span class="airtel-val">'+Number(amount).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Montant</span><span class="airtel-val">'+Number(amount).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
       '<div class="airtel-row airtel-divider"><span class="airtel-lbl">Tu déposes</span><span class="airtel-val bold">'+Number(deposit).toLocaleString('fr-FR')+' FCFA</span></div>'+
       '<div class="airtel-row"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA</span></div>'+
       '<div class="airtel-row"><span class="airtel-lbl">Équivalent EUR</span><span class="airtel-val">≈ '+eur+' €</span></div>'+
@@ -422,9 +418,9 @@ function renderAirtelPreview(amount, currency, toCountry, feesMode) {
     const xafNet = xafBrut - fees;
     return '<div class="airtel-box">'+
       '<div class="airtel-row"><span class="airtel-lbl">Montant</span><span class="airtel-val">'+Number(amount).toLocaleString('fr-FR')+' EUR</span></div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF brut</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-divider"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(xafNet).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF sans frais</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row airtel-divider"><span class="airtel-lbl">Équiv. XAF avec frais</span><span class="airtel-val green">'+Number(xafNet).toLocaleString('fr-FR')+' FCFA</span></div>'+
       '</div>';
   }
 
