@@ -385,7 +385,9 @@ function renderDeals(data) {
     document.getElementById('dealsList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce depuis le Feed pour démarrer un deal.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
     return;
   }
-  const items = data.map((d,i) => {
+  const list = document.createElement('div');
+  list.className = 'deal-list';
+  data.forEach((d,i) => {
     const other = d.otherUsername || '?';
     const ini = getInitials(other);
     const st = getStatusLabel(d.status);
@@ -418,9 +420,10 @@ function renderDeals(data) {
           actionHtml+
         '</div>'+
       '</div>';
-    return div.outerHTML;
+    list.appendChild(div);
   });
-  document.getElementById('dealsList').innerHTML = '<div class="deal-list">'+items.join('')+'</div>';
+  document.getElementById('dealsList').innerHTML = '';
+  document.getElementById('dealsList').appendChild(list);
 }
 
 
