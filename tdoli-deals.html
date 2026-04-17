@@ -455,18 +455,27 @@ async function loadDeals(silent) {
     } catch(renderErr) {
       console.error('[renderDeals]', renderErr);
       // Affichage de secours si renderDeals plante
-      document.getElementById('dealsList').innerHTML = '<div class="deal-list">' + allDeals.map(d => {
+      const fallbackList = document.createElement('div');
+      fallbackList.className = 'deal-list';
+      allDeals.forEach(d => {
         const st = getStatusLabel(d.status);
         const amt = d.myAmount || d.amount || 0;
         const cur = d.myCurrency || d.currency || '';
         const other = d.otherUsername || d.receiverEmail?.split('@')[0] || '?';
-        return '<div class="deal-item '+d.status+'" onclick="openDeal(''+d._id+'')" style="padding:14px 16px;">'+
-          '<div class="deal-body">'+
-            '<div class="deal-top"><span class="deal-ref">'+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span><span class="deal-badge-sm '+st.cls+'">'+st.label+'</span></div>'+
-            '<div class="deal-mid"><span class="deal-amount-sm">'+Number(amt).toLocaleString('fr-FR')+' '+cur+'</span><span class="deal-other"> · '+other+'</span></div>'+
-          '</div>'+
-        '</div>';
-      }).join('') + '</div>';
+        const el = document.createElement('div');
+        el.className = 'deal-item ' + d.status;
+        el.style.padding = '14px 16px';
+        el.dataset.id = d._id;
+        el.addEventListener('click', () => openDeal(d._id));
+        el.innerHTML =
+          '<div class="deal-body">' +
+            '<div class="deal-top"><span class="deal-ref">' + (d.dealCode || '#' + d._id.slice(-6).toUpperCase()) + '</span><span class="deal-badge-sm ' + st.cls + '">' + st.label + '</span></div>' +
+            '<div class="deal-mid"><span class="deal-amount-sm">' + Number(amt).toLocaleString('fr-FR') + ' ' + cur + '</span><span class="deal-other"> \xB7 ' + other + '</span></div>' +
+          '</div>';
+        fallbackList.appendChild(el);
+      });
+      document.getElementById('dealsList').innerHTML = '';
+      document.getElementById('dealsList').appendChild(fallbackList);
     }
   } catch(e) {
     document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Erreur réseau</div><div class="empty-sub">'+e.message+'</div></div>';
@@ -491,7 +500,7 @@ function openDeal(id) {
 
   // Code TDL
   const tdlCode = d.dealCode || 'En attente';
-  const tdlHtml = '<div class="tdl-code-box"><div><div class="tdl-code-label">Code du deal</div><div class="tdl-code-val">'+tdlCode+'</div></div><button class="tdl-copy-btn" onclick="copyCode(''+tdlCode+'')">📋 Copier</button></div>';
+  const tdlHtml = '<div class="tdl-code-box"><div><div class="tdl-code-label">Code du deal</div><div class="tdl-code-val">'+tdlCode+'</div></div><button class="tdl-copy-btn" data-code="'+tdlCode+'" onclick="copyCode(this.dataset.code)">📋 Copier</button></div>';
 
   // Stepper
   const stepHtml = '<div class="stepper">' + [
@@ -512,8 +521,8 @@ function openDeal(id) {
     : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l&#39;autre partie</div>';
 
   const myInfoHtml = myInfoFilled
-    ? renderPaymentInfo(myPayInfo, '✅ Mes coordonnées') + '<button style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-bottom:10px;" onclick="openPaymentInfo(''+d._id+'')">✏️ Modifier</button>'
-    : '<button class="btn-add-payment" onclick="openPaymentInfo(''+d._id+'')">➕ Ajouter mes coordonnées de paiement</button>';
+    ? renderPaymentInfo(myPayInfo, '✅ Mes coordonnées') + '<button style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-bottom:10px;" data-id="'+d._id+'" onclick="openPaymentInfo(this.dataset.id)">✏️ Modifier</button>'
+    : '<button class="btn-add-payment" data-id="'+d._id+'" onclick="openPaymentInfo(this.dataset.id)">➕ Ajouter mes coordonnées de paiement</button>';
 
   // OCR résultat
   const myOcr = isSender ? d.ocrSender : d.ocrReceiver;
@@ -559,9 +568,10 @@ function openDeal(id) {
       ratingHtml = '<div class="rating-section"><div class="rated-done">✓ Tu as déjà noté ce deal</div></div>';
     } else {
       const r = selectedRatings[d._id] || 0;
-      ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+d._id+'">'
-        +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" onclick="setRating(''+d._id+'','+n+')">★</span>').join('')
-        +'</div><textarea class="rating-comment" id="comment-'+d._id+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" onclick="submitRating(''+d._id+'')">Envoyer la note</button></div>';
+      const dealIdAttr = d._id;
+      ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+dealIdAttr+'">'
+        +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+dealIdAttr+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)">★</span>').join('')
+        +'</div><textarea class="rating-comment" id="comment-'+dealIdAttr+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" data-deal="'+dealIdAttr+'" onclick="submitRating(this.dataset.deal)">Envoyer la note</button></div>';
     }
   }
 
