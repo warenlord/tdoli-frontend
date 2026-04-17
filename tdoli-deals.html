@@ -477,7 +477,7 @@ function openDeal(id) {
 
   const otherInfoHtml = otherInfoFilled
     ? renderPaymentInfo(otherPayInfo, '📍 Envoyer à')
-    : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l'autre partie</div>';
+    : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l&#39;autre partie</div>';
 
   const myInfoHtml = myInfoFilled
     ? renderPaymentInfo(myPayInfo, '✅ Mes coordonnées') + '<button style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-bottom:10px;" onclick="openPaymentInfo(''+d._id+'')">✏️ Modifier</button>'
@@ -511,10 +511,12 @@ function openDeal(id) {
 
   let actionsHtml = '';
   if(d.status==='matched' && !iConfirmed) {
-    actionsHtml = tdlHtml + ocrHtml + '<div class="deal-actions"><button class="btn-confirm" onclick="openProof(''+d._id+'')">📎 J'ai envoyé</button><button class="btn-dispute" onclick="openDispute(''+d._id+'')">⚠ Litige</button></div>';
+    actionsHtml = tdlHtml + ocrHtml + '<div class="deal-actions">' +
+      '<button class="btn-confirm" onclick="openProof(\'' + d._id + '\')" >📎 J&#39;ai envoyé</button>' +
+      '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')" >⚠ Litige</button>' +
+      '</div>';
   } else if(d.status==='matched' && iConfirmed) {
-    actionsHtml = tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);">✓ Tu as confirmé — en attente de l'autre partie</div>';
-  }
+    actionsHtml = tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);">✓ Tu as confirmé — en attente de l&#39;autre partie</div>';  }
 
   const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;">💬</div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
 
