@@ -427,17 +427,38 @@ async function loadDeals(silent) {
   try {
     const r = await safeJson(await fetch(API+'/deals/mine', {headers:{'Authorization':'Bearer '+token}}));
     if(r.status===401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
-    if(!r.ok || !Array.isArray(r.data)) {
-      // FIX: arrêter le spinner — afficher état vide propre
+    if(!r.ok || !r.data) {
       document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce pour démarrer.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
       allDeals=[];
       return;
     }
-    allDeals = r.data;
+    // Accepter tableau ou objet
+    allDeals = Array.isArray(r.data) ? r.data : [];
+    if(allDeals.length === 0) {
+      document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce pour démarrer.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
+      return;
+    }
     const filtered = currentFilter==='all' ? allDeals : allDeals.filter(d=>d.status===currentFilter);
-    renderDeals(filtered);
+    try {
+      renderDeals(filtered);
+    } catch(renderErr) {
+      console.error('[renderDeals]', renderErr);
+      // Affichage de secours si renderDeals plante
+      document.getElementById('dealsList').innerHTML = '<div class="deal-list">' + allDeals.map(d => {
+        const st = getStatusLabel(d.status);
+        const amt = d.myAmount || d.amount || 0;
+        const cur = d.myCurrency || d.currency || '';
+        const other = d.otherUsername || d.receiverEmail?.split('@')[0] || '?';
+        return '<div class="deal-item '+d.status+'" onclick="openDeal(''+d._id+'')" style="padding:14px 16px;">'+
+          '<div class="deal-body">'+
+            '<div class="deal-top"><span class="deal-ref">'+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span><span class="deal-badge-sm '+st.cls+'">'+st.label+'</span></div>'+
+            '<div class="deal-mid"><span class="deal-amount-sm">'+Number(amt).toLocaleString('fr-FR')+' '+cur+'</span><span class="deal-other"> · '+other+'</span></div>'+
+          '</div>'+
+        '</div>';
+      }).join('') + '</div>';
+    }
   } catch(e) {
-    document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Erreur réseau</div><div class="empty-sub">Vérifie ta connexion et réessaie.</div></div>';
+    document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Erreur réseau</div><div class="empty-sub">'+e.message+'</div></div>';
   }
 }
 
