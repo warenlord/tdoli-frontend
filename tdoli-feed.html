@@ -328,6 +328,66 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 
+<!-- Sheet nouveau bénéficiaire inline (depuis feed) -->
+<div class="overlay" id="inlineBenefOverlay" onclick="closeOnOverlay(event,'inlineBenefOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title">Nouveau bénéficiaire</div>
+
+    <div class="form-group">
+      <label class="form-label">Nom</label>
+      <input class="form-input" type="text" id="ib-nom" placeholder="Ex: Maman, Jean Dupont…">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Pays</label>
+      <select class="form-select" id="ib-pays">
+        <option value="">Sélectionner…</option>
+        <option value="Gabon">🇬🇦 Gabon</option>
+        <option value="France">🇫🇷 France</option>
+        <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+        <option value="Belgique">🇧🇪 Belgique</option>
+        <option value="Suisse">🇨🇭 Suisse</option>
+        <option value="Canada">🇨🇦 Canada</option>
+        <option value="Etats-Unis">🇺🇸 États-Unis</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Méthode</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+        <div class="filter-chip active" id="ibm-mm" onclick="setIBMethod('mobilemoney',this)">📱 Mobile Money</div>
+        <div class="filter-chip" id="ibm-vir" onclick="setIBMethod('virement',this)">🏦 Virement</div>
+        <div class="filter-chip" id="ibm-pp" onclick="setIBMethod('paypal',this)">💳 PayPal</div>
+        <div class="filter-chip" id="ibm-wero" onclick="setIBMethod('wero',this)">🟣 Wero</div>
+      </div>
+    </div>
+    <div id="ib-fields-mobilemoney">
+      <div class="form-group"><label class="form-label">Numéro Mobile Money</label><input class="form-input" type="tel" id="ib-phone" placeholder="+241 06 00 00 00" inputmode="tel"></div>
+      <div class="form-group"><label class="form-label">Opérateur</label>
+        <select class="form-select" id="ib-operateur">
+          <option value="">Sélectionner…</option>
+          <option value="Airtel Money">Airtel Money</option>
+          <option value="Moov Money">Moov Money</option>
+          <option value="Orange Money">Orange Money</option>
+        </select>
+      </div>
+    </div>
+    <div id="ib-fields-virement" style="display:none;">
+      <div class="form-group"><label class="form-label">IBAN</label><input class="form-input" type="text" id="ib-iban" placeholder="FR76…"></div>
+      <div class="form-group"><label class="form-label">Banque</label><input class="form-input" type="text" id="ib-banque" placeholder="BNP, Société Générale…"></div>
+    </div>
+    <div id="ib-fields-paypal" style="display:none;">
+      <div class="form-group"><label class="form-label">Email PayPal</label><input class="form-input" type="email" id="ib-paypal" placeholder="ton@email.com"></div>
+    </div>
+    <div id="ib-fields-wero" style="display:none;">
+      <div class="form-group"><label class="form-label">Numéro Wero</label><input class="form-input" type="tel" id="ib-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"></div>
+    </div>
+
+    <button class="btn-primary" id="btn-ib-save" onclick="saveInlineBenef()">Enregistrer et sélectionner</button>
+    <button class="btn-cancel" onclick="closeSheet('inlineBenefOverlay');openBenefSheet('create')">Annuler</button>
+    <div class="msg" id="msg-ib"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -641,7 +701,12 @@ async function checkActiveDeals() {
   } catch (e) {}
 }
 
-function openCreateSheet() { document.getElementById('createOverlay').classList.add('open'); }
+function openCreateSheet() {
+  // Charger les bénéficiaires avant d'ouvrir
+  loadBeneficiaires().then(() => {
+    document.getElementById('createOverlay').classList.add('open');
+  });
+}
 function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
 function closeOnOverlay(e, id) { if (e.target === document.getElementById(id)) closeSheet(id); }
 function showMsg(id, text) { const el = document.getElementById(id); el.className = 'msg error show'; el.textContent = text; }
@@ -730,7 +795,7 @@ function renderBenefSelectList(onSelect) {
   
   if(allBeneficiaires.length === 0) {
     list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;">Aucun bénéficiaire enregistré</div>' +
-      '<a href="/tdoli-beneficiaires.html" class="btn-primary" style="display:block;text-align:center;text-decoration:none;padding:14px;margin-top:8px;">+ Créer un bénéficiaire</a>';
+      '<button class="btn-primary" style="margin-top:8px;" onclick="openInlineBenefForm()">+ Créer un bénéficiaire</button>';
     return;
   }
 
@@ -747,7 +812,7 @@ function renderBenefSelectList(onSelect) {
       ${selectedBenefId === b._id ? '<span style="margin-left:auto;color:var(--green);">✓</span>' : ''}
     </div>`;
   }).join('') +
-  '<a href="/tdoli-beneficiaires.html" style="display:block;text-align:center;font-size:12px;color:var(--text-3);margin-top:12px;text-decoration:none;">+ Nouveau bénéficiaire</a>';
+  '<button onclick="openInlineBenefForm()" style="background:none;border:none;color:var(--text-3);font-size:12px;cursor:pointer;width:100%;margin-top:12px;">+ Nouveau bénéficiaire</button>';
 }
 
 function selectBenef(id, context) {
@@ -777,6 +842,87 @@ function openBenefSheet(context) {
 
 // Charger bénéficiaires au démarrage
 loadBeneficiaires();
+
+
+let currentIBMethod = 'mobilemoney';
+
+function setIBMethod(method, el) {
+  currentIBMethod = method;
+  ['mobilemoney','virement','paypal','wero'].forEach(m => {
+    document.getElementById('ib-fields-'+m).style.display = m === method ? 'block' : 'none';
+    document.getElementById('ibm-'+m.substring(0,m==='mobilemoney'?2:m==='virement'?3:m==='paypal'?2:4)).classList.toggle('active', m === method);
+  });
+}
+
+function openInlineBenefForm() {
+  closeSheet('benefOverlay');
+  // Reset form
+  ['ib-nom','ib-phone','ib-iban','ib-banque','ib-paypal','ib-wero'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('ib-pays').value = '';
+  document.getElementById('ib-operateur').value = '';
+  currentIBMethod = 'mobilemoney';
+  ['mobilemoney','virement','paypal','wero'].forEach(m => {
+    document.getElementById('ib-fields-'+m).style.display = m === 'mobilemoney' ? 'block' : 'none';
+  });
+  document.getElementById('ibm-mm').classList.add('active');
+  document.getElementById('ibm-vir').classList.remove('active');
+  document.getElementById('ibm-pp').classList.remove('active');
+  document.getElementById('ibm-wero').classList.remove('active');
+  const msg = document.getElementById('msg-ib');
+  if (msg) { msg.className = 'msg'; msg.textContent = ''; }
+  document.getElementById('inlineBenefOverlay').classList.add('open');
+}
+
+async function saveInlineBenef() {
+  const nom = document.getElementById('ib-nom').value.trim();
+  if (!nom) {
+    const el = document.getElementById('msg-ib');
+    el.className = 'msg error show'; el.textContent = 'Le nom est requis';
+    return;
+  }
+  const payload = {
+    type: 'beneficiaire',
+    nom,
+    methode: currentIBMethod,
+    pays: document.getElementById('ib-pays').value || '',
+    phone: document.getElementById('ib-phone')?.value.trim() || '',
+    operateur: document.getElementById('ib-operateur')?.value || '',
+    iban: document.getElementById('ib-iban')?.value.trim() || '',
+    banque: document.getElementById('ib-banque')?.value.trim() || '',
+    paypal: document.getElementById('ib-paypal')?.value.trim() || '',
+    wero: document.getElementById('ib-wero')?.value.trim() || '',
+  };
+
+  const btn = document.getElementById('btn-ib-save');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+
+  try {
+    const res = await fetch(API + '/beneficiaires', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (res.ok && data.beneficiaire) {
+      // Ajouter à la liste locale et sélectionner
+      allBeneficiaires.push(data.beneficiaire);
+      closeSheet('inlineBenefOverlay');
+      selectBenef(data.beneficiaire._id, 'create');
+      showToast('Bénéficiaire ajouté ✓');
+    } else {
+      const el = document.getElementById('msg-ib');
+      el.className = 'msg error show';
+      el.textContent = (data && data.message) || 'Erreur';
+    }
+  } catch(e) {
+    const el = document.getElementById('msg-ib');
+    el.className = 'msg error show'; el.textContent = 'Erreur réseau';
+  }
+  btn.disabled = false; btn.textContent = 'Enregistrer et sélectionner';
+}
 
 // Démarrage
 loadFeed();
