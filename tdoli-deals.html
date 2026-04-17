@@ -131,6 +131,24 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:400;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* Phase 3 — Code TDL + OCR */
+.tdl-code-box{background:rgba(26,79,255,0.08);border:1px solid rgba(26,79,255,0.25);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.tdl-code-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
+.tdl-code-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--blue);letter-spacing:2px;}
+.tdl-copy-btn{background:rgba(26,79,255,0.15);border:none;color:var(--blue);font-size:11px;font-family:'Syne',sans-serif;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;}
+.ocr-result{border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;}
+.ocr-result.validated{background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);color:var(--green);}
+.ocr-result.pending{background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.2);color:var(--yellow);}
+.ocr-result.failed{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:var(--red);}
+.ocr-score{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-left:8px;}
+.ocr-checks{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.ocr-check{font-size:10px;padding:2px 8px;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;}
+.ocr-check.ok{background:rgba(0,201,122,0.1);color:var(--green);}
+.ocr-check.ko{background:rgba(255,68,68,0.1);color:var(--red);}
+.proof-upload-area{border:2px dashed var(--border-active);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px;transition:all 0.2s;}
+.proof-upload-area:active{background:var(--green-glow);}
+.ocr-loading{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-3);padding:10px 0;}
+
 /* Infos paiement bénéficiaire */
 .payment-info-box{background:var(--surface);border:1px solid var(--border-active);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
 .payment-info-title{font-size:11px;font-weight:700;font-family:'Syne',sans-serif;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
@@ -368,22 +386,32 @@ function renderDeals(data) {
     return;
   }
   document.getElementById('dealsList').innerHTML = '<div class="deal-list">' + data.map((d,i) => {
-    const isA = d.senderA===email;
-    const other = isA ? (d.usernameB||d.receiverB?.split('@')[0]||'?') : (d.usernameA||d.senderA?.split('@')[0]||'?');
+    const other = d.otherUsername || '?';
     const ini = getInitials(other);
     const st = getStatusLabel(d.status);
-    const eur = convertToEur(d.amountA||d.amount, d.currencyA||d.currency);
-    const euroLabel = (d.currencyA||d.currency)!=='EUR' ? '≈'+eur.toFixed(0)+'€' : '';
-    return `<div class="deal-item ${d.status}" style="animation-delay:${i*0.04}s" onclick="openDeal('${d._id}')">
-      <div class="deal-avatar">${ini}</div>
-      <div class="deal-body">
-        <div class="deal-top"><span class="deal-ref">#${d._id.slice(-6).toUpperCase()}</span><span class="deal-badge-sm ${st.cls}">${st.label}</span></div>
-        <div class="deal-mid"><span class="deal-amount-sm">${Number(d.amountA||d.amount).toLocaleString('fr-FR')} ${d.currencyA||d.currency}</span><span class="deal-other">${other}${euroLabel?' · '+euroLabel:''}</span></div>
-        <div class="deal-bottom"><span class="deal-dir">${d.fromCountry||'?'} → ${d.toCountry||'?'}</span>${d.status==='matched'?'<span class="deal-action-hint">Action requise →</span>':'<span style="font-size:10px;color:var(--text-3)">' + timeAgo(d.updatedAt||d.createdAt)+'</span>'}</div>
-      </div>
-    </div>`;
+    const myAmt = d.myAmount || d.amount || 0;
+    const myCur = d.myCurrency || d.currency || '';
+    const iConfirmed = d.iConfirmed || false;
+    return '<div class="deal-item '+d.status+'" style="animation-delay:'+(i*0.04)+'s" onclick="openDeal(''+d._id+'')">'+
+      '<div class="deal-avatar">'+ini+'</div>'+
+      '<div class="deal-body">'+
+        '<div class="deal-top">'+
+          '<span class="deal-ref">'+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span>'+
+          '<span class="deal-badge-sm '+st.cls+'">'+st.label+'</span>'+
+        '</div>'+
+        '<div class="deal-mid">'+
+          '<span class="deal-amount-sm">'+Number(myAmt).toLocaleString('fr-FR')+' '+myCur+'</span>'+
+          '<span class="deal-other">'+other+'</span>'+
+        '</div>'+
+        '<div class="deal-bottom">'+
+          '<span class="deal-dir">'+(d.fromCountry||'?')+' ⇄ '+(d.toCountry||'?')+'</span>'+
+          (d.status==='matched' ? (iConfirmed ? '<span style="font-size:10px;color:var(--green)">✓ Envoyé · En attente</span>' : '<span class="deal-action-hint">Action requise →</span>') : '<span style="font-size:10px;color:var(--text-3)">'+timeAgo(d.updatedAt||d.createdAt)+'</span>')+
+        '</div>'+
+      '</div>'+
+    '</div>';
   }).join('') + '</div>';
 }
+
 
 function setFilter(f, el) {
   currentFilter=f;
@@ -415,69 +443,80 @@ async function loadDeals(silent) {
 
 function openDeal(id) {
   const d = allDeals.find(x=>x._id===id); if(!d) return;
-  const isA = d.senderA===email;
-  const otherName = isA ? (d.usernameB||d.receiverB?.split('@')[0]||'?') : (d.usernameA||d.senderA?.split('@')[0]||'?');
-  const myName = isA ? (d.usernameA||d.senderA?.split('@')[0]||'?') : (d.usernameB||d.receiverB?.split('@')[0]||'?');
+  const isSender = d.sender === email;
+  const otherName = d.otherUsername || '?';
+  const myName = localStorage.getItem('tdoli_username') || email?.split('@')[0] || '?';
   const st = getStatusLabel(d.status);
-  const amount = d.amountA||d.amount;
-  const currency = d.currencyA||d.currency;
-  const eur = convertToEur(amount,currency);
+  const amount = d.myAmount || d.amount || 0;
+  const currency = d.myCurrency || d.currency || '';
+  const otherAmount = d.otherAmount || d.matchedAmount || 0;
+  const otherCurrency = d.otherCurrency || d.matchedCurrency || '';
+  const eur = convertToEur(amount, currency);
   const euroLabel = currency!=='EUR' ? '≈ '+eur.toFixed(0)+' EUR' : '';
 
-  // Stepper
-  const steps = [
-    {label:'Match',done:true},
-    {label:'Envoi',done:d.proofA||d.proofB||d.status==='completed'},
-    {label:'Reçu',done:d.status==='completed'},
-    {label:'Terminé',done:d.status==='completed'}
-  ];
-  const stepHtml = '<div class="stepper">' + steps.map((s,i)=>`
-    <div class="step ${s.done?'done':i===1&&d.status==='matched'?'active':''}">
-      <div class="step-dot ${s.done?'done':i===1&&d.status==='matched'?'active':'pending'}">${s.done?'✓':i+1}</div>
-      <div class="step-label">${s.label}</div>
-    </div>`).join('') + '</div>';
+  const iConfirmed = isSender ? d.confirmedBySender : d.confirmedByReceiver;
+  const otherConfirmed = isSender ? d.confirmedByReceiver : d.confirmedBySender;
 
-  // Instruction selon statut
+  // Code TDL
+  const tdlCode = d.dealCode || 'En attente';
+  const tdlHtml = '<div class="tdl-code-box"><div><div class="tdl-code-label">Code du deal</div><div class="tdl-code-val">'+tdlCode+'</div></div><button class="tdl-copy-btn" onclick="copyCode(''+tdlCode+'')">📋 Copier</button></div>';
+
+  // Stepper
+  const stepHtml = '<div class="stepper">' + [
+    {label:'Match', done:true},
+    {label:'J'envoie', done:iConfirmed||d.status==='completed', active:!iConfirmed&&d.status==='matched'},
+    {label:'Autre', done:otherConfirmed||d.status==='completed', active:!otherConfirmed&&d.status==='matched'},
+    {label:'Terminé', done:d.status==='completed'}
+  ].map((s,j)=>'<div class="step '+(s.done?'done':s.active?'active':'')+'"><div class="step-dot '+(s.done?'done':s.active?'active':'pending')+'">'+(s.done?'✓':j+1)+'</div><div class="step-label">'+s.label+'</div></div>').join('') + '</div>';
+
+  // Infos bénéficiaire + instruction
+  const myPayInfo = isSender ? d.senderPaymentInfo : d.receiverPaymentInfo;
+  const otherPayInfo = isSender ? d.receiverPaymentInfo : d.senderPaymentInfo;
+  const otherInfoFilled = otherPayInfo && (otherPayInfo.name || otherPayInfo.phone || otherPayInfo.iban || otherPayInfo.paypal);
+  const myInfoFilled = myPayInfo && (myPayInfo.name || myPayInfo.phone || myPayInfo.iban || myPayInfo.paypal);
+
+  const otherInfoHtml = otherInfoFilled
+    ? renderPaymentInfo(otherPayInfo, '📍 Envoyer à')
+    : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l'autre partie</div>';
+
+  const myInfoHtml = myInfoFilled
+    ? renderPaymentInfo(myPayInfo, '✅ Mes coordonnées') + '<button style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-bottom:10px;" onclick="openPaymentInfo(''+d._id+'')">✏️ Modifier</button>'
+    : '<button class="btn-add-payment" onclick="openPaymentInfo(''+d._id+'')">➕ Ajouter mes coordonnées de paiement</button>';
+
+  // OCR résultat
+  const myOcr = isSender ? d.ocrSender : d.ocrReceiver;
+  let ocrHtml = '';
+  if (myOcr && myOcr.reason) {
+    const ocrCls = myOcr.validated ? 'validated' : myOcr.score >= 30 ? 'pending' : 'failed';
+    const ocrIcon = myOcr.validated ? '✅' : myOcr.score >= 30 ? '⚠️' : '❌';
+    let checksHtml = '';
+    if (myOcr.checks) {
+      if (myOcr.checks.nom !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.nom?'ok':'ko')+'">Nom '+(myOcr.checks.nom?'✓':'✗')+'</span>';
+      if (myOcr.checks.phone !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.phone?'ok':'ko')+'">Téléphone '+(myOcr.checks.phone?'✓':'✗')+'</span>';
+      if (myOcr.checks.iban !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.iban?'ok':'ko')+'">IBAN '+(myOcr.checks.iban?'✓':'✗')+'</span>';
+      if (myOcr.checks.montant !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.montant?'ok':'ko')+'">Montant '+(myOcr.checks.montant?'✓':'✗')+'</span>';
+    }
+    ocrHtml = '<div class="ocr-result '+ocrCls+'">'+ocrIcon+' '+myOcr.reason+'<span class="ocr-score">'+myOcr.score+'%</span><div class="ocr-checks">'+checksHtml+'</div></div>';
+  }
+
   let instructionHtml = '';
   if(d.status==='matched') {
-    const isSenderDeal = d.sender === email;
-    const myPayInfo = isSenderDeal ? d.senderPaymentInfo : d.receiverPaymentInfo;
-    const otherPayInfo = isSenderDeal ? d.receiverPaymentInfo : d.senderPaymentInfo;
-    const myInfoFilled = myPayInfo && (myPayInfo.name || myPayInfo.phone || myPayInfo.iban || myPayInfo.paypal);
-    const otherInfoFilled = otherPayInfo && (otherPayInfo.name || otherPayInfo.phone || otherPayInfo.iban || otherPayInfo.paypal);
-
-    const otherInfoHtml = otherInfoFilled
-      ? renderPaymentInfo(otherPayInfo, '📍 Envoyer à')
-      : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l\'autre partie</div>';
-
-    const myInfoHtml = myInfoFilled
-      ? renderPaymentInfo(myPayInfo, '✅ Mes coordonnées') + '<button style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-bottom:10px;" onclick="openPaymentInfo(\''+d._id+'\')">✏️ Modifier</button>'
-      : '<button class="btn-add-payment" onclick="openPaymentInfo(\''+d._id+'\')">➕ Ajouter mes coordonnées de paiement</button>';
-
-    instructionHtml = '<div class="instruction-box"><div class="instruction-title">⏳ ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>' + otherInfoHtml + myInfoHtml;
+    instructionHtml = '<div class="instruction-box"><div class="instruction-title">⏳ ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>'
+      + otherInfoHtml + myInfoHtml;
   } else if(d.status==='completed') {
     instructionHtml = '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);">✓ Deal complété avec succès !</div>';
   } else if(d.status==='dispute') {
-    instructionHtml = '<div style="background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);">⚠ Litige en cours de traitement par l\'équipe TDOLI.</div>';
+    instructionHtml = '<div style="background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);">⚠ Litige en cours de traitement.</div>';
   }
 
-  // Actions
   let actionsHtml = '';
-  if(d.status==='matched') {
-    actionsHtml = `<div class="deal-actions">
-      <button class="btn-confirm" onclick="openProof('${d._id}')">📎 J'ai envoyé</button>
-      <button class="btn-dispute" onclick="openDispute('${d._id}')">⚠ Litige</button>
-    </div>`;
+  if(d.status==='matched' && !iConfirmed) {
+    actionsHtml = tdlHtml + ocrHtml + '<div class="deal-actions"><button class="btn-confirm" onclick="openProof(''+d._id+'')">📎 J'ai envoyé</button><button class="btn-dispute" onclick="openDispute(''+d._id+'')">⚠ Litige</button></div>';
+  } else if(d.status==='matched' && iConfirmed) {
+    actionsHtml = tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);">✓ Tu as confirmé — en attente de l'autre partie</div>';
   }
 
-  // Chat
-  const chatHtml = `<a href="/tdoli-chat.html?deal=${d._id}" class="chat-link">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;">💬</div>
-      <div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter ${otherName}</div></div>
-    </div>
-    <span style="color:var(--text-3);">→</span>
-  </a>`;
+  const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;">💬</div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
 
   // Notation
   let ratingHtml = '';
@@ -486,35 +525,22 @@ function openDeal(id) {
       ratingHtml = '<div class="rating-section"><div class="rated-done">✓ Tu as déjà noté ce deal</div></div>';
     } else {
       const r = selectedRatings[d._id] || 0;
-      ratingHtml = `<div class="rating-section">
-        <div class="rating-title">Noter ${otherName}</div>
-        <div class="stars" id="stars-${d._id}">
-          ${[1,2,3,4,5].map(n=>`<span class="star ${r>=n?'active':''}" onclick="setRating('${d._id}',${n})">★</span>`).join('')}
-        </div>
-        <textarea class="rating-comment" id="comment-${d._id}" placeholder="Ajoute un commentaire (optionnel)..."></textarea>
-        <button class="btn-rate" onclick="submitRating('${d._id}')">Envoyer la note</button>
-      </div>`;
+      ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+d._id+'">'
+        +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" onclick="setRating(''+d._id+'','+n+')">★</span>').join('')
+        +'</div><textarea class="rating-comment" id="comment-'+d._id+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" onclick="submitRating(''+d._id+'')">Envoyer la note</button></div>';
     }
   }
 
-  document.getElementById('detailContent').innerHTML = `
-    <div class="detail-header">
-      <span class="detail-ref">DEAL #${d._id.slice(-6).toUpperCase()}</span>
-      <span class="detail-badge ${st.cls}">${st.label}</span>
-    </div>
-    <div class="detail-parties">
-      <div class="party"><div class="party-label">Envoyeur</div><div class="party-name">${isA?myName:otherName}${isA?'<span class="you-tag">Toi</span>':''}</div></div>
-      <div class="vs-sep">⇄</div>
-      <div class="party"><div class="party-label">Receveur</div><div class="party-name">${isA?otherName:myName}${!isA?'<span class="you-tag">Toi</span>':''}</div></div>
-    </div>
-    <div class="detail-amount-row">
-      <div><span class="detail-amt">${Number(amount).toLocaleString('fr-FR')}</span><span class="detail-cur">${currency}</span></div>
-      ${euroLabel?'<span class="detail-eur">'+euroLabel+'</span>':''}
-    </div>
-    ${stepHtml}${instructionHtml}${actionsHtml}${chatHtml}${ratingHtml}`;
+  document.getElementById('detailContent').innerHTML =
+    '<div class="detail-header"><span class="detail-ref">DEAL '+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span><span class="detail-badge '+st.cls+'">'+st.label+'</span></div>'+
+    '<div class="detail-parties"><div class="party"><div class="party-label">Toi</div><div class="party-name">'+myName+'</div></div><div class="vs-sep">⇄</div><div class="party"><div class="party-label">Partenaire</div><div class="party-name">'+otherName+'</div></div></div>'+
+    '<div class="detail-amount-row"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">TU ENVOIES</div><span class="detail-amt">'+Number(amount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+currency+'</span></div>'+(euroLabel?'<span class="detail-eur">'+euroLabel+'</span>':'')+'</div>'+
+    (otherAmount?'<div class="detail-amount-row" style="margin-top:8px;"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">'+otherName.toUpperCase()+' ENVOIE</div><span class="detail-amt">'+Number(otherAmount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+otherCurrency+'</span></div></div>':'')+
+    stepHtml + instructionHtml + actionsHtml + chatHtml + ratingHtml;
 
   document.getElementById('detailOverlay').classList.add('open');
 }
+
 
 function setRating(dealId, stars) {
   selectedRatings[dealId] = stars;
@@ -552,14 +578,27 @@ function previewProof(input) {
 async function submitProof() {
   if(!proofFile||!currentProofDealId) return;
   const btn=document.getElementById('btn-submit-proof');
-  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Envoi...';
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Analyse OCR…';
   try {
     const fd=new FormData(); fd.append('proof',proofFile);
-    const res=await fetch(API+'/deals/'+currentProofDealId+'/proof',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
+    const res=await fetch(API+'/deal/'+currentProofDealId+'/proof-ocr',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
     const r=await safeJson(res);
-    if(r.ok) { closeSheet('proofOverlay'); showToast('Preuve envoyée ✓'); loadDeals(true); }
-    else showMsg('msg-proof',(r.data&&r.data.message)||'Erreur upload');
-  } catch(e) { showMsg('msg-proof','Erreur réseau'); }
+    if(r.ok) {
+      closeSheet('proofOverlay');
+      if(r.data&&r.data.autoConfirmed) showToast('✅ Preuve validée automatiquement !','var(--green-dim)');
+      else showToast('Preuve envoyée — vérification en cours','#b8960c');
+      loadDeals(true);
+    } else {
+      // Fallback route classique
+      const fd2=new FormData(); fd2.append('proof',proofFile);
+      const res2=await fetch(API+'/deal/proof',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd2});
+      const r2=await safeJson(res2);
+      if(r2.ok&&r2.data&&r2.data.url) {
+        await fetch(API+'/deal/'+currentProofDealId+'/confirm',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({proofUrl:r2.data.url})});
+        closeSheet('proofOverlay'); showToast('Preuve envoyée ✓'); loadDeals(true);
+      } else showMsg('msg-proof',(r.data&&r.data.message)||'Erreur upload');
+    }
+  } catch(e) { showMsg('msg-proof','Erreur réseau: '+e.message); }
   btn.disabled=false; btn.innerHTML='Confirmer la réception';
 }
 
@@ -663,6 +702,12 @@ function renderPaymentInfo(info, label) {
   if (info.note) html += '<div class="payment-info-row"><span class="payment-info-label">Note</span><span class="payment-info-val" style="color:var(--text-3)">' + info.note + '</span></div>';
   html += '</div>';
   return html;
+}
+
+function copyCode(code) {
+  navigator.clipboard.writeText(code)
+    .then(() => showToast('Code copié ! ' + code, 'var(--blue)'))
+    .catch(() => showToast(code, 'var(--blue)'));
 }
 
 loadDeals();
