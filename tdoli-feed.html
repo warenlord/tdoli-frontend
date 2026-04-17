@@ -842,7 +842,7 @@ function selectBenef(id, context) {
   closeSheet('benefOverlay');
 
   const detail = getBenefDetail(b);
-  const badgeHtml = '<div class="benef-selected-badge"><span style="font-size:18px;">✓</span><div><div class="benef-selected-name">'+b.nom+'</div><div class="benef-selected-detail">'+detail+'</div></div><button onclick="openBenefSheet(''+context+'')" style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-left:auto;">Changer</button></div>';
+  const badgeHtml = '<div class="benef-selected-badge"><span style="font-size:18px;">✓</span><div><div class="benef-selected-name">'+b.nom+'</div><div class="benef-selected-detail">'+detail+'</div></div><button onclick="openBenefSheet(this.getAttribute(\"data-ctx\"))" data-ctx="'+context+'" style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-left:auto;">Changer</button></div>';
 
   if(context === 'create') {
     const container = document.getElementById('benef-selected-create');
