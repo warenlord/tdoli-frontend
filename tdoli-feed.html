@@ -115,6 +115,8 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
   width: auto;
   display: block;
 }
+.user-avatar-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
+.share-btn{background:transparent;border:none;color:#fcd116;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;white-space:nowrap;}
 </style>
 
   <link rel="manifest" href="/manifest.json">
@@ -396,12 +398,12 @@ function initAvatar(){
   const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
   let initials='?';
   if(username){
-    const parts=username.trim().split(' ').filter(p=>p.length>0);
+    const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
     if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
     else initials=username.substring(0,2).toUpperCase();
   }
   const btn=document.getElementById('avatarBtn');
-  if(btn){btn.textContent=initials;}
+  if(btn)btn.textContent=initials;
 }
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAvatar);}
 else{initAvatar();}
@@ -410,6 +412,8 @@ function shareApp(){
   const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
   const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
   if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
+  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+});}
   else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
 }
 </script>
