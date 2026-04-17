@@ -233,7 +233,7 @@ function renderFromCache() {
     </div>
     <div class="section-title">Paramètres</div>
     <div class="settings-card">
-      <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label">👥 Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>\n      <div class="settings-item" onclick="openPhoneVerif()"><span class="settings-label">📱 Téléphone</span><span class="settings-val">Non vérifié →</span></div>
+      <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label">👥 Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>\n     \ndiv class="settings-item" onclick="openPhoneVerif()"><span class="settings-label">📱 Téléphone</span><span class="settings-val">Non vérifié →</span></div>
       <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label">📄 CGU</span><span class="settings-val">→</span></div>
     </div>
     <button class="btn-logout" onclick="logout()">🚪 Déconnexion</button>
@@ -296,6 +296,7 @@ function renderFull(user, txs) {
     ${txHtml}
     <div class="section-title" style="margin-top:${txHtml?'16':'0'}px;">Paramètres</div>
     <div class="settings-card">
+      <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label">👥 Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>
       <div class="settings-item" onclick="openPhoneVerif()">
         <span class="settings-label">📱 Téléphone</span>
         <span class="settings-val">${user.phone?user.phone.replace(/(\+?\d{3})\d+(\d{2})$/,'$1•••$2'):'Non vérifié'} →</span>
