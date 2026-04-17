@@ -240,7 +240,7 @@ if ('serviceWorker' in navigator) {
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">De</label>
-        <select class="form-select" id="ann-from" onchange="syncCountries()">
+        <select class="form-select" id="ann-from" onchange="syncCountries();updatePreview('create')">
           <option value="France">🇫🇷 France</option>
           <option value="Gabon">🇬🇦 Gabon</option>
           <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
@@ -251,7 +251,7 @@ if ('serviceWorker' in navigator) {
         </select>
       </div>
       <div class="form-group"><label class="form-label">Vers</label>
-        <select class="form-select" id="ann-to">
+        <select class="form-select" id="ann-to" onchange="updatePreview('create')">
           <option value="Gabon">🇬🇦 Gabon</option>
           <option value="France">🇫🇷 France</option>
           <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
@@ -389,45 +389,48 @@ function calcAirtelFees(xafAmount) {
   return Math.round(xafAmount * 0.01);
 }
 
-function renderAirtelPreview(amount, currency, toCountry) {
+function renderAirtelPreview(amount, currency, toCountry, fromCountry) {
   if (!amount || isNaN(amount) || amount <= 0) return '';
-  const isGabon = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
-  if (!isGabon) return '';
   const RATE = 655.957;
+  const isGabonDest = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
+  const isGabonSrc = fromCountry === 'Gabon' || fromCountry === 'Burkina Faso';
+  if (!isGabonDest && !isGabonSrc) return '';
 
   if (currency === 'XAF') {
+    // XAF → autre pays : envoyeur utilise Airtel pour envoyer
     const fees = calcAirtelFees(amount);
-    const depot = amount + fees;         // scénario A : receveur reçoit le montant exact
-    const netSiFraisInclus = amount - fees; // scénario B : frais déduits du montant
+    const depot = amount + fees;
+    const netSiDeduit = amount - fees;
+    const eurNet = (netSiDeduit / RATE).toFixed(2);
+    const eurBrut = (amount / RATE).toFixed(2);
 
     return '<div class="airtel-box">'+
-      '<div class="airtel-scenario-title">📤 Si tu envoies '+Number(depot).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-scenario-title">📤 Scénario 1 — Tu envoies '+Number(depot).toLocaleString('fr-FR')+' FCFA</div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA (≈ '+eurBrut+' €)</span></div>'+
       '<div style="height:10px"></div>'+
-      '<div class="airtel-scenario-title">📤 Si tu envoies '+Number(amount).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(netSiFraisInclus).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row" style="margin-top:6px"><span class="airtel-lbl">Équivalent EUR</span><span class="airtel-val">≈ '+(amount/RATE).toFixed(0)+' €</span></div>'+
+      '<div class="airtel-scenario-title">📤 Scénario 2 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' FCFA</div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(netSiDeduit).toLocaleString('fr-FR')+' FCFA (≈ '+eurNet+' €)</span></div>'+
       '</div>';
   }
 
   if (currency === 'EUR') {
+    // EUR → Gabon : receveur retire via Airtel
     const xafBrut = Math.round(amount * RATE);
     const fees = calcAirtelFees(xafBrut);
     const xafNet = xafBrut - fees;
-    const depotPourXaf = xafBrut + fees;
-    const eurPourXaf = (depotPourXaf / RATE).toFixed(2);
+    const eurPourCouvrir = ((xafBrut + fees) / RATE).toFixed(2);
 
     return '<div class="airtel-box">'+
-      '<div class="airtel-scenario-title">📤 Si tu envoies '+Number(amount).toLocaleString('fr-FR')+' EUR</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF brut</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-scenario-title">📤 Scénario 1 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' EUR</div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
       '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(xafNet).toLocaleString('fr-FR')+' FCFA</span></div>'+
       '<div style="height:10px"></div>'+
-      '<div class="airtel-scenario-title">📥 Pour que receveur reçoit '+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel à ajouter</span><span class="airtel-val fees">+'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Tu envoies</span><span class="airtel-val green">'+eurPourXaf+' EUR</span></div>'+
+      '<div class="airtel-scenario-title">📥 Scénario 2 — Receveur reçoit '+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</div>'+
+      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel à couvrir</span><span class="airtel-val fees">+'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Tu envoies</span><span class="airtel-val green">'+eurPourCouvrir+' EUR</span></div>'+
       '</div>';
   }
 
@@ -648,7 +651,8 @@ function updatePreview(mode) {
   } else {
     preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">≈ ' + eur.toFixed(2) + ' EUR</span>';
   }
-  if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry);
+  const fromCountry = document.getElementById('ann-from')?.value || '';
+  if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry, fromCountry);
 }
 
 async function submitAnnonce() {
