@@ -631,21 +631,32 @@ function syncCountries() {
   if (toEl.value === from) { const other = Array.from(toEl.options).find(o => o.value !== from); if (other) toEl.value = other.value; }
 }
 
+
 function updatePreview(mode) {
-  updateFeeToggleVisibility(mode);
   const amountEl = document.getElementById(mode === 'create' ? 'ann-amount' : 'edit-amount');
   const currencyEl = document.getElementById(mode === 'create' ? 'ann-currency' : 'edit-currency');
+  const toEl = document.getElementById('ann-to');
   const preview = document.getElementById('convPreview-' + mode);
+  const airtelContainer = document.getElementById('airtel-preview-' + mode);
+  const feesToggle = document.getElementById('fees-toggle-' + mode);
   if (!amountEl || !currencyEl || !preview) return;
   const amount = parseFloat(amountEl.value);
   const currency = currencyEl.value;
-  if (!amount || isNaN(amount)) { preview.innerHTML = '<span class="conv-hint">Saisis un montant</span>'; return; }
+  const toCountry = toEl ? toEl.value : '';
+  const isGabon = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
+  if (feesToggle) feesToggle.style.display = (isGabon && (currency === 'XAF' || currency === 'EUR')) ? 'flex' : 'none';
+  if (!amount || isNaN(amount)) {
+    preview.innerHTML = '<span class="conv-hint">Saisis un montant</span>';
+    if (airtelContainer) airtelContainer.innerHTML = '';
+    return;
+  }
   const eur = convertToEur(amount, currency);
   if (currency === 'EUR') {
     preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">' + Math.round(eur * RATE).toLocaleString('fr-FR') + ' XAF</span>';
   } else {
     preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">≈ ' + eur.toFixed(2) + ' EUR</span>';
   }
+  if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry);
 }
 
 async function submitAnnonce() {
