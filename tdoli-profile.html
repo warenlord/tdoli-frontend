@@ -6,17 +6,52 @@
 <title>TDOLI — Profil</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);--r:16px;}
+:root{
+  --bg:#060d09;--surface:#0c1710;--card:#111e15;
+  --green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);
+  --yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;
+  --text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;
+  --border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);
+  --r:16px;
+}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
-.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;}
-.topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.topbar-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
+
+/* AVATAR BTN — FIX Phase 1 */
+.user-avatar-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green-dim),var(--blue));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;
+  border:1.5px solid var(--border-active);overflow:hidden;
+}
+.user-avatar-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+
+/* PARRAINER BTN — FIX Phase 1 (jaune) */
+.share-btn{
+  background:rgba(252,209,22,0.1);
+  border:1px solid rgba(252,209,22,0.3);
+  color:var(--yellow);
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  cursor:pointer;padding:7px 12px;white-space:nowrap;
+  border-radius:20px;transition:background 0.2s;
+}
+.share-btn:active{background:rgba(252,209,22,0.2);}
+
 .content{position:relative;z-index:1;padding:20px;max-width:480px;margin:0 auto;}
+
+/* HERO */
 .profile-hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden;}
 .profile-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
-.avatar-large{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin:0 auto 14px;border:2px solid var(--border-active);}
+.avatar-large{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin:0 auto 14px;border:2px solid var(--border-active);overflow:hidden;}
+.avatar-large img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .profile-username{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:2px;}
 .profile-fullname{font-size:13px;color:var(--text-2);margin-bottom:2px;}
 .profile-email{font-size:12px;color:var(--text-3);margin-bottom:4px;}
@@ -31,7 +66,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .rating-val{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--yellow);}
 .rating-count{font-size:12px;color:var(--text-3);}
 
-/* Section vérification */
+/* VÉRIFICATION */
 .verify-card{background:var(--card);border:1px solid var(--border-active);border-radius:var(--r);padding:20px;margin-bottom:16px;position:relative;overflow:hidden;}
 .verify-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--yellow));}
 .verify-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;}
@@ -44,11 +79,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .limit-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--yellow);}
 .phone-step{display:none;}.phone-step.active{display:block;}
 
+/* STATS */
 .stats-row{display:flex;gap:12px;margin-bottom:16px;}
 .stat-card{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;}
 .stat-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);margin-bottom:4px;}
 .stat-label{font-size:11px;color:var(--text-3);}
 .section-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text-2);}
+
+/* TRANSACTIONS */
 .tx-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
 .tx-ref{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;}
 .tx-dir{font-size:13px;font-weight:500;margin-top:2px;}
@@ -57,6 +95,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .tx-status.completed{background:rgba(0,201,122,0.1);color:var(--green);}
 .tx-status.matched{background:rgba(252,209,22,0.1);color:var(--yellow);}
 .tx-status.dispute{background:rgba(255,68,68,0.1);color:var(--red);}
+
+/* SETTINGS */
 .settings-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;}
 .settings-item{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.2s;}
 .settings-item:last-child{border-bottom:none;}
@@ -67,11 +107,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .btn-logout{width:100%;padding:15px;background:transparent;color:#ff6b6b;border:1px solid rgba(255,68,68,0.25);border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:16px;}
 .cgu-link{display:block;text-align:center;font-size:12px;color:var(--text-3);text-decoration:none;margin-bottom:16px;}
 .cgu-link:hover{color:var(--green);}
+
+/* NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(6,13,9,0.94);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+
+/* OVERLAYS */
 .overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
 .overlay.open{display:flex;}
 .sheet{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);}
@@ -100,272 +144,282 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .loader{width:22px;height:22px;position:relative;}
 .loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
 .loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
-
-.topbar-logo img {
-  height: 32px;
-  width: auto;
-  display: block;
-}
-.user-avatar-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
-.share-btn{background:transparent;border:none;color:#fcd116;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;white-space:nowrap;}
 </style>
-
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#060d09">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TDOLI">
-  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-  <script>
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(r => console.log('[SW] Enregistre'))
-          .catch(e => console.error('[SW] Erreur:', e));
-      });
-    }
-  </script>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#060d09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TDOLI">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(r => console.log('[SW] OK'))
+      .catch(e => console.warn('[SW] Non enregistré:', e.message));
+  });
+}
+</script>
 </head>
 <body>
 <div class="topbar">
   <div class="topbar-left">
-    <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a>
+    <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a>
   </div>
-  <div style="flex:1;"></div>
+  <div style="flex:1;text-align:center;">
+    <span class="topbar-title">Mon Profil</span>
+  </div>
   <div class="topbar-right">
     <button class="share-btn" onclick="shareApp()">🎁 Parrainer</button>
   </div>
 </div>
-<div class="content"><div id="profileContent"><div class="loading-wrap"><div class="loader"></div></div></div></div>
+
+<div class="content">
+  <div id="profileContent"><div class="loading-wrap"><div class="loader"></div></div></div>
+</div>
+
 <nav class="bottom-nav">
   <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
   <a class="nav-item" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
   <a class="nav-item active" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
 </nav>
-<!-- Sheet modifier profil -->
-<div class="overlay" id="editOverlay" onclick="closeOnOverlay(event,'editOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Modifier le profil</div>
-    <div class="form-group"><label class="form-label">Prénom</label><input class="form-input" type="text" id="edit-firstname" placeholder="Prénom"></div>
-    <div class="form-group"><label class="form-label">Nom</label><input class="form-input" type="text" id="edit-lastname" placeholder="Nom"></div>
-    <button class="btn-primary" id="btn-save-profile" onclick="saveProfile()">Enregistrer</button>
-    <button class="btn-cancel" onclick="closeSheet('editOverlay')">Annuler</button>
-    <div class="msg" id="msg-profile"></div>
-  </div>
-</div>
+
 <!-- Sheet vérification téléphone -->
 <div class="overlay" id="phoneOverlay" onclick="closeOnOverlay(event,'phoneOverlay')">
   <div class="sheet">
     <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Vérifier mon téléphone</div>
-    <!-- Step 1 : saisir numéro -->
-    <div class="phone-step active" id="phone-step1">
-      <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Entre ton numéro avec l'indicatif pays. Ex: <strong style="color:var(--text)">+33 6 12 34 56 78</strong></div>
-      <div class="form-group"><label class="form-label">Numéro de téléphone</label><input class="form-input" type="tel" id="phone-input" placeholder="+33 6 12 34 56 78"></div>
-      <button class="btn-primary" id="btn-send-sms" onclick="sendSms()">Envoyer le code SMS</button>
-      <button class="btn-cancel" onclick="closeSheet('phoneOverlay')">Annuler</button>
-      <div class="msg" id="msg-phone-step1"></div>
-    </div>
-    <!-- Step 2 : saisir code -->
-    <div class="phone-step" id="phone-step2">
-      <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Code envoyé sur <strong id="phone-display" style="color:var(--text)"></strong></div>
-      <div class="otp-wrap">
-        <input class="otp-digit" type="tel" maxlength="1" id="sms0" oninput="smsOtpInput(0)">
-        <input class="otp-digit" type="tel" maxlength="1" id="sms1" oninput="smsOtpInput(1)">
-        <input class="otp-digit" type="tel" maxlength="1" id="sms2" oninput="smsOtpInput(2)">
-        <input class="otp-digit" type="tel" maxlength="1" id="sms3" oninput="smsOtpInput(3)">
-        <input class="otp-digit" type="tel" maxlength="1" id="sms4" oninput="smsOtpInput(4)">
-        <input class="otp-digit" type="tel" maxlength="1" id="sms5" oninput="smsOtpInput(5)">
+    <div class="sheet-title">Vérifier mon numéro</div>
+    <div class="phone-step active" id="step-phone">
+      <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Un code SMS sera envoyé à ton numéro.</p>
+      <div class="form-group">
+        <label class="form-label">Numéro de téléphone</label>
+        <input class="form-input" type="tel" id="phone-input" placeholder="+33 6 12 34 56 78" inputmode="tel">
       </div>
-      <button class="btn-primary" id="btn-verify-sms" onclick="verifySms()">Vérifier le code</button>
-      <button class="btn-cancel" onclick="backToPhoneStep1()">Retour</button>
-      <div class="msg" id="msg-phone-step2"></div>
+      <button class="btn-primary" id="btn-send-otp" onclick="sendOtp()">Envoyer le code</button>
+      <button class="btn-cancel" onclick="closeSheet('phoneOverlay')">Annuler</button>
+      <div class="msg" id="msg-phone"></div>
+    </div>
+    <div class="phone-step" id="step-otp">
+      <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Entre le code à 6 chiffres reçu par SMS.</p>
+      <div class="otp-wrap" id="otpWrap">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpNext(this,0)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpNext(this,1)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpNext(this,2)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpNext(this,3)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpNext(this,4)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" oninput="otpNext(this,5)">
+      </div>
+      <button class="btn-primary" id="btn-verify-otp" onclick="verifyOtp()">Vérifier</button>
+      <button class="btn-cancel" onclick="closeSheet('phoneOverlay')">Annuler</button>
+      <div class="msg" id="msg-otp"></div>
     </div>
   </div>
 </div>
+
 <script>
-const API='https://tdoli-backend.onrender.com';
-const token=localStorage.getItem('tdoli_token');
-const email=localStorage.getItem('tdoli_email');
-if(!token)window.location.href='/tdoli-auth.html';
-function logout(){localStorage.clear();window.location.href='/tdoli-auth.html';}
-function closeOnOverlay(e,id){if(e.target===document.getElementById(id))closeSheet(id);}
-function closeSheet(id){document.getElementById(id).classList.remove('open');}
-function renderStars(r){if(!r||r===0)return'<span style="color:var(--text-3);font-size:12px;">Nouveau</span>';const f=Math.round(r);return'★'.repeat(f)+'☆'.repeat(5-f);}
-function showMsg(id,text,type){const el=document.getElementById(id);el.className='msg '+(type||'error')+' show';el.textContent=text;}
+const API = 'https://tdoli-backend.onrender.com';
+const token = localStorage.getItem('tdoli_token');
+const email = localStorage.getItem('tdoli_email');
+const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] || '?';
+const avatarUrl = localStorage.getItem('tdoli_avatar') || null;
 
-async function loadProfile(){
-  try{
-    const [dealsRes,profileRes]=await Promise.all([
-      fetch(API+'/deals/mine',{headers:{'Authorization':'Bearer '+token}}),
-      fetch(API+'/profile/'+encodeURIComponent(email),{headers:{'Authorization':'Bearer '+token}})
-    ]);
-    const deals=dealsRes.ok?await dealsRes.json():[];
-    const userData=profileRes.ok?await profileRes.json():{};
-    const username=userData.username||email?.split('@')[0]||'?';
-    const firstName=userData.firstName||'';const lastName=userData.lastName||'';
-    const country=userData.country||'';
-    const initials=(firstName?firstName[0]:'')+(lastName?lastName[0]:'');
-    const rating=userData.averageRating||0;const totalDeals=userData.totalDeals||0;
-    const verLevel=userData.verificationLevel||1;
-    const phoneVerified=userData.phoneVerified||false;
-    const maxDeal=userData.maxDealAmount||300;
-    const isSuspended=userData.isSuspended||false;
-    const completed=Array.isArray(deals)?deals.filter(d=>d.status==='completed').length:0;
-    const active=Array.isArray(deals)?deals.filter(d=>d.status==='matched').length:0;
-    const recentDeals=Array.isArray(deals)?deals.slice(0,5):[];
-    localStorage.setItem('tdoli_username',username);
-
-    // Badge niveau
-    let badgeHtml='';
-    if(isSuspended){
-      badgeHtml='<span class="badge-item badge-suspended">⛔ Suspendu</span>';
-    } else if(verLevel>=2){
-      badgeHtml='<span class="badge-item badge-level2">✓ Vérifié</span>';
-    } else {
-      badgeHtml='<span class="badge-item badge-level1">Niveau 1</span>';
-    }
-
-    // Section vérification
-    let verifySection='';
-    if(!phoneVerified&&!isSuspended){
-      verifySection=`
-        <div class="verify-card">
-          <div class="verify-title">🔐 Vérifier mon téléphone</div>
-          <div class="verify-sub">Passe au Niveau 2 pour augmenter ta limite et gagner la confiance des autres utilisateurs.</div>
-          <div class="limit-bar">
-            <div><div class="limit-label">Limite actuelle</div><div class="limit-val">${maxDeal}€ par deal</div></div>
-            <div style="text-align:right"><div class="limit-label">Après vérification</div><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green)">1 000€</div></div>
-          </div>
-          <div class="verify-benefits">
-            <div class="verify-benefit"><div class="verify-benefit-dot"></div>Badge "Vérifié ✓" sur tes annonces</div>
-            <div class="verify-benefit"><div class="verify-benefit-dot"></div>Limite portée à 1 000€ par deal</div>
-            <div class="verify-benefit"><div class="verify-benefit-dot"></div>Plus de deals grâce à la confiance accrue</div>
-          </div>
-          <button class="btn-primary" onclick="openPhoneVerif()">Vérifier mon téléphone</button>
-        </div>`;
-    } else if(phoneVerified){
-      verifySection=`
-        <div class="verify-card" style="border-color:rgba(0,201,122,0.3);">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="width:36px;height:36px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:16px;">✓</div>
-            <div><div class="verify-title" style="margin-bottom:0">Téléphone vérifié</div><div style="font-size:12px;color:var(--text-3);">${userData.phone||''}</div></div>
-          </div>
-          <div class="limit-bar"><div><div class="limit-label">Limite actuelle</div><div class="limit-val" style="color:var(--green)">${maxDeal}€ par deal</div></div></div>
-        </div>`;
-    }
-
-    document.getElementById('profileContent').innerHTML=
-      '<div class="profile-hero">'+
-        '<div class="avatar-large">'+(initials||username.substring(0,2).toUpperCase())+'</div>'+
-        '<div class="profile-username">'+username+'</div>'+
-        (firstName||lastName?'<div class="profile-fullname">'+firstName+' '+lastName+'</div>':'')+
-        '<div class="profile-email">'+email+'</div>'+
-        (country?'<div class="profile-country">📍 '+country+'</div>':'')+
-        '<div class="profile-badges">'+badgeHtml+'</div>'+
-        '<div class="profile-rating"><span class="stars-display">'+renderStars(rating)+'</span>'+(rating>0?'<span class="rating-val"> '+rating.toFixed(1)+'</span>':'')+'</div>'+
-        '<div class="rating-count">'+totalDeals+' deal'+(totalDeals>1?'s':'')+' complété'+(totalDeals>1?'s':'')+'</div>'+
-      '</div>'+
-      verifySection+
-      '<div class="stats-row">'+
-        '<div class="stat-card"><div class="stat-val">'+completed+'</div><div class="stat-label">Complétés</div></div>'+
-        '<div class="stat-card"><div class="stat-val">'+active+'</div><div class="stat-label">En cours</div></div>'+
-        '<div class="stat-card"><div class="stat-val">'+(rating>0?rating.toFixed(1):'—')+'</div><div class="stat-label">Note moy.</div></div>'+
-      '</div>'+
-      (recentDeals.length>0?'<div class="section-title">Transactions récentes</div>'+recentDeals.map(d=>{const isSender=d.sender===email;return '<div class="tx-item"><div><div class="tx-ref">REF '+d._id.slice(-6).toUpperCase()+'</div><div class="tx-dir">'+(isSender?'Envoi':'Réception')+' · '+d.fromCountry+' → '+d.toCountry+'</div></div><div style="text-align:right"><div class="tx-amt">'+Number(d.amount).toLocaleString('fr-FR')+' '+d.currency+'</div><span class="tx-status '+d.status+'">'+ {matched:'En cours',completed:'Complété',dispute:'Litige'}[d.status]+'</span></div></div>';}).join(''):'')+
-      '<div class="section-title" style="margin-top:8px">Paramètres</div>'+
-      '<div class="settings-card">'+
-        '<div class="settings-item" onclick="openEdit(\''+firstName+'\',\''+lastName+'\')"><span class="settings-label">Modifier le profil</span><span class="settings-arrow">→</span></div>'+
-        '<div class="settings-item" onclick="alert(\'Bientôt disponible\')"><span class="settings-label">Notifications</span><span class="settings-arrow">→</span></div>'+
-      '</div>'+
-      '<a href="/tdoli-cgu.html" class="cgu-link">Conditions d\'utilisation</a>'+
-      '<button class="btn-logout" onclick="logout()">Se déconnecter</button>';
-  }catch(e){document.getElementById('profileContent').innerHTML='<div class="loading-wrap">Erreur de chargement</div>';}
+if (!token && !window.location.pathname.includes('tdoli-auth')) {
+  window.location.replace('/tdoli-auth.html');
 }
 
-// Modifier profil
-function openEdit(firstName,lastName){
-  document.getElementById('edit-firstname').value=firstName;document.getElementById('edit-lastname').value=lastName;
-  document.getElementById('editOverlay').classList.add('open');
-  setTimeout(()=>document.getElementById('edit-firstname').focus(),300);
-}
-async function saveProfile(){
-  const firstName=document.getElementById('edit-firstname').value.trim();const lastName=document.getElementById('edit-lastname').value.trim();
-  if(!firstName||!lastName){showMsg('msg-profile','Remplis tous les champs','error');return;}
-  const btn=document.getElementById('btn-save-profile');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
-  try{const res=await fetch(API+'/profile',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({firstName,lastName,username:firstName+' '+lastName})});
-    const data=await res.json();
-    if(res.ok){localStorage.setItem('tdoli_username',data.username);closeSheet('editOverlay');loadProfile();}
-    else showMsg('msg-profile',data.message||'Erreur','error');
-  }catch(e){showMsg('msg-profile','Serveur inaccessible','error');}
-  btn.disabled=false;btn.innerHTML='Enregistrer';
-}
-
-// Vérification téléphone
-function openPhoneVerif(){
-  document.getElementById('phone-step1').className='phone-step active';document.getElementById('phone-step2').className='phone-step';
-  document.getElementById('phoneOverlay').classList.add('open');
-  setTimeout(()=>document.getElementById('phone-input').focus(),300);
-}
-function backToPhoneStep1(){
-  document.getElementById('phone-step1').className='phone-step active';document.getElementById('phone-step2').className='phone-step';
-  [0,1,2,3,4,5].forEach(i=>document.getElementById('sms'+i).value='');
-}
-async function sendSms(){
-  const phone=document.getElementById('phone-input').value.trim();
-  if(!phone){showMsg('msg-phone-step1','Entre ton numéro','error');return;}
-  const btn=document.getElementById('btn-send-sms');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Envoi...';
-  try{const res=await fetch(API+'/auth/send-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({phone})});
-    const data=await res.json();
-    if(res.ok){document.getElementById('phone-display').textContent=phone;document.getElementById('phone-step1').className='phone-step';document.getElementById('phone-step2').className='phone-step active';document.getElementById('sms0').focus();}
-    else showMsg('msg-phone-step1',data.message||'Erreur','error');
-  }catch(e){showMsg('msg-phone-step1','Serveur inaccessible','error');}
-  btn.disabled=false;btn.innerHTML='Envoyer le code SMS';
-}
-function smsOtpInput(idx){
-  const val=document.getElementById('sms'+idx).value;
-  if(val&&idx<5)document.getElementById('sms'+(idx+1)).focus();
-  const code=[0,1,2,3,4,5].map(i=>document.getElementById('sms'+i).value).join('');
-  if(code.length===6)verifySms();
-}
-async function verifySms(){
-  const code=[0,1,2,3,4,5].map(i=>document.getElementById('sms'+i).value).join('');
-  if(code.length<6){showMsg('msg-phone-step2','Saisis les 6 chiffres','error');return;}
-  const btn=document.getElementById('btn-verify-sms');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
-  try{const res=await fetch(API+'/auth/verify-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code})});
-    const data=await res.json();
-    if(res.ok){closeSheet('phoneOverlay');showMsg('msg-profile','Téléphone vérifié ! Limite portée à 1 000€.','success');loadProfile();}
-    else showMsg('msg-phone-step2',data.message||'Code incorrect','error');
-  }catch(e){showMsg('msg-phone-step2','Serveur inaccessible','error');}
-  btn.disabled=false;btn.innerHTML='Vérifier le code';
-}
-
-function showMsg(id,text,type){const el=document.getElementById(id);if(el){el.className='msg '+(type||'error')+' show';el.textContent=text;}}
-loadProfile();
-
-function initAvatar(){
-  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
-  let initials='?';
-  if(username){
-    const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
-    if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
-    else initials=username.substring(0,2).toUpperCase();
+// FIX Phase 1: avatar initialisé
+function initAvatar() {
+  const btn = document.getElementById('avatarBtn');
+  if (!btn) return;
+  const parts = username.trim().split(' ').filter(p => p.length > 0);
+  const initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : username.substring(0, 2).toUpperCase();
+  if (avatarUrl) {
+    btn.innerHTML = '<img src="' + avatarUrl + '" alt="' + initials + '">';
+  } else {
+    btn.textContent = initials;
   }
-  const btn=document.getElementById('avatarBtn');
-  if(btn)btn.textContent=initials;
 }
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAvatar);}
-else{initAvatar();}
-window.addEventListener('storage',initAvatar);
-function shareApp(){
-  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
-  const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
-  if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
-  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
-});}
-  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+initAvatar();
+
+// FIX Phase 1: shareApp
+function shareApp() {
+  const refCode = localStorage.getItem('tdoli_ref') || username;
+  const msg = '🦜 TDOLI — Transfert d\'argent entre particuliers, sans frais cachés !\nInscris-toi avec mon code parrain : ' + refCode + '\nhttps://tdoli-frontend.pages.dev';
+  if (navigator.share) {
+    navigator.share({ title: 'TDOLI', text: msg, url: 'https://tdoli-frontend.pages.dev' }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(msg)
+      .then(() => alert('Lien copié ! 🎁'))
+      .catch(() => {});
+  }
 }
+
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+function closeOnOverlay(e, id) { if (e.target === document.getElementById(id)) closeSheet(id); }
+function showMsg(id, text, type) { const el = document.getElementById(id); el.className = 'msg ' + (type || 'error') + ' show'; el.textContent = text; }
+
+function getLevelLabel(level) {
+  const labels = { 1: '📧 Niveau 1 — Email', 2: '📱 Niveau 2 — Email + SMS', 3: '🪪 Niveau 3 — KYC', 4: '✅ Niveau 4 — KYC complet' };
+  return labels[level] || '📧 Niveau 1';
+}
+function getLevelLimit(level) {
+  const limits = { 1: '300 €', 2: '500 €', 3: '1 000 €', 4: 'Illimité' };
+  return limits[level] || '300 €';
+}
+function getLevelClass(level) {
+  return level >= 2 ? 'badge-level2' : 'badge-level1';
+}
+
+async function loadProfile() {
+  try {
+    const res = await fetch(API + '/user/me', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (res.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+    const user = await res.json();
+
+    // Mettre à jour le localStorage avec données fraîches
+    if (user.username) localStorage.setItem('tdoli_username', user.username);
+    if (user.avatarUrl) localStorage.setItem('tdoli_avatar', user.avatarUrl);
+
+    const uname = user.username || email?.split('@')[0] || '?';
+    const parts = uname.trim().split(' ').filter(p => p.length > 0);
+    const initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : uname.substring(0, 2).toUpperCase();
+    const level = user.verificationLevel || 1;
+    const rating = user.rating || 0;
+    const ratingCount = user.ratingCount || 0;
+
+    // Mettre à jour l'avatar en topbar aussi
+    const avatarBtn = document.getElementById('avatarBtn');
+    if (avatarBtn) {
+      if (user.avatarUrl) avatarBtn.innerHTML = '<img src="' + user.avatarUrl + '" alt="' + initials + '">';
+      else avatarBtn.textContent = initials;
+    }
+
+    // Render avatar grand format
+    const avatarHtml = user.avatarUrl
+      ? '<div class="avatar-large"><img src="' + user.avatarUrl + '" alt="' + initials + '"></div>'
+      : '<div class="avatar-large">' + initials + '</div>';
+
+    // Rating stars
+    const starsHtml = rating > 0
+      ? '<div class="profile-rating"><span class="stars-display">' + '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating)) + '</span><span class="rating-val">' + rating.toFixed(1) + '</span><span class="rating-count">(' + ratingCount + ' avis)</span></div>'
+      : '<div style="font-size:12px;color:var(--text-3);margin-bottom:12px;">Aucun avis pour l\'instant</div>';
+
+    // Verify card
+    const verifyHtml = level < 2 ? `
+      <div class="verify-card">
+        <div class="verify-title">🔐 Augmente ta limite</div>
+        <div class="verify-sub">Vérifie ton numéro de téléphone pour passer au Niveau 2 et augmenter ta limite à 500 €.</div>
+        <div class="limit-bar"><span class="limit-label">Limite actuelle</span><span class="limit-val">300 €</span></div>
+        <div class="verify-benefits">
+          <div class="verify-benefit"><div class="verify-benefit-dot"></div>Limite portée à 500 €</div>
+          <div class="verify-benefit"><div class="verify-benefit-dot"></div>Badge de confiance visible</div>
+          <div class="verify-benefit"><div class="verify-benefit-dot"></div>Priorité dans le feed</div>
+        </div>
+        <button class="btn-primary" onclick="openPhoneVerif()">Vérifier mon numéro →</button>
+      </div>` : '';
+
+    // Transactions
+    let txHtml = '';
+    try {
+      const txRes = await fetch(API + '/transfers/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+      const txs = await txRes.json();
+      if (Array.isArray(txs) && txs.length > 0) {
+        txHtml = '<div class="section-title">Mes annonces récentes</div>' +
+          txs.slice(0, 5).map(t => `
+            <div class="tx-item">
+              <div>
+                <div class="tx-ref">#${t._id.slice(-6).toUpperCase()}</div>
+                <div class="tx-dir">${t.fromCountry} → ${t.toCountry}</div>
+                <span class="tx-status ${t.status || 'open'}">${t.status || 'En attente'}</span>
+              </div>
+              <div class="tx-amt">${Number(t.amount).toLocaleString('fr-FR')} ${t.currency}</div>
+            </div>`).join('');
+      }
+    } catch (e) {}
+
+    document.getElementById('profileContent').innerHTML = `
+      <div class="profile-hero">
+        ${avatarHtml}
+        <div class="profile-username">${uname}</div>
+        ${user.fullName ? '<div class="profile-fullname">' + user.fullName + '</div>' : ''}
+        <div class="profile-email">${email || ''}</div>
+        ${user.country ? '<div class="profile-country">📍 ' + user.country + '</div>' : ''}
+        <div class="profile-badges">
+          <span class="badge-item ${getLevelClass(level)}">${getLevelLabel(level)}</span>
+          ${user.suspended ? '<span class="badge-item badge-suspended">⛔ Suspendu</span>' : ''}
+        </div>
+        ${starsHtml}
+      </div>
+      ${verifyHtml}
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val">${user.completedDeals || 0}</div><div class="stat-label">Deals complétés</div></div>
+        <div class="stat-card"><div class="stat-val">${getLevelLimit(level)}</div><div class="stat-label">Limite</div></div>
+      </div>
+      ${txHtml}
+      <div class="section-title" style="margin-top:8px;">Paramètres</div>
+      <div class="settings-card">
+        <div class="settings-item" onclick="openPhoneVerif()">
+          <span class="settings-label">📱 Téléphone</span>
+          <span class="settings-val">${user.phone ? user.phone.replace(/(\d{2})(\d+)(\d{2})/, '$1••••$3') : 'Non vérifié'} →</span>
+        </div>
+        <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'">
+          <span class="settings-label">📄 CGU / Mentions légales</span>
+          <span class="settings-arrow">→</span>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">🚪 Déconnexion</button>
+      <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
+    `;
+  } catch (e) {
+    document.getElementById('profileContent').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-3)">Erreur de chargement.<br><small>' + e.message + '</small></div>';
+  }
+}
+
+function logout() { localStorage.clear(); window.location.href = '/tdoli-auth.html'; }
+
+function openPhoneVerif() {
+  document.getElementById('step-phone').classList.add('active');
+  document.getElementById('step-otp').classList.remove('active');
+  document.getElementById('phoneOverlay').classList.add('open');
+}
+
+async function sendOtp() {
+  const phone = document.getElementById('phone-input').value.trim();
+  if (!phone) { showMsg('msg-phone', 'Entre ton numéro'); return; }
+  const btn = document.getElementById('btn-send-otp');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const res = await fetch(API + '/user/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ phone }) });
+    const data = await res.json();
+    if (res.ok) {
+      document.getElementById('step-phone').classList.remove('active');
+      document.getElementById('step-otp').classList.add('active');
+      document.querySelectorAll('.otp-digit')[0].focus();
+    } else showMsg('msg-phone', data.message || 'Erreur');
+  } catch (e) { showMsg('msg-phone', 'Serveur inaccessible'); }
+  btn.disabled = false; btn.innerHTML = 'Envoyer le code';
+}
+
+function otpNext(el, index) {
+  if (el.value.length === 1 && index < 5) document.querySelectorAll('.otp-digit')[index + 1].focus();
+}
+
+async function verifyOtp() {
+  const digits = Array.from(document.querySelectorAll('.otp-digit')).map(i => i.value);
+  const code = digits.join('');
+  if (code.length < 6) { showMsg('msg-otp', 'Code incomplet'); return; }
+  const btn = document.getElementById('btn-verify-otp');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const res = await fetch(API + '/user/verify-otp', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ code }) });
+    const data = await res.json();
+    if (res.ok) { closeSheet('phoneOverlay'); loadProfile(); }
+    else showMsg('msg-otp', data.message || 'Code incorrect');
+  } catch (e) { showMsg('msg-otp', 'Serveur inaccessible'); }
+  btn.disabled = false; btn.innerHTML = 'Vérifier';
+}
+
+loadProfile();
 </script>
 </body>
 </html>

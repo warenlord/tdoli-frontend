@@ -1,7 +1,5 @@
-/auth        /tdoli-auth.html     200
-/feed        /tdoli-feed.html     200
-/deals       /tdoli-deals.html    200
-/chat        /tdoli-chat.html     200
-/profile     /tdoli-profile.html  200
-/admin       /tdoli-admin.html    200
-/reset       /tdoli-reset.html    200
+# TDOLI — Cloudflare Pages redirects
+# Règle unique : toutes les routes non trouvées → feed (SPA fallback)
+# Les fichiers HTML statiques sont servis directement par Cloudflare Pages
+
+/*    /tdoli-feed.html    200
