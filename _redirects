@@ -1,5 +1,3 @@
-# TDOLI — Cloudflare Pages redirects
-# Règle unique : toutes les routes non trouvées → feed (SPA fallback)
-# Les fichiers HTML statiques sont servis directement par Cloudflare Pages
-
-/*    /tdoli-feed.html    200
+# TDOLI — Cloudflare Pages
+# Rediriger UNIQUEMENT la racine vers le feed (pas de wildcard pour éviter la boucle)
+/    /tdoli-feed.html    302
