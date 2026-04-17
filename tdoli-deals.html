@@ -385,18 +385,28 @@ function renderDeals(data) {
     document.getElementById('dealsList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce depuis le Feed pour démarrer un deal.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
     return;
   }
-  document.getElementById('dealsList').innerHTML = '<div class="deal-list">' + data.map((d,i) => {
+  const items = data.map((d,i) => {
     const other = d.otherUsername || '?';
     const ini = getInitials(other);
     const st = getStatusLabel(d.status);
     const myAmt = d.myAmount || d.amount || 0;
     const myCur = d.myCurrency || d.currency || '';
     const iConfirmed = d.iConfirmed || false;
-    return '<div class="deal-item '+d.status+'" style="animation-delay:'+(i*0.04)+'s" onclick="openDeal(''+d._id+'')">'+
+    const ref = d.dealCode || ('#' + d._id.slice(-6).toUpperCase());
+    const actionHtml = d.status==='matched'
+      ? (iConfirmed ? '<span style="font-size:10px;color:var(--green)">✓ Envoyé · En attente</span>' : '<span class="deal-action-hint">Action requise →</span>')
+      : '<span style="font-size:10px;color:var(--text-3)">'+timeAgo(d.updatedAt||d.createdAt)+'</span>';
+
+    const div = document.createElement('div');
+    div.className = 'deal-item ' + d.status;
+    div.style.animationDelay = (i*0.04) + 's';
+    div.dataset.id = d._id;
+    div.addEventListener('click', () => openDeal(d._id));
+    div.innerHTML =
       '<div class="deal-avatar">'+ini+'</div>'+
       '<div class="deal-body">'+
         '<div class="deal-top">'+
-          '<span class="deal-ref">'+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span>'+
+          '<span class="deal-ref">'+ref+'</span>'+
           '<span class="deal-badge-sm '+st.cls+'">'+st.label+'</span>'+
         '</div>'+
         '<div class="deal-mid">'+
@@ -404,12 +414,13 @@ function renderDeals(data) {
           '<span class="deal-other">'+other+'</span>'+
         '</div>'+
         '<div class="deal-bottom">'+
-          '<span class="deal-dir">'+(d.fromCountry||'?')+' ⇄ '+(d.toCountry||'?')+'</span>'+
-          (d.status==='matched' ? (iConfirmed ? '<span style="font-size:10px;color:var(--green)">✓ Envoyé · En attente</span>' : '<span class="deal-action-hint">Action requise →</span>') : '<span style="font-size:10px;color:var(--text-3)">'+timeAgo(d.updatedAt||d.createdAt)+'</span>')+
+          '<span class="deal-dir">'+((d.fromCountry||'?')+' ⇄ '+(d.toCountry||'?'))+'</span>'+
+          actionHtml+
         '</div>'+
-      '</div>'+
-    '</div>';
-  }).join('') + '</div>';
+      '</div>';
+    return div.outerHTML;
+  });
+  document.getElementById('dealsList').innerHTML = '<div class="deal-list">'+items.join('')+'</div>';
 }
 
 
