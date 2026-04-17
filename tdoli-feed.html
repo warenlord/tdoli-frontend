@@ -781,11 +781,13 @@ async function submitAnnonce() {
   const btn = document.getElementById('btn-submit');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
   try {
-    const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount: Number(amount), currency, fromCountry, toCountry }) });
+    const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount: Number(amount), currency, fromCountry, toCountry, beneficiaireId: selectedBenefId || null }) });
     const data = await res.json();
     if (res.ok) {
       closeSheet('createOverlay');
       document.getElementById('ann-amount').value = '';
+      selectedBenefId = null;
+      const bc = document.getElementById('benef-selected-create'); if(bc) bc.innerHTML = '';
       if (data.message && data.message.includes('Match')) { showToast('Match immédiat ! 🎉', 'var(--yellow)'); setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000); }
       else { showToast('Annonce publiée ✓'); loadFeed(true); }
     } else showMsg('msg-create', data.message || 'Erreur');
