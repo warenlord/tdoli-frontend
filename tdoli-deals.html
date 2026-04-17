@@ -465,7 +465,6 @@ async function loadDeals(silent) {
         const el = document.createElement('div');
         el.className = 'deal-item ' + d.status;
         el.style.padding = '14px 16px';
-        el.dataset.id = d._id;
         el.addEventListener('click', () => openDeal(d._id));
         el.innerHTML =
           '<div class="deal-body">' +
@@ -505,7 +504,7 @@ function openDeal(id) {
   // Stepper
   const stepHtml = '<div class="stepper">' + [
     {label:'Match', done:true},
-    {label:'J\'envoie', done:iConfirmed||d.status==='completed', active:!iConfirmed&&d.status==='matched'},
+    {label:'J\u2019envoie', done:iConfirmed||d.status==='completed', active:!iConfirmed&&d.status==='matched'},
     {label:'Autre', done:otherConfirmed||d.status==='completed', active:!otherConfirmed&&d.status==='matched'},
     {label:'Terminé', done:d.status==='completed'}
   ].map((s,j)=>'<div class="step '+(s.done?'done':s.active?'active':'')+'"><div class="step-dot '+(s.done?'done':s.active?'active':'pending')+'">'+(s.done?'✓':j+1)+'</div><div class="step-label">'+s.label+'</div></div>').join('') + '</div>';
@@ -568,10 +567,9 @@ function openDeal(id) {
       ratingHtml = '<div class="rating-section"><div class="rated-done">✓ Tu as déjà noté ce deal</div></div>';
     } else {
       const r = selectedRatings[d._id] || 0;
-      const dealIdAttr = d._id;
-      ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+dealIdAttr+'">'
-        +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+dealIdAttr+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)">★</span>').join('')
-        +'</div><textarea class="rating-comment" id="comment-'+dealIdAttr+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" data-deal="'+dealIdAttr+'" onclick="submitRating(this.dataset.deal)">Envoyer la note</button></div>';
+      ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+d._id+'">'
+        +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+d._id+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)">★</span>').join('')
+        +'</div><textarea class="rating-comment" id="comment-'+d._id+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" data-deal="'+d._id+'" onclick="submitRating(this.dataset.deal)">Envoyer la note</button></div>';
     }
   }
 
