@@ -306,7 +306,7 @@ if ('serviceWorker' in navigator) {
 
 
 <!-- Sheet sélection bénéficiaire -->
-<div class="overlay" id="benefOverlay" onclick="closeOnOverlay(event,'benefOverlay')" style="z-index:400;">
+<div class="overlay" id="benefOverlay" onclick="closeOnOverlay(event,'benefOverlay')" style="z-index:500;">
   <div class="sheet">
     <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
     <div class="sheet-title">Qui reçoit ?</div>
@@ -694,13 +694,19 @@ function renderFeed() {
   list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
 }
 
+// safeJson — évite crash si backend renvoie HTML
+async function safeJson(res) {
+  const text = await res.text();
+  try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+  catch(e) { return { ok: false, status: res.status, data: null }; }
+}
+
 async function loadFeed(silent) {
   if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
   try {
-    const res = await fetch(API + '/transfers', { headers: { 'Authorization': 'Bearer ' + token } });
-    if (res.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
-    allTransfers = await res.json();
-    if (!Array.isArray(allTransfers)) allTransfers = [];
+    const r = await safeJson(await fetch(API + '/transfers', { headers: { 'Authorization': 'Bearer ' + token } }));
+    if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+    allTransfers = Array.isArray(r.data) ? r.data : [];
     renderFeed();
     checkActiveDeals();
   } catch (e) {
@@ -847,10 +853,14 @@ function selectBenef(id, context) {
     const container = document.getElementById('benef-selected-create');
     if(container) container.innerHTML = badgeHtml;
   } else if(context === 'match') {
+    // Fermer la liste bénéficiaires
+    closeSheet('benefOverlay');
+    // Mettre à jour le badge dans confirmOverlay
     const container = document.getElementById('confirm-benef-badge');
     if(container) container.innerHTML = badgeHtml;
-    // Mettre à jour pendingMatch avec le beneficiaireId
+    // Mettre à jour pendingMatch
     if(pendingMatch) pendingMatch.beneficiaireId = id;
+    // confirmOverlay reste visible — pas de fermeture
   }
 }
 
@@ -948,16 +958,11 @@ async function saveInlineBenef() {
 
 function closeBenefSheet() {
   closeSheet('benefOverlay');
-  // Si pendingMatch existe, rouvrir confirmOverlay
-  if (pendingMatch) {
-    setTimeout(() => {
-      document.getElementById('confirmOverlay').classList.add('open');
-    }, 100);
-  }
+  // confirmOverlay reste ouvert — rien à faire
 }
 
 function openBenefSheetForMatch() {
-  closeSheet('confirmOverlay');
+  // Ne PAS fermer confirmOverlay — juste ouvrir la liste par-dessus
   loadBeneficiaires().then(() => {
     renderBenefSelectList('match');
     document.getElementById('benefOverlay').classList.add('open');
