@@ -464,7 +464,7 @@ function openDeal(id) {
   // Stepper
   const stepHtml = '<div class="stepper">' + [
     {label:'Match', done:true},
-    {label:'J'envoie', done:iConfirmed||d.status==='completed', active:!iConfirmed&&d.status==='matched'},
+    {label:'J\'envoie', done:iConfirmed||d.status==='completed', active:!iConfirmed&&d.status==='matched'},
     {label:'Autre', done:otherConfirmed||d.status==='completed', active:!otherConfirmed&&d.status==='matched'},
     {label:'Terminé', done:d.status==='completed'}
   ].map((s,j)=>'<div class="step '+(s.done?'done':s.active?'active':'')+'"><div class="step-dot '+(s.done?'done':s.active?'active':'pending')+'">'+(s.done?'✓':j+1)+'</div><div class="step-label">'+s.label+'</div></div>').join('') + '</div>';
