@@ -131,6 +131,18 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:400;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* Infos paiement bénéficiaire */
+.payment-info-box{background:var(--surface);border:1px solid var(--border-active);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.payment-info-title{font-size:11px;font-weight:700;font-family:'Syne',sans-serif;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
+.payment-info-row{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;}
+.payment-info-label{color:var(--text-3);font-size:11px;min-width:80px;}
+.payment-info-val{font-weight:600;color:var(--text);}
+.btn-add-payment{width:100%;padding:11px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:10px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:6px;}
+.method-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.method-tab{padding:7px 12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-3);cursor:pointer;transition:all 0.2s;}
+.method-tab.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
+.method-fields{display:none;}.method-fields.show{display:block;}
+
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#060d09">
@@ -216,6 +228,75 @@ if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.s
     <button class="btn-primary dispute-btn" id="btn-submit-dispute" onclick="submitDispute()">Envoyer le litige</button>
     <button class="btn-cancel" onclick="closeSheet('disputeOverlay')">Annuler</button>
     <div class="msg" id="msg-dispute"></div>
+  </div>
+</div>
+
+
+<!-- Sheet infos de paiement -->
+<div class="overlay" id="paymentInfoOverlay" onclick="closeOnOverlay(event,'paymentInfoOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Infos de paiement</div>
+    <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Renseigne tes coordonnées pour que l'autre partie sache où envoyer les fonds.</div>
+
+    <div class="method-tabs">
+      <div class="method-tab active" onclick="setMethod('mobilemoney',this)">📱 Mobile Money</div>
+      <div class="method-tab" onclick="setMethod('virement',this)">🏦 Virement</div>
+      <div class="method-tab" onclick="setMethod('paypal',this)">💳 PayPal</div>
+    </div>
+
+    <!-- Mobile Money -->
+    <div class="method-fields show" id="fields-mobilemoney">
+      <div class="form-group">
+        <label class="form-label">Nom complet</label>
+        <input class="form-input" type="text" id="pi-name-mm" placeholder="Jean Dupont">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Numéro Mobile Money</label>
+        <input class="form-input" type="tel" id="pi-phone" placeholder="+241 06 00 00 00" inputmode="tel">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Opérateur</label>
+        <input class="form-input" type="text" id="pi-operator" placeholder="Airtel Money / Moov / Orange">
+      </div>
+    </div>
+
+    <!-- Virement bancaire -->
+    <div class="method-fields" id="fields-virement">
+      <div class="form-group">
+        <label class="form-label">Nom complet</label>
+        <input class="form-input" type="text" id="pi-name-vir" placeholder="Jean Dupont">
+      </div>
+      <div class="form-group">
+        <label class="form-label">IBAN</label>
+        <input class="form-input" type="text" id="pi-iban" placeholder="FR76 3000 6000 0112 3456 7890 189">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Banque</label>
+        <input class="form-input" type="text" id="pi-bank" placeholder="BNP Paribas, Société Générale…">
+      </div>
+    </div>
+
+    <!-- PayPal -->
+    <div class="method-fields" id="fields-paypal">
+      <div class="form-group">
+        <label class="form-label">Email PayPal</label>
+        <input class="form-input" type="email" id="pi-paypal" placeholder="ton@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nom complet</label>
+        <input class="form-input" type="text" id="pi-name-pp" placeholder="Jean Dupont">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Note (optionnel)</label>
+      <input class="form-input" type="text" id="pi-note" placeholder="Ex: Envoyer entre 9h et 18h">
+    </div>
+
+    <button class="btn-primary" id="btn-save-payment" onclick="savePaymentInfo()">Enregistrer</button>
+    <button class="btn-cancel" onclick="closeSheet('paymentInfoOverlay')">Plus tard</button>
+    <div class="msg" id="msg-payment"></div>
   </div>
 </div>
 
@@ -359,10 +440,21 @@ function openDeal(id) {
   // Instruction selon statut
   let instructionHtml = '';
   if(d.status==='matched') {
-    instructionHtml = `<div class="instruction-box">
-      <div class="instruction-title">⏳ ACTION REQUISE</div>
-      <div class="instruction-text">Envoie <strong>${Number(amount).toLocaleString('fr-FR')} ${currency}</strong> à <strong>${otherName}</strong> puis confirme ici avec une preuve.</div>
-    </div>`;
+    const isSenderDeal = d.sender === email;
+    const myPayInfo = isSenderDeal ? d.senderPaymentInfo : d.receiverPaymentInfo;
+    const otherPayInfo = isSenderDeal ? d.receiverPaymentInfo : d.senderPaymentInfo;
+    const myInfoFilled = myPayInfo && (myPayInfo.name || myPayInfo.phone || myPayInfo.iban || myPayInfo.paypal);
+    const otherInfoFilled = otherPayInfo && (otherPayInfo.name || otherPayInfo.phone || otherPayInfo.iban || otherPayInfo.paypal);
+
+    const otherInfoHtml = otherInfoFilled
+      ? renderPaymentInfo(otherPayInfo, '📍 Envoyer à')
+      : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l\'autre partie</div>';
+
+    const myInfoHtml = myInfoFilled
+      ? renderPaymentInfo(myPayInfo, '✅ Mes coordonnées') + '<button style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-bottom:10px;" onclick="openPaymentInfo(\''+d._id+'\')">✏️ Modifier</button>'
+      : '<button class="btn-add-payment" onclick="openPaymentInfo(\''+d._id+'\')">➕ Ajouter mes coordonnées de paiement</button>';
+
+    instructionHtml = '<div class="instruction-box"><div class="instruction-title">⏳ ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>' + otherInfoHtml + myInfoHtml;
   } else if(d.status==='completed') {
     instructionHtml = '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);">✓ Deal complété avec succès !</div>';
   } else if(d.status==='dispute') {
@@ -494,6 +586,83 @@ async function submitDispute() {
     else showMsg('msg-dispute',(r.data&&r.data.message)||'Erreur');
   } catch(e) { showMsg('msg-dispute','Erreur réseau'); }
   btn.disabled=false; btn.innerHTML='Envoyer le litige';
+}
+
+
+let currentPaymentDealId = null;
+let currentPaymentMethod = 'mobilemoney';
+
+function setMethod(method, el) {
+  currentPaymentMethod = method;
+  document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.method-fields').forEach(f => f.classList.remove('show'));
+  document.getElementById('fields-' + method).classList.add('show');
+}
+
+function openPaymentInfo(dealId) {
+  currentPaymentDealId = dealId;
+  document.getElementById('paymentInfoOverlay').classList.add('open');
+}
+
+async function savePaymentInfo() {
+  if (!currentPaymentDealId) return;
+  const method = currentPaymentMethod;
+  let name = '', phone = '', iban = '', bankName = '', paypal = '', note = '';
+
+  if (method === 'mobilemoney') {
+    name = document.getElementById('pi-name-mm').value.trim();
+    phone = document.getElementById('pi-phone').value.trim();
+    const op = document.getElementById('pi-operator').value.trim();
+    note = op ? 'Opérateur: ' + op + (document.getElementById('pi-note').value ? ' — ' + document.getElementById('pi-note').value : '') : document.getElementById('pi-note').value;
+  } else if (method === 'virement') {
+    name = document.getElementById('pi-name-vir').value.trim();
+    iban = document.getElementById('pi-iban').value.trim();
+    bankName = document.getElementById('pi-bank').value.trim();
+    note = document.getElementById('pi-note').value.trim();
+  } else if (method === 'paypal') {
+    paypal = document.getElementById('pi-paypal').value.trim();
+    name = document.getElementById('pi-name-pp').value.trim();
+    note = document.getElementById('pi-note').value.trim();
+  }
+
+  if (!name && !phone && !iban && !paypal) {
+    showMsg('msg-payment', 'Renseigne au moins un champ');
+    return;
+  }
+
+  const btn = document.getElementById('btn-save-payment');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+
+  const r = await safeJson(await fetch(API + '/deal/' + currentPaymentDealId + '/payment-info', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ name, phone, iban, bankName, paypal, method, note })
+  })).catch(() => ({ ok: false, data: null }));
+
+  if (r.ok) {
+    closeSheet('paymentInfoOverlay');
+    showToast('Infos sauvegardées ✓');
+    loadDeals(true);
+  } else {
+    showMsg('msg-payment', (r.data && r.data.message) || 'Erreur');
+  }
+  btn.disabled = false; btn.innerHTML = 'Enregistrer';
+}
+
+function renderPaymentInfo(info, label) {
+  if (!info || (!info.name && !info.phone && !info.iban && !info.paypal)) {
+    return '<div style="font-size:12px;color:var(--text-3);font-style:italic;">Pas encore renseigné</div>';
+  }
+  let html = '<div class="payment-info-box"><div class="payment-info-title">' + label + '</div>';
+  if (info.name) html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">' + info.name + '</span></div>';
+  if (info.phone) html += '<div class="payment-info-row"><span class="payment-info-label">Mobile Money</span><span class="payment-info-val" style="color:var(--green)">' + info.phone + '</span></div>';
+  if (info.iban) html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px">' + info.iban + '</span></div>';
+  if (info.bankName) html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">' + info.bankName + '</span></div>';
+  if (info.paypal) html += '<div class="payment-info-row"><span class="payment-info-label">PayPal</span><span class="payment-info-val">' + info.paypal + '</span></div>';
+  if (info.note) html += '<div class="payment-info-row"><span class="payment-info-label">Note</span><span class="payment-info-val" style="color:var(--text-3)">' + info.note + '</span></div>';
+  html += '</div>';
+  return html;
 }
 
 loadDeals();
