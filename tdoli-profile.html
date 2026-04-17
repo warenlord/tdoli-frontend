@@ -84,10 +84,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
 .loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
 .phone-step{display:none;}.phone-step.active{display:block;}
-/* Wake-up banner */
-.wake-banner{background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--yellow);}
-.wake-dot{width:8px;height:8px;border-radius:50%;background:var(--yellow);animation:blink 1s ease infinite;flex-shrink:0;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#060d09">
@@ -103,10 +99,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 </div>
 
 <div class="content">
-  <div id="wakeBanner" style="display:none;" class="wake-banner">
-    <div class="wake-dot"></div>
-    <span>Démarrage du serveur… (~30 sec)</span>
-  </div>
   <div id="profileContent"><div class="loading-wrap"><div class="loader"></div></div></div>
 </div>
 
@@ -241,7 +233,7 @@ function renderFromCache() {
     </div>
     <div class="section-title">Paramètres</div>
     <div class="settings-card">
-      <div class="settings-item" onclick="openPhoneVerif()"><span class="settings-label">📱 Téléphone</span><span class="settings-val">Non vérifié →</span></div>
+      <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label">👥 Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>\n      <div class="settings-item" onclick="openPhoneVerif()"><span class="settings-label">📱 Téléphone</span><span class="settings-val">Non vérifié →</span></div>
       <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label">📄 CGU</span><span class="settings-val">→</span></div>
     </div>
     <button class="btn-logout" onclick="logout()">🚪 Déconnexion</button>
@@ -323,11 +315,7 @@ async function loadProfile() {
   // 1. Affichage immédiat depuis cache (pas de loading spinner)
   renderFromCache();
 
-  // 2. Wake-up banner après 3s si backend pas encore répondu
-  const wakeTimer = setTimeout(() => {
-    const b = document.getElementById('wakeBanner');
-    if (b) b.style.display = 'flex';
-  }, 3000);
+  const wakeTimer = null;
 
   // 3. Charger depuis API avec retry
   let user = null;
@@ -338,9 +326,6 @@ async function loadProfile() {
     if (!user && attempts < 3) await new Promise(r => setTimeout(r, 5000));
   }
 
-  clearTimeout(wakeTimer);
-  const b = document.getElementById('wakeBanner');
-  if (b) b.style.display = 'none';
 
   if (!user) {
     // Afficher quand même le profil depuis cache avec message discret
