@@ -520,8 +520,8 @@ function openDeal(id) {
     : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l&#39;autre partie</div>';
 
   const myInfoHtml = myInfoFilled
-    ? renderPaymentInfo(myPayInfo, '✅ Mes coordonnées') + '<button style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-bottom:10px;" onclick="openPaymentInfo(''+d._id+'')">✏️ Modifier</button>'
-    : '<button class="btn-add-payment" onclick="openPaymentInfo(''+d._id+'')">➕ Ajouter mes coordonnées de paiement</button>';
+    ? renderPaymentInfo(myPayInfo, '✅ Mes coordonnées') + '<button style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-bottom:10px;" data-id="'+d._id+'" onclick="openPaymentInfo(this.dataset.id)">✏️ Modifier</button>'
+    : '<button class="btn-add-payment" data-id="'+d._id+'" onclick="openPaymentInfo(this.dataset.id)">➕ Ajouter mes coordonnées de paiement</button>';
 
   // OCR résultat
   const myOcr = isSender ? d.ocrSender : d.ocrReceiver;
