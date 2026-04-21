@@ -2,135 +2,137 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>TDOLI — Feed</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#060d09;--surface:#0c1710;--card:#111e15;
-  --green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);
-  --yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;
-  --text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;
-  --border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);
+:root {
+  --bg:#060d09; --surface:#0c1710; --card:#111e15;
+  --green:#00c97a; --green-dim:#009e60; --green-glow:rgba(0,201,122,0.12);
+  --yellow:#fcd116; --blue:#1a4fff;
+  --text:#e8f2eb; --text-2:#a8bfad; --text-3:#5a7560;
+  --border:rgba(255,255,255,0.07); --border-active:rgba(0,201,122,0.2);
   --r:16px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
-.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,180,90,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 20% 90%,rgba(26,79,255,0.07) 0%,transparent 60%);}
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,180,90,0.07) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 40% at 20% 90%,rgba(26,79,255,0.07) 0%,transparent 60%);}
+.flag-bar{position:fixed;top:0;left:0;right:0;height:3px;display:flex;z-index:200;}
+.flag-bar span{flex:1;}
+.flag-bar span:nth-child(1){background:var(--green);}
+.flag-bar span:nth-child(2){background:var(--yellow);}
+.flag-bar span:nth-child(3){background:var(--blue);}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.topbar-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.topbar{position:sticky;top:3px;z-index:100;background:rgba(6,13,9,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.5px;}
+.topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.user-chip{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:6px 12px 6px 7px;font-size:12px;color:var(--text-2);max-width:150px;}
+.user-avatar-sm{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;color:#fff;flex-shrink:0;}
+.user-name-sm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logout-btn{width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--text-3);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;transition:all 0.2s;}
+.logout-btn:active{background:rgba(255,60,60,0.1);color:#ff6b6b;}
 
-/* AVATAR BTN — FIX Phase 1 */
-.user-avatar-btn{
-  width:38px;height:38px;border-radius:50%;
-  background:linear-gradient(135deg,var(--green-dim),var(--blue));
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
-  color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;
-  border:1.5px solid var(--border-active);
-  overflow:hidden;
-  transition:transform 0.15s;
-}
-.user-avatar-btn:active{transform:scale(0.93);}
-.user-avatar-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+/* PULL TO REFRESH */
+.ptr-indicator{height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;transition:height 0.2s;position:relative;z-index:1;}
+.ptr-spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 0.6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-/* PARRAINER BTN — FIX Phase 1 (jaune) */
-.share-btn{
-  background:rgba(252,209,22,0.1);
-  border:1px solid rgba(252,209,22,0.3);
-  color:var(--yellow);
-  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
-  cursor:pointer;padding:7px 12px;white-space:nowrap;
-  border-radius:20px;
-  transition:background 0.2s;
-  letter-spacing:0.3px;
-}
-.share-btn:active{background:rgba(252,209,22,0.2);}
-
+/* CONTENT */
 .content{position:relative;z-index:1;padding:16px 20px;max-width:480px;margin:0 auto;}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .section-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
 .badge{background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);font-size:12px;font-weight:700;font-family:'Syne',sans-serif;border-radius:20px;padding:3px 11px;}
+
+/* FILTER */
 .filter-bar{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;}
 .filter-bar::-webkit-scrollbar{display:none;}
-.filter-chip{flex-shrink:0;padding:7px 16px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.filter-chip{flex-shrink:0;padding:6px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .filter-chip.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
-.annonce-list{display:flex;flex-direction:column;gap:8px;}
-.annonce-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;position:relative;overflow:hidden;}
-@keyframes cardIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.annonce-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green),var(--blue));}
-.annonce-item.mine::before{background:var(--green);}
-.annonce-item:active{background:var(--surface);}
-.item-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
-.item-body{flex:1;min-width:0;}
-.item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
-.item-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
-.item-amount{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;}
-.item-bottom{display:flex;align-items:center;justify-content:space-between;}
-.item-dir{font-size:11px;color:var(--text-3);}
-.item-meta{display:flex;align-items:center;gap:6px;}
-.item-rating{font-size:10px;color:var(--yellow);}
-.item-time{font-size:10px;color:var(--text-3);}
-.item-currency{font-size:11px;color:var(--text-3);margin-left:2px;}
-.mine-tag{font-size:9px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:4px;padding:1px 6px;font-family:'Syne',sans-serif;font-weight:700;}
-.status-dot-sm{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
+
+/* CARD */
+.annonce-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;position:relative;overflow:hidden;animation:cardIn 0.4s cubic-bezier(0.19,1,0.22,1) both;transition:border-color 0.2s;}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.annonce-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green),var(--blue));}
+.annonce-card:nth-child(1){animation-delay:.03s}.annonce-card:nth-child(2){animation-delay:.06s}.annonce-card:nth-child(3){animation-delay:.09s}.annonce-card:nth-child(4){animation-delay:.12s}
+
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.card-user{display:flex;align-items:center;gap:10px;}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
+.user-name{font-size:13px;font-weight:500;}
+.user-meta{display:flex;align-items:center;gap:8px;margin-top:3px;}
+.user-rating{font-size:11px;color:var(--yellow);display:flex;align-items:center;gap:3px;}
+.user-deals{font-size:10px;color:var(--text-3);}
+.rating-stars{letter-spacing:-1px;}
+.verified-badge{font-size:9px;background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);border-radius:4px;padding:1px 5px;font-family:'Syne',sans-serif;font-weight:700;}
+
+.status-pill{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:4px 10px;border-radius:20px;background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.status-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);animation:blink 2s ease infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+.card-flow{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.country-tag{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 10px;font-size:13px;font-weight:500;text-align:center;}
+.arrow-wrap{width:26px;height:26px;border-radius:50%;background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;color:var(--yellow);font-family:'Syne',sans-serif;font-weight:700;}
+
+.card-amount{display:flex;align-items:baseline;gap:6px;margin-bottom:14px;}
+.amt-main{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;letter-spacing:-0.5px;}
+.amt-currency{font-size:13px;color:var(--text-3);}
+.amt-converted{font-size:12px;color:var(--green);margin-left:auto;background:var(--green-glow);border-radius:6px;padding:3px 8px;}
+
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
+.card-time{font-size:11px;color:var(--text-3);}
+.btn-match{background:linear-gradient(135deg,var(--green-dim),var(--blue));color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:transform 0.15s;box-shadow:0 2px 12px rgba(0,158,96,0.25);}
+.btn-match:active{transform:scale(0.95);}
+.my-label{font-size:11px;color:var(--text-3);background:var(--surface);border-radius:6px;padding:4px 10px;border:1px solid var(--border);}
+
+/* EMPTY / LOADING */
 .empty-state{text-align:center;padding:60px 20px;}
 .empty-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
 .empty-sub{font-size:13px;color:var(--text-3);line-height:1.6;}
-.loading-wrap{display:flex;justify-content:center;padding:50px;}
-.loader{width:30px;height:30px;position:relative;}
+.loading-wrap{display:flex;flex-direction:column;align-items:center;padding:60px 20px;gap:16px;}
+.loader{width:34px;height:34px;position:relative;}
 .loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
-.loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
-@keyframes spin{to{transform:rotate(360deg);}}
+.loader::before{border-top-color:var(--green);}
+.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
+.loading-text{font-size:13px;color:var(--text-3);}
+
+/* FAB */
 .fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,158,96,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .fab:active{transform:scale(0.9);}
+.fab::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--green);opacity:0;animation:fabPulse 2.5s ease infinite;}
+@keyframes fabPulse{0%{opacity:0.5;transform:scale(1);}100%{opacity:0;transform:scale(1.35);}}
+
+/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(6,13,9,0.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
-.nav-icon-wrap{position:relative;}
-.deals-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--yellow);color:#000;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
-.deals-badge.show{display:flex;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-.overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
-.overlay.open{display:flex;}
-.sheet{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);box-shadow:0 -8px 40px rgba(0,0,0,0.5);max-height:90vh;overflow-y:auto;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:flex-end;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);box-shadow:0 -8px 40px rgba(0,0,0,0.5);}
 @keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
-.sheet-handle-row{padding:16px 0 18px;display:flex;justify-content:center;position:sticky;top:0;background:var(--card);z-index:1;}
-.sheet-handle{width:34px;height:3px;border-radius:2px;background:var(--border);}
-.sheet-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px;}
-.detail-hero{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
-.detail-user{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.detail-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff;border:1px solid var(--border-active);}
-.detail-uname{font-size:14px;font-weight:600;}
-.detail-rating{font-size:11px;color:var(--yellow);margin-top:2px;}
-.detail-flow{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.detail-country{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:500;text-align:center;}
-.detail-arrow{width:24px;height:24px;border-radius:50%;background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--yellow);flex-shrink:0;}
-.detail-amount{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;}
-.detail-currency{font-size:14px;color:var(--text-3);margin-left:6px;}
-.detail-eur{font-size:12px;color:var(--green);background:var(--green-glow);border-radius:6px;padding:3px 8px;margin-left:auto;}
-.match-info{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
-.match-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
-.match-row:last-child{margin-bottom:0;}
-.match-label{color:var(--text-3);}
-.match-val{font-weight:600;}
-.my-actions{display:flex;gap:8px;margin-bottom:12px;}
-.btn-edit{flex:1;padding:12px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
-.btn-delete{padding:12px 16px;background:transparent;color:var(--red);border:1px solid rgba(255,68,68,0.25);border-radius:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+.modal-handle-row{padding:16px 0 18px;display:flex;justify-content:center;}
+.modal-handle{width:34px;height:3px;border-radius:2px;background:var(--border);}
+.modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px;}
+
 .form-group{margin-bottom:16px;}
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
 .form-input,.form-select{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
-.form-input:focus,.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
-.form-row{display:flex;gap:10px;}.form-row .form-group{flex:1;}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--green);background:rgba(0,201,122,0.04);box-shadow:0 0 0 3px var(--green-glow);}
+.form-row{display:flex;gap:10px;}
+.form-row .form-group{flex:1;}
+
 .conv-preview{background:var(--surface);border:1px solid var(--border-active);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;min-height:44px;}
 .conv-hint{font-size:12px;color:var(--text-3);}
 .conv-amount{font-family:'Syne',sans-serif;font-weight:700;color:var(--green);font-size:14px;}
-.btn-primary{width:100%;padding:16px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s,opacity 0.15s;}
+
+.btn-primary{width:100%;padding:16px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s,opacity 0.15s;box-shadow:0 4px 20px rgba(0,158,96,0.2);}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .btn-primary:active{transform:scale(0.97);}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
@@ -139,255 +141,164 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6b6b;}
 .msg.show{display:block;}
 .spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:7px;}
+
+/* CONFIRM OVERLAY */
+.confirm-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
+.confirm-overlay.open{display:flex;}
+.confirm-box{background:var(--card);border:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:28px 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.3s cubic-bezier(0.19,1,0.22,1);}
+.confirm-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px;}
+.confirm-sub{font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.6;}
+.confirm-detail{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:20px;}
+.confirm-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;}
+.confirm-row:last-child{margin-bottom:0;}
+.confirm-label{color:var(--text-3);}
+.confirm-value{font-weight:500;}
+
+/* TOAST */
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:500;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-/* Sélection bénéficiaire */
-.benef-select-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;}
-.benef-select-item:active,.benef-select-item.selected{background:var(--green-glow);border-color:var(--border-active);}
-.benef-select-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;}
-.benef-select-name{font-size:14px;font-weight:600;}
-.benef-select-detail{font-size:11px;color:var(--text-3);margin-top:2px;}
-.benef-selected-badge{background:var(--green-glow);border:1px solid var(--border-active);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;}
-.benef-selected-name{font-weight:600;color:var(--green);}
-.benef-selected-detail{font-size:11px;color:var(--text-3);}
 
-/* Phase 2 — Airtel Money */
-.airtel-box{background:rgba(252,209,22,0.05);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-top:10px;margin-bottom:4px;}
-.airtel-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:3px 0;}
-.airtel-divider{border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:7px;}
-.airtel-lbl{color:var(--text-3);}
-.airtel-val{font-weight:600;font-family:'Syne',sans-serif;font-size:12px;}
-.airtel-val.fees{color:var(--yellow);}
-.airtel-val.green{color:var(--green);}
-.airtel-val.bold{color:var(--text);font-size:13px;}
-.airtel-val.yellow{color:var(--yellow);}
-.airtel-scenario-title{font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:var(--text-2);margin-bottom:4px;margin-top:2px;}
-.airtel-highlight{background:rgba(0,0,0,0.15);border-radius:6px;padding:4px 6px;margin:2px -6px;}
+/* Deals badge */
+.deals-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--yellow);color:#000;font-size:9px;font-weight:800;font-family:'Syne',sans-serif;display:none;align-items:center;justify-content:center;}
+.deals-badge.show{display:flex;}
+.nav-icon-wrap{position:relative;}
 
+/* WEEKLY STATS BANNER */
+.weekly-banner{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,201,122,0.08),rgba(26,79,255,0.08));border:1px solid var(--border-active);border-radius:14px;padding:14px 16px;margin-bottom:16px;}
+.weekly-icon{font-size:22px;flex-shrink:0;}
+.weekly-text{font-size:12px;color:var(--text-2);line-height:1.6;}
+.weekly-text strong{font-family:'Syne',sans-serif;font-weight:700;color:var(--green);}
+.weekly-text .vol{font-family:'Syne',sans-serif;font-weight:700;color:var(--yellow);}
+.weekly-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
+
+/* BADGE RÉACTIVITÉ */
+.reactivity-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;border-radius:4px;padding:1px 6px;}
+.reactivity-badge.fast{background:rgba(0,201,122,0.12);color:var(--green);border:1px solid rgba(0,201,122,0.25);}
+.reactivity-badge.normal{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
+.reactivity-badge.slow{background:rgba(255,100,60,0.08);color:#ff7a55;border:1px solid rgba(255,100,60,0.18);}
+
+/* RANG COMMUNAUTAIRE */
+.rank-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;border-radius:4px;padding:1px 6px;}
+.rank-badge.nouveau{background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);}
+.rank-badge.actif{background:rgba(0,201,122,0.08);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.rank-badge.fiable{background:rgba(26,79,255,0.1);color:#6b8fff;border:1px solid rgba(26,79,255,0.2);}
+.rank-badge.pilier{background:linear-gradient(135deg,rgba(252,209,22,0.12),rgba(26,79,255,0.12));color:var(--yellow);border:1px solid rgba(252,209,22,0.25);}
+
+/* TRUST LINE */
+.trust-line{font-size:10px;color:var(--text-3);margin-top:2px;}
 </style>
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#060d09">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="TDOLI">
-<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-<script>
-// FIX: SW enregistrement sans crash si fichier absent
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(r => console.log('[SW] OK'))
-      .catch(e => console.warn('[SW] Non enregistré:', e.message));
-  });
-}
-</script>
 </head>
 <body>
 <div class="bg-mesh"></div>
+<div class="flag-bar"><span></span><span></span><span></span></div>
 
 <div class="topbar">
-  <div class="topbar-left">
-    <!-- FIX Phase 1: avatar initialisé avec initiales, photo si dispo -->
-    <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a>
-  </div>
-  <div style="flex:1;"></div>
+  <div class="topbar-logo"><span class="l1">T</span><span class="l2">D</span><span class="l3">O</span><span class="l4">L</span><span class="l5">I</span></div>
   <div class="topbar-right">
-    <!-- FIX Phase 1: bouton Parrainer jaune stylisé -->
-    <button class="share-btn" onclick="shareApp()">🎁 Parrainer</button>
+    <div class="user-chip">
+      <div class="user-avatar-sm" id="avatarSm">?</div>
+      <div class="user-name-sm" id="userChip">—</div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Off</button>
   </div>
 </div>
+
+<div class="ptr-indicator" id="ptrIndicator"><div class="ptr-spinner"></div></div>
 
 <div class="content">
   <div class="section-header">
-    <div class="section-title">Annonces</div>
+    <div class="section-title">Annonces disponibles</div>
     <div class="badge" id="countBadge">—</div>
   </div>
+
+  <!-- Compteur hebdomadaire -->
+  <div class="weekly-banner" id="weeklyBanner" style="display:none;">
+    <div class="weekly-pulse"></div>
+    <div class="weekly-icon">🌍</div>
+    <div class="weekly-text">
+      <strong id="weeklyMembers">—</strong> membres de la communauté ont échangé
+      <span class="vol" id="weeklyVolume">—</span> cette semaine
+    </div>
+  </div>
+
+  <!-- Filtres -->
   <div class="filter-bar">
     <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div>
-    <div class="filter-chip" onclick="setFilter('EUR',this)">EUR</div>
-    <div class="filter-chip" onclick="setFilter('XAF',this)">XAF</div>
-    <div class="filter-chip" onclick="setFilter('USD',this)">USD</div>
-    <div class="filter-chip" onclick="setFilter('CAD',this)">CAD</div>
-    <div class="filter-chip" onclick="setFilter('mine',this)">Mes annonces</div>
+    <div class="filter-chip" onclick="setFilter('France','Gabon',this)">France → Gabon</div>
+    <div class="filter-chip" onclick="setFilter('Gabon','France',this)">Gabon → France</div>
   </div>
-  <div id="feedList"><div class="loading-wrap"><div class="loader"></div></div></div>
+
+  <div id="feedList">
+    <div class="loading-wrap"><div class="loader"></div><div class="loading-text">Chargement...</div></div>
+  </div>
 </div>
 
-<button class="fab" onclick="openCreateSheet()">+</button>
+<button class="fab" onclick="openModal()">+</button>
 
 <nav class="bottom-nav">
-  <a class="nav-item active" href="/tdoli-feed.html">
+  <a class="nav-item active" href="tdoli-feed.html">
     <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
   </a>
-  <a class="nav-item" href="/tdoli-deals.html">
+  <a class="nav-item" href="tdoli-deals.html">
     <div class="nav-icon-wrap">
       <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
       <div class="deals-badge" id="dealsBadge">!</div>
     </div>Deals
   </a>
-  <a class="nav-item" href="/tdoli-profile.html">
+  <a class="nav-item" href="tdoli-profile.html">
     <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
   </a>
 </nav>
 
-<!-- Sheet détail annonce -->
-<div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')">
-  <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
-</div>
-
-<!-- Sheet créer annonce -->
-<div class="overlay" id="createOverlay" onclick="closeOnOverlay(event,'createOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Nouvelle annonce</div>
+<!-- Modal créer annonce -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-handle-row"><div class="modal-handle"></div></div>
+    <div class="modal-title">Nouvelle annonce</div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="ann-amount" placeholder="500" inputmode="numeric" oninput="updatePreview('create')"></div>
-      <div class="form-group"><label class="form-label">Devise</label>
-        <select class="form-select" id="ann-currency" onchange="updatePreview('create')">
-          <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
+      <div class="form-group">
+        <label class="form-label">Montant</label>
+        <input class="form-input" type="number" id="ann-amount" placeholder="500" inputmode="numeric" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Devise</label>
+        <select class="form-select" id="ann-currency" onchange="updatePreview()">
+          <option value="EUR">EUR</option>
+          <option value="XAF">XAF</option>
         </select>
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">De</label>
-        <select class="form-select" id="ann-from" onchange="syncCountries();updatePreview('create')">
-          <option value="France">🇫🇷 France</option>
-          <option value="Gabon">🇬🇦 Gabon</option>
-          <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
-          <option value="Canada">🇨🇦 Canada</option>
-          <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-          <option value="Belgique">🇧🇪 Belgique</option>
-          <option value="Suisse">🇨🇭 Suisse</option>
+      <div class="form-group">
+        <label class="form-label">De</label>
+        <select class="form-select" id="ann-from" onchange="syncCountries()">
+          <option value="France">France</option>
+          <option value="Gabon">Gabon</option>
         </select>
       </div>
-      <div class="form-group"><label class="form-label">Vers</label>
-        <select class="form-select" id="ann-to" onchange="updatePreview('create')">
-          <option value="Gabon">🇬🇦 Gabon</option>
-          <option value="France">🇫🇷 France</option>
-          <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
-          <option value="Canada">🇨🇦 Canada</option>
-          <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-          <option value="Belgique">🇧🇪 Belgique</option>
-          <option value="Suisse">🇨🇭 Suisse</option>
+      <div class="form-group">
+        <label class="form-label">Vers</label>
+        <select class="form-select" id="ann-to">
+          <option value="Gabon">Gabon</option>
+          <option value="France">France</option>
         </select>
       </div>
     </div>
-    <div class="conv-preview" id="convPreview-create"><span class="conv-hint">Saisis un montant</span></div>
-    <div id="airtel-preview-create"></div>
-    <!-- Sélection bénéficiaire -->
-    <div id="benef-selected-create"></div>
-    <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('create')">👤 Choisir le bénéficiaire</button>
-    <div id="airtel-preview-create"></div>
+    <div class="conv-preview" id="convPreview"><span class="conv-hint">Saisis un montant</span></div>
     <button class="btn-primary" id="btn-submit" onclick="submitAnnonce()">Publier</button>
-    <button class="btn-cancel" onclick="closeSheet('createOverlay')">Annuler</button>
-    <div class="msg" id="msg-create"></div>
+    <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+    <div class="msg" id="msg-modal"></div>
   </div>
 </div>
 
-<!-- Sheet modifier annonce -->
-<div class="overlay" id="editOverlay" onclick="closeOnOverlay(event,'editOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Modifier l'annonce</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="edit-amount" inputmode="numeric" oninput="updatePreview('edit')"></div>
-      <div class="form-group"><label class="form-label">Devise</label>
-        <select class="form-select" id="edit-currency" onchange="updatePreview('edit')">
-          <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
-        </select>
-      </div>
-    </div>
-    <div class="conv-preview" id="convPreview-edit"><span class="conv-hint">Saisis un montant</span></div>
-    <button class="btn-primary" id="btn-edit-submit" onclick="submitEdit()">Enregistrer</button>
-    <button class="btn-cancel" onclick="closeSheet('editOverlay')">Annuler</button>
-    <div class="msg" id="msg-edit"></div>
-  </div>
-</div>
-
-
-<!-- Sheet sélection bénéficiaire -->
-<div class="overlay" id="benefOverlay" onclick="closeOnOverlay(event,'benefOverlay')" style="z-index:500;">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Qui reçoit ?</div>
-    <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Sélectionne le bénéficiaire pour cette annonce.</div>
-    <div id="benefSelectList"><div class="loading-wrap"><div class="loader"></div></div></div>
-    <button class="btn-cancel" style="margin-top:8px;" onclick="closeBenefSheet()">Fermer</button>
-  </div>
-</div>
-
-<!-- Sheet confirmer match -->
-<div class="overlay" id="confirmOverlay" onclick="closeOnOverlay(event,'confirmOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Confirmer le match</div>
-    <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Vérifie les détails avant de confirmer.</div>
-    <div id="confirmDetail" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;"></div>
-    <!-- Sélection bénéficiaire pour le match -->
-    <div id="confirm-benef-badge" style="margin-bottom:12px;"></div>
-    <button class="btn-primary" style="margin-bottom:12px;background:var(--surface);border:1px solid var(--border-active);color:var(--green);" onclick="openBenefSheetForMatch()">👤 Choisir mon bénéficiaire</button>
-    <button class="btn-primary" id="btn-confirm-match" onclick="executeMatch()">Confirmer le match</button>
-    <button class="btn-cancel" onclick="closeSheet('confirmOverlay')">Annuler</button>
-  </div>
-</div>
-
-<!-- Sheet nouveau bénéficiaire inline (depuis feed) -->
-<div class="overlay" id="inlineBenefOverlay" onclick="closeOnOverlay(event,'inlineBenefOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Nouveau bénéficiaire</div>
-
-    <div class="form-group">
-      <label class="form-label">Nom</label>
-      <input class="form-input" type="text" id="ib-nom" placeholder="Ex: Maman, Jean Dupont…">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Pays</label>
-      <select class="form-select" id="ib-pays">
-        <option value="">Sélectionner…</option>
-        <option value="Gabon">🇬🇦 Gabon</option>
-        <option value="France">🇫🇷 France</option>
-        <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-        <option value="Belgique">🇧🇪 Belgique</option>
-        <option value="Suisse">🇨🇭 Suisse</option>
-        <option value="Canada">🇨🇦 Canada</option>
-        <option value="Etats-Unis">🇺🇸 États-Unis</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Méthode</label>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-        <div class="filter-chip active" id="ibm-mm" onclick="setIBMethod('mobilemoney',this)">📱 Mobile Money</div>
-        <div class="filter-chip" id="ibm-vir" onclick="setIBMethod('virement',this)">🏦 Virement</div>
-        <div class="filter-chip" id="ibm-pp" onclick="setIBMethod('paypal',this)">💳 PayPal</div>
-        <div class="filter-chip" id="ibm-wero" onclick="setIBMethod('wero',this)">🟣 Wero</div>
-      </div>
-    </div>
-    <div id="ib-fields-mobilemoney">
-      <div class="form-group"><label class="form-label">Numéro Mobile Money</label><input class="form-input" type="tel" id="ib-phone" placeholder="+241 06 00 00 00" inputmode="tel"></div>
-      <div class="form-group"><label class="form-label">Opérateur</label>
-        <select class="form-select" id="ib-operateur">
-          <option value="">Sélectionner…</option>
-          <option value="Airtel Money">Airtel Money</option>
-          <option value="Moov Money">Moov Money</option>
-          <option value="Orange Money">Orange Money</option>
-        </select>
-      </div>
-    </div>
-    <div id="ib-fields-virement" style="display:none;">
-      <div class="form-group"><label class="form-label">IBAN</label><input class="form-input" type="text" id="ib-iban" placeholder="FR76…"></div>
-      <div class="form-group"><label class="form-label">Banque</label><input class="form-input" type="text" id="ib-banque" placeholder="BNP, Société Générale…"></div>
-    </div>
-    <div id="ib-fields-paypal" style="display:none;">
-      <div class="form-group"><label class="form-label">Email PayPal</label><input class="form-input" type="email" id="ib-paypal" placeholder="ton@email.com"></div>
-    </div>
-    <div id="ib-fields-wero" style="display:none;">
-      <div class="form-group"><label class="form-label">Numéro Wero</label><input class="form-input" type="tel" id="ib-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"></div>
-    </div>
-
-    <button class="btn-primary" id="btn-ib-save" onclick="saveInlineBenef()">Enregistrer et sélectionner</button>
-    <button class="btn-cancel" onclick="closeSheet('inlineBenefOverlay');openBenefSheet('create')">Annuler</button>
-    <div class="msg" id="msg-ib"></div>
+<!-- Confirm match -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-title">Confirmer le match</div>
+    <div class="confirm-sub">Verifie les details avant de confirmer.</div>
+    <div class="confirm-detail" id="confirmDetail"></div>
+    <button class="btn-primary" id="btn-confirm-match" onclick="executeMatch()">Confirmer</button>
+    <button class="btn-cancel" onclick="closeConfirm()">Annuler</button>
   </div>
 </div>
 
@@ -397,326 +308,185 @@ if ('serviceWorker' in navigator) {
 const API = 'https://tdoli-backend.onrender.com';
 const token = localStorage.getItem('tdoli_token');
 const email = localStorage.getItem('tdoli_email');
-const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] || '?';
-const avatarUrl = localStorage.getItem('tdoli_avatar') || null;
 const RATE = 655.957;
 
-// FIX: redirect sécurisé — évite la boucle si déjà sur auth
-if (!token && !window.location.pathname.includes('tdoli-auth')) {
-  window.location.replace('/tdoli-auth.html');
+if (!token) window.location.href = 'tdoli-auth.html';
+if (email) {
+  const name = email.split('@')[0];
+  document.getElementById('userChip').textContent = name;
+  document.getElementById('avatarSm').textContent = name.substring(0,2).toUpperCase();
 }
 
-// FIX Phase 1: Initialiser l'avatar avec initiales ou photo Cloudinary
-function initAvatar() {
-  const btn = document.getElementById('avatarBtn');
-  if (!btn) return;
-  const name = username || '?';
-  const parts = name.trim().split(' ').filter(p => p.length > 0);
-  const initials = parts.length >= 2
-    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-    : name.substring(0, 2).toUpperCase();
+let allTransfers = [];
+let currentFilter = 'all';
+let currentFromFilter = null;
+let currentToFilter = null;
+let pendingMatch = null;
 
-  if (avatarUrl) {
-    btn.innerHTML = '<img src="' + avatarUrl + '" alt="' + initials + '">';
-  } else {
-    btn.textContent = initials;
-  }
+function logout() {
+  localStorage.removeItem('tdoli_token');
+  localStorage.removeItem('tdoli_email');
+  window.location.href = 'tdoli-auth.html';
 }
-initAvatar();
-
-let allTransfers = [], currentFilter = 'all', pendingMatch = null, editingId = null;
-
-// FIX Phase 1: shareApp() fonctionnelle avec Web Share API + fallback copier
-function shareApp() {
-  const refCode = localStorage.getItem('tdoli_ref') || username;
-  const msg = '🦜 TDOLI — Transfert d\'argent entre particuliers, sans frais cachés !\nInscris-toi avec mon code parrain : ' + refCode + '\nhttps://tdoli-frontend.pages.dev';
-  if (navigator.share) {
-    navigator.share({ title: 'TDOLI', text: msg, url: 'https://tdoli-frontend.pages.dev' })
-      .catch(() => {});
-  } else {
-    navigator.clipboard.writeText(msg)
-      .then(() => showToast('Lien copié ! 🎁', '#fcd116'))
-      .catch(() => showToast('Partage: ' + msg.substring(0, 30) + '...', '#fcd116'));
-  }
-}
-
-function logout() { localStorage.clear(); window.location.href = '/tdoli-auth.html'; }
 
 function showToast(msg, color) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = color || 'var(--green-dim)';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
+  t.textContent = msg; t.style.background = color || 'var(--green-dim)';
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500);
 }
 
 function timeAgo(dateStr) {
   if (!dateStr) return '';
   const diff = Date.now() - new Date(dateStr).getTime();
-  const m = Math.floor(diff / 60000);
-  if (m < 1) return "À l'instant";
-  if (m < 60) return m + ' min';
-  const h = Math.floor(m / 60);
-  if (h < 24) return h + 'h';
-  return Math.floor(h / 24) + 'j';
+  const m = Math.floor(diff/60000);
+  if (m < 1) return 'A l\'instant';
+  if (m < 60) return `${m} min`;
+  const h = Math.floor(m/60);
+  if (h < 24) return `${h}h`;
+  return `${Math.floor(h/24)}j`;
 }
 
-function renderStars(r) {
-  if (!r || r === 0) return '';
-  const f = Math.round(r);
-  return '★'.repeat(f) + '☆'.repeat(5 - f) + ' ' + r.toFixed(1);
+function renderStars(rating) {
+  if (!rating || rating === 0) return '<span style="color:var(--text-3);font-size:10px;">Nouveau</span>';
+  const full = Math.round(rating);
+  return '★'.repeat(full) + '☆'.repeat(5-full);
 }
 
-
-// ── Phase 2 : Calcul frais Airtel Money Gabon ─────────────────
-function calcAirtelFees(xafAmount) {
-  if (xafAmount <= 0) return 0;
-  if (xafAmount < 200000) {
-    return Math.ceil(xafAmount / 100000) * 3000;
-  }
-  if (xafAmount <= 500000) return 5000;
-  return Math.round(xafAmount * 0.01);
+function communityRank(score) {
+  if (score === null || score === undefined) return null;
+  if (score >= 86) return { cls: 'pilier', label: 'Pilier 🏆' };
+  if (score >= 66) return { cls: 'fiable', label: 'Membre fiable' };
+  if (score >= 41) return { cls: 'actif',  label: 'Membre actif' };
+  return { cls: 'nouveau', label: 'Nouveau' };
 }
 
-function renderAirtelPreview(amount, currency, toCountry, fromCountry) {
-  if (!amount || isNaN(amount) || amount <= 0) return '';
-  const RATE = 655.957;
-  const isGabonDest = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
-  const isGabonSrc = fromCountry === 'Gabon' || fromCountry === 'Burkina Faso';
-  if (!isGabonDest && !isGabonSrc) return '';
-
-  if (currency === 'XAF') {
-    // XAF → autre pays : envoyeur utilise Airtel pour envoyer
-    const fees = calcAirtelFees(amount);
-    const depot = amount + fees;
-    const netSiDeduit = amount - fees;
-    const eurNet = (netSiDeduit / RATE).toFixed(2);
-    const eurBrut = (amount / RATE).toFixed(2);
-
-    return '<div class="airtel-box">'+
-      '<div class="airtel-scenario-title">📤 Scénario 1 — Tu envoies '+Number(depot).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA (≈ '+eurBrut+' €)</span></div>'+
-      '<div style="height:10px"></div>'+
-      '<div class="airtel-scenario-title">📤 Scénario 2 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(netSiDeduit).toLocaleString('fr-FR')+' FCFA (≈ '+eurNet+' €)</span></div>'+
-      '</div>';
-  }
-
-  if (currency === 'EUR') {
-    // EUR → Gabon : receveur retire via Airtel
-    const xafBrut = Math.round(amount * RATE);
-    const fees = calcAirtelFees(xafBrut);
-    const xafNet = xafBrut - fees;
-    const eurPourCouvrir = ((xafBrut + fees) / RATE).toFixed(2);
-
-    return '<div class="airtel-box">'+
-      '<div class="airtel-scenario-title">📤 Scénario 1 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' EUR</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(xafNet).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div style="height:10px"></div>'+
-      '<div class="airtel-scenario-title">📥 Scénario 2 — Receveur reçoit '+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel à couvrir</span><span class="airtel-val fees">+'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Tu envoies</span><span class="airtel-val green">'+eurPourCouvrir+' EUR</span></div>'+
-      '</div>';
-  }
-
-  return '';
+function renderRankBadge(score) {
+  const rank = communityRank(score);
+  if (!rank) return '';
+  return `<span class="rank-badge ${rank.cls}">${rank.label}</span>`;
 }
 
-function convertToEur(amount, currency) {
-  const rates = { EUR: 1, XAF: 1 / 655.957, USD: 0.92, CAD: 0.68 };
-  return amount * (rates[currency] || 1);
-}
-
-function formatMatchAmount(amount, currency, toCountry) {
-  const eur = convertToEur(amount, currency);
-  if (toCountry === 'Gabon' || toCountry === 'Burkina Faso') return Math.round(eur * 655.957).toLocaleString('fr-FR') + ' XAF';
-  if (toCountry === 'Etats-Unis') return (eur / 0.92).toFixed(0) + ' USD';
-  if (toCountry === 'Canada') return (eur / 0.68).toFixed(0) + ' CAD';
-  return eur.toFixed(0) + ' EUR';
-}
-
-function getInitials(name) {
-  const parts = (name || '?').trim().split(' ').filter(p => p.length > 0);
-  return parts.length >= 2
-    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-    : (name || '??').substring(0, 2).toUpperCase();
-}
-
-function renderList(data) {
-  return data.map((t, i) => {
-    const isOwn = t.sender === email;
-    const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
-    const initials = getInitials(displayName);
-    const eurVal = convertToEur(t.amount, t.currency);
-    const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
-    return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
-      '<div class="item-avatar">' + initials + '</div>' +
-      '<div class="item-body">' +
-      '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
-      '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
-      '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
-      '<span class="item-meta">' + (t.senderRating > 0 ? '<span class="item-rating">★' + t.senderRating.toFixed(1) + '</span>' : '') + '<span class="item-time">' + timeAgo(t.createdAt) + '</span><div class="status-dot-sm"></div></span></div>' +
-      '</div></div>';
-  }).join('');
-}
-
-function openDetail(id) {
-  const t = allTransfers.find(x => x._id === id);
-  if (!t) return;
+function renderCard(t, idx) {
+  const initials = t.sender ? t.sender.substring(0,2).toUpperCase() : '--';
+  const name = t.senderUsername || (t.sender ? t.sender.split('@')[0] : 'Inconnu');
   const isOwn = t.sender === email;
-  const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
-  const initials = getInitials(displayName);
-  const eurVal = convertToEur(t.amount, t.currency);
-  const euroLabel = t.currency !== 'EUR' ? '≈ ' + eurVal.toFixed(0) + ' EUR' : '';
-  const matchAmt = formatMatchAmount(t.amount, t.currency, t.toCountry);
+  const euroLabel = t.currency !== 'EUR' && t.amountEuro
+    ? `≈ ${Number(t.amountEuro).toFixed(0)} EUR` : '';
+  const rating = t.senderRating || 0;
+  const deals = t.senderDeals || 0;
+  const matchAmount = t.currency === 'EUR'
+    ? `${Math.round(t.amount * RATE).toLocaleString('fr-FR')} XAF`
+    : `${Math.round(t.amount / RATE).toLocaleString('fr-FR')} EUR`;
 
-  let html = '<div class="detail-hero">' +
-    '<div class="detail-user"><div class="detail-avatar">' + initials + '</div>' +
-    '<div><div class="detail-uname">' + (isOwn ? 'Mon annonce' : displayName) + '</div>' +
-    (t.senderRating > 0 ? '<div class="detail-rating">' + renderStars(t.senderRating) + '</div>' : '<div style="font-size:11px;color:var(--text-3)">Nouveau</div>') + '</div></div>' +
-    '<div class="detail-flow"><div class="detail-country">' + t.fromCountry + '</div><div class="detail-arrow">→</div><div class="detail-country">' + t.toCountry + '</div></div>' +
-    '<div style="display:flex;align-items:baseline;gap:6px"><span class="detail-amount">' + Number(t.amount).toLocaleString('fr-FR') + '</span><span class="detail-currency">' + t.currency + '</span>' + (euroLabel ? '<span class="detail-eur">' + euroLabel + '</span>' : '') + '</div></div>';
+  const trustLine = deals > 0
+    ? `<div class="trust-line">Fait confiance par ${deals} membre${deals>1?'s':''}</div>`
+    : '';
 
-  if (!isOwn) {
-    html += '<div class="match-info"><div class="match-row"><span class="match-label">Tu envoies</span><span class="match-val">' + matchAmt + '</span></div><div class="match-row"><span class="match-label">Sens</span><span class="match-val">' + t.toCountry + ' → ' + t.fromCountry + '</span></div></div>' +
-      '<button class="btn-primary" onclick="showConfirm(\'' + t._id + '\',\'' + t.fromCountry + '\',\'' + t.toCountry + '\',\'' + t.currency + '\',' + t.amount + ',\'' + matchAmt + '\')">Matcher cette annonce</button>';
-  } else {
-    html += '<div class="my-actions"><button class="btn-edit" onclick="openEdit(\'' + t._id + '\',' + t.amount + ',\'' + t.currency + '\')">✏ Modifier</button><button class="btn-delete" onclick="deleteAnnonce(\'' + t._id + '\')">🗑 Supprimer</button></div>';
-  }
-
-  document.getElementById('detailContent').innerHTML = html;
-  document.getElementById('detailOverlay').classList.add('open');
+  return `
+    <div class="annonce-card" style="animation-delay:${idx*0.04}s">
+      <div class="card-top">
+        <div class="card-user">
+          <div class="avatar">${initials}</div>
+          <div>
+            <div class="user-name">${name}</div>
+            <div class="user-meta">
+              <span class="user-rating"><span class="rating-stars">${renderStars(rating)}</span> ${rating > 0 ? rating.toFixed(1) : ''}</span>
+              ${deals >= 5 ? '<span class="verified-badge">Verifie</span>' : ''}
+              ${renderReactivityBadge(t.senderReactivityBadge)}
+              ${renderRankBadge(t.senderCommunityScore)}
+            </div>
+            ${trustLine}
+          </div>
+        </div>
+        <div class="status-pill"><div class="status-dot"></div>Disponible</div>
+      </div>
+      <div class="card-flow">
+        <div class="country-tag">${t.fromCountry}</div>
+        <div class="arrow-wrap">→</div>
+        <div class="country-tag">${t.toCountry}</div>
+      </div>
+      <div class="card-amount">
+        <span class="amt-main">${Number(t.amount).toLocaleString('fr-FR')}</span>
+        <span class="amt-currency">${t.currency}</span>
+        ${euroLabel ? `<span class="amt-converted">${euroLabel}</span>` : ''}
+      </div>
+      <div class="card-footer">
+        <span class="card-time">${timeAgo(t.createdAt)}</span>
+        ${!isOwn
+          ? `<button class="btn-match" onclick="showConfirm('${t._id}','${t.fromCountry}','${t.toCountry}','${t.currency}',${t.amount},'${matchAmount}')">Matcher</button>`
+          : `<span class="my-label">Mon annonce</span>`}
+      </div>
+    </div>`;
 }
 
-function openEdit(id, amount, currency) {
-  editingId = id;
-  closeSheet('detailOverlay');
-  document.getElementById('edit-amount').value = amount;
-  document.getElementById('edit-currency').value = currency;
-  updatePreview('edit');
-  document.getElementById('editOverlay').classList.add('open');
-}
+function setFilter(filter, from, elOrTo, el) {
+  // Gestion des deux signatures
+  let filterEl;
+  if (typeof from === 'object') { filterEl = from; currentFilter = filter; currentFromFilter = null; currentToFilter = null; }
+  else { currentFilter = 'custom'; currentFromFilter = from; currentToFilter = elOrTo; filterEl = el; }
 
-async function deleteAnnonce(id) {
-  if (!confirm('Supprimer cette annonce ?')) return;
-  try {
-    const res = await fetch(API + '/transfer/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
-    const data = await res.json();
-    if (res.ok) { closeSheet('detailOverlay'); showToast('Annonce supprimée'); loadFeed(true); }
-    else showToast(data.message || 'Erreur', '#ff4444');
-  } catch (e) { showToast('Erreur', '#ff4444'); }
-}
-
-async function submitEdit() {
-  const amount = document.getElementById('edit-amount').value;
-  const currency = document.getElementById('edit-currency').value;
-  if (!amount || Number(amount) <= 0) { showMsg('msg-edit', 'Montant invalide'); return; }
-  const btn = document.getElementById('btn-edit-submit');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
-  try {
-    const res = await fetch(API + '/transfer/' + editingId, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount: Number(amount), currency }) });
-    const data = await res.json();
-    if (res.ok) { closeSheet('editOverlay'); showToast('Annonce modifiée'); loadFeed(true); }
-    else showMsg('msg-edit', data.message || 'Erreur');
-  } catch (e) { showMsg('msg-edit', 'Serveur inaccessible'); }
-  btn.disabled = false; btn.innerHTML = 'Enregistrer';
-}
-
-function showConfirm(id, fromCountry, toCountry, currency, amount, matchAmount) {
-  closeSheet('detailOverlay');
-  let targetCurrency = 'EUR';
-  if (toCountry === 'Gabon' || toCountry === 'Burkina Faso') targetCurrency = 'XAF';
-  else if (toCountry === 'Etats-Unis') targetCurrency = 'USD';
-  else if (toCountry === 'Canada') targetCurrency = 'CAD';
-  pendingMatch = { fromCountry: toCountry, toCountry: fromCountry, currency: targetCurrency, amount: parseFloat(matchAmount.replace(/[^\d.]/g, '')), beneficiaireId: selectedBenefId };
-  document.getElementById('confirmDetail').innerHTML =
-    '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--text-3)">Annonce</span><span style="font-weight:600">' + Number(amount).toLocaleString('fr-FR') + ' ' + currency + '</span></div>' +
-    '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--text-3)">Tu envoies</span><span style="font-weight:600">' + matchAmount + '</span></div>' +
-    '<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-3)">Sens</span><span style="font-weight:600">' + toCountry + ' → ' + fromCountry + '</span></div>';
-  document.getElementById('confirmOverlay').classList.add('open');
-}
-
-async function executeMatch() {
-  if (!pendingMatch) return;
-  const btn = document.getElementById('btn-confirm-match');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Matching...';
-  try {
-    const payload = Object.assign({}, pendingMatch);
-    const res = await fetch(API + '/transfer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    closeSheet('confirmOverlay');
-    if (res.ok && data.dealCode) {
-      showToast('🎯 Match ! Code: ' + data.dealCode, '#fcd116');
-      setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
-    } else if (res.ok && data.message && data.message.includes('Match')) {
-      showToast('Match confirmé !', '#fcd116');
-      setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
-    } else if (res.ok) {
-      showToast('Annonce publiée');
-      loadFeed(true);
-    } else {
-      showToast(data.message || 'Erreur', '#ff4444');
-    }
-  } catch (e) {
-    showToast('Serveur inaccessible', '#ff4444');
-    closeSheet('confirmOverlay');
-  }
-  btn.disabled = false; btn.innerHTML = 'Confirmer le match';
-}
-
-function setFilter(filter, el) {
-  currentFilter = filter;
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
+  filterEl.classList.add('active');
   renderFeed();
 }
 
 function renderFeed() {
   let data = allTransfers;
-  if (currentFilter === 'mine') data = data.filter(t => t.sender === email);
-  else if (currentFilter !== 'all') data = data.filter(t => t.currency === currentFilter);
+  if (currentFilter === 'custom' && currentFromFilter) {
+    data = data.filter(t => t.fromCountry === currentFromFilter && t.toCountry === currentToFilter);
+  }
+
   const list = document.getElementById('feedList');
   const badge = document.getElementById('countBadge');
+
   if (data.length === 0) {
     badge.textContent = '0';
-    list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
+    list.innerHTML = `<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie la premiere annonce via le bouton +</div></div>`;
     return;
   }
+
   badge.textContent = data.length;
-  list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
+  list.innerHTML = data.map((t,i) => renderCard(t,i)).join('');
 }
 
-// safeJson — évite crash si backend renvoie HTML
-async function safeJson(res) {
-  const text = await res.text();
-  try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
-  catch(e) { return { ok: false, status: res.status, data: null }; }
+async function loadWeeklyStats() {
+  try {
+    const res = await fetch(`${API}/stats/weekly`, { headers: { 'Authorization': `Bearer ${token}` } });
+    if (!res.ok) return;
+    const { memberCount, totalVolumeEur } = await res.json();
+    if (memberCount > 0) {
+      document.getElementById('weeklyMembers').textContent = memberCount;
+      document.getElementById('weeklyVolume').textContent =
+        totalVolumeEur >= 1000
+          ? `${(totalVolumeEur / 1000).toFixed(1)}k€`
+          : `${totalVolumeEur}€`;
+      document.getElementById('weeklyBanner').style.display = 'flex';
+    }
+  } catch(e) {}
 }
 
 async function loadFeed(silent) {
-  if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+  if (!silent) {
+    document.getElementById('feedList').innerHTML = `<div class="loading-wrap"><div class="loader"></div><div class="loading-text">Chargement...</div></div>`;
+  }
   try {
-    const r = await safeJson(await fetch(API + '/transfers', { headers: { 'Authorization': 'Bearer ' + token } }));
-    if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
-    allTransfers = Array.isArray(r.data) ? r.data : [];
+    const res = await fetch(`${API}/transfers`, { headers: { 'Authorization': `Bearer ${token}` } });
+    allTransfers = await res.json();
+    if (!Array.isArray(allTransfers)) allTransfers = [];
     renderFeed();
     checkActiveDeals();
-  } catch (e) {
-    if (!silent) document.getElementById('feedList').innerHTML = '<div class="empty-state"><div class="empty-title">Serveur inaccessible</div><div class="empty-sub">Vérifie ta connexion</div></div>';
+    loadWeeklyStats();
+  } catch(e) {
+    if (!silent) {
+      document.getElementById('feedList').innerHTML = `<div class="empty-state"><div class="empty-title">Serveur inaccessible</div><div class="empty-sub">Lance node server.js</div></div>`;
+    }
   }
 }
 
+// Badge deals actifs
 async function checkActiveDeals() {
   try {
-    const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+    const res = await fetch(`${API}/deals/mine`, { headers: { 'Authorization': `Bearer ${token}` } });
     const deals = await res.json();
     if (Array.isArray(deals)) {
       const active = deals.filter(d => d.status === 'matched').length;
@@ -724,51 +494,88 @@ async function checkActiveDeals() {
       if (active > 0) { badge.textContent = active; badge.classList.add('show'); }
       else badge.classList.remove('show');
     }
-  } catch (e) {}
+  } catch(e) {}
 }
 
-function openCreateSheet() {
-  document.getElementById('createOverlay').classList.add('open');
-  // Charger bénéficiaires en arrière-plan sans bloquer
-  loadBeneficiaires().catch(() => {});
-}
-function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
-function closeOnOverlay(e, id) { if (e.target === document.getElementById(id)) closeSheet(id); }
-function showMsg(id, text) { const el = document.getElementById(id); el.className = 'msg error show'; el.textContent = text; }
+function showConfirm(id, fromCountry, toCountry, currency, amount, matchAmount) {
+  pendingMatch = {
+    fromCountry: toCountry,
+    toCountry: fromCountry,
+    currency: fromCountry === 'France' ? 'XAF' : 'EUR',
+    amount: fromCountry === 'France' ? Math.round(amount * RATE) : Math.round(amount / RATE)
+  };
 
+  document.getElementById('confirmDetail').innerHTML = `
+    <div class="confirm-row"><span class="confirm-label">Annonce</span><span class="confirm-value">${Number(amount).toLocaleString('fr-FR')} ${currency}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Tu envoies</span><span class="confirm-value">${matchAmount}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Sens</span><span class="confirm-value">${toCountry} → ${fromCountry}</span></div>
+  `;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+
+function closeConfirm() {
+  document.getElementById('confirmOverlay').classList.remove('open');
+  pendingMatch = null;
+}
+
+async function executeMatch() {
+  if (!pendingMatch) return;
+  const btn = document.getElementById('btn-confirm-match');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Matching...';
+
+  try {
+    const res = await fetch(`${API}/transfer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(pendingMatch)
+    });
+    const data = await res.json();
+    closeConfirm();
+
+    if (res.ok && data.message && data.message.includes('Match')) {
+      showToast('Match confirme — consulte tes deals', '#fcd116');
+      setTimeout(() => window.location.href = 'tdoli-deals.html', 2000);
+    } else if (res.ok) {
+      showToast('Annonce publiee'); loadFeed(true);
+    } else {
+      showToast(data.message || 'Erreur', '#ff4444');
+    }
+  } catch(e) { showToast('Serveur inaccessible', '#ff4444'); closeConfirm(); }
+
+  btn.disabled = false; btn.innerHTML = 'Confirmer';
+}
+
+function updatePreview() {
+  const amount = parseFloat(document.getElementById('ann-amount').value);
+  const currency = document.getElementById('ann-currency').value;
+  const preview = document.getElementById('convPreview');
+  if (!amount || isNaN(amount)) { preview.innerHTML = `<span class="conv-hint">Saisis un montant</span>`; return; }
+  if (currency === 'EUR') {
+    const xaf = Math.round(amount * RATE);
+    preview.innerHTML = `<span class="conv-hint">Equivalent</span><span class="conv-amount">${xaf.toLocaleString('fr-FR')} XAF</span>`;
+  } else {
+    const eur = (amount / RATE).toFixed(2);
+    preview.innerHTML = `<span class="conv-hint">Equivalent</span><span class="conv-amount">≈ ${Number(eur).toLocaleString('fr-FR')} EUR</span>`;
+  }
+}
 
 function syncCountries() {
   const from = document.getElementById('ann-from').value;
-  const toEl = document.getElementById('ann-to');
-  Array.from(toEl.options).forEach(opt => { opt.selected = opt.value !== from ? (toEl.value === from ? true : opt.selected) : false; });
-  if (toEl.value === from) { const other = Array.from(toEl.options).find(o => o.value !== from); if (other) toEl.value = other.value; }
+  document.getElementById('ann-to').value = from === 'France' ? 'Gabon' : 'France';
 }
 
+function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('msg-modal').className = 'msg';
+  document.getElementById('ann-amount').value = '';
+  updatePreview();
+}
+function closeOnOverlay(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
 
-function updatePreview(mode) {
-  const amountEl = document.getElementById(mode === 'create' ? 'ann-amount' : 'edit-amount');
-  const currencyEl = document.getElementById(mode === 'create' ? 'ann-currency' : 'edit-currency');
-  const toEl = document.getElementById('ann-to');
-  const preview = document.getElementById('convPreview-' + mode);
-  const airtelContainer = document.getElementById('airtel-preview-' + mode);
-  if (!amountEl || !currencyEl || !preview) return;
-  const amount = parseFloat(amountEl.value);
-  const currency = currencyEl.value;
-  const toCountry = toEl ? toEl.value : '';
-  const isGabon = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
-  if (!amount || isNaN(amount)) {
-    preview.innerHTML = '<span class="conv-hint">Saisis un montant</span>';
-    if (airtelContainer) airtelContainer.innerHTML = '';
-    return;
-  }
-  const eur = convertToEur(amount, currency);
-  if (currency === 'EUR') {
-    preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">' + Math.round(eur * RATE).toLocaleString('fr-FR') + ' XAF</span>';
-  } else {
-    preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">≈ ' + eur.toFixed(2) + ' EUR</span>';
-  }
-  const fromCountry = document.getElementById('ann-from')?.value || '';
-  if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry, fromCountry);
+function showMsg(id, type, text) {
+  const el = document.getElementById(id);
+  el.className = `msg ${type} show`; el.textContent = text;
 }
 
 async function submitAnnonce() {
@@ -776,206 +583,51 @@ async function submitAnnonce() {
   const currency = document.getElementById('ann-currency').value;
   const fromCountry = document.getElementById('ann-from').value;
   const toCountry = document.getElementById('ann-to').value;
-  if (!amount || Number(amount) <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
-  if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
+  if (!amount || Number(amount) <= 0) { showMsg('msg-modal','error','Montant invalide'); return; }
+  if (fromCountry === toCountry) { showMsg('msg-modal','error','Pays identiques'); return; }
+
   const btn = document.getElementById('btn-submit');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
+
   try {
-    const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount: Number(amount), currency, fromCountry, toCountry, beneficiaireId: selectedBenefId || null }) });
+    const res = await fetch(`${API}/transfer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ amount: Number(amount), currency, fromCountry, toCountry })
+    });
     const data = await res.json();
     if (res.ok) {
-      closeSheet('createOverlay');
-      document.getElementById('ann-amount').value = '';
-      selectedBenefId = null;
-      const bc = document.getElementById('benef-selected-create'); if(bc) bc.innerHTML = '';
-      if (data.message && data.message.includes('Match')) { showToast('Match immédiat ! 🎉', 'var(--yellow)'); setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000); }
-      else { showToast('Annonce publiée ✓'); loadFeed(true); }
-    } else showMsg('msg-create', data.message || 'Erreur');
-  } catch (e) { showMsg('msg-create', 'Serveur inaccessible'); }
+      closeModal();
+      if (data.message && data.message.includes('Match')) {
+        showToast('Match trouve — consulte tes deals', '#fcd116');
+        setTimeout(() => window.location.href = 'tdoli-deals.html', 2000);
+      } else { showToast('Annonce publiee'); loadFeed(true); }
+    } else { showMsg('msg-modal','error', data.message || 'Erreur'); }
+  } catch(e) { showMsg('msg-modal','error','Serveur inaccessible'); }
+
   btn.disabled = false; btn.innerHTML = 'Publier';
 }
 
-
-// ── Bénéficiaires ──────────────────────────────────────────────
-let allBeneficiaires = [];
-let selectedBenefId = null;
-
-async function loadBeneficiaires() {
-  try {
-    const r = await fetch(API + '/beneficiaires', { headers: { 'Authorization': 'Bearer ' + token } });
-    const data = await r.json();
-    if(Array.isArray(data)) allBeneficiaires = data;
-  } catch(e) {}
-}
-
-function getBenefDetail(b) {
-  if(!b) return '';
-  if(b.phone) return b.phone + (b.operateur ? ' · ' + b.operateur : '');
-  if(b.iban) return b.iban.substring(0,12) + '…';
-  if(b.paypal) return b.paypal;
-  return '';
-}
-
-function renderBenefSelectList(onSelect) {
-  const list = document.getElementById('benefSelectList');
-  if(!list) return;
-  
-  if(allBeneficiaires.length === 0) {
-    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;">Aucun bénéficiaire enregistré</div>' +
-      '<button class="btn-primary" style="margin-top:8px;" onclick="openInlineBenefForm()">+ Créer un bénéficiaire</button>';
-    return;
+// Pull to refresh
+let startY = 0;
+let pulling = false;
+document.addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
+document.addEventListener('touchmove', e => {
+  if (window.scrollY === 0 && e.touches[0].clientY - startY > 60) {
+    pulling = true;
+    document.getElementById('ptrIndicator').style.height = '40px';
   }
-
-  list.innerHTML = allBeneficiaires.map(b => {
-    const ini = (b.nom||'?').substring(0,2).toUpperCase();
-    const detail = getBenefDetail(b);
-    const type = b.type === 'moi' ? '🙋 ' : '';
-    return `<div class="benef-select-item ${selectedBenefId === b._id ? 'selected' : ''}" onclick="selectBenef('${b._id}','${onSelect}')">
-      <div class="benef-select-avatar">${ini}</div>
-      <div>
-        <div class="benef-select-name">${type}${b.nom}</div>
-        <div class="benef-select-detail">${detail}${b.pays ? ' · '+b.pays : ''}</div>
-      </div>
-      ${selectedBenefId === b._id ? '<span style="margin-left:auto;color:var(--green);">✓</span>' : ''}
-    </div>`;
-  }).join('') +
-  '<button onclick="openInlineBenefForm()" style="background:none;border:none;color:var(--text-3);font-size:12px;cursor:pointer;width:100%;margin-top:12px;">+ Nouveau bénéficiaire</button>';
-}
-
-function selectBenef(id, context) {
-  selectedBenefId = id;
-  const b = allBeneficiaires.find(x => x._id === id);
-  if(!b) return;
-  closeSheet('benefOverlay');
-
-  const detail = getBenefDetail(b);
-  const badgeHtml = '<div class="benef-selected-badge"><span style="font-size:18px;">✓</span><div><div class="benef-selected-name">'+b.nom+'</div><div class="benef-selected-detail">'+detail+'</div></div><button onclick="openBenefSheet(this.getAttribute(\"data-ctx\"))" data-ctx="'+context+'" style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-left:auto;">Changer</button></div>';
-
-  if(context === 'create') {
-    const container = document.getElementById('benef-selected-create');
-    if(container) container.innerHTML = badgeHtml;
-  } else if(context === 'match') {
-    // Fermer la liste bénéficiaires
-    closeSheet('benefOverlay');
-    // Mettre à jour le badge dans confirmOverlay
-    const container = document.getElementById('confirm-benef-badge');
-    if(container) container.innerHTML = badgeHtml;
-    // Mettre à jour pendingMatch
-    if(pendingMatch) pendingMatch.beneficiaireId = id;
-    // confirmOverlay reste visible — pas de fermeture
+});
+document.addEventListener('touchend', () => {
+  if (pulling) {
+    pulling = false;
+    document.getElementById('ptrIndicator').style.height = '0';
+    loadFeed(false);
   }
-}
+});
 
-function openBenefSheet(context) {
-  renderBenefSelectList(context);
-  document.getElementById('benefOverlay').classList.add('open');
-}
-
-// Charger bénéficiaires au démarrage
-loadBeneficiaires();
-
-
-let currentIBMethod = 'mobilemoney';
-
-function setIBMethod(method, el) {
-  currentIBMethod = method;
-  ['mobilemoney','virement','paypal','wero'].forEach(m => {
-    document.getElementById('ib-fields-'+m).style.display = m === method ? 'block' : 'none';
-    const ibmMap = {mobilemoney:'mm', virement:'vir', paypal:'pp', wero:'wero'};
-    const el2 = document.getElementById('ibm-'+ibmMap[m]);
-    if(el2) el2.classList.toggle('active', m === method);
-  });
-}
-
-function openInlineBenefForm() {
-  closeSheet('benefOverlay');
-  // Reset form
-  ['ib-nom','ib-phone','ib-iban','ib-banque','ib-paypal','ib-wero'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('ib-pays').value = '';
-  document.getElementById('ib-operateur').value = '';
-  currentIBMethod = 'mobilemoney';
-  ['mobilemoney','virement','paypal','wero'].forEach(m => {
-    document.getElementById('ib-fields-'+m).style.display = m === 'mobilemoney' ? 'block' : 'none';
-  });
-  document.getElementById('ibm-mm').classList.add('active');
-  document.getElementById('ibm-vir').classList.remove('active');
-  document.getElementById('ibm-pp').classList.remove('active');
-  document.getElementById('ibm-wero').classList.remove('active');
-  const msg = document.getElementById('msg-ib');
-  if (msg) { msg.className = 'msg'; msg.textContent = ''; }
-  document.getElementById('inlineBenefOverlay').classList.add('open');
-}
-
-async function saveInlineBenef() {
-  const nom = document.getElementById('ib-nom').value.trim();
-  if (!nom) {
-    const el = document.getElementById('msg-ib');
-    el.className = 'msg error show'; el.textContent = 'Le nom est requis';
-    return;
-  }
-  const payload = {
-    type: 'beneficiaire',
-    nom,
-    methode: currentIBMethod,
-    pays: document.getElementById('ib-pays').value || '',
-    phone: document.getElementById('ib-phone')?.value.trim() || '',
-    operateur: document.getElementById('ib-operateur')?.value || '',
-    iban: document.getElementById('ib-iban')?.value.trim() || '',
-    banque: document.getElementById('ib-banque')?.value.trim() || '',
-    paypal: document.getElementById('ib-paypal')?.value.trim() || '',
-    wero: document.getElementById('ib-wero')?.value.trim() || '',
-  };
-
-  const btn = document.getElementById('btn-ib-save');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
-
-  try {
-    const res = await fetch(API + '/beneficiaires', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (res.ok && data.beneficiaire) {
-      // Ajouter à la liste locale et sélectionner
-      allBeneficiaires.push(data.beneficiaire);
-      closeSheet('inlineBenefOverlay');
-      selectBenef(data.beneficiaire._id, 'create');
-      showToast('Bénéficiaire ajouté ✓');
-    } else {
-      const el = document.getElementById('msg-ib');
-      el.className = 'msg error show';
-      el.textContent = (data && data.message) || 'Erreur';
-    }
-  } catch(e) {
-    const el = document.getElementById('msg-ib');
-    el.className = 'msg error show'; el.textContent = 'Erreur réseau';
-  }
-  btn.disabled = false; btn.textContent = 'Enregistrer et sélectionner';
-}
-
-
-function closeBenefSheet() {
-  closeSheet('benefOverlay');
-  // confirmOverlay reste ouvert — rien à faire
-}
-
-function openBenefSheetForMatch() {
-  // Ne PAS fermer confirmOverlay — juste ouvrir la liste par-dessus
-  loadBeneficiaires().then(() => {
-    renderBenefSelectList('match');
-    document.getElementById('benefOverlay').classList.add('open');
-  }).catch(() => {
-    renderBenefSelectList('match');
-    document.getElementById('benefOverlay').classList.add('open');
-  });
-}
-
-// Démarrage
 loadFeed();
+setInterval(() => loadFeed(true), 30000);
 </script>
 </body>
 </html>

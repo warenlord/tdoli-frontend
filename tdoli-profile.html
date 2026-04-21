@@ -84,6 +84,32 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
 .loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
 .phone-step{display:none;}.phone-step.active{display:block;}
+
+/* RANG COMMUNAUTAIRE */
+.rank-hero{display:inline-flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;border-radius:20px;padding:5px 14px;margin-bottom:10px;}
+.rank-hero.nouveau{background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);}
+.rank-hero.actif{background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.rank-hero.fiable{background:rgba(26,79,255,0.1);color:#6b8fff;border:1px solid rgba(26,79,255,0.2);}
+.rank-hero.pilier{background:linear-gradient(135deg,rgba(252,209,22,0.15),rgba(26,79,255,0.15));color:var(--yellow);border:1px solid rgba(252,209,22,0.3);}
+
+/* BADGE RÉACTIVITÉ PROFIL */
+.reactivity-hero{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;font-family:'Syne',sans-serif;border-radius:20px;padding:4px 12px;}
+.reactivity-hero.fast{background:rgba(0,201,122,0.08);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.reactivity-hero.normal{background:rgba(252,209,22,0.08);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
+.reactivity-hero.slow{background:rgba(255,100,60,0.08);color:#ff7a55;border:1px solid rgba(255,100,60,0.18);}
+
+/* SECTION TÉMOIGNAGES */
+.testimonials-section{margin-top:16px;}
+.testimonials-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.testimonials-title span{font-size:11px;color:var(--text-3);font-family:'DM Sans',sans-serif;font-weight:400;}
+.testimonial-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;}
+.testimonial-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green),var(--blue));border-radius:2px 0 0 2px;}
+.testimonial-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.testimonial-from{font-size:12px;font-weight:500;color:var(--text-2);}
+.testimonial-stars{color:var(--yellow);font-size:12px;letter-spacing:-1px;}
+.testimonial-text{font-size:13px;color:var(--text);line-height:1.6;font-style:italic;}
+.testimonial-date{font-size:10px;color:var(--text-3);margin-top:6px;}
+.no-testimonial{text-align:center;padding:30px 20px;color:var(--text-3);font-size:13px;background:var(--card);border:1px solid var(--border);border-radius:12px;}
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#060d09">
@@ -213,6 +239,65 @@ function getLevelInfo(level){
   return info[level]||info[1];
 }
 
+function communityRank(score) {
+  if (score === null || score === undefined) return null;
+  if (score >= 86) return { cls: 'pilier', label: 'Pilier 🏆' };
+  if (score >= 66) return { cls: 'fiable', label: 'Membre fiable' };
+  if (score >= 41) return { cls: 'actif',  label: 'Membre actif' };
+  return { cls: 'nouveau', label: 'Nouveau membre' };
+}
+
+function renderReactivityHero(badge) {
+  if (!badge) return '';
+  const map = { fast: ['⚡', 'Très réactif'], normal: ['🕐', 'Réactif'], slow: ['🐢', 'Peu réactif'] };
+  const [icon, label] = map[badge] || [];
+  return `<span class="reactivity-hero ${badge}">${icon} ${label}</span>`;
+}
+
+function timeAgoShort(dateStr) {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const d = Math.floor(diff / 86400000);
+  if (d < 1) return "Aujourd'hui";
+  if (d < 7) return `Il y a ${d}j`;
+  if (d < 30) return `Il y a ${Math.floor(d/7)} sem.`;
+  return `Il y a ${Math.floor(d/30)} mois`;
+}
+
+async function fetchTestimonials(userId) {
+  if (!userId) return [];
+  try {
+    const r = await safeJson(await fetch(API + '/ratings/' + userId + '/testimonials', {
+      headers: { 'Authorization': 'Bearer ' + token },
+      signal: AbortSignal.timeout(5000)
+    }));
+    if (r.ok && r.data && Array.isArray(r.data.testimonials)) return r.data.testimonials;
+  } catch(e) {}
+  return [];
+}
+
+function renderTestimonials(testimonials) {
+  const section = document.getElementById('testimonialsSection');
+  if (!section) return;
+  if (!testimonials || testimonials.length === 0) {
+    section.innerHTML = `
+      <div class="testimonials-title">💬 Ce que disent les membres</div>
+      <div class="no-testimonial">Aucun témoignage pour l'instant.<br>Complete des deals pour recevoir tes premiers avis.</div>`;
+    return;
+  }
+  section.innerHTML = `
+    <div class="testimonials-title">💬 Ce que disent les membres <span>(${testimonials.length})</span></div>
+    ${testimonials.map(t => `
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <span class="testimonial-from">👤 ${t.fromUsername || 'Membre'}</span>
+          <span class="testimonial-stars">${'★'.repeat(t.rating || 0)}${'☆'.repeat(5 - (t.rating || 0))}</span>
+        </div>
+        <div class="testimonial-text">"${t.comment}"</div>
+        <div class="testimonial-date">${timeAgoShort(t.createdAt)}</div>
+      </div>`).join('')}`;
+}
+
 // ── Affichage immédiat depuis localStorage (pas d'attente réseau) ──
 function renderFromCache() {
   const uname = username;
@@ -259,6 +344,16 @@ function renderFull(user, txs) {
     ? '<div class="profile-rating"><span class="stars-display">'+'★'.repeat(Math.round(rating))+'☆'.repeat(5-Math.round(rating))+'</span><span class="rating-val">'+rating.toFixed(1)+'</span><span class="rating-count">('+ratingCount+')</span></div>'
     : '<div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">Aucun avis</div>';
 
+  // ── Phase 5 — Rang + réactivité ──────────────────────────────
+  const rank = communityRank(user.communityScore);
+  const rankHtml = rank
+    ? `<span class="rank-hero ${rank.cls}">${rank.label}</span>`
+    : '';
+  const reactivityHtml = renderReactivityHero(user.reactivityBadge);
+  const trustHtml = user.completedDeals > 0
+    ? `<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Fait confiance par <strong style="color:var(--text-2);">${user.completedDeals} membre${user.completedDeals>1?'s':''}</strong></div>`
+    : '';
+
   const verifyHtml = level < 2 ? `<div class="verify-card">
     <div class="verify-title">🔐 Augmente ta limite</div>
     <div class="verify-sub">Vérifie ton numéro pour passer au Niveau 2 — limite à 500 €.</div>
@@ -285,7 +380,13 @@ function renderFull(user, txs) {
       <div class="profile-username">${uname}</div>
       ${user.fullName?'<div style="font-size:13px;color:var(--text-2);margin-bottom:2px;">'+user.fullName+'</div>':''}
       <div class="profile-email">${email||''}</div>
-      <div class="profile-badges"><span class="badge-item ${lvl.cls}">${lvl.label}</span>${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);">⛔ Suspendu</span>':''}</div>
+      <div class="profile-badges">
+        <span class="badge-item ${lvl.cls}">${lvl.label}</span>
+        ${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);">⛔ Suspendu</span>':''}
+      </div>
+      ${rankHtml}
+      ${reactivityHtml ? `<div style="margin-bottom:8px;">${reactivityHtml}</div>` : ''}
+      ${trustHtml}
       ${starsHtml}
     </div>
     ${verifyHtml}
@@ -294,6 +395,12 @@ function renderFull(user, txs) {
       <div class="stat-card"><div class="stat-val">${lvl.limit}</div><div class="stat-label">Limite</div></div>
     </div>
     ${txHtml}
+
+    <!-- Section témoignages -->
+    <div class="testimonials-section" id="testimonialsSection">
+      <div class="no-testimonial">Chargement des témoignages…</div>
+    </div>
+
     <div class="section-title" style="margin-top:${txHtml?'16':'0'}px;">Paramètres</div>
     <div class="settings-card">
       <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label">👥 Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>
@@ -310,6 +417,11 @@ function renderFull(user, txs) {
   // Mettre à jour l'avatar topbar
   const btn = document.getElementById('avatarBtn');
   if (btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
+
+  // Charger les témoignages en async
+  if (user._id) {
+    fetchTestimonials(user._id).then(renderTestimonials);
+  }
 }
 
 async function loadProfile() {
