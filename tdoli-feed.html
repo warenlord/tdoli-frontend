@@ -775,7 +775,14 @@ function shareApp() {
   }
 }
 
-function logout() { localStorage.clear(); window.location.href = '/tdoli-auth.html'; }
+function logout() {
+  localStorage.clear();
+  // Vider le cache SW pour forcer rechargement de auth.html
+  if ('caches' in window) {
+    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+  }
+  window.location.replace('/tdoli-auth.html');
+}
 
 function showToast(msg, color) {
   const t = document.getElementById('toast');

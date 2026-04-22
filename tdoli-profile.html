@@ -470,7 +470,13 @@ async function loadProfile() {
   renderFull(user, txs);
 }
 
-function logout(){localStorage.clear();window.location.href='/tdoli-auth.html';}
+function logout(){
+  localStorage.clear();
+  if ('caches' in window) {
+    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+  }
+  window.location.replace('/tdoli-auth.html');
+}
 function openPhoneVerif(){document.getElementById('step-phone').classList.add('active');document.getElementById('step-otp').classList.remove('active');document.getElementById('phoneOverlay').classList.add('open');}
 function otpNext(el,index){if(el.value.length===1&&index<5) document.querySelectorAll('.otp-digit')[index+1].focus();}
 
