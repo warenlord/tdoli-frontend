@@ -307,24 +307,29 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <script>
 const API='https://tdoli-backend.onrender.com';
-if(localStorage.getItem('tdoli_token'))window.location.href='/tdoli-feed.html';
 let loginEmail='',resendInterval=null;
 
-// ── Phase 8 — Auth biométrique automatique à l'ouverture ──────
-(async function autoTriggerBiometric() {
+// ── Logique d'ouverture ────────────────────────────────────────
+(async function onAppOpen() {
   const faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
   const savedEmail   = localStorage.getItem('tdoli_email');
-  if (!faceidActive || !savedEmail || !window.PublicKeyCredential) return;
 
-  // Pré-remplir l'email pour le fallback
-  const emailInput = document.getElementById('login-email');
-  if (emailInput) emailInput.value = savedEmail;
+  // Face ID activé → déclenchement automatique
+  // Pas de vérification de token ici — c'est Face ID qui génère un nouveau token
+  if (faceidActive && savedEmail && window.PublicKeyCredential) {
+    const emailInput = document.getElementById('login-email');
+    if (emailInput) emailInput.value = savedEmail;
+    document.getElementById('bioAuthOverlay').classList.add('open');
+    setTimeout(() => triggerBiometricAuth(), 600);
+    return;
+  }
 
-  // Afficher la sheet biométrique
-  document.getElementById('bioAuthOverlay').classList.add('open');
-
-  // Déclencher automatiquement après 600ms (laisser le temps à l'animation)
-  setTimeout(() => triggerBiometricAuth(), 600);
+  // Pas de Face ID → formulaire classique
+  // Pré-remplir l'email si connu
+  if (savedEmail) {
+    const emailInput = document.getElementById('login-email');
+    if (emailInput) emailInput.value = savedEmail;
+  }
 })();
 
 async function triggerBiometricAuth() {
