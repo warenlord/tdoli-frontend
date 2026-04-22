@@ -182,6 +182,44 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .rank-badge.pilier{background:linear-gradient(135deg,rgba(252,209,22,0.12),rgba(26,79,255,0.12));color:var(--yellow);border:1px solid rgba(252,209,22,0.25);}
 .trust-line{font-size:10px;color:var(--text-3);margin-top:2px;}
 
+/* Filtres avancés */
+.filter-advanced-btn{flex-shrink:0;padding:7px 16px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.filter-advanced-btn.active{background:rgba(252,209,22,0.1);border-color:rgba(252,209,22,0.3);color:var(--yellow);}
+.filter-section-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;margin-top:16px;}
+.filter-section-label:first-child{margin-top:0;}
+.filter-chips-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px;}
+.range-row{display:flex;gap:10px;margin-bottom:4px;}
+.range-input{flex:1;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;-webkit-appearance:none;}
+.range-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
+.active-filters-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.active-filter-tag{display:flex;align-items:center;gap:5px;background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.2);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--yellow);font-family:'Syne',sans-serif;font-weight:700;}
+.active-filter-tag button{background:none;border:none;color:var(--yellow);cursor:pointer;font-size:12px;padding:0;line-height:1;}
+.btn-filter-apply{width:100%;padding:14px;background:linear-gradient(135deg,var(--green-dim),var(--blue));color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;}
+.btn-filter-reset{width:100%;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+
+/* Profil public */
+.pub-profile-hero{text-align:center;padding:20px 0 16px;}
+.pub-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin:0 auto 12px;border:2px solid var(--border-active);overflow:hidden;}
+.pub-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.pub-username{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px;}
+.pub-rating{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--yellow);font-size:14px;margin-bottom:8px;}
+.pub-badges{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.pub-stats{display:flex;gap:10px;margin-bottom:16px;}
+.pub-stat{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.pub-stat-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);}
+.pub-stat-lbl{font-size:10px;color:var(--text-3);margin-top:2px;}
+.pub-section-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text-2);margin-bottom:10px;}
+.pub-annonce-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.pub-annonce-dir{font-size:12px;color:var(--text-2);}
+.pub-annonce-amt{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.pub-testimonial{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;position:relative;}
+.pub-testimonial::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green),var(--blue));border-radius:2px 0 0 2px;}
+.pub-test-header{display:flex;justify-content:space-between;margin-bottom:6px;}
+.pub-test-from{font-size:11px;color:var(--text-2);font-weight:500;}
+.pub-test-stars{font-size:11px;color:var(--yellow);}
+.pub-test-text{font-size:12px;color:var(--text);line-height:1.5;font-style:italic;}
+.pub-empty{text-align:center;padding:20px;color:var(--text-3);font-size:13px;}
+
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#060d09">
@@ -233,12 +271,12 @@ if ('serviceWorker' in navigator) {
 
   <div class="filter-bar">
     <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div>
-    <div class="filter-chip" onclick="setFilter('EUR',this)">EUR</div>
-    <div class="filter-chip" onclick="setFilter('XAF',this)">XAF</div>
-    <div class="filter-chip" onclick="setFilter('USD',this)">USD</div>
-    <div class="filter-chip" onclick="setFilter('CAD',this)">CAD</div>
     <div class="filter-chip" onclick="setFilter('mine',this)">Mes annonces</div>
+    <div class="filter-advanced-btn" id="filterAdvancedBtn" onclick="openAdvancedFilters()">⚙ Filtres avancés</div>
   </div>
+
+  <!-- Tags filtres actifs -->
+  <div class="active-filters-bar" id="activeFiltersBar" style="display:none;"></div>
   <div id="feedList"><div class="loading-wrap"><div class="loader"></div></div></div>
 </div>
 
@@ -420,6 +458,56 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 
+<!-- Sheet filtres avancés -->
+<div class="overlay" id="advancedFilterOverlay" onclick="closeOnOverlay(event,'advancedFilterOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title">Filtres avancés</div>
+
+    <div class="filter-section-label">Devise</div>
+    <div class="filter-chips-wrap">
+      <div class="filter-chip" id="af-eur" onclick="toggleAdvFilter('currency','EUR',this)">EUR</div>
+      <div class="filter-chip" id="af-xaf" onclick="toggleAdvFilter('currency','XAF',this)">XAF</div>
+      <div class="filter-chip" id="af-usd" onclick="toggleAdvFilter('currency','USD',this)">USD</div>
+      <div class="filter-chip" id="af-cad" onclick="toggleAdvFilter('currency','CAD',this)">CAD</div>
+    </div>
+
+    <div class="filter-section-label">Direction</div>
+    <div class="filter-chips-wrap">
+      <div class="filter-chip" id="af-fr-ga" onclick="toggleAdvFilter('direction','France→Gabon',this)">🇫🇷 France → 🇬🇦 Gabon</div>
+      <div class="filter-chip" id="af-ga-fr" onclick="toggleAdvFilter('direction','Gabon→France',this)">🇬🇦 Gabon → 🇫🇷 France</div>
+      <div class="filter-chip" id="af-fr-bf" onclick="toggleAdvFilter('direction','France→Burkina Faso',this)">🇫🇷 France → 🇧🇫 Burkina</div>
+      <div class="filter-chip" id="af-bf-fr" onclick="toggleAdvFilter('direction','Burkina Faso→France',this)">🇧🇫 Burkina → 🇫🇷 France</div>
+    </div>
+
+    <div class="filter-section-label">Montant (EUR)</div>
+    <div class="range-row">
+      <input class="range-input" type="number" id="af-min" placeholder="Min" inputmode="numeric">
+      <input class="range-input" type="number" id="af-max" placeholder="Max" inputmode="numeric">
+    </div>
+
+    <div class="filter-section-label">Rang communautaire</div>
+    <div class="filter-chips-wrap">
+      <div class="filter-chip" id="af-nouveau" onclick="toggleAdvFilter('rank','nouveau',this)">Nouveau</div>
+      <div class="filter-chip" id="af-actif" onclick="toggleAdvFilter('rank','actif',this)">Membre actif</div>
+      <div class="filter-chip" id="af-fiable" onclick="toggleAdvFilter('rank','fiable',this)">Membre fiable</div>
+      <div class="filter-chip" id="af-pilier" onclick="toggleAdvFilter('rank','pilier',this)">Pilier 🏆</div>
+    </div>
+
+    <button class="btn-filter-apply" onclick="applyAdvancedFilters()">Appliquer</button>
+    <button class="btn-filter-reset" onclick="resetAdvancedFilters()">Réinitialiser</button>
+  </div>
+</div>
+
+<!-- Sheet profil public -->
+<div class="overlay" id="pubProfileOverlay" onclick="closeOnOverlay(event,'pubProfileOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div id="pubProfileContent"><div class="loading-wrap"><div class="loader"></div></div></div>
+    <button class="btn-cancel" onclick="closeSheet('pubProfileOverlay')" style="margin-top:8px;">Fermer</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -454,6 +542,224 @@ function initAvatar() {
 initAvatar();
 
 let allTransfers = [], currentFilter = 'all', pendingMatch = null, editingId = null;
+
+// ── Filtres avancés ───────────────────────────────────────────
+let advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
+
+function setFilter(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('filterAdvancedBtn').classList.remove('active');
+  if (el) el.classList.add('active');
+  renderFeed();
+}
+
+function openAdvancedFilters() {
+  document.getElementById('advancedFilterOverlay').classList.add('open');
+}
+
+function toggleAdvFilter(type, value, el) {
+  const isActive = el.classList.contains('active');
+  // Désactiver tous les chips du même groupe
+  const groupMap = {
+    currency: ['af-eur','af-xaf','af-usd','af-cad'],
+    direction: ['af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr'],
+    rank: ['af-nouveau','af-actif','af-fiable','af-pilier']
+  };
+  groupMap[type].forEach(id => document.getElementById(id)?.classList.remove('active'));
+  if (!isActive) {
+    el.classList.add('active');
+    advFilters[type] = value;
+  } else {
+    advFilters[type] = null;
+  }
+}
+
+function applyAdvancedFilters() {
+  advFilters.minEur = parseFloat(document.getElementById('af-min').value) || null;
+  advFilters.maxEur = parseFloat(document.getElementById('af-max').value) || null;
+  closeSheet('advancedFilterOverlay');
+
+  // Activer le bouton filtres avancés
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('filterAdvancedBtn').classList.add('active');
+  currentFilter = 'advanced';
+
+  renderFeed();
+  renderActiveFilterTags();
+}
+
+function resetAdvancedFilters() {
+  advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
+  ['af-eur','af-xaf','af-usd','af-cad','af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr','af-nouveau','af-actif','af-fiable','af-pilier']
+    .forEach(id => document.getElementById(id)?.classList.remove('active'));
+  document.getElementById('af-min').value = '';
+  document.getElementById('af-max').value = '';
+  closeSheet('advancedFilterOverlay');
+  document.getElementById('filterAdvancedBtn').classList.remove('active');
+  document.getElementById('activeFiltersBar').style.display = 'none';
+  currentFilter = 'all';
+  document.querySelector('.filter-chip').classList.add('active');
+  renderFeed();
+}
+
+function renderActiveFilterTags() {
+  const bar = document.getElementById('activeFiltersBar');
+  const tags = [];
+  if (advFilters.currency) tags.push({ label: advFilters.currency, key: 'currency' });
+  if (advFilters.direction) tags.push({ label: advFilters.direction.replace('→', ' → '), key: 'direction' });
+  if (advFilters.minEur) tags.push({ label: 'Min ' + advFilters.minEur + '€', key: 'minEur' });
+  if (advFilters.maxEur) tags.push({ label: 'Max ' + advFilters.maxEur + '€', key: 'maxEur' });
+  if (advFilters.rank) tags.push({ label: advFilters.rank, key: 'rank' });
+
+  if (tags.length === 0) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  bar.innerHTML = tags.map(t =>
+    '<div class="active-filter-tag">' + t.label +
+    ' <button onclick="removeAdvFilter(\'' + t.key + '\')">×</button></div>'
+  ).join('');
+}
+
+function removeAdvFilter(key) {
+  advFilters[key] = null;
+  if (key === 'minEur') document.getElementById('af-min').value = '';
+  if (key === 'maxEur') document.getElementById('af-max').value = '';
+  const chipMap = { currency: ['af-eur','af-xaf','af-usd','af-cad'], direction: ['af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr'], rank: ['af-nouveau','af-actif','af-fiable','af-pilier'] };
+  if (chipMap[key]) chipMap[key].forEach(id => document.getElementById(id)?.classList.remove('active'));
+  renderFeed();
+  renderActiveFilterTags();
+  const hasAny = Object.values(advFilters).some(v => v !== null);
+  if (!hasAny) {
+    currentFilter = 'all';
+    document.getElementById('filterAdvancedBtn').classList.remove('active');
+    document.querySelector('.filter-chip').classList.add('active');
+  }
+}
+
+function applyAdvancedFilter(data) {
+  return data.filter(t => {
+    const eurVal = convertToEur(t.amount, t.currency);
+    if (advFilters.currency && t.currency !== advFilters.currency) return false;
+    if (advFilters.direction) {
+      const dir = t.fromCountry + '→' + t.toCountry;
+      if (dir !== advFilters.direction) return false;
+    }
+    if (advFilters.minEur !== null && eurVal < advFilters.minEur) return false;
+    if (advFilters.maxEur !== null && eurVal > advFilters.maxEur) return false;
+    if (advFilters.rank) {
+      const rank = communityRank(t.senderCommunityScore);
+      if (!rank || rank.cls !== advFilters.rank) return false;
+    }
+    return true;
+  });
+}
+
+function renderFeed() {
+  let data = allTransfers;
+  if (currentFilter === 'mine') data = data.filter(t => t.sender === email);
+  else if (currentFilter === 'advanced') data = applyAdvancedFilter(data);
+
+  const list = document.getElementById('feedList');
+  const badge = document.getElementById('countBadge');
+  if (data.length === 0) {
+    badge.textContent = '0';
+    list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
+    return;
+  }
+  badge.textContent = data.length;
+  list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
+}
+
+// ── Profil public ─────────────────────────────────────────────
+async function openPublicProfile(senderEmail) {
+  document.getElementById('pubProfileContent').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+  document.getElementById('pubProfileOverlay').classList.add('open');
+
+  try {
+    // Récupérer les infos de l'utilisateur
+    const [profileRes, testimonialsRes] = await Promise.all([
+      fetch(API + '/profile/' + senderEmail, { headers: { 'Authorization': 'Bearer ' + token } }),
+      fetch(API + '/ratings/' + encodeURIComponent(senderEmail) + '/by-email', { headers: { 'Authorization': 'Bearer ' + token } })
+        .catch(() => null)
+    ]);
+
+    const profile = profileRes.ok ? await profileRes.json() : null;
+    if (!profile) {
+      document.getElementById('pubProfileContent').innerHTML = '<div class="pub-empty">Profil introuvable</div>';
+      return;
+    }
+
+    // Témoignages via userId si dispo
+    let testimonials = [];
+    if (profile._id) {
+      try {
+        const tRes = await fetch(API + '/ratings/' + profile._id + '/testimonials', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (tRes.ok) { const tData = await tRes.json(); testimonials = tData.testimonials || []; }
+      } catch(e) {}
+    }
+
+    // Annonces actives de cet utilisateur
+    const userTransfers = allTransfers.filter(t => t.sender === senderEmail);
+
+    const rating = profile.averageRating || 0;
+    const ratingCount = (profile.ratings && profile.ratings.length) || 0;
+    const rank = communityRank(profile.communityScore);
+    const uname = profile.username || senderEmail.split('@')[0];
+    const initials = getInitials(uname);
+    const av = profile.avatarUrl;
+
+    const avatarHtml = av
+      ? '<div class="pub-avatar"><img src="' + av + '" alt="' + initials + '"></div>'
+      : '<div class="pub-avatar">' + initials + '</div>';
+
+    const starsHtml = rating > 0
+      ? '<div class="pub-rating"><span>' + '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating)) + '</span><strong>' + rating.toFixed(1) + '</strong><span style="color:var(--text-3);font-size:12px;">(' + ratingCount + ')</span></div>'
+      : '<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Aucun avis</div>';
+
+    const rankHtml = rank ? '<span class="rank-badge ' + rank.cls + '">' + rank.label + '</span>' : '';
+    const reactHtml = profile.reactivityBadge ? renderReactivityBadge(profile.reactivityBadge) : '';
+
+    // Annonces actives
+    const annoncesHtml = userTransfers.length > 0
+      ? userTransfers.map(t =>
+          '<div class="pub-annonce-item">' +
+          '<span class="pub-annonce-dir">' + t.fromCountry + ' → ' + t.toCountry + '</span>' +
+          '<span class="pub-annonce-amt">' + Number(t.amount).toLocaleString('fr-FR') + ' ' + t.currency + '</span>' +
+          '</div>'
+        ).join('')
+      : '<div class="pub-empty">Aucune annonce active</div>';
+
+    // Témoignages
+    const testimonialsHtml = testimonials.length > 0
+      ? testimonials.slice(0, 5).map(t =>
+          '<div class="pub-testimonial">' +
+          '<div class="pub-test-header">' +
+          '<span class="pub-test-from">👤 ' + (t.fromUsername || 'Membre') + '</span>' +
+          '<span class="pub-test-stars">' + '★'.repeat(t.rating || 0) + '☆'.repeat(5 - (t.rating || 0)) + '</span>' +
+          '</div>' +
+          '<div class="pub-test-text">"' + t.comment + '"</div>' +
+          '</div>'
+        ).join('')
+      : '<div class="pub-empty">Aucun témoignage pour l\'instant</div>';
+
+    document.getElementById('pubProfileContent').innerHTML =
+      '<div class="pub-profile-hero">' +
+        avatarHtml +
+        '<div class="pub-username">' + uname + '</div>' +
+        starsHtml +
+        '<div class="pub-badges">' + rankHtml + (reactHtml ? reactHtml : '') + '</div>' +
+      '</div>' +
+      '<div class="pub-stats">' +
+        '<div class="pub-stat"><div class="pub-stat-val">' + (profile.completedDeals || 0) + '</div><div class="pub-stat-lbl">Deals</div></div>' +
+        '<div class="pub-stat"><div class="pub-stat-val">' + (profile.communityScore || '—') + '</div><div class="pub-stat-lbl">Score</div></div>' +
+      '</div>' +
+      '<div class="pub-section-title">Annonces actives</div>' + annoncesHtml +
+      '<div class="pub-section-title" style="margin-top:16px;">💬 Ce que disent les membres</div>' + testimonialsHtml;
+
+  } catch(e) {
+    document.getElementById('pubProfileContent').innerHTML = '<div class="pub-empty">Erreur de chargement</div>';
+  }
+}
 
 // FIX Phase 1: shareApp() fonctionnelle avec Web Share API + fallback copier
 function shareApp() {
@@ -650,9 +956,13 @@ function openDetail(id) {
   const matchAmt = formatMatchAmount(t.amount, t.currency, t.toCountry);
 
   let html = '<div class="detail-hero">' +
-    '<div class="detail-user"><div class="detail-avatar">' + initials + '</div>' +
-    '<div><div class="detail-uname">' + (isOwn ? 'Mon annonce' : displayName) + '</div>' +
-    (t.senderRating > 0 ? '<div class="detail-rating">' + renderStars(t.senderRating) + '</div>' : '<div style="font-size:11px;color:var(--text-3)">Nouveau</div>') + '</div></div>' +
+    '<div class="detail-user">' +
+    '<div class="detail-avatar" ' + (!isOwn ? 'onclick="closeSheet(\'detailOverlay\');openPublicProfile(\'' + t.sender + '\')" style="cursor:pointer;"' : '') + '>' + initials + '</div>' +
+    '<div>' +
+    '<div class="detail-uname" ' + (!isOwn ? 'onclick="closeSheet(\'detailOverlay\');openPublicProfile(\'' + t.sender + '\')" style="cursor:pointer;color:var(--green);text-decoration:underline;"' : '') + '>' + (isOwn ? 'Mon annonce' : displayName) + '</div>' +
+    (t.senderRating > 0 ? '<div class="detail-rating">' + renderStars(t.senderRating) + '</div>' : '<div style="font-size:11px;color:var(--text-3)">Nouveau</div>') +
+    (!isOwn ? '<div style="font-size:10px;color:var(--text-3);margin-top:2px;">Voir le profil →</div>' : '') +
+    '</div></div>' +
     '<div class="detail-flow"><div class="detail-country">' + t.fromCountry + '</div><div class="detail-arrow">→</div><div class="detail-country">' + t.toCountry + '</div></div>' +
     '<div style="display:flex;align-items:baseline;gap:6px"><span class="detail-amount">' + Number(t.amount).toLocaleString('fr-FR') + '</span><span class="detail-currency">' + t.currency + '</span>' + (euroLabel ? '<span class="detail-eur">' + euroLabel + '</span>' : '') + '</div></div>';
 
