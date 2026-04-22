@@ -1,7 +1,7 @@
-// TDOLI — Service Worker v1.2
-// Fix: fichier manquant qui causait redirect loop sur toutes les pages
+// TDOLI — Service Worker v1.3
+// Phase 8 — Face ID : cache invalidé pour prendre les nouveaux fichiers
 
-const CACHE_NAME = 'tdoli-v1.2';
+const CACHE_NAME = 'tdoli-v1.3';
 const STATIC_ASSETS = [
   '/tdoli-feed.html',
   '/tdoli-auth.html',
@@ -35,15 +35,12 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   const url = e.request.url;
-  // Ne pas cacher les appels API backend
   if (url.includes('tdoli-backend.onrender.com')) return;
-  // Ne pas cacher les requêtes non-GET
   if (e.request.method !== 'GET') return;
 
   e.respondWith(
     fetch(e.request)
       .then(response => {
-        // Mettre en cache les ressources statiques valides
         if (response && response.status === 200) {
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(e.request, responseClone));
