@@ -554,14 +554,21 @@ const RATE = 655.957;
     return;
   }
 
-  // Token présent + Face ID actif → vérifier biométrie d'abord
+  // Déjà vérifié dans cette session → ne pas redemander
+  if (sessionStorage.getItem('tdoli_faceid_verified') === '1') {
+    return;
+  }
+
+  // Token présent + Face ID actif → vérifier biométrie
   if (faceidActive && email && window.PublicKeyCredential) {
     document.getElementById('bioGate').classList.add('open');
     setTimeout(() => bioGateAuth(), 600);
     return;
   }
 
-  // Token présent + pas de Face ID → afficher le feed directement
+  // Token présent + pas de Face ID → feed directement
+  // Marquer la session comme vérifiée
+  sessionStorage.setItem('tdoli_faceid_verified', '1');
 })();
 
 // ── Auth biométrique depuis le feed ───────────────────────────
@@ -613,6 +620,8 @@ async function bioGateAuth() {
     if (verRes.ok && verData.token) {
       // Mettre à jour le token
       localStorage.setItem('tdoli_token', verData.token);
+      // Marquer la session comme vérifiée — ne plus redemander jusqu'à fermeture de l'app
+      sessionStorage.setItem('tdoli_faceid_verified', '1');
       // Fermer la gate et afficher le feed
       document.getElementById('bioGate').classList.remove('open');
       loadFeed();
