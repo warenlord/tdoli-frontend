@@ -991,11 +991,28 @@ function renderList(data) {
 }
 function calcAirtelFees(xafAmount) {
   if (xafAmount <= 0) return 0;
-  if (xafAmount < 200000) {
-    return Math.ceil(xafAmount / 100000) * 3000;
-  }
-  if (xafAmount <= 500000) return 5000;
-  return Math.round(xafAmount * 0.01);
+  // Grille officielle Airtel Money Gabon
+  if (xafAmount <= 1000)  return 30;
+  if (xafAmount <= 2000)  return 60;
+  if (xafAmount <= 3000)  return 90;
+  if (xafAmount <= 4000)  return 120;
+  if (xafAmount <= 5000)  return 150;
+  if (xafAmount <= 6000)  return 180;
+  if (xafAmount <= 7000)  return 210;
+  if (xafAmount <= 8000)  return 240;
+  if (xafAmount <= 9000)  return 270;
+  if (xafAmount <= 10000) return 300;
+  if (xafAmount <= 15000) return 450;
+  if (xafAmount <= 20000) return 600;
+  if (xafAmount <= 25000) return 750;
+  if (xafAmount <= 30000) return 900;
+  if (xafAmount <= 50000) return 1500;
+  if (xafAmount <= 60000) return 1800;
+  if (xafAmount <= 70000) return 2100;
+  if (xafAmount <= 80000) return 2400;
+  if (xafAmount <= 90000) return 2700;
+  // Plafonné à 5000 FCFA à partir de 100 000 FCFA
+  return 5000;
 }
 
 function renderAirtelPreview(amount, currency, toCountry, fromCountry) {
