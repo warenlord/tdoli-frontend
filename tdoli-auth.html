@@ -449,6 +449,8 @@ function dismissBioAuth() {
     localStorage.setItem('tdoli_email',    decodeURIComponent(email));
     localStorage.setItem('tdoli_username', decodeURIComponent(username || email.split('%40')[0]));
     if (avatar) localStorage.setItem('tdoli_avatar', decodeURIComponent(avatar));
+    // Marquer session vérifiée — évite gate Face ID après connexion Google
+    sessionStorage.setItem('tdoli_faceid_verified', '1');
     document.getElementById('redirectOverlay').classList.add('show');
     setTimeout(() => window.location.href = '/tdoli-feed.html', 1000);
   }
@@ -480,6 +482,7 @@ async function maybeShowBiometricPrompt(token, email) {
 }
 
 function redirectAfterLogin() {
+  sessionStorage.setItem('tdoli_faceid_verified', '1');
   document.getElementById('redirectOverlay').classList.add('show');
   setTimeout(() => window.location.href = '/tdoli-feed.html', 1000);
 }
