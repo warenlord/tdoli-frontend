@@ -377,6 +377,9 @@ if ('serviceWorker' in navigator) {
       </div>
     </div>
     <div class="conv-preview" id="convPreview-edit"><span class="conv-hint">Saisis un montant</span></div>
+    <!-- Bénéficiaire -->
+    <div id="benef-selected-edit" style="margin-bottom:8px;"></div>
+    <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('edit')">👤 Changer le bénéficiaire</button>
     <button class="btn-primary" id="btn-edit-submit" onclick="submitEdit()">Enregistrer</button>
     <button class="btn-cancel" onclick="closeSheet('editOverlay')">Annuler</button>
     <div class="msg" id="msg-edit"></div>
@@ -1139,6 +1142,17 @@ function openEdit(id, amount, currency) {
   document.getElementById('edit-amount').value = amount;
   document.getElementById('edit-currency').value = currency;
   updatePreview('edit');
+
+  // Charger le bénéficiaire actuel
+  const transfer = allTransfers.find(x => x._id === id);
+  selectedEditBenefId = transfer?.senderBeneficiaireId || null;
+  const container = document.getElementById('benef-selected-edit');
+  if (container) {
+    if (selectedEditBenefId) {
+      const b = allBeneficiaires.find(x => x._id === selectedEditBenefId);
+      if (b) container.innerHTML = '<div class="benef-selected-badge"><span style="font-size:18px;">✓</span><div><div class="benef-selected-name">'+b.nom+'</div><div class="benef-selected-detail">'+getBenefDetail(b)+'</div></div></div>';
+    } else { container.innerHTML = ''; }
+  }
   document.getElementById('editOverlay').classList.add('open');
 }
 
@@ -1159,7 +1173,11 @@ async function submitEdit() {
   const btn = document.getElementById('btn-edit-submit');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
   try {
-    const res = await fetch(API + '/transfer/' + editingId, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount: Number(amount), currency }) });
+    const res = await fetch(API + '/transfer/' + editingId, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ amount: Number(amount), currency, beneficiaireId: selectedEditBenefId || null })
+    });
     const data = await res.json();
     if (res.ok) { closeSheet('editOverlay'); showToast('Annonce modifiée'); loadFeed(true); }
     else showMsg('msg-edit', data.message || 'Erreur');
@@ -1335,6 +1353,7 @@ async function submitAnnonce() {
   const toCountry = document.getElementById('ann-to').value;
   if (!amount || Number(amount) <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
   if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
+  if (!selectedBenefId) { showMsg('msg-create', 'Choisis un bénéficiaire avant de publier'); return; }
   const btn = document.getElementById('btn-submit');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
   try {
@@ -1356,6 +1375,7 @@ async function submitAnnonce() {
 // ── Bénéficiaires ──────────────────────────────────────────────
 let allBeneficiaires = [];
 let selectedBenefId = null;
+let selectedEditBenefId = null;
 
 async function loadBeneficiaires() {
   try {
@@ -1410,6 +1430,10 @@ function selectBenef(id, context) {
 
   if(context === 'create') {
     const container = document.getElementById('benef-selected-create');
+    if(container) container.innerHTML = badgeHtml;
+  } else if(context === 'edit') {
+    selectedEditBenefId = id;
+    const container = document.getElementById('benef-selected-edit');
     if(container) container.innerHTML = badgeHtml;
   } else if(context === 'match') {
     // Fermer la liste bénéficiaires
