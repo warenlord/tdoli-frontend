@@ -319,11 +319,21 @@ function renderFromCache() {
     <div class="section-title">Paramètres</div>
     <div class="settings-card">
       <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label">👥 Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>\n     \ndiv class="settings-item" onclick="openPhoneVerif()"><span class="settings-label">📱 Téléphone</span><span class="settings-val">Non vérifié →</span></div>
+      <div class="settings-item" id="faceid-setting-cache" onclick="toggleFaceID()">
+        <span class="settings-label">🔐 Face ID / Empreinte</span>
+        <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ✅':'Désactivé →'}</span>
+      </div>
       <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label">📄 CGU</span><span class="settings-val">→</span></div>
     </div>
     <button class="btn-logout" onclick="logout()">🚪 Déconnexion</button>
     <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
   `;
+
+  // Masquer Face ID si non supporté
+  if (!window.PublicKeyCredential) {
+    const el = document.getElementById('faceid-setting-cache');
+    if (el) el.style.display = 'none';
+  }
 }
 
 // ── Enrichir l'affichage avec les données API ──────────────────
@@ -408,6 +418,10 @@ function renderFull(user, txs) {
         <span class="settings-label">📱 Téléphone</span>
         <span class="settings-val">${user.phone?user.phone.replace(/(\+?\d{3})\d+(\d{2})$/,'$1•••$2'):'Non vérifié'} →</span>
       </div>
+      <div class="settings-item" id="faceid-setting" onclick="toggleFaceID()">
+        <span class="settings-label">🔐 Face ID / Empreinte</span>
+        <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ✅':'Désactivé →'}</span>
+      </div>
       <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label">📄 CGU</span><span class="settings-val">→</span></div>
     </div>
     <button class="btn-logout" onclick="logout()">🚪 Déconnexion</button>
@@ -417,6 +431,12 @@ function renderFull(user, txs) {
   // Mettre à jour l'avatar topbar
   const btn = document.getElementById('avatarBtn');
   if (btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
+
+  // Masquer Face ID si non supporté
+  if (!window.PublicKeyCredential) {
+    const el = document.getElementById('faceid-setting');
+    if (el) el.style.display = 'none';
+  }
 
   // Charger les témoignages en async
   if (user._id) {
@@ -479,6 +499,54 @@ async function verifyOtp(){
 }
 
 loadProfile();
+
+// ── Phase 8 — Face ID depuis le profil ────────────────────────
+async function toggleFaceID() {
+  const isActive = localStorage.getItem('tdoli_faceid_active') === '1';
+  if (isActive) {
+    localStorage.removeItem('tdoli_faceid_active');
+    localStorage.removeItem('tdoli_faceid_dismissed');
+    const el = document.getElementById('faceid-status');
+    if (el) el.textContent = 'Désactivé →';
+    showToast('Face ID désactivé');
+    return;
+  }
+  if (!window.PublicKeyCredential) { showToast('Face ID non supporté sur cet appareil'); return; }
+  try {
+    const optRes = await fetch(API + '/webauthn/register/options', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+    });
+    if (!optRes.ok) throw new Error('options_failed');
+    const options = await optRes.json();
+    options.challenge = base64urlToBuffer(options.challenge);
+    options.user.id   = base64urlToBuffer(options.user.id);
+    options.excludeCredentials = (options.excludeCredentials || []).map(c => ({ ...c, id: base64urlToBuffer(c.id) }));
+    const credential = await navigator.credentials.create({ publicKey: options });
+    const regResponse = {
+      id: bufferToBase64url(credential.rawId), rawId: bufferToBase64url(credential.rawId), type: credential.type,
+      response: {
+        attestationObject: bufferToBase64url(credential.response.attestationObject),
+        clientDataJSON:    bufferToBase64url(credential.response.clientDataJSON),
+        transports:        credential.response.getTransports?.() || [],
+      }
+    };
+    const verRes = await fetch(API + '/webauthn/register/verify', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(regResponse)
+    });
+    if (verRes.ok) {
+      localStorage.setItem('tdoli_faceid_active', '1');
+      const el = document.getElementById('faceid-status');
+      if (el) el.textContent = 'Activé ✅';
+      showToast('Face ID activé ! 🔐');
+    } else {
+      showToast('Activation échouée');
+    }
+  } catch(err) { if(err.name !== 'NotAllowedError') showToast('Erreur — réessaie'); }
+}
+
+function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);return buf.buffer;}
+function bufferToBase64url(b){const bytes=new Uint8Array(b);let bin='';for(const x of bytes)bin+=String.fromCharCode(x);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
 </script>
 </body>
 </html>
