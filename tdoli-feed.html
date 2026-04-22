@@ -184,6 +184,18 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
 /* Filtres avancés */
 .filter-advanced-btn{flex-shrink:0;padding:7px 16px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+
+/* Auth biométrique dans le feed */
+.bio-gate{position:fixed;inset:0;z-index:600;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:flex-end;}
+.bio-gate.open{display:flex;}
+.bio-gate-sheet{background:var(--card);border:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:28px 22px 48px;width:100%;max-width:480px;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);}
+.bio-gate-icon{font-size:48px;text-align:center;margin-bottom:14px;animation:breathe 1.5s ease infinite;}
+.bio-gate-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:8px;}
+.bio-gate-sub{font-size:13px;color:var(--text-3);text-align:center;line-height:1.6;margin-bottom:22px;}
+.btn-bio-confirm{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim),var(--blue));color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;}
+.btn-bio-fallback{width:100%;padding:13px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.bio-gate-msg{font-size:12px;color:#ff6b6b;text-align:center;margin-top:10px;display:none;}
+.bio-gate-msg.show{display:block;}
 .filter-advanced-btn.active{background:rgba(252,209,22,0.1);border-color:rgba(252,209,22,0.3);color:var(--yellow);}
 .filter-section-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;margin-top:16px;}
 .filter-section-label:first-child{margin-top:0;}
@@ -508,6 +520,20 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 
+<!-- Gate biométrique à l'ouverture -->
+<div class="bio-gate" id="bioGate">
+  <div class="bio-gate-sheet">
+    <div class="bio-gate-icon">🔐</div>
+    <div class="bio-gate-title">Connexion sécurisée</div>
+    <div class="bio-gate-sub">Utilise ton Face ID ou empreinte digitale pour accéder à TDOLI.</div>
+    <button class="btn-bio-confirm" id="btn-bio-confirm" onclick="bioGateAuth()">
+      <span id="bio-confirm-label">Se connecter avec Face ID</span>
+    </button>
+    <button class="btn-bio-fallback" onclick="bioGateFallback()">Utiliser mon mot de passe</button>
+    <div class="bio-gate-msg" id="bio-gate-msg"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -518,10 +544,107 @@ const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] 
 const avatarUrl = localStorage.getItem('tdoli_avatar') || null;
 const RATE = 655.957;
 
-// FIX: redirect sécurisé — évite la boucle si déjà sur auth
-if (!token && !window.location.pathname.includes('tdoli-auth')) {
+// ── Vérification Face ID à l'ouverture ────────────────────────
+(async function checkFaceIdOnOpen() {
+  const faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
+
+  // Pas de token → auth classique
+  if (!token) {
+    window.location.replace('/tdoli-auth.html');
+    return;
+  }
+
+  // Token présent + Face ID actif → vérifier biométrie d'abord
+  if (faceidActive && email && window.PublicKeyCredential) {
+    document.getElementById('bioGate').classList.add('open');
+    setTimeout(() => bioGateAuth(), 600);
+    return;
+  }
+
+  // Token présent + pas de Face ID → afficher le feed directement
+})();
+
+// ── Auth biométrique depuis le feed ───────────────────────────
+async function bioGateAuth() {
+  const savedEmail = localStorage.getItem('tdoli_email');
+  if (!savedEmail) { bioGateFallback(); return; }
+
+  const btn = document.getElementById('btn-bio-confirm');
+  const lbl = document.getElementById('bio-confirm-label');
+  btn.disabled = true;
+  lbl.innerHTML = '<span style="display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;"></span> Vérification...';
+
+  try {
+    const optRes = await fetch(API + '/webauthn/auth/options', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: savedEmail })
+    });
+    if (!optRes.ok) { bioGateFallback(); return; }
+    const options = await optRes.json();
+
+    options.challenge = base64urlToBuffer(options.challenge);
+    options.allowCredentials = (options.allowCredentials || []).map(c => ({
+      ...c, id: base64urlToBuffer(c.id)
+    }));
+
+    const assertion = await navigator.credentials.get({ publicKey: options });
+
+    const assertionResponse = {
+      email: savedEmail,
+      id:    bufferToBase64url(assertion.rawId),
+      rawId: bufferToBase64url(assertion.rawId),
+      type:  assertion.type,
+      response: {
+        authenticatorData: bufferToBase64url(assertion.response.authenticatorData),
+        clientDataJSON:    bufferToBase64url(assertion.response.clientDataJSON),
+        signature:         bufferToBase64url(assertion.response.signature),
+        userHandle:        assertion.response.userHandle ? bufferToBase64url(assertion.response.userHandle) : null,
+      }
+    };
+
+    const verRes = await fetch(API + '/webauthn/auth/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(assertionResponse)
+    });
+    const verData = await verRes.json();
+
+    if (verRes.ok && verData.token) {
+      // Mettre à jour le token
+      localStorage.setItem('tdoli_token', verData.token);
+      // Fermer la gate et afficher le feed
+      document.getElementById('bioGate').classList.remove('open');
+      loadFeed();
+    } else {
+      const msg = document.getElementById('bio-gate-msg');
+      msg.textContent = 'Face ID échoué — utilise ton mot de passe';
+      msg.classList.add('show');
+      btn.disabled = false;
+      lbl.textContent = 'Réessayer';
+    }
+  } catch(err) {
+    if (err.name === 'NotAllowedError') {
+      bioGateFallback();
+    } else {
+      const msg = document.getElementById('bio-gate-msg');
+      msg.textContent = 'Erreur — utilise ton mot de passe';
+      msg.classList.add('show');
+      btn.disabled = false;
+      lbl.textContent = 'Réessayer';
+    }
+  }
+}
+
+function bioGateFallback() {
+  // Effacer token et Face ID → retour à la connexion classique
+  localStorage.removeItem('tdoli_token');
   window.location.replace('/tdoli-auth.html');
 }
+
+function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);return buf.buffer;}
+function bufferToBase64url(b){const bytes=new Uint8Array(b);let bin='';for(const x of bytes)bin+=String.fromCharCode(x);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
+// ─────────────────────────────────────────────────────────────
 
 // FIX Phase 1: Initialiser l'avatar avec initiales ou photo Cloudinary
 function initAvatar() {
