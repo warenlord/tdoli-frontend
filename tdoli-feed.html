@@ -165,11 +165,11 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
 /* WEEKLY STATS BANNER */
 .weekly-banner{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,201,122,0.08),rgba(26,79,255,0.08));border:1px solid var(--border-active);border-radius:14px;padding:14px 16px;margin-bottom:16px;}
+.weekly-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
 .weekly-icon{font-size:22px;flex-shrink:0;}
 .weekly-text{font-size:12px;color:var(--text-2);line-height:1.6;}
 .weekly-text strong{font-family:'Syne',sans-serif;font-weight:700;color:var(--green);}
 .weekly-text .vol{font-family:'Syne',sans-serif;font-weight:700;color:var(--yellow);}
-.weekly-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
 
 /* BADGE RÉACTIVITÉ */
 .reactivity-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;border-radius:4px;padding:1px 6px;}
@@ -352,6 +352,12 @@ function renderStars(rating) {
   return '★'.repeat(full) + '☆'.repeat(5-full);
 }
 
+function renderReactivityBadge(badge) {
+  if (!badge) return '';
+  const labels = { fast: '⚡ Rapide', normal: '🕐 Normal', slow: '🐢 Lent' };
+  return `<span class="reactivity-badge ${badge}">${labels[badge]}</span>`;
+}
+
 function communityRank(score) {
   if (score === null || score === undefined) return null;
   if (score >= 86) return { cls: 'pilier', label: 'Pilier 🏆' };
@@ -391,6 +397,7 @@ function renderCard(t, idx) {
             <div class="user-name">${name}</div>
             <div class="user-meta">
               <span class="user-rating"><span class="rating-stars">${renderStars(rating)}</span> ${rating > 0 ? rating.toFixed(1) : ''}</span>
+              ${deals > 0 ? `<span class="user-deals">${deals} deal${deals>1?'s':''}</span>` : ''}
               ${deals >= 5 ? '<span class="verified-badge">Verifie</span>' : ''}
               ${renderReactivityBadge(t.senderReactivityBadge)}
               ${renderRankBadge(t.senderCommunityScore)}
@@ -449,22 +456,6 @@ function renderFeed() {
   list.innerHTML = data.map((t,i) => renderCard(t,i)).join('');
 }
 
-async function loadWeeklyStats() {
-  try {
-    const res = await fetch(`${API}/stats/weekly`, { headers: { 'Authorization': `Bearer ${token}` } });
-    if (!res.ok) return;
-    const { memberCount, totalVolumeEur } = await res.json();
-    if (memberCount > 0) {
-      document.getElementById('weeklyMembers').textContent = memberCount;
-      document.getElementById('weeklyVolume').textContent =
-        totalVolumeEur >= 1000
-          ? `${(totalVolumeEur / 1000).toFixed(1)}k€`
-          : `${totalVolumeEur}€`;
-      document.getElementById('weeklyBanner').style.display = 'flex';
-    }
-  } catch(e) {}
-}
-
 async function loadFeed(silent) {
   if (!silent) {
     document.getElementById('feedList').innerHTML = `<div class="loading-wrap"><div class="loader"></div><div class="loading-text">Chargement...</div></div>`;
@@ -481,6 +472,22 @@ async function loadFeed(silent) {
       document.getElementById('feedList').innerHTML = `<div class="empty-state"><div class="empty-title">Serveur inaccessible</div><div class="empty-sub">Lance node server.js</div></div>`;
     }
   }
+}
+
+async function loadWeeklyStats() {
+  try {
+    const res = await fetch(`${API}/stats/weekly`, { headers: { 'Authorization': `Bearer ${token}` } });
+    if (!res.ok) return;
+    const { memberCount, totalVolumeEur } = await res.json();
+    if (memberCount > 0) {
+      document.getElementById('weeklyMembers').textContent = memberCount;
+      document.getElementById('weeklyVolume').textContent =
+        totalVolumeEur >= 1000
+          ? `${(totalVolumeEur / 1000).toFixed(1)}k€`
+          : `${totalVolumeEur}€`;
+      document.getElementById('weeklyBanner').style.display = 'flex';
+    }
+  } catch(e) {}
 }
 
 // Badge deals actifs
