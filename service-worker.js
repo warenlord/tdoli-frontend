@@ -1,7 +1,53 @@
-// TDOLI — Service Worker v1.3
-// Phase 8 — Face ID : cache invalidé pour prendre les nouveaux fichiers
+// TDOLI — Service Worker v1.4
+// Phase 9 — Firebase Messaging intégré
 
-const CACHE_NAME = 'tdoli-v1.3';
+importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
+
+// ── Firebase config ───────────────────────────────────────────
+// Remplace ces valeurs par les tiennes (mêmes que dans tdoli-feed.html)
+firebase.initializeApp({
+  apiKey:            "REMPLACE_PAR_TA_VALEUR",
+  authDomain:        "tdoli-c47a1.firebaseapp.com",
+  projectId:         "tdoli-c47a1",
+  storageBucket:     "tdoli-c47a1.appspot.com",
+  messagingSenderId: "REMPLACE_PAR_TA_VALEUR",
+  appId:             "REMPLACE_PAR_TA_VALEUR"
+});
+
+const messaging = firebase.messaging();
+
+// ── Notification reçue en arrière-plan ───────────────────────
+messaging.onBackgroundMessage((payload) => {
+  console.log('[SW] Notification arrière-plan:', payload);
+  const { title, body } = payload.notification || {};
+  const url = payload.data?.url || '/tdoli-deals.html';
+
+  self.registration.showNotification(title || 'TDOLI', {
+    body:     body || '',
+    icon:     '/TDOLI_APP.png',
+    badge:    '/TDOLI_APP.png',
+    data:     { url },
+    tag:      'tdoli-notification',
+    renotify: true,
+  });
+});
+
+// ── Clic sur la notification ──────────────────────────────────
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const url = e.notification.data?.url || '/tdoli-deals.html';
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(wins => {
+      const existing = wins.find(w => w.url.includes('tdoli'));
+      if (existing) { existing.focus(); existing.navigate(url); }
+      else clients.openWindow(url);
+    })
+  );
+});
+
+// ── Cache PWA ─────────────────────────────────────────────────
+const CACHE_NAME = 'tdoli-v1.4';
 const STATIC_ASSETS = [
   '/tdoli-feed.html',
   '/tdoli-auth.html',
@@ -36,6 +82,7 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = e.request.url;
   if (url.includes('tdoli-backend.onrender.com')) return;
+  if (url.includes('firebaseinstallations') || url.includes('fcm.googleapis')) return;
   if (e.request.method !== 'GET') return;
 
   e.respondWith(
