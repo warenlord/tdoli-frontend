@@ -1,52 +1,5 @@
 // TDOLI — Service Worker v1.4
-// Phase 9 — Firebase Messaging intégré
 
-importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
-
-// ── Firebase config ───────────────────────────────────────────
-// Remplace ces valeurs par les tiennes (mêmes que dans tdoli-feed.html)
-firebase.initializeApp({
- apiKey:            "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",  // ← remplace avec ta vraie valeur
-  authDomain:        "tdoli-c47a1.firebaseapp.com",
-  projectId:         "tdoli-c47a1",
-  storageBucket:     "tdoli-c47a1.appspot.com",
-  messagingSenderId: "416651280494", // ← remplace avec ta vraie valeur
-  appId:             "1:416651280494:web:de03eb6a47204031f1267f", // ← remplace avec ta vraie valeur
-});
-
-const messaging = firebase.messaging();
-
-// ── Notification reçue en arrière-plan ───────────────────────
-messaging.onBackgroundMessage((payload) => {
-  console.log('[SW] Notification arrière-plan:', payload);
-  const { title, body } = payload.notification || {};
-  const url = payload.data?.url || '/tdoli-deals.html';
-
-  self.registration.showNotification(title || 'TDOLI', {
-    body:     body || '',
-    icon:     '/TDOLI_APP.png',
-    badge:    '/TDOLI_APP.png',
-    data:     { url },
-    tag:      'tdoli-notification',
-    renotify: true,
-  });
-});
-
-// ── Clic sur la notification ──────────────────────────────────
-self.addEventListener('notificationclick', (e) => {
-  e.notification.close();
-  const url = e.notification.data?.url || '/tdoli-deals.html';
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(wins => {
-      const existing = wins.find(w => w.url.includes('tdoli'));
-      if (existing) { existing.focus(); existing.navigate(url); }
-      else clients.openWindow(url);
-    })
-  );
-});
-
-// ── Cache PWA ─────────────────────────────────────────────────
 const CACHE_NAME = 'tdoli-v1.4';
 const STATIC_ASSETS = [
   '/tdoli-feed.html',
