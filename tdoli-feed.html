@@ -1594,7 +1594,7 @@ async function registerFCMToken() {
 
     // Récupérer le token VAPID
     const fcmToken = await messaging.getToken({
-      vapidKey: 'VOTRE_VAPID_KBEb-bIVX7GAPpbpuS9pp74rbwz3296KScUw7ZBbJTLRYnnvTNjmZMNG7f0M5x5D6spxZmrRlPpotVPogRP5AZOgEY_ICI', // ← remplace avec ta VAPID key Firebase
+      vapidKey: 'BB-1MdkGPI9g2KtXuWP-dzGu7hBzoqeXKT6RxhITFbAe7oW1CSZyjB4lsI7d6ELgzd9Tw31xGWBpDdS_k4LG4sw', // ← remplace avec ta VAPID key Firebase
       serviceWorkerRegistration: await navigator.serviceWorker.getRegistration('/firebase-messaging-sw.js')
     });
 
