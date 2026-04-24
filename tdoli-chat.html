@@ -387,8 +387,6 @@ function shareApp(){
   const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
   if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
   else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
-});}
-  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
 }
 </script>
 </body>
