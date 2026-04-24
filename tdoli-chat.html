@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TDOLI — Chat</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <style>
 :root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
 .topbar{flex-shrink:0;background:rgba(6,13,9,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 16px 12px;display:flex;align-items:center;gap:12px;}
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;text-decoration:none;}
 .topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.5px;flex-shrink:0;}
@@ -33,9 +33,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .msg-wrap.mine{align-items:flex-end;}
 .msg-wrap.theirs{align-items:flex-start;}
 .msg-sender{font-size:10px;color:var(--text-3);margin-bottom:3px;padding:0 4px;}
-.msg-bubble{max-width:80%;padding:10px 13px;border-radius:16px;font-size:14px;line-height:1.5;word-break:break-word;}
-.msg-bubble.mine{background:linear-gradient(135deg,var(--green-dim),var(--blue));color:#fff;border-bottom-right-radius:4px;}
-.msg-bubble.theirs{background:var(--card);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px;}
+.msg-bubble{max-width:82%;padding:11px 15px;border-radius:20px;font-size:14px;line-height:1.55;word-break:break-word;}
+.msg-bubble.mine{background:linear-gradient(135deg,#00c86e,#00a558);color:#fff;border-bottom-right-radius:5px;box-shadow:0 2px 12px rgba(0,179,104,0.3);}
+.msg-bubble.theirs{background:#1e2b22;border:1px solid rgba(255,255,255,0.08);color:var(--text);border-bottom-left-radius:5px;}
 .msg-bubble.mm-card{background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.25);color:var(--text);border-radius:12px;max-width:90%;}
 .msg-time{font-size:10px;opacity:0.55;margin-top:4px;padding:0 4px;}
 /* Indicateur de frappe */
@@ -50,11 +50,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .conn-status.show{display:flex;}
 .conn-status.reconnecting{color:var(--yellow);border-color:rgba(252,209,22,0.3);}
 .conn-status.connected{color:var(--green);border-color:rgba(0,201,122,0.3);}
-.input-area{flex-shrink:0;background:rgba(6,13,9,0.98);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:8px;}
-.msg-input{flex:1;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;resize:none;max-height:80px;overflow-y:auto;line-height:1.4;transition:border-color 0.2s;-webkit-appearance:none;}
+.input-area{flex-shrink:0;background:rgba(10,15,13,0.98);backdrop-filter:blur(24px);border-top:1px solid rgba(0,217,130,0.1);padding:12px 14px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:10px;}
+.msg-input{flex:1;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;resize:none;max-height:80px;overflow-y:auto;line-height:1.4;transition:border-color 0.2s;-webkit-appearance:none;}
 .msg-input:focus{outline:none;border-color:var(--green);}
 .msg-input::placeholder{color:var(--text-3);opacity:0.6;}
-.send-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;}
+.send-btn{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#00d982,#00b368);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;box-shadow:0 3px 16px rgba(0,179,104,0.4);}
 .send-btn:active{transform:scale(0.9);}
 .send-btn:disabled{opacity:0.35;}
 /* Sheet Mobile Money */
@@ -68,7 +68,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .sheet-sub{font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;}
 .form-group{margin-bottom:16px;}
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.form-input-field,.form-select-field{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
+.form-input-field,.form-select-field{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Nunito',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
 .form-input-field:focus,.form-select-field:focus{outline:none;border-color:var(--green);}
 .btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;position:relative;overflow:hidden;}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
