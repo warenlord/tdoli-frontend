@@ -254,14 +254,30 @@ if ('serviceWorker' in navigator) {
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
 const firebaseConfig = {
-  apiKey:            "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",  // ← remplace avec ta vraie valeur
+  apiKey:            "AIzaSyCnBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   authDomain:        "tdoli-c47a1.firebaseapp.com",
   projectId:         "tdoli-c47a1",
   storageBucket:     "tdoli-c47a1.appspot.com",
-  messagingSenderId: "416651280494", // ← remplace avec ta vraie valeur
-  appId:             "1:416651280494:web:de03eb6a47204031f1267f", // ← remplace avec ta vraie valeur
+  messagingSenderId: "1416651280xxx",
+  appId:             "1:1416651280xxx:web:xxxxxxxxxxxxxxxx"
 };
 firebase.initializeApp(firebaseConfig);
+
+// ── Notifications au premier plan ─────────────────────────────
+const _messaging = firebase.messaging();
+_messaging.onMessage((payload) => {
+  console.log('[FCM] Message reçu au premier plan:', payload);
+  const { title, body } = payload.notification || {};
+  const url = payload.data?.url || '/tdoli-deals.html';
+  // Afficher une notification même si l'app est ouverte
+  if (Notification.permission === 'granted') {
+    new Notification(title || 'TDOLI', {
+      body: body || '',
+      icon: '/TDOLI_APP.png',
+      data: { url }
+    });
+  }
+});
 </script>
 </head>
 <body>
@@ -1596,7 +1612,7 @@ async function registerFCMToken() {
     await navigator.serviceWorker.ready;
 
     const fcmToken = await messaging.getToken({
-      vapidKey: 'BIXwPIf199mTWr5vo5CxZiDyJylmed5978sXEP2RSZzb0h2qiFLSW8GFp8WjwHro9EjK5DEVnxYtvuBUsqoPoRE',
+      vapidKey: 'REMPLACE_PAR_TA_VAPID_KEY',
       serviceWorkerRegistration: swReg
     });
 
