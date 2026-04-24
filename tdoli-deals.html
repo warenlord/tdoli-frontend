@@ -676,9 +676,11 @@ async function submitDispute() {
   const btn=document.getElementById('btn-submit-dispute');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
   try {
-    const fd=new FormData(); fd.append('description',desc);
-    selectedFiles.forEach(f=>fd.append('files',f));
-    const res=await fetch(API+'/deals/'+currentDisputeId+'/dispute',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
+    const fd=new FormData();
+    fd.append('transferId', currentDisputeId);
+    fd.append('description', desc);
+    selectedFiles.forEach(f=>fd.append('justificatifs',f));
+    const res=await fetch(API+'/dispute',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
     const r=await safeJson(res);
     if(r.ok) { closeSheet('disputeOverlay'); showToast('Litige signalé','#ff6b6b'); loadDeals(true); }
     else showMsg('msg-dispute',(r.data&&r.data.message)||'Erreur');
