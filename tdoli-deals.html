@@ -99,6 +99,17 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .btn-confirm{flex:1;padding:13px;background:linear-gradient(135deg,var(--green-dim),#004d2a);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
 .btn-confirm:disabled{opacity:0.35;cursor:not-allowed;}
 .btn-dispute{padding:13px 16px;background:transparent;color:var(--red);border:1px solid rgba(255,68,68,0.25);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.partner-card{background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
+.partner-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.partner-avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+.partner-name{font-size:13px;font-weight:600;}
+.partner-badge{font-size:10px;color:var(--text-3);margin-top:2px;}
+.partner-indicators{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.partner-chip{font-size:10px;padding:2px 8px;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;}
+.partner-chip.green{background:rgba(0,201,122,0.1);color:var(--green);}
+.partner-chip.yellow{background:rgba(252,209,22,0.1);color:var(--yellow);}
+.partner-chip.blue{background:rgba(26,79,255,0.1);color:#6b8fff;}
+.partner-testimonial{font-size:12px;color:var(--text-3);font-style:italic;line-height:1.5;border-top:1px solid var(--border);padding-top:8px;margin-top:4px;}
 .chat-link{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;text-decoration:none;}
 .chat-text{font-size:13px;font-weight:500;color:var(--text);}
 .chat-sub{font-size:11px;color:var(--text-3);margin-top:2px;}
@@ -567,13 +578,33 @@ function openDeal(id) {
   }
 
   let actionsHtml = '';
+  // Carte partenaire affichée avant les actions
   if(d.status==='matched' && !iConfirmed) {
-    actionsHtml = tdlHtml + ocrHtml + '<div class="deal-actions">' +
+    actionsHtml = partnerCardHtml + tdlHtml + ocrHtml + '<div class="deal-actions">' +
       '<button class="btn-confirm" onclick="openProof(\'' + d._id + '\')" >📎 J&#39;ai envoyé</button>' +
       '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')" >⚠ Litige</button>' +
       '</div>';
   } else if(d.status==='matched' && iConfirmed) {
-    actionsHtml = tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);">✓ Tu as confirmé — en attente de l&#39;autre partie</div>';  }
+    actionsHtml = partnerCardHtml + tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);">✓ Tu as confirmé — en attente de l&#39;autre partie</div>';  }
+
+  // ── Phase 5 — Mini carte partenaire ──────────────────────────
+  const partnerInitials = otherName.trim().split(' ').filter(p=>p.length>0).reduce((acc,p,i,arr)=>i===0||i===arr.length-1?acc+p[0]:'', '').toUpperCase() || otherName.substring(0,2).toUpperCase();
+  const partnerRatingStars = d.otherRating > 0 ? '★'.repeat(Math.round(d.otherRating))+'☆'.repeat(5-Math.round(d.otherRating)) + ' ' + d.otherRating.toFixed(1) : '';
+  const partnerDeals = d.otherCompletedDeals || 0;
+  const partnerChips = [];
+  if (partnerDeals > 0) partnerChips.push('<span class="partner-chip green">🤝 ' + partnerDeals + ' échange' + (partnerDeals>1?'s':'') + '</span>');
+  if (d.otherRating >= 4) partnerChips.push('<span class="partner-chip blue">⭐ Très bien noté</span>');
+  else if (d.otherRating > 0) partnerChips.push('<span class="partner-chip blue">⭐ ' + d.otherRating.toFixed(1) + '/5</span>');
+  if (partnerDeals === 0 && !d.otherRating) partnerChips.push('<span class="partner-chip yellow">🟠 Nouveau membre</span>');
+  const partnerCardHtml = d.status === 'matched' ? '<div class="partner-card">' +
+    '<div class="partner-card-header">' +
+      '<div class="partner-avatar-sm">' + partnerInitials + '</div>' +
+      '<div><div class="partner-name">' + otherName + '</div>' +
+        (partnerRatingStars ? '<div class="partner-badge" style="color:var(--yellow);">' + partnerRatingStars + '</div>' : '<div class="partner-badge">Nouveau</div>') +
+      '</div>' +
+    '</div>' +
+    (partnerChips.length > 0 ? '<div class="partner-indicators">' + partnerChips.join('') + '</div>' : '') +
+    '</div>' : '';
 
   const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;">💬</div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
 

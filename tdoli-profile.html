@@ -100,6 +100,17 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
 /* SECTION TÉMOIGNAGES */
 .testimonials-section{margin-top:16px;}
+.community-phrase{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px;font-size:13px;color:var(--text-2);line-height:1.6;font-style:italic;}
+.community-phrase strong{color:var(--green);font-style:normal;}
+.community-indicators{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.indicator-chip{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;}
+.indicator-chip.green{background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.indicator-chip.yellow{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
+.indicator-chip.blue{background:rgba(26,79,255,0.1);color:#6b8fff;border:1px solid rgba(26,79,255,0.2);}
+.reliability-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;}
+.reliability-badge.green{background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.reliability-badge.yellow{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
+.reliability-badge.orange{background:rgba(255,100,50,0.1);color:#ff6432;border:1px solid rgba(255,100,50,0.2);}
 .testimonials-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .testimonials-title span{font-size:11px;color:var(--text-3);font-family:'DM Sans',sans-serif;font-weight:400;}
 .testimonial-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;}
@@ -337,6 +348,44 @@ function renderFromCache() {
 }
 
 // ── Enrichir l'affichage avec les données API ──────────────────
+// ── Phase 5 — Phrase communautaire personnalisée ─────────────
+function communityPhrase(user) {
+  const name = (user.username || user.firstName || 'Ce membre').split(' ')[0];
+  const deals = user.completedDeals || 0;
+  const since = user.createdAt ? new Date(user.createdAt).toLocaleDateString('fr-FR', {month:'long', year:'numeric'}) : null;
+  const sinceStr = since ? ` depuis <strong>${since}</strong>` : '';
+  if (deals === 0) return `<div class="community-phrase">${name} fait partie de la communauté TDOLI${sinceStr}. Bienvenue !</div>`;
+  return `<div class="community-phrase">${name} fait partie de la communauté TDOLI${sinceStr}. Il a aidé <strong>${deals} membre${deals>1?'s':''}</strong> de la diaspora.</div>`;
+}
+
+function communityIndicators(user) {
+  const chips = [];
+  const deals = user.completedDeals || 0;
+  if (deals > 0) chips.push('<div class="indicator-chip green">🤝 ' + deals + ' membre' + (deals>1?'s':'') + ' aidé' + (deals>1?'s':'') + '</div>');
+  if (user.reactivityBadge === 'fast') chips.push('<div class="indicator-chip yellow">⚡ Répond vite</div>');
+  else if (user.reactivityBadge === 'normal') chips.push('<div class="indicator-chip yellow">🕐 Répond en 1h</div>');
+  if (user.averageRating >= 4) chips.push('<div class="indicator-chip blue">⭐ Très bien noté</div>');
+  else if (user.averageRating >= 3) chips.push('<div class="indicator-chip blue">⭐ Bien noté</div>');
+  // Actif cette semaine
+  if (user.lastResponseAt) {
+    const daysSince = (Date.now() - new Date(user.lastResponseAt).getTime()) / (1000*60*60*24);
+    if (daysSince < 7) chips.push('<div class="indicator-chip green">🟢 Actif cette semaine</div>');
+  }
+  if (chips.length === 0) return '';
+  return '<div class="community-indicators">' + chips.join('') + '</div>';
+}
+
+function reliabilityBadge(user) {
+  const abandoned = user.abandonCount || 0;
+  const completed = user.completedDeals || 0;
+  const total = completed + abandoned;
+  if (total === 0) return '<div class="reliability-badge orange">🟠 Nouveau membre</div>';
+  const rate = completed / total;
+  if (rate >= 0.85 && completed >= 3) return '<div class="reliability-badge green">🟢 Membre actif et fiable</div>';
+  if (rate >= 0.5 || completed >= 1) return '<div class="reliability-badge yellow">🟡 Membre actif</div>';
+  return '<div class="reliability-badge orange">🟠 Nouveau membre</div>';
+}
+
 function renderFull(user, txs) {
   const uname = user.username || email?.split('@')[0] || '?';
   const av = user.avatarUrl || localStorage.getItem('tdoli_avatar');
@@ -366,7 +415,7 @@ function renderFull(user, txs) {
 
   const verifyHtml = level < 2 ? `<div class="verify-card">
     <div class="verify-title">🔐 Augmente ta limite</div>
-    <div class="verify-sub">Vérifie ton numéro pour passer au Niveau 2 — limite à 500 €.</div>
+    <div class="verify-sub">Vérifie ton numéro pour passer au Niveau 2 — limite à 1 000 €.</div>
     <div class="limit-bar"><span class="limit-label">Limite actuelle</span><span class="limit-val">300 €</span></div>
     <button class="btn-primary" onclick="openPhoneVerif()">Vérifier mon numéro →</button>
   </div>` : '';
@@ -395,10 +444,11 @@ function renderFull(user, txs) {
         ${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);">⛔ Suspendu</span>':''}
       </div>
       ${rankHtml}
-      ${reactivityHtml ? `<div style="margin-bottom:8px;">${reactivityHtml}</div>` : ''}
-      ${trustHtml}
+      ${reliabilityBadge(user)}
       ${starsHtml}
     </div>
+    ${communityPhrase(user)}
+    ${communityIndicators(user)}
     ${verifyHtml}
     <div class="stats-row">
       <div class="stat-card"><div class="stat-val">${user.totalDeals||user.completedDeals||0}</div><div class="stat-label">Deals</div></div>

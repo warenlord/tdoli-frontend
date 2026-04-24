@@ -77,6 +77,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .item-currency{font-size:11px;color:var(--text-3);margin-left:2px;}
 .mine-tag{font-size:9px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:4px;padding:1px 6px;font-family:'Syne',sans-serif;font-weight:700;}
 .status-dot-sm{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
+.trust-line{font-size:10px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:4px;}
+.trust-line .trust-members{color:var(--green);font-weight:600;}
+.reactivity-inline{font-size:9px;padding:1px 6px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;}
+.reactivity-inline.fast{background:rgba(0,201,122,0.1);color:var(--green);}
+.reactivity-inline.normal{background:rgba(252,209,22,0.1);color:var(--yellow);}
+.reactivity-inline.slow{background:rgba(255,100,50,0.1);color:#ff6432;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
 .empty-state{text-align:center;padding:60px 20px;}
 .empty-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
@@ -986,8 +992,16 @@ function renderList(data) {
     const initials = getInitials(displayName);
     const eurVal = convertToEur(t.amount, t.currency);
     const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
-    const trustLine = (t.senderDeals > 0)
-      ? '<div class="trust-line">Fait confiance par ' + t.senderDeals + ' membre' + (t.senderDeals > 1 ? 's' : '') + '</div>'
+    // Trust line — "A aidé X membres"
+    const dealsCount = t.senderDeals || t.senderCompletedDeals || 0;
+    const trustLine = dealsCount > 0
+      ? '<div class="trust-line">A aidé <span class="trust-members">' + dealsCount + ' membre' + (dealsCount > 1 ? 's' : '') + '</span></div>'
+      : '';
+    // Badge réactivité inline
+    const reactBadgeMap = { fast: '⚡ Répond vite', normal: '🕐 Répond en 1h', slow: '🐢 Répond lentement' };
+    const reactClass = { fast: 'fast', normal: 'normal', slow: 'slow' };
+    const reactInline = t.senderReactivityBadge && reactBadgeMap[t.senderReactivityBadge]
+      ? '<span class="reactivity-inline ' + reactClass[t.senderReactivityBadge] + '">' + reactBadgeMap[t.senderReactivityBadge] + '</span>'
       : '';
     return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
       '<div class="item-avatar">' + initials + '</div>' +
@@ -997,7 +1011,7 @@ function renderList(data) {
       '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
       '<span class="item-meta">' +
         (t.senderRating > 0 ? '<span class="item-rating">★' + t.senderRating.toFixed(1) + '</span>' : '') +
-        renderReactivityBadge(t.senderReactivityBadge) +
+        reactInline +
         renderRankBadge(t.senderCommunityScore) +
         '<span class="item-time">' + timeAgo(t.createdAt) + '</span>' +
         '<div class="status-dot-sm"></div>' +
