@@ -495,9 +495,10 @@ async function sendOtp(){
 async function verifyOtp(){
   const code=Array.from(document.querySelectorAll('.otp-digit')).map(i=>i.value).join('');
   if(code.length<6){showMsg('msg-otp','Code incomplet');return;}
+  const phone=document.getElementById('phone-input').value.trim();
   const btn=document.getElementById('btn-verify-otp');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
   try{
-    const r=await safeJson(await fetch(API+'/auth/verify-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code})}));
+    const r=await safeJson(await fetch(API+'/auth/verify-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code,phone})}));
     if(r.ok){closeSheet('phoneOverlay');loadProfile();}
     else showMsg('msg-otp',(r.data&&r.data.message)||'Code incorrect');
   }catch(e){showMsg('msg-otp','Serveur inaccessible');}
