@@ -7,12 +7,12 @@ importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-comp
 // ── Firebase config ───────────────────────────────────────────
 // Remplace ces valeurs par les tiennes (mêmes que dans tdoli-feed.html)
 firebase.initializeApp({
-  apiKey:            "REMPLACE_PAR_TA_VALEUR",
+ apiKey:            "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",  // ← remplace avec ta vraie valeur
   authDomain:        "tdoli-c47a1.firebaseapp.com",
   projectId:         "tdoli-c47a1",
   storageBucket:     "tdoli-c47a1.appspot.com",
-  messagingSenderId: "REMPLACE_PAR_TA_VALEUR",
-  appId:             "REMPLACE_PAR_TA_VALEUR"
+  messagingSenderId: "416651280494", // ← remplace avec ta vraie valeur
+  appId:             "1:416651280494:web:de03eb6a47204031f1267f", // ← remplace avec ta vraie valeur
 });
 
 const messaging = firebase.messaging();
