@@ -736,16 +736,35 @@ async function savePaymentInfo() {
 }
 
 function renderPaymentInfo(info, label) {
-  if (!info || (!info.name && !info.phone && !info.iban && !info.paypal)) {
+  if (!info || (!info.name && !info.phone && !info.iban && !info.paypal && !info.wero)) {
     return '<div style="font-size:12px;color:var(--text-3);font-style:italic;">Pas encore renseigné</div>';
   }
-  let html = '<div class="payment-info-box"><div class="payment-info-title">' + label + '</div>';
-  if (info.name) html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">' + info.name + '</span></div>';
-  if (info.phone) html += '<div class="payment-info-row"><span class="payment-info-label">Mobile Money</span><span class="payment-info-val" style="color:var(--green)">' + info.phone + '</span></div>';
-  if (info.iban) html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px">' + info.iban + '</span></div>';
-  if (info.bankName) html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">' + info.bankName + '</span></div>';
-  if (info.paypal) html += '<div class="payment-info-row"><span class="payment-info-label">PayPal</span><span class="payment-info-val">' + info.paypal + '</span></div>';
-  if (info.note) html += '<div class="payment-info-row"><span class="payment-info-label">Note</span><span class="payment-info-val" style="color:var(--text-3)">' + info.note + '</span></div>';
+
+  // Icône et label de la méthode
+  const methodIcons = {
+    mobilemoney: '📱 Mobile Money',
+    virement:    '🏦 Virement bancaire',
+    paypal:      '💳 PayPal',
+    wero:        '🟣 Wero'
+  };
+  const methodLabel = info.method ? (methodIcons[info.method] || info.method) : null;
+
+  let html = '<div class="payment-info-box">';
+  html += '<div class="payment-info-title">' + label + '</div>';
+
+  // Plateforme en évidence
+  if (methodLabel) {
+    html += '<div class="payment-info-row" style="margin-bottom:10px;"><span style="background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);border-radius:6px;padding:3px 10px;font-size:12px;font-family:Syne,sans-serif;font-weight:700;color:var(--yellow);">' + methodLabel + '</span></div>';
+  }
+
+  if (info.name)    html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">' + info.name + '</span></div>';
+  if (info.phone)   html += '<div class="payment-info-row"><span class="payment-info-label">Numéro</span><span class="payment-info-val" style="color:var(--green);font-size:15px;font-family:Syne,sans-serif;">' + info.phone + '</span></div>';
+  if (info.wero)    html += '<div class="payment-info-row"><span class="payment-info-label">Wero</span><span class="payment-info-val" style="color:#a78bfa;font-size:15px;font-family:Syne,sans-serif;">' + info.wero + '</span></div>';
+  if (info.paypal)  html += '<div class="payment-info-row"><span class="payment-info-label">Email</span><span class="payment-info-val" style="color:#60a5fa;">' + info.paypal + '</span></div>';
+  if (info.iban)    html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px;letter-spacing:1px;">' + info.iban + '</span></div>';
+  if (info.bankName)html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">' + info.bankName + '</span></div>';
+  if (info.note)    html += '<div class="payment-info-row"><span class="payment-info-label">Note</span><span class="payment-info-val" style="color:var(--text-3)">' + info.note + '</span></div>';
+
   html += '</div>';
   return html;
 }
