@@ -405,9 +405,9 @@ if ('serviceWorker' in navigator) {
     <div class="sheet-title">Confirmer le match</div>
     <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Vérifie les détails avant de confirmer.</div>
     <div id="confirmDetail" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;"></div>
-    <!-- Sélection bénéficiaire pour le match -->
-    <div id="confirm-benef-badge" style="margin-bottom:12px;"></div>
-    <button class="btn-primary" style="margin-bottom:12px;background:var(--surface);border:1px solid var(--border-active);color:var(--green);" onclick="openBenefSheetForMatch()">👤 Choisir mon bénéficiaire</button>
+    <!-- Sélection bénéficiaire obligatoire pour le match -->
+    <div id="confirm-benef-badge" style="margin-bottom:8px;"></div>
+    <button class="btn-primary" id="btn-choose-benef-match" style="margin-bottom:12px;background:var(--surface);border:1px solid rgba(252,209,22,0.4);color:var(--yellow);" onclick="openBenefSheetForMatch()">👤 Choisir mon bénéficiaire <span style="font-size:10px;color:var(--red);">*obligatoire</span></button>
     <button class="btn-primary" id="btn-confirm-match" onclick="executeMatch()">Confirmer le match</button>
     <button class="btn-cancel" onclick="closeSheet('confirmOverlay')">Annuler</button>
   </div>
@@ -1201,6 +1201,10 @@ function showConfirm(id, fromCountry, toCountry, currency, amount, matchAmount) 
 
 async function executeMatch() {
   if (!pendingMatch) return;
+  if (!pendingMatch.beneficiaireId) {
+    showToast('Choisis ton bénéficiaire avant de matcher', '#ff4444');
+    return;
+  }
   const btn = document.getElementById('btn-confirm-match');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Matching...';
   try {
@@ -1443,6 +1447,9 @@ function selectBenef(id, context) {
     if(container) container.innerHTML = badgeHtml;
     // Mettre à jour pendingMatch
     if(pendingMatch) pendingMatch.beneficiaireId = id;
+    // Changer le bouton en vert une fois sélectionné
+    const btn = document.getElementById('btn-choose-benef-match');
+    if(btn) { btn.style.borderColor = 'rgba(0,201,122,0.4)'; btn.style.color = 'var(--green)'; btn.innerHTML = '✓ Bénéficiaire sélectionné'; }
     // confirmOverlay reste visible — pas de fermeture
   }
 }
