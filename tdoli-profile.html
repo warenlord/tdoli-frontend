@@ -151,12 +151,12 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
     <div class="phone-step" id="step-otp">
       <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Entre le code à 6 chiffres reçu par SMS.</p>
       <div class="otp-wrap">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,0)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,1)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,2)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,3)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,4)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,5)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,0)" onkeydown="otpBack(event,this,0)" onpaste="otpPaste(event)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,1)" onkeydown="otpBack(event,this,1)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,2)" onkeydown="otpBack(event,this,2)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,3)" onkeydown="otpBack(event,this,3)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,4)" onkeydown="otpBack(event,this,4)">
+        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,5)" onkeydown="otpBack(event,this,5)">
       </div>
       <button class="btn-primary" id="btn-verify-otp" onclick="verifyOtp()">Vérifier</button>
       <button class="btn-cancel" onclick="closeSheet('phoneOverlay')">Annuler</button>
@@ -478,7 +478,37 @@ function logout(){
   window.location.replace('/tdoli-auth.html');
 }
 function openPhoneVerif(){document.getElementById('step-phone').classList.add('active');document.getElementById('step-otp').classList.remove('active');document.getElementById('phoneOverlay').classList.add('open');}
-function otpNext(el,index){if(el.value.length===1&&index<5) document.querySelectorAll('.otp-digit')[index+1].focus();}
+function otpNext(el, index) {
+  // Garder uniquement le dernier chiffre saisi
+  el.value = el.value.replace(/\D/g, '').slice(-1);
+  if (el.value.length === 1 && index < 5) {
+    document.querySelectorAll('.otp-digit')[index + 1].focus();
+  }
+}
+function otpBack(e, el, index) {
+  if (e.key === 'Backspace') {
+    if (el.value) {
+      el.value = '';
+    } else if (index > 0) {
+      const prev = document.querySelectorAll('.otp-digit')[index - 1];
+      prev.value = '';
+      prev.focus();
+    }
+  } else if (e.key === 'ArrowLeft' && index > 0) {
+    document.querySelectorAll('.otp-digit')[index - 1].focus();
+  } else if (e.key === 'ArrowRight' && index < 5) {
+    document.querySelectorAll('.otp-digit')[index + 1].focus();
+  }
+}
+function otpPaste(e) {
+  e.preventDefault();
+  const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+  const digits = document.querySelectorAll('.otp-digit');
+  pasted.split('').forEach((d, i) => { if (digits[i]) digits[i].value = d; });
+  const last = Math.min(pasted.length, 5);
+  digits[last].focus();
+  if (pasted.length === 6) verifyOtp();
+}
 
 async function sendOtp(){
   const phone=document.getElementById('phone-input').value.trim();
@@ -499,7 +529,11 @@ async function verifyOtp(){
   const btn=document.getElementById('btn-verify-otp');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
   try{
     const r=await safeJson(await fetch(API+'/auth/verify-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code,phone})}));
-    if(r.ok){closeSheet('phoneOverlay');loadProfile();}
+    if(r.ok){
+      closeSheet('phoneOverlay');
+      showToast('Téléphone vérifié ! Niveau 2 atteint 🎉');
+      setTimeout(() => loadProfile(), 500);
+    }
     else showMsg('msg-otp',(r.data&&r.data.message)||'Code incorrect');
   }catch(e){showMsg('msg-otp','Serveur inaccessible');}
   btn.disabled=false;btn.innerHTML='Vérifier';
