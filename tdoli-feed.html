@@ -254,12 +254,12 @@ if ('serviceWorker' in navigator) {
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
 const firebaseConfig = {
-  apiKey:            "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",  // ← remplace avec ta vraie valeur
+  apiKey:            "AIzaSyCnBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   authDomain:        "tdoli-c47a1.firebaseapp.com",
   projectId:         "tdoli-c47a1",
   storageBucket:     "tdoli-c47a1.appspot.com",
-  messagingSenderId: "416651280494", // ← remplace avec ta vraie valeur
-  appId:             "1:416651280494:web:de03eb6a47204031f1267f", // ← remplace avec ta vraie valeur
+  messagingSenderId: "1416651280xxx",
+  appId:             "1:1416651280xxx:web:xxxxxxxxxxxxxxxx"
 };
 firebase.initializeApp(firebaseConfig);
 </script>
@@ -1585,22 +1585,23 @@ async function registerFCMToken() {
     if (!firebase.messaging.isSupported()) return;
     const messaging = firebase.messaging();
 
-    // Demander la permission notifications
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
       console.log('[FCM] Permission refusée');
       return;
     }
 
-    // Récupérer le token VAPID
+    // Enregistrer explicitement le SW Firebase
+    const swReg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    await navigator.serviceWorker.ready;
+
     const fcmToken = await messaging.getToken({
-      vapidKey: 'BB-1MdkGPI9g2KtXuWP-dzGu7hBzoqeXKT6RxhITFbAe7oW1CSZyjB4lsI7d6ELgzd9Tw31xGWBpDdS_k4LG4sw', // ← remplace avec ta VAPID key Firebase
-      serviceWorkerRegistration: await navigator.serviceWorker.getRegistration('/firebase-messaging-sw.js')
+      vapidKey: 'BB-1MdkGPI9g2KtXuWP-dzGu7hBzoqeXKT6RxhITFbAe7oW1CSZyjB4lsI7d6ELgzd9Tw31xGWBpDdS_k4LG4sw',
+      serviceWorkerRegistration: swReg
     });
 
     if (!fcmToken) return;
 
-    // Envoyer au backend seulement si le token a changé
     const savedToken = localStorage.getItem('tdoli_fcm_token');
     if (savedToken === fcmToken) return;
 
