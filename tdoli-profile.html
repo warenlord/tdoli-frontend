@@ -4,11 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TDOLI — Profil</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);--r:16px;}
+:root{
+ --bg:#080c0a;--surface:#0e1612;--card:#131d16;
+ --green:#00a854;--green-dim:#007a3d;--green-glow:rgba(0,168,84,0.1);
+ --yellow:#c49a00;--blue:#2952cc;--red:#c0392b;
+ --text:#ddeae2;--text-2:#8aab96;--text-3:#4a6654;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,168,84,0.25);
+ --r:14px;
+ --shadow:0 2px 16px rgba(0,0,0,0.4);
+}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:10px;}
 .topbar-left{flex-shrink:0;}.topbar-center{flex:1;text-align:center;}.topbar-right{flex-shrink:0;}
 .topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
@@ -64,7 +72,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .sheet-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px;}
 .form-group{margin-bottom:16px;}
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.form-input{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Nunito',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
+.form-input{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
 .form-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
 .otp-wrap{display:flex;gap:8px;justify-content:center;margin:4px 0 16px;}
 .otp-digit{width:46px;height:56px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Syne',sans-serif;font-size:22px;font-weight:700;text-align:center;transition:all 0.2s;-webkit-appearance:none;}
@@ -112,7 +120,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .reliability-badge.yellow{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
 .reliability-badge.orange{background:rgba(255,100,50,0.1);color:#ff6432;border:1px solid rgba(255,100,50,0.2);}
 .testimonials-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.testimonials-title span{font-size:11px;color:var(--text-3);font-family:'Nunito',sans-serif;font-weight:400;}
+.testimonials-title span{font-size:11px;color:var(--text-3);font-family:'Inter',sans-serif;font-weight:400;}
 .testimonial-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;}
 .testimonial-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green),var(--blue));border-radius:2px 0 0 2px;}
 .testimonial-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
@@ -130,50 +138,50 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 </head>
 <body>
 <div class="topbar">
-  <div class="topbar-left"><a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a></div>
-  <div class="topbar-center"><span class="topbar-title">Mon Profil</span></div>
-  <div class="topbar-right"><button class="share-btn" onclick="shareApp()">🎁 Parrainer</button></div>
+ <div class="topbar-left"><a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a></div>
+ <div class="topbar-center"><span class="topbar-title">Mon Profil</span></div>
+ <div class="topbar-right"><button class="share-btn" onclick="shareApp()">Parrainer</button></div>
 </div>
 
 <div class="content">
-  <div id="profileContent"><div class="loading-wrap"><div class="loader"></div></div></div>
+ <div id="profileContent"><div class="loading-wrap"><div class="loader"></div></div></div>
 </div>
 
 <nav class="bottom-nav">
-  <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
-  <a class="nav-item" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
-  <a class="nav-item active" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
+ <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
+ <a class="nav-item" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
+ <a class="nav-item active" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
 </nav>
 
 <div class="overlay" id="phoneOverlay" onclick="closeOnOverlay(event,'phoneOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Vérifier mon numéro</div>
-    <div class="phone-step active" id="step-phone">
-      <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Un code SMS sera envoyé à ton numéro.</p>
-      <div class="form-group">
-        <label class="form-label">Numéro de téléphone</label>
-        <input class="form-input" type="tel" id="phone-input" placeholder="+33 6 12 34 56 78" inputmode="tel">
-      </div>
-      <button class="btn-primary" id="btn-send-otp" onclick="sendOtp()">Envoyer le code</button>
-      <button class="btn-cancel" onclick="closeSheet('phoneOverlay')">Annuler</button>
-      <div class="msg" id="msg-phone"></div>
-    </div>
-    <div class="phone-step" id="step-otp">
-      <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Entre le code à 6 chiffres reçu par SMS.</p>
-      <div class="otp-wrap">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,0)" onkeydown="otpBack(event,this,0)" onpaste="otpPaste(event)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,1)" onkeydown="otpBack(event,this,1)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,2)" onkeydown="otpBack(event,this,2)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,3)" onkeydown="otpBack(event,this,3)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,4)" onkeydown="otpBack(event,this,4)">
-        <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,5)" onkeydown="otpBack(event,this,5)">
-      </div>
-      <button class="btn-primary" id="btn-verify-otp" onclick="verifyOtp()">Vérifier</button>
-      <button class="btn-cancel" onclick="closeSheet('phoneOverlay')">Annuler</button>
-      <div class="msg" id="msg-otp"></div>
-    </div>
+ <div class="sheet">
+  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+  <div class="sheet-title">Vérifier mon numéro</div>
+  <div class="phone-step active" id="step-phone">
+   <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Un code SMS sera envoyé à ton numéro.</p>
+   <div class="form-group">
+    <label class="form-label">Numéro de téléphone</label>
+    <input class="form-input" type="tel" id="phone-input" placeholder="+33 6 12 34 56 78" inputmode="tel">
+   </div>
+   <button class="btn-primary" id="btn-send-otp" onclick="sendOtp()">Envoyer le code</button>
+   <button class="btn-cancel" onclick="closeSheet('phoneOverlay')">Annuler</button>
+   <div class="msg" id="msg-phone"></div>
   </div>
+  <div class="phone-step" id="step-otp">
+   <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Entre le code à 6 chiffres reçu par SMS.</p>
+   <div class="otp-wrap">
+    <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,0)" onkeydown="otpBack(event,this,0)" onpaste="otpPaste(event)">
+    <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,1)" onkeydown="otpBack(event,this,1)">
+    <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,2)" onkeydown="otpBack(event,this,2)">
+    <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,3)" onkeydown="otpBack(event,this,3)">
+    <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,4)" onkeydown="otpBack(event,this,4)">
+    <input class="otp-digit" maxlength="1" inputmode="numeric" oninput="otpNext(this,5)" onkeydown="otpBack(event,this,5)">
+   </div>
+   <button class="btn-primary" id="btn-verify-otp" onclick="verifyOtp()">Vérifier</button>
+   <button class="btn-cancel" onclick="closeSheet('phoneOverlay')">Annuler</button>
+   <div class="msg" id="msg-otp"></div>
+  </div>
+ </div>
 </div>
 
 <script>
@@ -187,17 +195,17 @@ if (!token) { window.location.replace('/tdoli-auth.html'); }
 // ── Avatar immédiat depuis localStorage ────────────────────────
 function getInitials(n){const p=(n||'?').trim().split(' ').filter(x=>x.length>0);return p.length>=2?(p[0][0]+p[p.length-1][0]).toUpperCase():(n||'??').substring(0,2).toUpperCase();}
 (function(){
-  const btn=document.getElementById('avatarBtn');
-  const av=localStorage.getItem('tdoli_avatar');
-  const ini=getInitials(username);
-  if(btn) btn.innerHTML=av?'<img src="'+av+'" alt="'+ini+'">':ini;
+ const btn=document.getElementById('avatarBtn');
+ const av=localStorage.getItem('tdoli_avatar');
+ const ini=getInitials(username);
+ if(btn) btn.innerHTML=av?'<img src="'+av+'" alt="'+ini+'">':ini;
 })();
 
 function shareApp(){
-  const ref=localStorage.getItem('tdoli_ref')||username;
-  const msg='🦜 TDOLI\nhttps://tdoli-frontend.pages.dev\nCode parrain: '+ref;
-  if(navigator.share) navigator.share({title:'TDOLI',text:msg}).catch(()=>{});
-  else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! 🎁','#fcd116')).catch(()=>{});
+ const ref=localStorage.getItem('tdoli_ref')||username;
+ const msg='🦜 TDOLI\nhttps://tdoli-frontend.pages.dev\nCode parrain: '+ref;
+ if(navigator.share) navigator.share({title:'TDOLI',text:msg}).catch(()=>{});
+ else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#fcd116')).catch(()=>{});
 }
 function closeSheet(id){document.getElementById(id).classList.remove('open');}
 function closeOnOverlay(e,id){if(e.target===document.getElementById(id))closeSheet(id);}
@@ -206,434 +214,434 @@ function showToast(msg,color){const t=document.createElement('div');t.textConten
 
 // ── safeJson : jamais de crash sur réponse HTML ────────────────
 async function safeJson(res){
-  const text=await res.text();
-  try{return{ok:res.ok,status:res.status,data:JSON.parse(text)};}
-  catch(e){return{ok:false,status:res.status,data:null,raw:text.substring(0,100)};}
+ const text=await res.text();
+ try{return{ok:res.ok,status:res.status,data:JSON.parse(text)};}
+ catch(e){return{ok:false,status:res.status,data:null,raw:text.substring(0,100)};}
 }
 
 // ── Essayer plusieurs routes (backend peut avoir /profile ou /user/me) ──
 async function fetchProfile() {
-  // Routes à tester dans l'ordre
-  const routes = ['/profile/'+email, '/user/me', '/users/me'];
-  for (const route of routes) {
-    try {
-      const r = await safeJson(await fetch(API+route, {
-        headers:{'Authorization':'Bearer '+token},
-        signal: AbortSignal.timeout(8000)
-      }));
-      if (r.ok && r.data && (r.data.email || r.data.username || r.data._id || r.data.totalDeals !== undefined)) {
-        console.log('[TDOLI] Route profil OK:', route);
-        return r.data;
-      }
-      if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return null; }
-    } catch(e) { /* timeout ou réseau, continuer */ }
-  }
-  return null;
+ // Routes à tester dans l'ordre
+ const routes = ['/profile/'+email, '/user/me', '/users/me'];
+ for (const route of routes) {
+  try {
+   const r = await safeJson(await fetch(API+route, {
+    headers:{'Authorization':'Bearer '+token},
+    signal: AbortSignal.timeout(8000)
+   }));
+   if (r.ok && r.data && (r.data.email || r.data.username || r.data._id || r.data.totalDeals !== undefined)) {
+    console.log('[TDOLI] Route profil OK:', route);
+    return r.data;
+   }
+   if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return null; }
+  } catch(e) { /* timeout ou réseau, continuer */ }
+ }
+ return null;
 }
 
 async function fetchMyTransfers() {
-  const routes = ['/transfers'];
-  for (const route of routes) {
-    try {
-      const r = await safeJson(await fetch(API+route, {
-        headers:{'Authorization':'Bearer '+token},
-        signal: AbortSignal.timeout(5000)
-      }));
-      if (r.ok && Array.isArray(r.data)) return r.data;
-    } catch(e) {}
-  }
-  return [];
+ const routes = ['/transfers'];
+ for (const route of routes) {
+  try {
+   const r = await safeJson(await fetch(API+route, {
+    headers:{'Authorization':'Bearer '+token},
+    signal: AbortSignal.timeout(5000)
+   }));
+   if (r.ok && Array.isArray(r.data)) return r.data;
+  } catch(e) {}
+ }
+ return [];
 }
 
 function getLevelInfo(level){
-  const info={1:{label:'📧 Niveau 1',limit:'300 €',cls:'badge-level1'},2:{label:'📱 Niveau 2',limit:'500 €',cls:'badge-level2'},3:{label:'🪪 Niveau 3',limit:'1 000 €',cls:'badge-level2'},4:{label:'✅ Niveau 4',limit:'Illimité',cls:'badge-level2'}};
-  return info[level]||info[1];
+ const info={1:{label:'📧 Niveau 1',limit:'300 €',cls:'badge-level1'},2:{label:' Niveau 2',limit:'500 €',cls:'badge-level2'},3:{label:'🪪 Niveau 3',limit:'1 000 €',cls:'badge-level2'},4:{label:' Niveau 4',limit:'Illimité',cls:'badge-level2'}};
+ return info[level]||info[1];
 }
 
 function communityRank(score) {
-  if (score === null || score === undefined) return null;
-  if (score >= 86) return { cls: 'pilier', label: 'Pilier 🏆' };
-  if (score >= 66) return { cls: 'fiable', label: 'Membre fiable' };
-  if (score >= 41) return { cls: 'actif',  label: 'Membre actif' };
-  return { cls: 'nouveau', label: 'Nouveau membre' };
+ if (score === null || score === undefined) return null;
+ if (score >= 86) return { cls: 'pilier', label: 'Pilier 🏆' };
+ if (score >= 66) return { cls: 'fiable', label: 'Membre fiable' };
+ if (score >= 41) return { cls: 'actif', label: 'Membre actif' };
+ return { cls: 'nouveau', label: 'Nouveau membre' };
 }
 
 function renderReactivityHero(badge) {
-  if (!badge) return '';
-  const map = { fast: ['⚡', 'Très réactif'], normal: ['🕐', 'Réactif'], slow: ['🐢', 'Peu réactif'] };
-  const [icon, label] = map[badge] || [];
-  return `<span class="reactivity-hero ${badge}">${icon} ${label}</span>`;
+ if (!badge) return '';
+ const map = { fast: ['', 'Très réactif'], normal: ['🕐', 'Réactif'], slow: ['🐢', 'Peu réactif'] };
+ const [icon, label] = map[badge] || [];
+ return `<span class="reactivity-hero ${badge}">${icon} ${label}</span>`;
 }
 
 function timeAgoShort(dateStr) {
-  if (!dateStr) return '';
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const d = Math.floor(diff / 86400000);
-  if (d < 1) return "Aujourd'hui";
-  if (d < 7) return `Il y a ${d}j`;
-  if (d < 30) return `Il y a ${Math.floor(d/7)} sem.`;
-  return `Il y a ${Math.floor(d/30)} mois`;
+ if (!dateStr) return '';
+ const diff = Date.now() - new Date(dateStr).getTime();
+ const d = Math.floor(diff / 86400000);
+ if (d < 1) return "Aujourd'hui";
+ if (d < 7) return `Il y a ${d}j`;
+ if (d < 30) return `Il y a ${Math.floor(d/7)} sem.`;
+ return `Il y a ${Math.floor(d/30)} mois`;
 }
 
 async function fetchTestimonials(userId) {
-  if (!userId) return [];
-  try {
-    const r = await safeJson(await fetch(API + '/ratings/' + userId + '/testimonials', {
-      headers: { 'Authorization': 'Bearer ' + token },
-      signal: AbortSignal.timeout(5000)
-    }));
-    if (r.ok && r.data && Array.isArray(r.data.testimonials)) return r.data.testimonials;
-  } catch(e) {}
-  return [];
+ if (!userId) return [];
+ try {
+  const r = await safeJson(await fetch(API + '/ratings/' + userId + '/testimonials', {
+   headers: { 'Authorization': 'Bearer ' + token },
+   signal: AbortSignal.timeout(5000)
+  }));
+  if (r.ok && r.data && Array.isArray(r.data.testimonials)) return r.data.testimonials;
+ } catch(e) {}
+ return [];
 }
 
 function renderTestimonials(testimonials) {
-  const section = document.getElementById('testimonialsSection');
-  if (!section) return;
-  if (!testimonials || testimonials.length === 0) {
-    section.innerHTML = `
-      <div class="testimonials-title">💬 Ce que disent les membres</div>
-      <div class="no-testimonial">Aucun témoignage pour l'instant.<br>Complete des deals pour recevoir tes premiers avis.</div>`;
-    return;
-  }
+ const section = document.getElementById('testimonialsSection');
+ if (!section) return;
+ if (!testimonials || testimonials.length === 0) {
   section.innerHTML = `
-    <div class="testimonials-title">💬 Ce que disent les membres <span>(${testimonials.length})</span></div>
-    ${testimonials.map(t => `
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <span class="testimonial-from">👤 ${t.fromUsername || 'Membre'}</span>
-          <span class="testimonial-stars">${'★'.repeat(t.rating || 0)}${'☆'.repeat(5 - (t.rating || 0))}</span>
-        </div>
-        <div class="testimonial-text">"${t.comment}"</div>
-        <div class="testimonial-date">${timeAgoShort(t.createdAt)}</div>
-      </div>`).join('')}`;
+   <div class="testimonials-title">💬 Ce que disent les membres</div>
+   <div class="no-testimonial">Aucun témoignage pour l'instant.<br>Complete des deals pour recevoir tes premiers avis.</div>`;
+  return;
+ }
+ section.innerHTML = `
+  <div class="testimonials-title">💬 Ce que disent les membres <span>(${testimonials.length})</span></div>
+  ${testimonials.map(t => `
+   <div class="testimonial-card">
+    <div class="testimonial-header">
+     <span class="testimonial-from"> ${t.fromUsername || 'Membre'}</span>
+     <span class="testimonial-stars">${'★'.repeat(t.rating || 0)}${'☆'.repeat(5 - (t.rating || 0))}</span>
+    </div>
+    <div class="testimonial-text">"${t.comment}"</div>
+    <div class="testimonial-date">${timeAgoShort(t.createdAt)}</div>
+   </div>`).join('')}`;
 }
 
 // ── Affichage immédiat depuis localStorage (pas d'attente réseau) ──
 function renderFromCache() {
-  const uname = username;
-  const av = localStorage.getItem('tdoli_avatar');
-  const ini = getInitials(uname);
-  const avatarHtml = av ? '<div class="avatar-large"><img src="'+av+'" alt="'+ini+'"></div>' : '<div class="avatar-large">'+ini+'</div>';
-  document.getElementById('profileContent').innerHTML = `
-    <div class="profile-hero">
-      ${avatarHtml}
-      <div class="profile-username">${uname}</div>
-      <div class="profile-email">${email||''}</div>
-      <div class="profile-badges"><span class="badge-item badge-level1">📧 Niveau 1</span></div>
-      <div style="font-size:12px;color:var(--text-3);margin-top:8px;">Chargement des données…</div>
-    </div>
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-val">—</div><div class="stat-label">Deals</div></div>
-      <div class="stat-card"><div class="stat-val">300 €</div><div class="stat-label">Limite</div></div>
-    </div>
-    <div class="section-title">Paramètres</div>
-    <div class="settings-card">
-      <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label">👥 Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>\n     \ndiv class="settings-item" onclick="openPhoneVerif()"><span class="settings-label">📱 Téléphone</span><span class="settings-val">Non vérifié →</span></div>
-      <div class="settings-item" id="faceid-setting-cache" onclick="toggleFaceID()">
-        <span class="settings-label">🔐 Face ID / Empreinte</span>
-        <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ✅':'Désactivé →'}</span>
-      </div>
-      <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label">📄 CGU</span><span class="settings-val">→</span></div>
-    </div>
-    <button class="btn-logout" onclick="logout()">🚪 Déconnexion</button>
-    <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
-  `;
+ const uname = username;
+ const av = localStorage.getItem('tdoli_avatar');
+ const ini = getInitials(uname);
+ const avatarHtml = av ? '<div class="avatar-large"><img src="'+av+'" alt="'+ini+'"></div>' : '<div class="avatar-large">'+ini+'</div>';
+ document.getElementById('profileContent').innerHTML = `
+  <div class="profile-hero">
+   ${avatarHtml}
+   <div class="profile-username">${uname}</div>
+   <div class="profile-email">${email||''}</div>
+   <div class="profile-badges"><span class="badge-item badge-level1">📧 Niveau 1</span></div>
+   <div style="font-size:12px;color:var(--text-3);margin-top:8px;">Chargement des données…</div>
+  </div>
+  <div class="stats-row">
+   <div class="stat-card"><div class="stat-val">—</div><div class="stat-label">Deals</div></div>
+   <div class="stat-card"><div class="stat-val">300 €</div><div class="stat-label">Limite</div></div>
+  </div>
+  <div class="section-title">Paramètres</div>
+  <div class="settings-card">
+   <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label"> Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>\n   \ndiv class="settings-item" onclick="openPhoneVerif()"><span class="settings-label"> Téléphone</span><span class="settings-val">Non vérifié →</span></div>
+   <div class="settings-item" id="faceid-setting-cache" onclick="toggleFaceID()">
+    <span class="settings-label"> Face ID / Empreinte</span>
+    <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ':'Désactivé →'}</span>
+   </div>
+   <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label"> CGU</span><span class="settings-val">→</span></div>
+  </div>
+  <button class="btn-logout" onclick="logout()"> Déconnexion</button>
+  <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
+ `;
 
-  // Masquer Face ID si non supporté
-  if (!window.PublicKeyCredential) {
-    const el = document.getElementById('faceid-setting-cache');
-    if (el) el.style.display = 'none';
-  }
+ // Masquer Face ID si non supporté
+ if (!window.PublicKeyCredential) {
+  const el = document.getElementById('faceid-setting-cache');
+  if (el) el.style.display = 'none';
+ }
 }
 
 // ── Enrichir l'affichage avec les données API ──────────────────
 // ── Phase 5 — Phrase communautaire personnalisée ─────────────
 function communityPhrase(user) {
-  const name = (user.username || user.firstName || 'Ce membre').split(' ')[0];
-  const deals = user.completedDeals || 0;
-  const since = user.createdAt ? new Date(user.createdAt).toLocaleDateString('fr-FR', {month:'long', year:'numeric'}) : null;
-  const sinceStr = since ? ` depuis <strong>${since}</strong>` : '';
-  if (deals === 0) return `<div class="community-phrase">${name} fait partie de la communauté TDOLI${sinceStr}. Bienvenue !</div>`;
-  return `<div class="community-phrase">${name} fait partie de la communauté TDOLI${sinceStr}. Il a aidé <strong>${deals} membre${deals>1?'s':''}</strong> de la diaspora.</div>`;
+ const name = (user.username || user.firstName || 'Ce membre').split(' ')[0];
+ const deals = user.completedDeals || 0;
+ const since = user.createdAt ? new Date(user.createdAt).toLocaleDateString('fr-FR', {month:'long', year:'numeric'}) : null;
+ const sinceStr = since ? ` depuis <strong>${since}</strong>` : '';
+ if (deals === 0) return `<div class="community-phrase">${name} fait partie de la communauté TDOLI${sinceStr}. Bienvenue !</div>`;
+ return `<div class="community-phrase">${name} fait partie de la communauté TDOLI${sinceStr}. Il a aidé <strong>${deals} membre${deals>1?'s':''}</strong> de la diaspora.</div>`;
 }
 
 function communityIndicators(user) {
-  const chips = [];
-  const deals = user.completedDeals || 0;
-  if (deals > 0) chips.push('<div class="indicator-chip green">🤝 ' + deals + ' membre' + (deals>1?'s':'') + ' aidé' + (deals>1?'s':'') + '</div>');
-  if (user.reactivityBadge === 'fast') chips.push('<div class="indicator-chip yellow">⚡ Répond vite</div>');
-  else if (user.reactivityBadge === 'normal') chips.push('<div class="indicator-chip yellow">🕐 Répond en 1h</div>');
-  if (user.averageRating >= 4) chips.push('<div class="indicator-chip blue">⭐ Très bien noté</div>');
-  else if (user.averageRating >= 3) chips.push('<div class="indicator-chip blue">⭐ Bien noté</div>');
-  // Actif cette semaine
-  if (user.lastResponseAt) {
-    const daysSince = (Date.now() - new Date(user.lastResponseAt).getTime()) / (1000*60*60*24);
-    if (daysSince < 7) chips.push('<div class="indicator-chip green">🟢 Actif cette semaine</div>');
-  }
-  if (chips.length === 0) return '';
-  return '<div class="community-indicators">' + chips.join('') + '</div>';
+ const chips = [];
+ const deals = user.completedDeals || 0;
+ if (deals > 0) chips.push('<div class="indicator-chip green"> ' + deals + ' membre' + (deals>1?'s':'') + ' aidé' + (deals>1?'s':'') + '</div>');
+ if (user.reactivityBadge === 'fast') chips.push('<div class="indicator-chip yellow"> Répond vite</div>');
+ else if (user.reactivityBadge === 'normal') chips.push('<div class="indicator-chip yellow">🕐 Répond en 1h</div>');
+ if (user.averageRating >= 4) chips.push('<div class="indicator-chip blue"> Très bien noté</div>');
+ else if (user.averageRating >= 3) chips.push('<div class="indicator-chip blue"> Bien noté</div>');
+ // Actif cette semaine
+ if (user.lastResponseAt) {
+  const daysSince = (Date.now() - new Date(user.lastResponseAt).getTime()) / (1000*60*60*24);
+  if (daysSince < 7) chips.push('<div class="indicator-chip green"> Actif cette semaine</div>');
+ }
+ if (chips.length === 0) return '';
+ return '<div class="community-indicators">' + chips.join('') + '</div>';
 }
 
 function reliabilityBadge(user) {
-  const abandoned = user.abandonCount || 0;
-  const completed = user.completedDeals || 0;
-  const total = completed + abandoned;
-  if (total === 0) return '<div class="reliability-badge orange">🟠 Nouveau membre</div>';
-  const rate = completed / total;
-  if (rate >= 0.85 && completed >= 3) return '<div class="reliability-badge green">🟢 Membre actif et fiable</div>';
-  if (rate >= 0.5 || completed >= 1) return '<div class="reliability-badge yellow">🟡 Membre actif</div>';
-  return '<div class="reliability-badge orange">🟠 Nouveau membre</div>';
+ const abandoned = user.abandonCount || 0;
+ const completed = user.completedDeals || 0;
+ const total = completed + abandoned;
+ if (total === 0) return '<div class="reliability-badge orange"> Nouveau membre</div>';
+ const rate = completed / total;
+ if (rate >= 0.85 && completed >= 3) return '<div class="reliability-badge green"> Membre actif et fiable</div>';
+ if (rate >= 0.5 || completed >= 1) return '<div class="reliability-badge yellow"> Membre actif</div>';
+ return '<div class="reliability-badge orange"> Nouveau membre</div>';
 }
 
 function renderFull(user, txs) {
-  const uname = user.username || email?.split('@')[0] || '?';
-  const av = user.avatarUrl || localStorage.getItem('tdoli_avatar');
-  const ini = getInitials(uname);
-  const level = user.verificationLevel || 1;
-  const lvl = getLevelInfo(level);
-  const rating = user.averageRating || user.rating || 0;
-  const ratingCount = (user.ratings && user.ratings.length) || user.ratingCount || 0;
+ const uname = user.username || email?.split('@')[0] || '?';
+ const av = user.avatarUrl || localStorage.getItem('tdoli_avatar');
+ const ini = getInitials(uname);
+ const level = user.verificationLevel || 1;
+ const lvl = getLevelInfo(level);
+ const rating = user.averageRating || user.rating || 0;
+ const ratingCount = (user.ratings && user.ratings.length) || user.ratingCount || 0;
 
-  if (user.username) localStorage.setItem('tdoli_username', user.username);
-  if (user.avatarUrl) localStorage.setItem('tdoli_avatar', user.avatarUrl);
+ if (user.username) localStorage.setItem('tdoli_username', user.username);
+ if (user.avatarUrl) localStorage.setItem('tdoli_avatar', user.avatarUrl);
 
-  const avatarHtml = av ? '<div class="avatar-large"><img src="'+av+'" alt="'+ini+'"></div>' : '<div class="avatar-large">'+ini+'</div>';
-  const starsHtml = rating > 0
-    ? '<div class="profile-rating"><span class="stars-display">'+'★'.repeat(Math.round(rating))+'☆'.repeat(5-Math.round(rating))+'</span><span class="rating-val">'+rating.toFixed(1)+'</span><span class="rating-count">('+ratingCount+')</span></div>'
-    : '<div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">Aucun avis</div>';
+ const avatarHtml = av ? '<div class="avatar-large"><img src="'+av+'" alt="'+ini+'"></div>' : '<div class="avatar-large">'+ini+'</div>';
+ const starsHtml = rating > 0
+  ? '<div class="profile-rating"><span class="stars-display">'+'★'.repeat(Math.round(rating))+'☆'.repeat(5-Math.round(rating))+'</span><span class="rating-val">'+rating.toFixed(1)+'</span><span class="rating-count">('+ratingCount+')</span></div>'
+  : '<div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">Aucun avis</div>';
 
-  // ── Phase 5 — Rang + réactivité ──────────────────────────────
-  const rank = communityRank(user.communityScore);
-  const rankHtml = rank
-    ? `<span class="rank-hero ${rank.cls}">${rank.label}</span>`
-    : '';
-  const reactivityHtml = renderReactivityHero(user.reactivityBadge);
-  const trustHtml = user.completedDeals > 0
-    ? `<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Fait confiance par <strong style="color:var(--text-2);">${user.completedDeals} membre${user.completedDeals>1?'s':''}</strong></div>`
-    : '';
+ // ── Phase 5 — Rang + réactivité ──────────────────────────────
+ const rank = communityRank(user.communityScore);
+ const rankHtml = rank
+  ? `<span class="rank-hero ${rank.cls}">${rank.label}</span>`
+  : '';
+ const reactivityHtml = renderReactivityHero(user.reactivityBadge);
+ const trustHtml = user.completedDeals > 0
+  ? `<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Fait confiance par <strong style="color:var(--text-2);">${user.completedDeals} membre${user.completedDeals>1?'s':''}</strong></div>`
+  : '';
 
-  const verifyHtml = level < 2 ? `<div class="verify-card">
-    <div class="verify-title">🔐 Augmente ta limite</div>
-    <div class="verify-sub">Vérifie ton numéro pour passer au Niveau 2 — limite à 1 000 €.</div>
-    <div class="limit-bar"><span class="limit-label">Limite actuelle</span><span class="limit-val">300 €</span></div>
-    <button class="btn-primary" onclick="openPhoneVerif()">Vérifier mon numéro →</button>
-  </div>` : '';
+ const verifyHtml = level < 2 ? `<div class="verify-card">
+  <div class="verify-title"> Augmente ta limite</div>
+  <div class="verify-sub">Vérifie ton numéro pour passer au Niveau 2 — limite à 1 000 €.</div>
+  <div class="limit-bar"><span class="limit-label">Limite actuelle</span><span class="limit-val">300 €</span></div>
+  <button class="btn-primary" onclick="openPhoneVerif()">Vérifier mon numéro →</button>
+ </div>` : '';
 
-  let txHtml = '';
-  if (txs.length > 0) {
-    txHtml = '<div class="section-title" style="margin-top:16px;">Mes annonces récentes</div>' +
-      txs.slice(0,5).map(t=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;">#${t._id.slice(-6).toUpperCase()}</div>
-          <div style="font-size:13px;font-weight:500;margin-top:2px;">${t.fromCountry||'?'} → ${t.toCountry||'?'}</div>
-          <span style="font-size:10px;padding:2px 8px;border-radius:10px;margin-top:3px;display:inline-block;${t.status==='matched'?'background:rgba(252,209,22,0.1);color:var(--yellow);':t.status==='completed'?'background:rgba(0,201,122,0.1);color:var(--green);':'background:rgba(255,255,255,0.05);color:var(--text-3);'}">${t.status==='matched'?'Matché':t.status==='completed'?'Terminé':'En attente'}</span>
-        </div>
-        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;">${Number(t.amount).toLocaleString('fr-FR')} ${t.currency}</div>
-      </div>`).join('');
-  }
-
-  document.getElementById('profileContent').innerHTML = `
-    <div class="profile-hero">
-      ${avatarHtml}
-      <div class="profile-username">${uname}</div>
-      ${user.fullName?'<div style="font-size:13px;color:var(--text-2);margin-bottom:2px;">'+user.fullName+'</div>':''}
-      <div class="profile-email">${email||''}</div>
-      <div class="profile-badges">
-        <span class="badge-item ${lvl.cls}">${lvl.label}</span>
-        ${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);">⛔ Suspendu</span>':''}
-      </div>
-      ${rankHtml}
-      ${reliabilityBadge(user)}
-      ${starsHtml}
+ let txHtml = '';
+ if (txs.length > 0) {
+  txHtml = '<div class="section-title" style="margin-top:16px;">Mes annonces récentes</div>' +
+   txs.slice(0,5).map(t=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+     <div style="font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;">#${t._id.slice(-6).toUpperCase()}</div>
+     <div style="font-size:13px;font-weight:500;margin-top:2px;">${t.fromCountry||'?'} → ${t.toCountry||'?'}</div>
+     <span style="font-size:10px;padding:2px 8px;border-radius:10px;margin-top:3px;display:inline-block;${t.status==='matched'?'background:rgba(252,209,22,0.1);color:var(--yellow);':t.status==='completed'?'background:rgba(0,201,122,0.1);color:var(--green);':'background:rgba(255,255,255,0.05);color:var(--text-3);'}">${t.status==='matched'?'Matché':t.status==='completed'?'Terminé':'En attente'}</span>
     </div>
-    ${communityPhrase(user)}
-    ${communityIndicators(user)}
-    ${verifyHtml}
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-val">${user.totalDeals||user.completedDeals||0}</div><div class="stat-label">Deals</div></div>
-      <div class="stat-card"><div class="stat-val">${lvl.limit}</div><div class="stat-label">Limite</div></div>
-    </div>
-    ${txHtml}
+    <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;">${Number(t.amount).toLocaleString('fr-FR')} ${t.currency}</div>
+   </div>`).join('');
+ }
 
-    <!-- Section témoignages -->
-    <div class="testimonials-section" id="testimonialsSection">
-      <div class="no-testimonial">Chargement des témoignages…</div>
-    </div>
+ document.getElementById('profileContent').innerHTML = `
+  <div class="profile-hero">
+   ${avatarHtml}
+   <div class="profile-username">${uname}</div>
+   ${user.fullName?'<div style="font-size:13px;color:var(--text-2);margin-bottom:2px;">'+user.fullName+'</div>':''}
+   <div class="profile-email">${email||''}</div>
+   <div class="profile-badges">
+    <span class="badge-item ${lvl.cls}">${lvl.label}</span>
+    ${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);">⛔ Suspendu</span>':''}
+   </div>
+   ${rankHtml}
+   ${reliabilityBadge(user)}
+   ${starsHtml}
+  </div>
+  ${communityPhrase(user)}
+  ${communityIndicators(user)}
+  ${verifyHtml}
+  <div class="stats-row">
+   <div class="stat-card"><div class="stat-val">${user.totalDeals||user.completedDeals||0}</div><div class="stat-label">Deals</div></div>
+   <div class="stat-card"><div class="stat-val">${lvl.limit}</div><div class="stat-label">Limite</div></div>
+  </div>
+  ${txHtml}
 
-    <div class="section-title" style="margin-top:${txHtml?'16':'0'}px;">Paramètres</div>
-    <div class="settings-card">
-      <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label">👥 Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>
-      <div class="settings-item" onclick="openPhoneVerif()">
-        <span class="settings-label">📱 Téléphone</span>
-        <span class="settings-val">${user.phone?user.phone.replace(/(\+?\d{3})\d+(\d{2})$/,'$1•••$2'):'Non vérifié'} →</span>
-      </div>
-      <div class="settings-item" id="faceid-setting" onclick="toggleFaceID()">
-        <span class="settings-label">🔐 Face ID / Empreinte</span>
-        <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ✅':'Désactivé →'}</span>
-      </div>
-      <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label">📄 CGU</span><span class="settings-val">→</span></div>
-    </div>
-    <button class="btn-logout" onclick="logout()">🚪 Déconnexion</button>
-    <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
-  `;
+  <!-- Section témoignages -->
+  <div class="testimonials-section" id="testimonialsSection">
+   <div class="no-testimonial">Chargement des témoignages…</div>
+  </div>
 
-  // Mettre à jour l'avatar topbar
-  const btn = document.getElementById('avatarBtn');
-  if (btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
+  <div class="section-title" style="margin-top:${txHtml?'16':'0'}px;">Paramètres</div>
+  <div class="settings-card">
+   <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label"> Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>
+   <div class="settings-item" onclick="openPhoneVerif()">
+    <span class="settings-label"> Téléphone</span>
+    <span class="settings-val">${user.phone?user.phone.replace(/(\+?\d{3})\d+(\d{2})$/,'$1•••$2'):'Non vérifié'} →</span>
+   </div>
+   <div class="settings-item" id="faceid-setting" onclick="toggleFaceID()">
+    <span class="settings-label"> Face ID / Empreinte</span>
+    <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ':'Désactivé →'}</span>
+   </div>
+   <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label"> CGU</span><span class="settings-val">→</span></div>
+  </div>
+  <button class="btn-logout" onclick="logout()"> Déconnexion</button>
+  <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
+ `;
 
-  // Masquer Face ID si non supporté
-  if (!window.PublicKeyCredential) {
-    const el = document.getElementById('faceid-setting');
-    if (el) el.style.display = 'none';
-  }
+ // Mettre à jour l'avatar topbar
+ const btn = document.getElementById('avatarBtn');
+ if (btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
 
-  // Charger les témoignages en async
-  if (user._id) {
-    fetchTestimonials(user._id).then(renderTestimonials);
-  }
+ // Masquer Face ID si non supporté
+ if (!window.PublicKeyCredential) {
+  const el = document.getElementById('faceid-setting');
+  if (el) el.style.display = 'none';
+ }
+
+ // Charger les témoignages en async
+ if (user._id) {
+  fetchTestimonials(user._id).then(renderTestimonials);
+ }
 }
 
 async function loadProfile() {
-  // 1. Affichage immédiat depuis cache (pas de loading spinner)
-  renderFromCache();
+ // 1. Affichage immédiat depuis cache (pas de loading spinner)
+ renderFromCache();
 
-  const wakeTimer = null;
+ const wakeTimer = null;
 
-  // 3. Charger depuis API avec retry
-  let user = null;
-  let attempts = 0;
-  while (!user && attempts < 3) {
-    attempts++;
-    user = await fetchProfile();
-    if (!user && attempts < 3) await new Promise(r => setTimeout(r, 5000));
-  }
+ // 3. Charger depuis API avec retry
+ let user = null;
+ let attempts = 0;
+ while (!user && attempts < 3) {
+  attempts++;
+  user = await fetchProfile();
+  if (!user && attempts < 3) await new Promise(r => setTimeout(r, 5000));
+ }
 
 
-  if (!user) {
-    // Afficher quand même le profil depuis cache avec message discret
-    document.getElementById('profileContent').innerHTML += '<div style="text-align:center;font-size:11px;color:var(--text-3);padding:8px;">Données hors ligne — reconnecte-toi pour actualiser</div>';
-    return;
-  }
+ if (!user) {
+  // Afficher quand même le profil depuis cache avec message discret
+  document.getElementById('profileContent').innerHTML += '<div style="text-align:center;font-size:11px;color:var(--text-3);padding:8px;">Données hors ligne — reconnecte-toi pour actualiser</div>';
+  return;
+ }
 
-  const txs = await fetchMyTransfers();
-  renderFull(user, txs);
+ const txs = await fetchMyTransfers();
+ renderFull(user, txs);
 }
 
 function logout(){
-  localStorage.clear();
-  if ('caches' in window) {
-    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  }
-  window.location.replace('/tdoli-auth.html');
+ localStorage.clear();
+ if ('caches' in window) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+ }
+ window.location.replace('/tdoli-auth.html');
 }
 function openPhoneVerif(){document.getElementById('step-phone').classList.add('active');document.getElementById('step-otp').classList.remove('active');document.getElementById('phoneOverlay').classList.add('open');}
 function otpNext(el, index) {
-  // Garder uniquement le dernier chiffre saisi
-  el.value = el.value.replace(/\D/g, '').slice(-1);
-  if (el.value.length === 1 && index < 5) {
-    document.querySelectorAll('.otp-digit')[index + 1].focus();
-  }
+ // Garder uniquement le dernier chiffre saisi
+ el.value = el.value.replace(/\D/g, '').slice(-1);
+ if (el.value.length === 1 && index < 5) {
+  document.querySelectorAll('.otp-digit')[index + 1].focus();
+ }
 }
 function otpBack(e, el, index) {
-  if (e.key === 'Backspace') {
-    if (el.value) {
-      el.value = '';
-    } else if (index > 0) {
-      const prev = document.querySelectorAll('.otp-digit')[index - 1];
-      prev.value = '';
-      prev.focus();
-    }
-  } else if (e.key === 'ArrowLeft' && index > 0) {
-    document.querySelectorAll('.otp-digit')[index - 1].focus();
-  } else if (e.key === 'ArrowRight' && index < 5) {
-    document.querySelectorAll('.otp-digit')[index + 1].focus();
+ if (e.key === 'Backspace') {
+  if (el.value) {
+   el.value = '';
+  } else if (index > 0) {
+   const prev = document.querySelectorAll('.otp-digit')[index - 1];
+   prev.value = '';
+   prev.focus();
   }
+ } else if (e.key === 'ArrowLeft' && index > 0) {
+  document.querySelectorAll('.otp-digit')[index - 1].focus();
+ } else if (e.key === 'ArrowRight' && index < 5) {
+  document.querySelectorAll('.otp-digit')[index + 1].focus();
+ }
 }
 function otpPaste(e) {
-  e.preventDefault();
-  const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
-  const digits = document.querySelectorAll('.otp-digit');
-  pasted.split('').forEach((d, i) => { if (digits[i]) digits[i].value = d; });
-  const last = Math.min(pasted.length, 5);
-  digits[last].focus();
-  if (pasted.length === 6) verifyOtp();
+ e.preventDefault();
+ const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+ const digits = document.querySelectorAll('.otp-digit');
+ pasted.split('').forEach((d, i) => { if (digits[i]) digits[i].value = d; });
+ const last = Math.min(pasted.length, 5);
+ digits[last].focus();
+ if (pasted.length === 6) verifyOtp();
 }
 
 async function sendOtp(){
-  const phone=document.getElementById('phone-input').value.trim();
-  if(!phone){showMsg('msg-phone','Entre ton numéro');return;}
-  const btn=document.getElementById('btn-send-otp');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
-  try{
-    const r=await safeJson(await fetch(API+'/auth/send-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({phone})}));
-    if(r.ok){document.getElementById('step-phone').classList.remove('active');document.getElementById('step-otp').classList.add('active');document.querySelectorAll('.otp-digit')[0].focus();}
-    else showMsg('msg-phone',(r.data&&r.data.message)||'Erreur envoi');
-  }catch(e){showMsg('msg-phone','Serveur inaccessible');}
-  btn.disabled=false;btn.innerHTML='Envoyer le code';
+ const phone=document.getElementById('phone-input').value.trim();
+ if(!phone){showMsg('msg-phone','Entre ton numéro');return;}
+ const btn=document.getElementById('btn-send-otp');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
+ try{
+  const r=await safeJson(await fetch(API+'/auth/send-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({phone})}));
+  if(r.ok){document.getElementById('step-phone').classList.remove('active');document.getElementById('step-otp').classList.add('active');document.querySelectorAll('.otp-digit')[0].focus();}
+  else showMsg('msg-phone',(r.data&&r.data.message)||'Erreur envoi');
+ }catch(e){showMsg('msg-phone','Serveur inaccessible');}
+ btn.disabled=false;btn.innerHTML='Envoyer le code';
 }
 
 async function verifyOtp(){
-  const code=Array.from(document.querySelectorAll('.otp-digit')).map(i=>i.value).join('');
-  if(code.length<6){showMsg('msg-otp','Code incomplet');return;}
-  const phone=document.getElementById('phone-input').value.trim();
-  const btn=document.getElementById('btn-verify-otp');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
-  try{
-    const r=await safeJson(await fetch(API+'/auth/verify-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code,phone})}));
-    if(r.ok){
-      closeSheet('phoneOverlay');
-      showToast('Téléphone vérifié ! Niveau 2 atteint 🎉');
-      setTimeout(() => window.location.reload(), 1500);
-    }
-    else showMsg('msg-otp',(r.data&&r.data.message)||'Code incorrect');
-  }catch(e){showMsg('msg-otp','Serveur inaccessible');}
-  btn.disabled=false;btn.innerHTML='Vérifier';
+ const code=Array.from(document.querySelectorAll('.otp-digit')).map(i=>i.value).join('');
+ if(code.length<6){showMsg('msg-otp','Code incomplet');return;}
+ const phone=document.getElementById('phone-input').value.trim();
+ const btn=document.getElementById('btn-verify-otp');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
+ try{
+  const r=await safeJson(await fetch(API+'/auth/verify-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code,phone})}));
+  if(r.ok){
+   closeSheet('phoneOverlay');
+   showToast('Téléphone vérifié ! Niveau 2 atteint 🎉');
+   setTimeout(() => window.location.reload(), 1500);
+  }
+  else showMsg('msg-otp',(r.data&&r.data.message)||'Code incorrect');
+ }catch(e){showMsg('msg-otp','Serveur inaccessible');}
+ btn.disabled=false;btn.innerHTML='Vérifier';
 }
 
 loadProfile();
 
 // ── Phase 8 — Face ID depuis le profil ────────────────────────
 async function toggleFaceID() {
-  const isActive = localStorage.getItem('tdoli_faceid_active') === '1';
-  if (isActive) {
-    localStorage.removeItem('tdoli_faceid_active');
-    localStorage.removeItem('tdoli_faceid_dismissed');
-    const el = document.getElementById('faceid-status');
-    if (el) el.textContent = 'Désactivé →';
-    showToast('Face ID désactivé');
-    return;
+ const isActive = localStorage.getItem('tdoli_faceid_active') === '1';
+ if (isActive) {
+  localStorage.removeItem('tdoli_faceid_active');
+  localStorage.removeItem('tdoli_faceid_dismissed');
+  const el = document.getElementById('faceid-status');
+  if (el) el.textContent = 'Désactivé →';
+  showToast('Face ID désactivé');
+  return;
+ }
+ if (!window.PublicKeyCredential) { showToast('Face ID non supporté sur cet appareil'); return; }
+ try {
+  const optRes = await fetch(API + '/webauthn/register/options', {
+   method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+  });
+  if (!optRes.ok) throw new Error('options_failed');
+  const options = await optRes.json();
+  options.challenge = base64urlToBuffer(options.challenge);
+  options.user.id  = base64urlToBuffer(options.user.id);
+  options.excludeCredentials = (options.excludeCredentials || []).map(c => ({ ...c, id: base64urlToBuffer(c.id) }));
+  const credential = await navigator.credentials.create({ publicKey: options });
+  const regResponse = {
+   id: bufferToBase64url(credential.rawId), rawId: bufferToBase64url(credential.rawId), type: credential.type,
+   response: {
+    attestationObject: bufferToBase64url(credential.response.attestationObject),
+    clientDataJSON:  bufferToBase64url(credential.response.clientDataJSON),
+    transports:    credential.response.getTransports?.() || [],
+   }
+  };
+  const verRes = await fetch(API + '/webauthn/register/verify', {
+   method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+   body: JSON.stringify(regResponse)
+  });
+  if (verRes.ok) {
+   localStorage.setItem('tdoli_faceid_active', '1');
+   const el = document.getElementById('faceid-status');
+   if (el) el.textContent = 'Activé ';
+   showToast('Face ID activé ! ');
+  } else {
+   showToast('Activation échouée');
   }
-  if (!window.PublicKeyCredential) { showToast('Face ID non supporté sur cet appareil'); return; }
-  try {
-    const optRes = await fetch(API + '/webauthn/register/options', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
-    });
-    if (!optRes.ok) throw new Error('options_failed');
-    const options = await optRes.json();
-    options.challenge = base64urlToBuffer(options.challenge);
-    options.user.id   = base64urlToBuffer(options.user.id);
-    options.excludeCredentials = (options.excludeCredentials || []).map(c => ({ ...c, id: base64urlToBuffer(c.id) }));
-    const credential = await navigator.credentials.create({ publicKey: options });
-    const regResponse = {
-      id: bufferToBase64url(credential.rawId), rawId: bufferToBase64url(credential.rawId), type: credential.type,
-      response: {
-        attestationObject: bufferToBase64url(credential.response.attestationObject),
-        clientDataJSON:    bufferToBase64url(credential.response.clientDataJSON),
-        transports:        credential.response.getTransports?.() || [],
-      }
-    };
-    const verRes = await fetch(API + '/webauthn/register/verify', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify(regResponse)
-    });
-    if (verRes.ok) {
-      localStorage.setItem('tdoli_faceid_active', '1');
-      const el = document.getElementById('faceid-status');
-      if (el) el.textContent = 'Activé ✅';
-      showToast('Face ID activé ! 🔐');
-    } else {
-      showToast('Activation échouée');
-    }
-  } catch(err) { if(err.name !== 'NotAllowedError') showToast('Erreur — réessaie'); }
+ } catch(err) { if(err.name !== 'NotAllowedError') showToast('Erreur — réessaie'); }
 }
 
 function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);return buf.buffer;}

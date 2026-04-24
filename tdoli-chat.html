@@ -4,13 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TDOLI — Chat</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <style>
-:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);}
+:root{
+ --bg:#080c0a;--surface:#0e1612;--card:#131d16;
+ --green:#00a854;--green-dim:#007a3d;--green-glow:rgba(0,168,84,0.1);
+ --yellow:#c49a00;--blue:#2952cc;--red:#c0392b;
+ --text:#ddeae2;--text-2:#8aab96;--text-3:#4a6654;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,168,84,0.25);
+ --r:14px;
+ --shadow:0 2px 16px rgba(0,0,0,0.4);
+}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
 .topbar{flex-shrink:0;background:rgba(6,13,9,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 16px 12px;display:flex;align-items:center;gap:12px;}
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;text-decoration:none;}
 .topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.5px;flex-shrink:0;}
@@ -51,7 +59,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 .conn-status.reconnecting{color:var(--yellow);border-color:rgba(252,209,22,0.3);}
 .conn-status.connected{color:var(--green);border-color:rgba(0,201,122,0.3);}
 .input-area{flex-shrink:0;background:rgba(10,15,13,0.98);backdrop-filter:blur(24px);border-top:1px solid rgba(0,217,130,0.1);padding:12px 14px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:10px;}
-.msg-input{flex:1;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;resize:none;max-height:80px;overflow-y:auto;line-height:1.4;transition:border-color 0.2s;-webkit-appearance:none;}
+.msg-input{flex:1;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;resize:none;max-height:80px;overflow-y:auto;line-height:1.4;transition:border-color 0.2s;-webkit-appearance:none;}
 .msg-input:focus{outline:none;border-color:var(--green);}
 .msg-input::placeholder{color:var(--text-3);opacity:0.6;}
 .send-btn{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#00d982,#00b368);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;box-shadow:0 3px 16px rgba(0,179,104,0.4);}
@@ -68,7 +76,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 .sheet-sub{font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;}
 .form-group{margin-bottom:16px;}
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.form-input-field,.form-select-field{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Nunito',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
+.form-input-field,.form-select-field{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
 .form-input-field:focus,.form-select-field:focus{outline:none;border-color:var(--green);}
 .btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;position:relative;overflow:hidden;}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
@@ -83,39 +91,39 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
 
 .topbar-logo img {
-  height: 32px;
-  width: auto;
-  display: block;
+ height: 32px;
+ width: auto;
+ display: block;
 }
 .user-avatar-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
 .share-btn{background:transparent;border:none;color:#fcd116;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;white-space:nowrap;}
 </style>
 
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#060d09">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TDOLI">
-  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-  <script>
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(r => console.log('[SW] Enregistre'))
-          .catch(e => console.error('[SW] Erreur:', e));
-      });
-    }
-  </script>
+ <link rel="manifest" href="/manifest.json">
+ <meta name="theme-color" content="#060d09">
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <meta name="apple-mobile-web-app-title" content="TDOLI">
+ <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+ <script>
+  if('serviceWorker' in navigator){
+   window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+     .then(r => console.log('[SW] Enregistre'))
+     .catch(e => console.error('[SW] Erreur:', e));
+   });
+  }
+ </script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
 firebase.initializeApp({
-  apiKey:            "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
-  authDomain:        "tdoli-c47a1.firebaseapp.com",
-  projectId:         "tdoli-c47a1",
-  storageBucket:     "tdoli-c47a1.appspot.com",
-  messagingSenderId: "416651280494",
-  appId:             "1:416651280494:web:de03eb6a47204031f1267f"
+ apiKey:      "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
+ authDomain:    "tdoli-c47a1.firebaseapp.com",
+ projectId:     "tdoli-c47a1",
+ storageBucket:   "tdoli-c47a1.appspot.com",
+ messagingSenderId: "416651280494",
+ appId:       "1:416651280494:web:de03eb6a47204031f1267f"
 });
 </script>
 <script src="/fcm-init.js"></script>
@@ -123,26 +131,26 @@ firebase.initializeApp({
 <body>
 <div class="conn-status" id="connStatus"></div>
 <div class="topbar">
-  <div class="topbar-left">
-    <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a>
-  </div>
-  <div style="flex:1;"></div>
-  <div class="topbar-right">
-    <button class="share-btn" onclick="shareApp()">🎁 Parrainer</button>
-  </div>
+ <div class="topbar-left">
+  <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a>
+ </div>
+ <div style="flex:1;"></div>
+ <div class="topbar-right">
+  <button class="share-btn" onclick="shareApp()">Parrainer</button>
+ </div>
 </div>
 <div class="deal-summary" id="dealSummary" style="display:none">
-  <div><div class="deal-sum-label">Montant</div><div class="deal-sum-val" id="dealAmt">—</div></div>
-  <div style="text-align:right"><div class="deal-sum-label">Sens</div><div class="deal-sum-val" id="dealDir">—</div></div>
+ <div><div class="deal-sum-label">Montant</div><div class="deal-sum-val" id="dealAmt">—</div></div>
+ <div style="text-align:right"><div class="deal-sum-label">Sens</div><div class="deal-sum-val" id="dealDir">—</div></div>
 </div>
 <div class="messages-area" id="messagesArea">
-  <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
+ <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
 </div>
 <div class="input-area">
-  <textarea class="msg-input" id="msgInput" placeholder="Ecris ton message..." rows="1" onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
-  <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-    <svg viewBox="0 0 24 24" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-  </button>
+ <textarea class="msg-input" id="msgInput" placeholder="Ecris ton message..." rows="1" onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
+ <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+  <svg viewBox="0 0 24 24" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+ </button>
 </div>
 <script>
 const API = 'https://tdoli-backend.onrender.com';
@@ -162,203 +170,203 @@ let otherEmail = '';
 // ─── CONNEXION SOCKET ─────────────────────────────────────────────────────────
 
 function connectSocket() {
-  socket = io(API, {
-    auth: { token },
-    transports: ['websocket', 'polling'],
-    reconnectionAttempts: 5,
-    reconnectionDelay: 2000
-  });
+ socket = io(API, {
+  auth: { token },
+  transports: ['websocket', 'polling'],
+  reconnectionAttempts: 5,
+  reconnectionDelay: 2000
+ });
 
-  socket.on('connect', () => {
-    console.log('Socket connecté');
-    socket.emit('join_deal', dealId);
-    showConnStatus('Connecté', 'connected');
-    setTimeout(() => hideConnStatus(), 2000);
-    document.getElementById('onlineDot').style.display = 'block';
-    document.getElementById('chatSubText').textContent = 'En ligne';
-  });
+ socket.on('connect', () => {
+  console.log('Socket connecté');
+  socket.emit('join_deal', dealId);
+  showConnStatus('Connecté', 'connected');
+  setTimeout(() => hideConnStatus(), 2000);
+  document.getElementById('onlineDot').style.display = 'block';
+  document.getElementById('chatSubText').textContent = 'En ligne';
+ });
 
-  socket.on('disconnect', () => {
-    console.log('Socket déconnecté');
-    document.getElementById('onlineDot').style.display = 'none';
-    document.getElementById('chatSubText').textContent = 'Déconnecté';
-  });
+ socket.on('disconnect', () => {
+  console.log('Socket déconnecté');
+  document.getElementById('onlineDot').style.display = 'none';
+  document.getElementById('chatSubText').textContent = 'Déconnecté';
+ });
 
-  socket.on('connect_error', (err) => {
-    console.error('Erreur socket:', err.message);
-    showConnStatus('Reconnexion...', 'reconnecting');
-    document.getElementById('chatSubText').textContent = 'Reconnexion...';
-  });
+ socket.on('connect_error', (err) => {
+  console.error('Erreur socket:', err.message);
+  showConnStatus('Reconnexion...', 'reconnecting');
+  document.getElementById('chatSubText').textContent = 'Reconnexion...';
+ });
 
-  socket.on('reconnect', () => {
-    socket.emit('join_deal', dealId);
-    showConnStatus('Reconnecté', 'connected');
-    setTimeout(() => hideConnStatus(), 2000);
-  });
+ socket.on('reconnect', () => {
+  socket.emit('join_deal', dealId);
+  showConnStatus('Reconnecté', 'connected');
+  setTimeout(() => hideConnStatus(), 2000);
+ });
 
-  // Nouveau message reçu en temps réel
-  socket.on('new_message', (msg) => {
-    appendMessage(msg);
-    const area = document.getElementById('messagesArea');
-    area.scrollTop = area.scrollHeight;
-  });
+ // Nouveau message reçu en temps réel
+ socket.on('new_message', (msg) => {
+  appendMessage(msg);
+  const area = document.getElementById('messagesArea');
+  area.scrollTop = area.scrollHeight;
+ });
 
-  // Indicateur de frappe
-  socket.on('user_typing', ({ email: typingEmail, isTyping: typing }) => {
-    if (typingEmail !== email) {
-      const indicator = document.getElementById('typingIndicator');
-      if (indicator) {
-        indicator.className = 'typing-indicator' + (typing ? ' show' : '');
-      }
-    }
-  });
+ // Indicateur de frappe
+ socket.on('user_typing', ({ email: typingEmail, isTyping: typing }) => {
+  if (typingEmail !== email) {
+   const indicator = document.getElementById('typingIndicator');
+   if (indicator) {
+    indicator.className = 'typing-indicator' + (typing ? ' show' : '');
+   }
+  }
+ });
 
-  socket.on('message_error', ({ error }) => {
-    console.error('Erreur message:', error);
-  });
+ socket.on('message_error', ({ error }) => {
+  console.error('Erreur message:', error);
+ });
 }
 
 function showConnStatus(text, type) {
-  const el = document.getElementById('connStatus');
-  el.textContent = text;
-  el.className = 'conn-status show ' + type;
+ const el = document.getElementById('connStatus');
+ el.textContent = text;
+ el.className = 'conn-status show ' + type;
 }
 function hideConnStatus() {
-  document.getElementById('connStatus').className = 'conn-status';
+ document.getElementById('connStatus').className = 'conn-status';
 }
 
 // ─── CHARGEMENT INITIAL DES MESSAGES ─────────────────────────────────────────
 
 async function loadDealInfo() {
-  try {
-    const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
-    const deals = await res.json();
-    const deal = deals.find(d => d._id === dealId);
-    if (deal) {
-      const isSender = deal.sender === email;
-      otherEmail = isSender ? deal.receiverEmail : deal.sender;
-      const otherName = otherEmail ? otherEmail.split('@')[0] : '...';
-      document.getElementById('chatTitle').textContent = 'Chat avec ' + otherName;
-      document.getElementById('dealAmt').textContent = Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
-      document.getElementById('dealDir').textContent = deal.fromCountry + ' → ' + deal.toCountry;
-      document.getElementById('dealSummary').style.display = 'flex';
-    }
-  } catch (e) {}
+ try {
+  const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+  const deals = await res.json();
+  const deal = deals.find(d => d._id === dealId);
+  if (deal) {
+   const isSender = deal.sender === email;
+   otherEmail = isSender ? deal.receiverEmail : deal.sender;
+   const otherName = otherEmail ? otherEmail.split('@')[0] : '...';
+   document.getElementById('chatTitle').textContent = 'Chat avec ' + otherName;
+   document.getElementById('dealAmt').textContent = Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
+   document.getElementById('dealDir').textContent = deal.fromCountry + ' → ' + deal.toCountry;
+   document.getElementById('dealSummary').style.display = 'flex';
+  }
+ } catch (e) {}
 }
 
 async function loadInitialMessages() {
-  try {
-    const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
-    const msgs = await res.json();
-    const area = document.getElementById('messagesArea');
+ try {
+  const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
+  const msgs = await res.json();
+  const area = document.getElementById('messagesArea');
 
-    if (!Array.isArray(msgs) || msgs.length === 0) {
-      area.innerHTML = `
-        <div class="empty-chat">
-          <div class="empty-chat-icon">💬</div>
-          <div class="empty-chat-title">Aucun message</div>
-          <div class="empty-chat-hint">Commence la conversation.</div>
-        </div>
-        <div class="typing-indicator" id="typingIndicator">
-          <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
-        </div>`;
-      return;
-    }
-
-    area.innerHTML = msgs.map(m => buildMessageHTML(m)).join('') +
-      '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
-    area.scrollTop = area.scrollHeight;
-  } catch (e) {
-    document.getElementById('messagesArea').innerHTML = '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
+  if (!Array.isArray(msgs) || msgs.length === 0) {
+   area.innerHTML = `
+    <div class="empty-chat">
+     <div class="empty-chat-icon">💬</div>
+     <div class="empty-chat-title">Aucun message</div>
+     <div class="empty-chat-hint">Commence la conversation.</div>
+    </div>
+    <div class="typing-indicator" id="typingIndicator">
+     <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+    </div>`;
+   return;
   }
+
+  area.innerHTML = msgs.map(m => buildMessageHTML(m)).join('') +
+   '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  area.scrollTop = area.scrollHeight;
+ } catch (e) {
+  document.getElementById('messagesArea').innerHTML = '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
+ }
 }
 
 function formatTime(dateStr) {
-  return new Date(dateStr).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+ return new Date(dateStr).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 }
 function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
-function isMM(text) { return text.startsWith('💳 Infos Mobile Money'); }
+function isMM(text) { return text.startsWith(' Infos Mobile Money'); }
 function renderMMCard(text) {
-  const lines = text.split('\n');
-  return '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:8px;">'+escHtml(lines[0])+'</div>' +
-    lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">'+escHtml(l)+'</div>').join('');
+ const lines = text.split('\n');
+ return '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:8px;">'+escHtml(lines[0])+'</div>' +
+  lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">'+escHtml(l)+'</div>').join('');
 }
 
 function buildMessageHTML(m) {
-  const isMine = m.sender === email;
-  const name = m.sender ? m.sender.split('@')[0] : '?';
-  if (isMM(m.text)) {
-    return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
-      ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
-      <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div>
-      <div class="msg-time">${formatTime(m.createdAt)}</div>
-    </div>`;
-  }
+ const isMine = m.sender === email;
+ const name = m.sender ? m.sender.split('@')[0] : '?';
+ if (isMM(m.text)) {
   return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
-    ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
-    <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div>
-    <div class="msg-time">${formatTime(m.createdAt)}</div>
+   ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
+   <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div>
+   <div class="msg-time">${formatTime(m.createdAt)}</div>
   </div>`;
+ }
+ return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+  ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
+  <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div>
+  <div class="msg-time">${formatTime(m.createdAt)}</div>
+ </div>`;
 }
 
 function appendMessage(m) {
-  const area = document.getElementById('messagesArea');
-  // Supprimer le empty-chat si présent
-  const emptyChat = area.querySelector('.empty-chat');
-  if (emptyChat) emptyChat.remove();
+ const area = document.getElementById('messagesArea');
+ // Supprimer le empty-chat si présent
+ const emptyChat = area.querySelector('.empty-chat');
+ if (emptyChat) emptyChat.remove();
 
-  // Insérer avant l'indicateur de frappe
-  const typingIndicator = document.getElementById('typingIndicator');
-  const div = document.createElement('div');
-  div.innerHTML = buildMessageHTML(m);
-  const msgEl = div.firstElementChild;
-  if (typingIndicator) {
-    area.insertBefore(msgEl, typingIndicator);
-  } else {
-    area.appendChild(msgEl);
-  }
+ // Insérer avant l'indicateur de frappe
+ const typingIndicator = document.getElementById('typingIndicator');
+ const div = document.createElement('div');
+ div.innerHTML = buildMessageHTML(m);
+ const msgEl = div.firstElementChild;
+ if (typingIndicator) {
+  area.insertBefore(msgEl, typingIndicator);
+ } else {
+  area.appendChild(msgEl);
+ }
 }
 
 // ─── ENVOI DE MESSAGE ─────────────────────────────────────────────────────────
 
 function sendMessage() {
-  const input = document.getElementById('msgInput');
-  const text = input.value.trim();
-  if (!text || !socket) return;
+ const input = document.getElementById('msgInput');
+ const text = input.value.trim();
+ if (!text || !socket) return;
 
-  socket.emit('send_message', { dealId, text });
-  input.value = '';
-  input.style.height = 'auto';
+ socket.emit('send_message', { dealId, text });
+ input.value = '';
+ input.style.height = 'auto';
 
-  // Arrêter l'indicateur de frappe
-  stopTyping();
+ // Arrêter l'indicateur de frappe
+ stopTyping();
 }
 
 function handleInput(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+ el.style.height = 'auto';
+ el.style.height = Math.min(el.scrollHeight, 80) + 'px';
 
-  // Indicateur de frappe
-  if (!isTyping && socket) {
-    isTyping = true;
-    socket.emit('typing', { dealId, isTyping: true });
-  }
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(stopTyping, 2000);
+ // Indicateur de frappe
+ if (!isTyping && socket) {
+  isTyping = true;
+  socket.emit('typing', { dealId, isTyping: true });
+ }
+ clearTimeout(typingTimer);
+ typingTimer = setTimeout(stopTyping, 2000);
 }
 
 function stopTyping() {
-  if (isTyping && socket) {
-    isTyping = false;
-    socket.emit('typing', { dealId, isTyping: false });
-  }
-  clearTimeout(typingTimer);
+ if (isTyping && socket) {
+  isTyping = false;
+  socket.emit('typing', { dealId, isTyping: false });
+ }
+ clearTimeout(typingTimer);
 }
 
 function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+ if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
 // ─── MOBILE MONEY ─────────────────────────────────────────────────────────────
@@ -367,14 +375,14 @@ function handleKey(e) {
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 window.addEventListener('resize', () => {
-  setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 100);
+ setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 100);
 });
 document.getElementById('msgInput').addEventListener('focus', () => {
-  setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 300);
+ setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 300);
 });
 
 window.addEventListener('beforeunload', () => {
-  if (socket) { socket.emit('leave_deal', dealId); socket.disconnect(); }
+ if (socket) { socket.emit('leave_deal', dealId); socket.disconnect(); }
 });
 
 loadDealInfo();
@@ -382,24 +390,24 @@ loadInitialMessages();
 connectSocket();
 
 function initAvatar(){
-  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
-  let initials='?';
-  if(username){
-    const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
-    if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
-    else initials=username.substring(0,2).toUpperCase();
-  }
-  const btn=document.getElementById('avatarBtn');
-  if(btn)btn.textContent=initials;
+ const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
+ let initials='?';
+ if(username){
+  const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
+  if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
+  else initials=username.substring(0,2).toUpperCase();
+ }
+ const btn=document.getElementById('avatarBtn');
+ if(btn)btn.textContent=initials;
 }
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAvatar);}
 else{initAvatar();}
 window.addEventListener('storage',initAvatar);
 function shareApp(){
-  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
-  const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
-  if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
-  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+ const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
+ const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
+ if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
+ else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
 }
 </script>
 </body>

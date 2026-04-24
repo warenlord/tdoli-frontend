@@ -4,28 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TDOLI — Messages</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f5f7f5;--surface:#ffffff;--card:#ffffff;
-  --green:#00b85c;--green-dim:#009e4f;--green-glow:rgba(0,184,92,0.1);
-  --yellow:#f5a623;--orange:#ff7043;--blue:#3d6fff;--red:#e53935;
-  --text:#1a2e22;--text-2:#4a6654;--text-3:#8aab96;
-  --border:rgba(0,0,0,0.08);--border-active:rgba(0,184,92,0.3);
-  --r:18px;
-  --shadow-card:0 2px 12px rgba(0,0,0,0.06);
+ --bg:#080c0a;--surface:#0e1612;--card:#131d16;
+ --green:#00a854;--green-dim:#007a3d;--green-glow:rgba(0,168,84,0.1);
+ --yellow:#c49a00;--blue:#2952cc;--red:#c0392b;
+ --text:#ddeae2;--text-2:#8aab96;--text-3:#4a6654;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,168,84,0.25);
+ --r:14px;
+ --shadow:0 2px 16px rgba(0,0,0,0.4);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.08);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 12px rgba(0,0,0,0.05);}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(8,12,10,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.08);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 12px rgba(0,0,0,0.3);}
 .topbar-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--text);}
 .topbar-sub{font-size:12px;color:var(--text-3);margin-top:1px;}
 
 /* LISTE CONVERSATIONS */
 .conv-list{padding:12px 16px;max-width:480px;margin:0 auto;}
-.conv-item{background:#fff;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;box-shadow:var(--shadow-card);border:1px solid rgba(0,0,0,0.05);position:relative;}
+.conv-item{background:var(--card);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;box-shadow:var(--shadow-card);border:1px solid var(--border);position:relative;}
 .conv-item:active{background:#f8faf9;transform:scale(0.98);}
 .conv-item.unread{border-left:3px solid var(--green);}
 .conv-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;position:relative;}
@@ -43,7 +43,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .conv-deal-tag.completed{background:rgba(0,184,92,0.1);color:var(--green);}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(0,0,0,0.08);display:flex;padding:8px 0 24px;box-shadow:0 -2px 20px rgba(0,0,0,0.08);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(8,12,10,0.95);backdrop-filter:blur(20px);border-top:1px solid rgba(0,0,0,0.08);display:flex;padding:8px 0 24px;box-shadow:0 -2px 20px rgba(0,0,0,0.3);}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:all 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
@@ -74,7 +74,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
 /* RECHERCHE */
 .search-bar{padding:12px 16px 4px;max-width:480px;margin:0 auto;}
-.search-input{width:100%;padding:11px 16px 11px 40px;background:#fff;border:1.5px solid rgba(0,0,0,0.1);border-radius:24px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--text);position:relative;box-shadow:0 1px 6px rgba(0,0,0,0.04);}
+.search-input{width:100%;padding:11px 16px 11px 40px;background:var(--card);border:1px solid var(--border);border-radius:24px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);position:relative;box-shadow:0 1px 6px rgba(0,0,0,0.04);}
 .search-input:focus{outline:none;border-color:var(--green);}
 .search-wrap{position:relative;}
 .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-3);pointer-events:none;}
@@ -86,42 +86,42 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 <body>
 
 <div class="topbar">
-  <div>
-    <div class="topbar-title">💬 Messages</div>
-    <div class="topbar-sub" id="convCount">Chargement...</div>
-  </div>
+ <div>
+  <div class="topbar-title"> Messages</div>
+  <div class="topbar-sub" id="convCount">Chargement...</div>
+ </div>
 </div>
 
 <div class="search-bar">
-  <div class="search-wrap">
-    <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input class="search-input" type="text" id="searchInput" placeholder="Rechercher une conversation..." oninput="filterConvs(this.value)">
-  </div>
+ <div class="search-wrap">
+  <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  <input class="search-input" type="text" id="searchInput" placeholder="Rechercher une conversation..." oninput="filterConvs(this.value)">
+ </div>
 </div>
 
 <div id="convList" class="conv-list">
-  <div class="loader-wrap"><div class="loader"></div></div>
+ <div class="loader-wrap"><div class="loader"></div></div>
 </div>
 
 <nav class="bottom-nav">
-  <a class="nav-item" href="/tdoli-feed.html">
-    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
-  </a>
-  <a class="nav-item" href="/tdoli-deals.html">
-    <div class="nav-icon-wrap">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
-      <div class="deals-badge" id="dealsBadge">!</div>
-    </div>Deals
-  </a>
-  <a class="nav-item active" href="/tdoli-messages.html">
-    <div class="nav-icon-wrap">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-      <div class="msg-badge-nav" id="msgBadgeNav"></div>
-    </div>Messages
-  </a>
-  <a class="nav-item" href="/tdoli-profile.html">
-    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
-  </a>
+ <a class="nav-item" href="/tdoli-feed.html">
+  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
+ </a>
+ <a class="nav-item" href="/tdoli-deals.html">
+  <div class="nav-icon-wrap">
+   <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+   <div class="deals-badge" id="dealsBadge">!</div>
+  </div>Deals
+ </a>
+ <a class="nav-item active" href="/tdoli-messages.html">
+  <div class="nav-icon-wrap">
+   <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+   <div class="msg-badge-nav" id="msgBadgeNav"></div>
+  </div>Messages
+ </a>
+ <a class="nav-item" href="/tdoli-profile.html">
+  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
+ </a>
 </nav>
 
 <div class="toast" id="toast"></div>
@@ -135,131 +135,131 @@ if (!token) window.location.replace('/tdoli-auth.html');
 let allConvs = [];
 
 function timeAgo(d) {
-  if (!d) return '';
-  const diff = Date.now() - new Date(d).getTime();
-  const m = Math.floor(diff / 60000);
-  if (m < 1) return "À l'instant";
-  if (m < 60) return m + ' min';
-  const h = Math.floor(m / 60);
-  if (h < 24) return h + 'h';
-  const days = Math.floor(h / 24);
-  if (days < 7) return days + 'j';
-  return new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'short' });
+ if (!d) return '';
+ const diff = Date.now() - new Date(d).getTime();
+ const m = Math.floor(diff / 60000);
+ if (m < 1) return "À l'instant";
+ if (m < 60) return m + ' min';
+ const h = Math.floor(m / 60);
+ if (h < 24) return h + 'h';
+ const days = Math.floor(h / 24);
+ if (days < 7) return days + 'j';
+ return new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'short' });
 }
 
 function getInitials(name) {
-  const p = (name||'?').trim().split(' ').filter(x=>x.length>0);
-  return p.length >= 2 ? (p[0][0]+p[p.length-1][0]).toUpperCase() : (name||'??').substring(0,2).toUpperCase();
+ const p = (name||'?').trim().split(' ').filter(x=>x.length>0);
+ return p.length >= 2 ? (p[0][0]+p[p.length-1][0]).toUpperCase() : (name||'??').substring(0,2).toUpperCase();
 }
 
 function showToast(msg, color) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.background = color || 'var(--green-dim)';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+ const t = document.getElementById('toast');
+ t.textContent = msg; t.style.background = color || 'var(--green-dim)';
+ t.classList.add('show');
+ setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 function renderConvs(convs) {
-  const list = document.getElementById('convList');
-  const count = document.getElementById('convCount');
+ const list = document.getElementById('convList');
+ const count = document.getElementById('convCount');
 
-  if (convs.length === 0) {
-    count.textContent = 'Aucune conversation';
-    list.innerHTML = `<div class="empty-state">
-      <div class="empty-icon">💬</div>
-      <div class="empty-title">Aucun message</div>
-      <div class="empty-sub">Tes conversations avec tes partenaires d'échange apparaîtront ici.</div>
-    </div>`;
-    return;
-  }
+ if (convs.length === 0) {
+  count.textContent = 'Aucune conversation';
+  list.innerHTML = `<div class="empty-state">
+   <div class="empty-icon">💬</div>
+   <div class="empty-title">Aucun message</div>
+   <div class="empty-sub">Tes conversations avec tes partenaires d'échange apparaîtront ici.</div>
+  </div>`;
+  return;
+ }
 
-  const totalUnread = convs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
-  count.textContent = convs.length + ' conversation' + (convs.length > 1 ? 's' : '') +
-    (totalUnread > 0 ? ' · ' + totalUnread + ' non lu' + (totalUnread > 1 ? 's' : '') : '');
+ const totalUnread = convs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
+ count.textContent = convs.length + ' conversation' + (convs.length > 1 ? 's' : '') +
+  (totalUnread > 0 ? ' · ' + totalUnread + ' non lu' + (totalUnread > 1 ? 's' : '') : '');
 
-  list.innerHTML = convs.map(c => {
-    const isUnread = c.unreadCount > 0;
-    const ini = getInitials(c.otherUsername);
-    const statusCls = c.dealStatus === 'completed' ? 'completed' : 'matched';
-    const statusLabel = c.dealStatus === 'completed' ? '✓ Terminé' : '⚡ En cours';
-    const preview = c.lastMessage
-      ? (c.lastMessage.sender === email ? 'Vous : ' : '') + c.lastMessage.text.substring(0, 50) + (c.lastMessage.text.length > 50 ? '…' : '')
-      : 'Aucun message — Commence la conversation !';
+ list.innerHTML = convs.map(c => {
+  const isUnread = c.unreadCount > 0;
+  const ini = getInitials(c.otherUsername);
+  const statusCls = c.dealStatus === 'completed' ? 'completed' : 'matched';
+  const statusLabel = c.dealStatus === 'completed' ? 'Terminé' : ' En cours';
+  const preview = c.lastMessage
+   ? (c.lastMessage.sender === email ? 'Vous : ' : '') + c.lastMessage.text.substring(0, 50) + (c.lastMessage.text.length > 50 ? '…' : '')
+   : 'Aucun message — Commence la conversation !';
 
-    return `<div class="conv-item ${isUnread ? 'unread' : ''}" onclick="openChat('${c.dealId}')">
-      <div class="conv-avatar">
-        ${ini}
-        ${c.isOnline ? '<div class="conv-avatar-online"></div>' : ''}
-      </div>
-      <div class="conv-body">
-        <div class="conv-top">
-          <div class="conv-name">${c.otherUsername}</div>
-          <div class="conv-time">${timeAgo(c.lastMessage?.createdAt)}</div>
-        </div>
-        <div class="conv-bottom">
-          <div class="conv-preview ${isUnread ? 'unread' : ''}">${preview}</div>
-          ${isUnread ? `<div class="conv-badge">${c.unreadCount}</div>` : ''}
-        </div>
-        <span class="conv-deal-tag ${statusCls}">${statusLabel} · ${c.dealCode}</span>
-      </div>
-    </div>`;
-  }).join('');
+  return `<div class="conv-item ${isUnread ? 'unread' : ''}" onclick="openChat('${c.dealId}')">
+   <div class="conv-avatar">
+    ${ini}
+    ${c.isOnline ? '<div class="conv-avatar-online"></div>' : ''}
+   </div>
+   <div class="conv-body">
+    <div class="conv-top">
+     <div class="conv-name">${c.otherUsername}</div>
+     <div class="conv-time">${timeAgo(c.lastMessage?.createdAt)}</div>
+    </div>
+    <div class="conv-bottom">
+     <div class="conv-preview ${isUnread ? 'unread' : ''}">${preview}</div>
+     ${isUnread ? `<div class="conv-badge">${c.unreadCount}</div>` : ''}
+    </div>
+    <span class="conv-deal-tag ${statusCls}">${statusLabel} · ${c.dealCode}</span>
+   </div>
+  </div>`;
+ }).join('');
 }
 
 function filterConvs(query) {
-  if (!query.trim()) { renderConvs(allConvs); return; }
-  const q = query.toLowerCase();
-  const filtered = allConvs.filter(c =>
-    c.otherUsername?.toLowerCase().includes(q) ||
-    c.dealCode?.toLowerCase().includes(q) ||
-    c.lastMessage?.text?.toLowerCase().includes(q)
-  );
-  renderConvs(filtered);
+ if (!query.trim()) { renderConvs(allConvs); return; }
+ const q = query.toLowerCase();
+ const filtered = allConvs.filter(c =>
+  c.otherUsername?.toLowerCase().includes(q) ||
+  c.dealCode?.toLowerCase().includes(q) ||
+  c.lastMessage?.text?.toLowerCase().includes(q)
+ );
+ renderConvs(filtered);
 }
 
 function openChat(dealId) {
-  window.location.href = '/tdoli-chat.html?deal=' + dealId;
+ window.location.href = '/tdoli-chat.html?deal=' + dealId;
 }
 
 async function loadConversations() {
-  try {
-    const res = await fetch(API + '/messages/conversations', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    if (!res.ok) {
-      if (res.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
-      throw new Error('Erreur serveur');
-    }
-    const data = await res.json();
-    allConvs = Array.isArray(data) ? data : [];
-    renderConvs(allConvs);
-
-    // Badge nav
-    const totalUnread = allConvs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
-    const badge = document.getElementById('msgBadgeNav');
-    if (badge) {
-      if (totalUnread > 0) { badge.textContent = totalUnread > 9 ? '9+' : totalUnread; badge.classList.add('show'); }
-      else badge.classList.remove('show');
-    }
-  } catch(e) {
-    document.getElementById('convList').innerHTML = `<div class="empty-state">
-      <div class="empty-icon">⚠️</div>
-      <div class="empty-title">Erreur de connexion</div>
-      <div class="empty-sub">Vérifie ta connexion internet.</div>
-    </div>`;
+ try {
+  const res = await fetch(API + '/messages/conversations', {
+   headers: { 'Authorization': 'Bearer ' + token }
+  });
+  if (!res.ok) {
+   if (res.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+   throw new Error('Erreur serveur');
   }
+  const data = await res.json();
+  allConvs = Array.isArray(data) ? data : [];
+  renderConvs(allConvs);
+
+  // Badge nav
+  const totalUnread = allConvs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
+  const badge = document.getElementById('msgBadgeNav');
+  if (badge) {
+   if (totalUnread > 0) { badge.textContent = totalUnread > 9 ? '9+' : totalUnread; badge.classList.add('show'); }
+   else badge.classList.remove('show');
+  }
+ } catch(e) {
+  document.getElementById('convList').innerHTML = `<div class="empty-state">
+   <div class="empty-icon">️</div>
+   <div class="empty-title">Erreur de connexion</div>
+   <div class="empty-sub">Vérifie ta connexion internet.</div>
+  </div>`;
+ }
 }
 
 async function checkDeals() {
-  try {
-    const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
-    const deals = await res.json();
-    if (Array.isArray(deals)) {
-      const active = deals.filter(d => d.status === 'matched').length;
-      const badge = document.getElementById('dealsBadge');
-      if (badge) { if (active > 0) { badge.textContent = active; badge.classList.add('show'); } else badge.classList.remove('show'); }
-    }
-  } catch(e) {}
+ try {
+  const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+  const deals = await res.json();
+  if (Array.isArray(deals)) {
+   const active = deals.filter(d => d.status === 'matched').length;
+   const badge = document.getElementById('dealsBadge');
+   if (badge) { if (active > 0) { badge.textContent = active; badge.classList.add('show'); } else badge.classList.remove('show'); }
+  }
+ } catch(e) {}
 }
 
 loadConversations();
