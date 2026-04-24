@@ -23,8 +23,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .deal-sum-label{font-size:10px;color:var(--text-3);}
 .deal-sum-val{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green);margin-top:2px;}
 .mm-bar{flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;}
-.btn-mm{width:100%;padding:10px 16px;background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.25);border-radius:10px;color:var(--yellow);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;}
-.btn-mm:active{background:rgba(252,209,22,0.15);}
 .messages-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px;display:flex;flex-direction:column;gap:8px;}
 .empty-chat{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;gap:8px;}
 .empty-chat-icon{font-size:32px;opacity:0.4;}
@@ -124,9 +122,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
   <div><div class="deal-sum-label">Montant</div><div class="deal-sum-val" id="dealAmt">—</div></div>
   <div style="text-align:right"><div class="deal-sum-label">Sens</div><div class="deal-sum-val" id="dealDir">—</div></div>
 </div>
-<div class="mm-bar">
-  <button class="btn-mm" onclick="openMMSheet()">💳 Partager mes infos Mobile Money</button>
-</div>
 <div class="messages-area" id="messagesArea">
   <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
 </div>
@@ -135,34 +130,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
   <button class="send-btn" id="sendBtn" onclick="sendMessage()">
     <svg viewBox="0 0 24 24" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
   </button>
-</div>
-<!-- Sheet Mobile Money -->
-<div class="overlay" id="mmOverlay" onclick="closeMMOnOverlay(event)">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">💳 Infos Mobile Money</div>
-    <div class="sheet-sub">Ces informations seront envoyées dans le chat.</div>
-    <div class="form-group">
-      <label class="form-label">Nom du bénéficiaire</label>
-      <input class="form-input-field" type="text" id="mm-name" placeholder="Ex: Warren Lord Ngadi">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Numéro Mobile Money</label>
-      <input class="form-input-field" type="tel" id="mm-number" placeholder="Ex: +241 06 XX XX XX">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Opérateur</label>
-      <select class="form-select-field" id="mm-operator">
-        <option value="Airtel Money">Airtel Money</option>
-        <option value="Moov Money">Moov Money</option>
-        <option value="Orange Money">Orange Money</option>
-        <option value="Wave">Wave</option>
-        <option value="MTN Mobile Money">MTN Mobile Money</option>
-      </select>
-    </div>
-    <button class="btn-primary" id="btn-send-mm" onclick="sendMMInfo()">Envoyer dans le chat</button>
-    <button class="btn-cancel" onclick="closeSheet('mmOverlay')">Annuler</button>
-  </div>
 </div>
 <script>
 const API = 'https://tdoli-backend.onrender.com';
@@ -277,7 +244,7 @@ async function loadInitialMessages() {
         <div class="empty-chat">
           <div class="empty-chat-icon">💬</div>
           <div class="empty-chat-title">Aucun message</div>
-          <div class="empty-chat-hint">Commence la conversation et partage tes infos Mobile Money.</div>
+          <div class="empty-chat-hint">Commence la conversation.</div>
         </div>
         <div class="typing-indicator" id="typingIndicator">
           <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
@@ -383,22 +350,6 @@ function handleKey(e) {
 
 // ─── MOBILE MONEY ─────────────────────────────────────────────────────────────
 
-function openMMSheet() {
-  document.getElementById('mmOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('mm-name').focus(), 300);
-}
-function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
-function closeMMOnOverlay(e) { if (e.target === document.getElementById('mmOverlay')) closeSheet('mmOverlay'); }
-
-function sendMMInfo() {
-  const name = document.getElementById('mm-name').value.trim();
-  const number = document.getElementById('mm-number').value.trim();
-  const operator = document.getElementById('mm-operator').value;
-  if (!name || !number) { alert('Remplis le nom et le numéro'); return; }
-  const text = '💳 Infos Mobile Money\nNom : ' + name + '\nNumero : ' + number + '\nOperateur : ' + operator;
-  if (socket) socket.emit('send_message', { dealId, text });
-  closeSheet('mmOverlay');
-}
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
