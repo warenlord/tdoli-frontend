@@ -532,7 +532,7 @@ async function verifyOtp(){
     if(r.ok){
       closeSheet('phoneOverlay');
       showToast('Téléphone vérifié ! Niveau 2 atteint 🎉');
-      setTimeout(() => loadProfile(), 500);
+      setTimeout(() => window.location.reload(), 1500);
     }
     else showMsg('msg-otp',(r.data&&r.data.message)||'Code incorrect');
   }catch(e){showMsg('msg-otp','Serveur inaccessible');}
