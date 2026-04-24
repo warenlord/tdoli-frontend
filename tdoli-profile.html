@@ -485,7 +485,7 @@ async function sendOtp(){
   if(!phone){showMsg('msg-phone','Entre ton numéro');return;}
   const btn=document.getElementById('btn-send-otp');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
   try{
-    const r=await safeJson(await fetch(API+'/user/send-otp',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({phone})}));
+    const r=await safeJson(await fetch(API+'/sms/send-otp',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({phone})}));
     if(r.ok){document.getElementById('step-phone').classList.remove('active');document.getElementById('step-otp').classList.add('active');document.querySelectorAll('.otp-digit')[0].focus();}
     else showMsg('msg-phone',(r.data&&r.data.message)||'Erreur envoi');
   }catch(e){showMsg('msg-phone','Serveur inaccessible');}
@@ -497,7 +497,7 @@ async function verifyOtp(){
   if(code.length<6){showMsg('msg-otp','Code incomplet');return;}
   const btn=document.getElementById('btn-verify-otp');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
   try{
-    const r=await safeJson(await fetch(API+'/user/verify-otp',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code})}));
+    const r=await safeJson(await fetch(API+'/sms/verify-otp',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code})}));
     if(r.ok){closeSheet('phoneOverlay');loadProfile();}
     else showMsg('msg-otp',(r.data&&r.data.message)||'Code incorrect');
   }catch(e){showMsg('msg-otp','Serveur inaccessible');}
