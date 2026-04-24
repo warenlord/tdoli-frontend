@@ -249,6 +249,20 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+<!-- Phase 9 — Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey:            "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",  // ← remplace avec ta vraie valeur
+  authDomain:        "tdoli-c47a1.firebaseapp.com",
+  projectId:         "tdoli-c47a1",
+  storageBucket:     "tdoli-c47a1.appspot.com",
+  messagingSenderId: "416651280494", // ← remplace avec ta vraie valeur
+  appId:             "1:416651280494:web:de03eb6a47204031f1267f", // ← remplace avec ta vraie valeur
+};
+firebase.initializeApp(firebaseConfig);
+</script>
 </head>
 <body>
 <div class="bg-mesh"></div>
@@ -1564,6 +1578,50 @@ function openBenefSheetForMatch() {
 
 // Démarrage
 loadFeed();
+
+// ── Phase 9 — Enregistrement token FCM ───────────────────────
+async function registerFCMToken() {
+  try {
+    if (!firebase.messaging.isSupported()) return;
+    const messaging = firebase.messaging();
+
+    // Demander la permission notifications
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      console.log('[FCM] Permission refusée');
+      return;
+    }
+
+    // Récupérer le token VAPID
+    const fcmToken = await messaging.getToken({
+      vapidKey: 'VOTRE_VAPID_KBEb-bIVX7GAPpbpuS9pp74rbwz3296KScUw7ZBbJTLRYnnvTNjmZMNG7f0M5x5D6spxZmrRlPpotVPogRP5AZOgEY_ICI', // ← remplace avec ta VAPID key Firebase
+      serviceWorkerRegistration: await navigator.serviceWorker.getRegistration('/firebase-messaging-sw.js')
+    });
+
+    if (!fcmToken) return;
+
+    // Envoyer au backend seulement si le token a changé
+    const savedToken = localStorage.getItem('tdoli_fcm_token');
+    if (savedToken === fcmToken) return;
+
+    await fetch(API + '/notifications/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ fcmToken })
+    });
+
+    localStorage.setItem('tdoli_fcm_token', fcmToken);
+    console.log('[FCM] Token enregistré');
+
+  } catch(e) {
+    console.warn('[FCM] Erreur enregistrement:', e.message);
+  }
+}
+
+// Enregistrer le token FCM après chargement
+if ('Notification' in window) {
+  registerFCMToken();
+}
 </script>
 </body>
 </html>
