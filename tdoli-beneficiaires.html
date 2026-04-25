@@ -10,7 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px;overflow-x:hidden;}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
-.back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;transition:all 0.2s;}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;}
 .topbar-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;flex:1;}
 .btn-add{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:20px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
 .content{padding:16px 20px;max-width:480px;margin:0 auto;}
@@ -76,15 +76,182 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:500;opacity:0;pointer-events:none;transition:all 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.5);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── UX Fluidité globale ─────────────────────────────────────── */
+
+/* Skeleton loader */
+.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--card) 50%,var(--surface) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.4s infinite;}
+@keyframes skeleton-shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.skeleton-line{height:12px;border-radius:6px;margin-bottom:8px;}
+.skeleton-line.short{width:60%;}
+.skeleton-line.medium{width:80%;}
+.skeleton-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:8px;}
+
+/* Pull to refresh */
+.ptr-indicator{text-align:center;padding:12px;font-size:12px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;height:0;overflow:hidden;transition:height 0.2s;}
+.ptr-indicator.active{height:40px;}
+
+/* Transitions de pages */
+.page-enter{animation:pageEnter 0.2s ease-out;}
+@keyframes pageEnter{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* Feedback copier */
+.copy-feedback{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--green-dim);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:8px 20px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:999;}
+.copy-feedback.show{opacity:1;}
+
+/* Swipe sheet */
+.sheet{touch-action:pan-y;}
+
+/* Boutons actifs feedback haptique */
+.btn-primary:active,.btn-cancel:active,.annonce-item:active,.deal-item:active{transform:scale(0.97);}
+
+/* Progress bar deal */
+.deal-progress{height:3px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.deal-progress-fill{height:100%;border-radius:2px;background:var(--green);transition:width 0.4s ease;}
+
+/* Compte à rebours timer */
+.timer-countdown{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);}
+.timer-countdown.urgent{color:var(--red);animation:blink 1s ease infinite;}
+
+/* Input focus amélioré */
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
+
+/* Scroll auto dans le chat */
+.messages-area{scroll-behavior:smooth;}
+
+/* Indicateur de chargement inline */
+.inline-loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
+
 </style>
 <link rel="manifest" href="/manifest.json">
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/service-worker.js').catch(()=>{});});}</script>
 </head>
-<body><div class="topbar"><a class="back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Retour"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></a><div class="topbar-title">Mes Bénéficiaires</div><button class="btn-add" onclick="openSheet()">+ Ajouter</button>
-</div><div class="content"><!-- MOI --><div class="section-header"><div class="section-title"> Moi — Mes coordonnées</div></div><div id="listMoi"><div class="loading-wrap"><div class="loader"></div></div></div><!-- BENEFICIAIRES --><div class="section-header"><div class="section-title"> Mes bénéficiaires</div></div><div id="listBenef"><div class="loading-wrap"><div class="loader"></div></div></div>
-</div><!-- Sheet formulaire -->
-<div class="overlay" id="formOverlay" onclick="closeOnOverlay(event,'formOverlay')"><div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div class="sheet-title" id="formTitle">Nouveau bénéficiaire</div><!-- Type --><div class="type-toggle"><div class="type-btn active-benef" id="typeBtn-benef" onclick="setType('beneficiaire')"> Bénéficiaire</div><div class="type-btn" id="typeBtn-moi" onclick="setType('moi')"> Moi</div></div><!-- Nom --><div class="form-group"><label class="form-label" id="nomLabel">Nom du bénéficiaire</label><input class="form-input" type="text" id="f-nom" placeholder="Ex: Maman, Jean Dupont…"></div><!-- Pays --><div class="form-group"><label class="form-label">Pays</label><select class="form-select" id="f-pays"><option value="">Sélectionner…</option><option value="Gabon">🇬🇦 Gabon</option><option value="France">🇫🇷 France</option><option value="Burkina Faso">🇧🇫 Burkina Faso</option><option value="Belgique">🇧🇪 Belgique</option><option value="Suisse">🇨🇭 Suisse</option><option value="Canada">🇨🇦 Canada</option><option value="Etats-Unis">🇺🇸 États-Unis</option></select></div><!-- Méthode --><div class="form-group"><label class="form-label">Méthode de paiement</label><div class="method-tabs"><div class="method-tab active" data-method="mobilemoney" onclick="setMethod('mobilemoney',this)"> Mobile Money</div><div class="method-tab" data-method="virement" onclick="setMethod('virement',this)"> Virement</div><div class="method-tab" data-method="paypal" onclick="setMethod('paypal',this)"> PayPal</div><div class="method-tab" data-method="wero" onclick="setMethod('wero',this)"> Wero</div></div></div><!-- Mobile Money --><div class="method-fields show" id="ff-mobilemoney"><div class="form-group"><label class="form-label">Numéro Mobile Money</label><input class="form-input" type="tel" id="f-mm-phone" placeholder="+241 06 00 00 00" inputmode="tel"></div><div class="form-group"><label class="form-label">Opérateur</label><select class="form-select" id="f-mm-operateur"><option value="">Sélectionner…</option><option value="Airtel Money">Airtel Money</option><option value="Moov Money">Moov Money</option><option value="Orange Money">Orange Money</option></select></div></div><!-- Virement --><div class="method-fields" id="ff-virement"><div class="form-group"><label class="form-label">IBAN</label><input class="form-input" type="text" id="f-iban" placeholder="FR76 3000 6000 0112 3456 7890 189"></div><div class="form-group"><label class="form-label">Banque</label><input class="form-input" type="text" id="f-banque" placeholder="BNP, Société Générale…"></div></div><!-- PayPal --><div class="method-fields" id="ff-paypal"><div class="form-group"><label class="form-label">Email PayPal</label><input class="form-input" type="email" id="f-paypal" placeholder="ton@email.com"></div></div><!-- Wero --><div class="method-fields" id="ff-wero"><div class="form-group"><label class="form-label">Numéro de téléphone Wero</label><input class="form-input" type="tel" id="f-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"></div></div><!-- Note --><div class="form-group"><label class="form-label">Note (optionnel)</label><input class="form-input" type="text" id="f-note" placeholder="Ex: Envoyer en semaine"></div><button class="btn-primary" id="btn-save" onclick="saveBenef()">Enregistrer</button><button class="btn-cancel" onclick="closeSheet('formOverlay')">Annuler</button><div class="msg error" id="msg-form"></div></div>
-</div><div class="toast" id="toast"></div><script>
+<body>
+
+<div class="topbar">
+  <a href="/tdoli-profile.html" class="back-btn">←</a>
+  <div class="topbar-title">Mes Bénéficiaires</div>
+  <button class="btn-add" onclick="openSheet()">+ Ajouter</button>
+</div>
+
+<div class="content">
+  <!-- MOI -->
+  <div class="section-header">
+    <div class="section-title">🙋 Moi — Mes coordonnées</div>
+  </div>
+  <div id="listMoi"><div class="loading-wrap"><div class="loader"></div></div></div>
+
+  <!-- BENEFICIAIRES -->
+  <div class="section-header">
+    <div class="section-title">👥 Mes bénéficiaires</div>
+  </div>
+  <div id="listBenef"><div class="loading-wrap"><div class="loader"></div></div></div>
+</div>
+
+<!-- Sheet formulaire -->
+<div class="overlay" id="formOverlay" onclick="closeOnOverlay(event,'formOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title" id="formTitle">Nouveau bénéficiaire</div>
+
+    <!-- Type -->
+    <div class="type-toggle">
+      <div class="type-btn active-benef" id="typeBtn-benef" onclick="setType('beneficiaire')">👥 Bénéficiaire</div>
+      <div class="type-btn" id="typeBtn-moi" onclick="setType('moi')">🙋 Moi</div>
+    </div>
+
+    <!-- Nom -->
+    <div class="form-group">
+      <label class="form-label" id="nomLabel">Nom du bénéficiaire</label>
+      <input class="form-input" type="text" id="f-nom" placeholder="Ex: Maman, Jean Dupont…">
+    </div>
+
+    <!-- Pays -->
+    <div class="form-group">
+      <label class="form-label">Pays</label>
+      <select class="form-select" id="f-pays">
+        <option value="">Sélectionner…</option>
+        <option value="Gabon">🇬🇦 Gabon</option>
+        <option value="France">🇫🇷 France</option>
+        <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+        <option value="Belgique">🇧🇪 Belgique</option>
+        <option value="Suisse">🇨🇭 Suisse</option>
+        <option value="Canada">🇨🇦 Canada</option>
+        <option value="Etats-Unis">🇺🇸 États-Unis</option>
+      </select>
+    </div>
+
+    <!-- Méthode -->
+    <div class="form-group">
+      <label class="form-label">Méthode de paiement</label>
+      <div class="method-tabs">
+        <div class="method-tab active" data-method="mobilemoney" onclick="setMethod('mobilemoney',this)">📱 Mobile Money</div>
+        <div class="method-tab" data-method="virement" onclick="setMethod('virement',this)">🏦 Virement</div>
+        <div class="method-tab" data-method="paypal" onclick="setMethod('paypal',this)">💳 PayPal</div>
+        <div class="method-tab" data-method="wero" onclick="setMethod('wero',this)">🟣 Wero</div>
+      </div>
+    </div>
+
+    <!-- Mobile Money -->
+    <div class="method-fields show" id="ff-mobilemoney">
+      <div class="form-group">
+        <label class="form-label">Numéro Mobile Money</label>
+        <input class="form-input" type="tel" id="f-mm-phone" placeholder="+241 06 00 00 00" inputmode="tel">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Opérateur</label>
+        <select class="form-select" id="f-mm-operateur">
+          <option value="">Sélectionner…</option>
+          <option value="Airtel Money">Airtel Money</option>
+          <option value="Moov Money">Moov Money</option>
+          <option value="Orange Money">Orange Money</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Virement -->
+    <div class="method-fields" id="ff-virement">
+      <div class="form-group">
+        <label class="form-label">IBAN</label>
+        <input class="form-input" type="text" id="f-iban" placeholder="FR76 3000 6000 0112 3456 7890 189">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Banque</label>
+        <input class="form-input" type="text" id="f-banque" placeholder="BNP, Société Générale…">
+      </div>
+    </div>
+
+    <!-- PayPal -->
+    <div class="method-fields" id="ff-paypal">
+      <div class="form-group">
+        <label class="form-label">Email PayPal</label>
+        <input class="form-input" type="email" id="f-paypal" placeholder="ton@email.com">
+      </div>
+    </div>
+
+    <!-- Wero -->
+    <div class="method-fields" id="ff-wero">
+      <div class="form-group">
+        <label class="form-label">Numéro de téléphone Wero</label>
+        <input class="form-input" type="tel" id="f-wero" placeholder="+33 6 12 34 56 78" inputmode="tel">
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="form-group">
+      <label class="form-label">Note (optionnel)</label>
+      <input class="form-input" type="text" id="f-note" placeholder="Ex: Envoyer en semaine">
+    </div>
+
+    <button class="btn-primary" id="btn-save" onclick="saveBenef()">Enregistrer</button>
+    <button class="btn-cancel" onclick="closeSheet('formOverlay')">Annuler</button>
+    <div class="msg error" id="msg-form"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
 const API = 'https://tdoli-backend.onrender.com';
 const token = localStorage.getItem('tdoli_token');
 if (!token) window.location.replace('/tdoli-auth.html');
@@ -96,233 +263,320 @@ let currentMethod = 'mobilemoney';
 
 // ── Helpers ────────────────────────────────────────────────────
 async function safeJson(res) {
- const text = await res.text();
- try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
- catch(e) { return { ok: false, status: res.status, data: { message: text.substring(0,100) } }; }
+  const text = await res.text();
+  try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+  catch(e) { return { ok: false, status: res.status, data: { message: text.substring(0,100) } }; }
 }
 
 function showToast(msg, color) {
- const t = document.getElementById('toast');
- t.textContent = msg; t.style.background = color || 'var(--green-dim)';
- t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.background = color || 'var(--green-dim)';
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 function showError(msg) {
- const el = document.getElementById('msg-form');
- el.textContent = msg; el.classList.add('show');
+  const el = document.getElementById('msg-form');
+  el.textContent = msg; el.classList.add('show');
 }
 
 function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
 function closeOnOverlay(e, id) { if(e.target === document.getElementById(id)) closeSheet(id); }
 
 function getMethodLabel(m) {
- const labels = { mobilemoney: ' Mobile Money', virement: ' Virement', paypal: ' PayPal', wero: ' Wero' };
- return labels[m] || m;
+  const labels = { mobilemoney: '📱 Mobile Money', virement: '🏦 Virement', paypal: '💳 PayPal', wero: '🟣 Wero' };
+  return labels[m] || m;
 }
 
 function getBenefDetail(b) {
- if (b.methode === 'mobilemoney') return (b.phone || '') + (b.operateur ? ' · ' + b.operateur : '');
- if (b.methode === 'virement') return (b.iban ? b.iban.substring(0,16) + '…' : '') + (b.banque ? ' · ' + b.banque : '');
- if (b.methode === 'paypal') return b.paypal || '';
- if (b.methode === 'wero') return b.wero || '';
- return '';
+  if (b.methode === 'mobilemoney') return (b.phone || '') + (b.operateur ? ' · ' + b.operateur : '');
+  if (b.methode === 'virement') return (b.iban ? b.iban.substring(0,16) + '…' : '') + (b.banque ? ' · ' + b.banque : '');
+  if (b.methode === 'paypal') return b.paypal || '';
+  if (b.methode === 'wero') return b.wero || '';
+  return '';
 }
 
 function getInitials(name) {
- const p = (name||'?').trim().split(' ').filter(x => x.length > 0);
- return p.length >= 2 ? (p[0][0] + p[p.length-1][0]).toUpperCase() : (name||'??').substring(0, 2).toUpperCase();
+  const p = (name||'?').trim().split(' ').filter(x => x.length > 0);
+  return p.length >= 2 ? (p[0][0] + p[p.length-1][0]).toUpperCase() : (name||'??').substring(0, 2).toUpperCase();
 }
 
 // ── Rendu ──────────────────────────────────────────────────────
 function renderCard(b) {
- const ini = getInitials(b.nom);
- const detail = getBenefDetail(b);
- const pays = b.pays ? ' · ' + b.pays : '';
- return `
- <div class="benef-card type-${b.type}"><div class="benef-avatar type-${b.type}">${ini}</div><div class="benef-body"><div class="benef-name">${b.nom}</div><div class="benef-detail">${detail}${pays}</div><span class="benef-method m-${b.methode}">${getMethodLabel(b.methode)}</span></div><div class="benef-actions"><div class="btn-icon" onclick="editBenef('${b._id}')"></div><div class="btn-icon del" onclick="deleteBenef('${b._id}', '${b.nom.replace(/'/g, "\\'")}')"></div></div></div>`;
+  const ini = getInitials(b.nom);
+  const detail = getBenefDetail(b);
+  const pays = b.pays ? ' · ' + b.pays : '';
+  return `
+    <div class="benef-card type-${b.type}">
+      <div class="benef-avatar type-${b.type}">${ini}</div>
+      <div class="benef-body">
+        <div class="benef-name">${b.nom}</div>
+        <div class="benef-detail">${detail}${pays}</div>
+        <span class="benef-method m-${b.methode}">${getMethodLabel(b.methode)}</span>
+      </div>
+      <div class="benef-actions">
+        <div class="btn-icon" onclick="editBenef('${b._id}')">✏️</div>
+        <div class="btn-icon del" onclick="deleteBenef('${b._id}', '${b.nom.replace(/'/g, "\\'")}')">🗑</div>
+      </div>
+    </div>`;
 }
 
 function renderLists() {
- const moi = allBenef.filter(b => b.type === 'moi');
- const benef = allBenef.filter(b => b.type === 'beneficiaire');
+  const moi = allBenef.filter(b => b.type === 'moi');
+  const benef = allBenef.filter(b => b.type === 'beneficiaire');
 
- document.getElementById('listMoi').innerHTML = moi.length > 0
- ? '<div class="benef-list">' + moi.map(renderCard).join('') + '</div>'
- : '<div class="empty-state"><div class="empty-icon"></div>Ajoute tes coordonnées pour recevoir des paiements</div>';
+  document.getElementById('listMoi').innerHTML = moi.length > 0
+    ? '<div class="benef-list">' + moi.map(renderCard).join('') + '</div>'
+    : '<div class="empty-state"><div class="empty-icon">🙋</div>Ajoute tes coordonnées pour recevoir des paiements</div>';
 
- document.getElementById('listBenef').innerHTML = benef.length > 0
- ? '<div class="benef-list">' + benef.map(renderCard).join('') + '</div>'
- : '<div class="empty-state"><div class="empty-icon"></div>Aucun bénéficiaire enregistré</div>';
+  document.getElementById('listBenef').innerHTML = benef.length > 0
+    ? '<div class="benef-list">' + benef.map(renderCard).join('') + '</div>'
+    : '<div class="empty-state"><div class="empty-icon">👥</div>Aucun bénéficiaire enregistré</div>';
 }
 
 // ── Chargement ─────────────────────────────────────────────────
 async function loadBenef() {
- try {
- const r = await safeJson(await fetch(API + '/beneficiaires', {
- headers: { 'Authorization': 'Bearer ' + token }
- }));
- if (r.ok && Array.isArray(r.data)) {
- allBenef = r.data;
- } else {
- allBenef = [];
- }
- } catch(e) {
- allBenef = [];
- }
- renderLists();
+  try {
+    const r = await safeJson(await fetch(API + '/beneficiaires', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    }));
+    if (r.ok && Array.isArray(r.data)) {
+      allBenef = r.data;
+    } else {
+      allBenef = [];
+    }
+  } catch(e) {
+    allBenef = [];
+  }
+  renderLists();
 }
 
 // ── Sheet ──────────────────────────────────────────────────────
 function setType(type) {
- currentType = type;
- const btnBenef = document.getElementById('typeBtn-benef');
- const btnMoi = document.getElementById('typeBtn-moi');
- btnBenef.className = 'type-btn' + (type === 'beneficiaire' ? ' active-benef' : '');
- btnMoi.className = 'type-btn' + (type === 'moi' ? ' active-moi' : '');
- document.getElementById('nomLabel').textContent = type === 'moi' ? 'Mon nom complet' : 'Nom du bénéficiaire';
+  currentType = type;
+  const btnBenef = document.getElementById('typeBtn-benef');
+  const btnMoi = document.getElementById('typeBtn-moi');
+  btnBenef.className = 'type-btn' + (type === 'beneficiaire' ? ' active-benef' : '');
+  btnMoi.className = 'type-btn' + (type === 'moi' ? ' active-moi' : '');
+  document.getElementById('nomLabel').textContent = type === 'moi' ? 'Mon nom complet' : 'Nom du bénéficiaire';
 }
 
 function setMethod(method, el) {
- currentMethod = method;
- document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
- el.classList.add('active');
- document.querySelectorAll('.method-fields').forEach(f => f.classList.remove('show'));
- document.getElementById('ff-' + method).classList.add('show');
+  currentMethod = method;
+  document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.method-fields').forEach(f => f.classList.remove('show'));
+  document.getElementById('ff-' + method).classList.add('show');
 }
 
 function resetForm() {
- editingId = null;
- currentType = 'beneficiaire';
- currentMethod = 'mobilemoney';
- document.getElementById('formTitle').textContent = 'Nouveau bénéficiaire';
- setType('beneficiaire');
- // Reset fields
- ['f-nom','f-mm-phone','f-iban','f-banque','f-paypal','f-wero','f-note'].forEach(id => {
- const el = document.getElementById(id);
- if (el) el.value = '';
- });
- document.getElementById('f-pays').value = '';
- document.getElementById('f-mm-operateur').value = '';
- // Reset method tabs
- document.querySelectorAll('.method-tab').forEach((t, i) => t.classList.toggle('active', i === 0));
- document.querySelectorAll('.method-fields').forEach((f, i) => f.classList.toggle('show', i === 0));
- // Reset msg
- const msg = document.getElementById('msg-form');
- msg.className = 'msg error'; msg.textContent = '';
- const btn = document.getElementById('btn-save');
- btn.disabled = false; btn.textContent = 'Enregistrer';
+  editingId = null;
+  currentType = 'beneficiaire';
+  currentMethod = 'mobilemoney';
+  document.getElementById('formTitle').textContent = 'Nouveau bénéficiaire';
+  setType('beneficiaire');
+  // Reset fields
+  ['f-nom','f-mm-phone','f-iban','f-banque','f-paypal','f-wero','f-note'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('f-pays').value = '';
+  document.getElementById('f-mm-operateur').value = '';
+  // Reset method tabs
+  document.querySelectorAll('.method-tab').forEach((t, i) => t.classList.toggle('active', i === 0));
+  document.querySelectorAll('.method-fields').forEach((f, i) => f.classList.toggle('show', i === 0));
+  // Reset msg
+  const msg = document.getElementById('msg-form');
+  msg.className = 'msg error'; msg.textContent = '';
+  const btn = document.getElementById('btn-save');
+  btn.disabled = false; btn.textContent = 'Enregistrer';
 }
 
 function openSheet() {
- resetForm();
- document.getElementById('formOverlay').classList.add('open');
+  resetForm();
+  document.getElementById('formOverlay').classList.add('open');
 }
 
 function editBenef(id) {
- const b = allBenef.find(x => x._id === id);
- if (!b) return;
- resetForm();
- editingId = id;
- document.getElementById('formTitle').textContent = 'Modifier';
- setType(b.type || 'beneficiaire');
- document.getElementById('f-nom').value = b.nom || '';
- document.getElementById('f-pays').value = b.pays || '';
- document.getElementById('f-note').value = b.note || '';
+  const b = allBenef.find(x => x._id === id);
+  if (!b) return;
+  resetForm();
+  editingId = id;
+  document.getElementById('formTitle').textContent = 'Modifier';
+  setType(b.type || 'beneficiaire');
+  document.getElementById('f-nom').value = b.nom || '';
+  document.getElementById('f-pays').value = b.pays || '';
+  document.getElementById('f-note').value = b.note || '';
 
- // Activer le bon onglet méthode
- const tab = document.querySelector(`.method-tab[data-method="${b.methode}"]`);
- if (tab) setMethod(b.methode, tab);
+  // Activer le bon onglet méthode
+  const tab = document.querySelector(`.method-tab[data-method="${b.methode}"]`);
+  if (tab) setMethod(b.methode, tab);
 
- if (b.methode === 'mobilemoney') {
- document.getElementById('f-mm-phone').value = b.phone || '';
- document.getElementById('f-mm-operateur').value = b.operateur || '';
- } else if (b.methode === 'virement') {
- document.getElementById('f-iban').value = b.iban || '';
- document.getElementById('f-banque').value = b.banque || '';
- } else if (b.methode === 'paypal') {
- document.getElementById('f-paypal').value = b.paypal || '';
- } else if (b.methode === 'wero') {
- document.getElementById('f-wero').value = b.wero || '';
- }
+  if (b.methode === 'mobilemoney') {
+    document.getElementById('f-mm-phone').value = b.phone || '';
+    document.getElementById('f-mm-operateur').value = b.operateur || '';
+  } else if (b.methode === 'virement') {
+    document.getElementById('f-iban').value = b.iban || '';
+    document.getElementById('f-banque').value = b.banque || '';
+  } else if (b.methode === 'paypal') {
+    document.getElementById('f-paypal').value = b.paypal || '';
+  } else if (b.methode === 'wero') {
+    document.getElementById('f-wero').value = b.wero || '';
+  }
 
- document.getElementById('formOverlay').classList.add('open');
+  document.getElementById('formOverlay').classList.add('open');
 }
 
 async function saveBenef() {
- const nom = document.getElementById('f-nom').value.trim();
- if (!nom) { showError('Le nom est requis'); return; }
+  const nom = document.getElementById('f-nom').value.trim();
+  if (!nom) { showError('Le nom est requis'); return; }
 
- // Construire payload selon méthode
- const payload = {
- type: currentType,
- nom: nom,
- methode: currentMethod,
- pays: document.getElementById('f-pays').value || '',
- note: document.getElementById('f-note').value.trim() || '',
- };
+  // Construire payload selon méthode
+  const payload = {
+    type: currentType,
+    nom: nom,
+    methode: currentMethod,
+    pays: document.getElementById('f-pays').value || '',
+    note: document.getElementById('f-note').value.trim() || '',
+  };
 
- if (currentMethod === 'mobilemoney') {
- payload.phone = document.getElementById('f-mm-phone').value.trim();
- payload.operateur = document.getElementById('f-mm-operateur').value;
- if (!payload.phone) { showError('Numéro Mobile Money requis'); return; }
- } else if (currentMethod === 'virement') {
- payload.iban = document.getElementById('f-iban').value.trim();
- payload.banque = document.getElementById('f-banque').value.trim();
- if (!payload.iban) { showError('IBAN requis'); return; }
- } else if (currentMethod === 'paypal') {
- payload.paypal = document.getElementById('f-paypal').value.trim();
- if (!payload.paypal) { showError('Email PayPal requis'); return; }
- } else if (currentMethod === 'wero') {
- payload.wero = document.getElementById('f-wero').value.trim();
- if (!payload.wero) { showError('Numéro Wero requis'); return; }
- }
+  if (currentMethod === 'mobilemoney') {
+    payload.phone = document.getElementById('f-mm-phone').value.trim();
+    payload.operateur = document.getElementById('f-mm-operateur').value;
+    if (!payload.phone) { showError('Numéro Mobile Money requis'); return; }
+  } else if (currentMethod === 'virement') {
+    payload.iban = document.getElementById('f-iban').value.trim();
+    payload.banque = document.getElementById('f-banque').value.trim();
+    if (!payload.iban) { showError('IBAN requis'); return; }
+  } else if (currentMethod === 'paypal') {
+    payload.paypal = document.getElementById('f-paypal').value.trim();
+    if (!payload.paypal) { showError('Email PayPal requis'); return; }
+  } else if (currentMethod === 'wero') {
+    payload.wero = document.getElementById('f-wero').value.trim();
+    if (!payload.wero) { showError('Numéro Wero requis'); return; }
+  }
 
- const btn = document.getElementById('btn-save');
- btn.disabled = true;
- btn.innerHTML = '<span class="spinner"></span>Enregistrement…';
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Enregistrement…';
 
- try {
- const url = editingId ? API + '/beneficiaires/' + editingId : API + '/beneficiaires';
- const method = editingId ? 'PUT' : 'POST';
+  try {
+    const url = editingId ? API + '/beneficiaires/' + editingId : API + '/beneficiaires';
+    const method = editingId ? 'PUT' : 'POST';
 
- const r = await safeJson(await fetch(url, {
- method: method,
- headers: {
- 'Content-Type': 'application/json',
- 'Authorization': 'Bearer ' + token
- },
- body: JSON.stringify(payload)
- }));
+    const r = await safeJson(await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify(payload)
+    }));
 
- if (r.ok) {
- closeSheet('formOverlay');
- showToast(editingId ? 'Modifié ' : 'Ajouté ');
- await loadBenef();
- } else {
- showError((r.data && r.data.message) || 'Erreur lors de l\'enregistrement');
- }
- } catch(e) {
- showError('Erreur réseau: ' + e.message);
- }
+    if (r.ok) {
+      closeSheet('formOverlay');
+      showToast(editingId ? 'Modifié ✓' : 'Ajouté ✓');
+      await loadBenef();
+    } else {
+      showError((r.data && r.data.message) || 'Erreur lors de l\'enregistrement');
+    }
+  } catch(e) {
+    showError('Erreur réseau: ' + e.message);
+  }
 
- btn.disabled = false;
- btn.textContent = 'Enregistrer';
+  btn.disabled = false;
+  btn.textContent = 'Enregistrer';
 }
 
 async function deleteBenef(id, nom) {
- if (!confirm('Supprimer "' + nom + '" ?')) return;
- try {
- const r = await safeJson(await fetch(API + '/beneficiaires/' + id, {
- method: 'DELETE',
- headers: { 'Authorization': 'Bearer ' + token }
- }));
- if (r.ok) { showToast('Supprimé'); loadBenef(); }
- else showToast('Erreur suppression', '#ff4444');
- } catch(e) { showToast('Erreur réseau', '#ff4444'); }
+  if (!confirm('Supprimer "' + nom + '" ?')) return;
+  try {
+    const r = await safeJson(await fetch(API + '/beneficiaires/' + id, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + token }
+    }));
+    if (r.ok) { showToast('Supprimé'); loadBenef(); }
+    else showToast('Erreur suppression', '#ff4444');
+  } catch(e) { showToast('Erreur réseau', '#ff4444'); }
 }
 
 // Démarrage
 loadBenef();
+
+// ── UX Fluidité ───────────────────────────────────────────────
+
+// 1. Animation entrée de page
+document.body.classList.add('page-enter');
+
+// 2. Pull-to-refresh sur les pages avec feed/liste
+(function initPullToRefresh() {
+  let startY = 0, pulling = false;
+  const MIN_PULL = 80;
+  const indicator = document.createElement('div');
+  indicator.className = 'ptr-indicator';
+  indicator.textContent = 'Relâcher pour actualiser';
+  const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
+  if (!firstChild) return;
+  firstChild.parentNode.insertBefore(indicator, firstChild);
+
+  document.addEventListener('touchstart', e => {
+    if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
+  }, { passive: true });
+  document.addEventListener('touchmove', e => {
+    if (!pulling) return;
+    const dist = e.touches[0].pageY - startY;
+    if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (!pulling) return;
+    pulling = false;
+    const dist = e.changedTouches[0].pageY - startY;
+    indicator.classList.remove('active');
+    if (dist > MIN_PULL) {
+      indicator.classList.add('active');
+      indicator.textContent = 'Actualisation...';
+      setTimeout(() => { window.location.reload(); }, 500);
+    }
+  });
+})();
+
+// 3. Swipe bas pour fermer les sheets
+(function initSwipeSheet() {
+  document.querySelectorAll('.sheet').forEach(sheet => {
+    let startY = 0;
+    sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
+    sheet.addEventListener('touchend', e => {
+      const dist = e.changedTouches[0].pageY - startY;
+      if (dist > 80) {
+        const overlay = sheet.closest('.overlay');
+        if (overlay) overlay.classList.remove('open');
+      }
+    }, { passive: true });
+  });
+})();
+
+// 4. Feedback copier avec vibration
+function copyWithFeedback(text, label) {
+  navigator.clipboard.writeText(text).then(() => {
+    if (navigator.vibrate) navigator.vibrate(50);
+    let el = document.querySelector('.copy-feedback');
+    if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
+    el.textContent = label || 'Copié';
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 1800);
+  });
+}
+
+// 5. Auto-focus sur le premier input des sheets à l'ouverture
+document.querySelectorAll('.overlay').forEach(overlay => {
+  const observer = new MutationObserver(() => {
+    if (overlay.classList.contains('open')) {
+      const input = overlay.querySelector('input:not([type=hidden]), textarea');
+      if (input) setTimeout(() => input.focus(), 300);
+    }
+  });
+  observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+});
+
 </script>
 </body>
 </html>
