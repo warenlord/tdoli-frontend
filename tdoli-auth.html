@@ -7,11 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
- --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
- --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
- --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
- --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
- --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --bg:#05090a;
+ --surface:#0a1018;
+ --card:#0d1520;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.1);
+ --yellow:#ffd740;
+ --blue:#2979ff;--blue-dim:#1a56d4;--blue-glow:rgba(41,121,255,0.12);
+ --red:#ff1744;
+ --text:#ecf4f0;--text-2:#7a9db5;--text-3:#3d6070;
+ --border:rgba(41,121,255,0.12);--border-active:rgba(0,230,118,0.25);
  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -67,7 +71,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .req-item.ok .req-dot{background:var(--green);}
 /* Mot de passe oublié */
 .forgot-link{display:block;text-align:right;font-size:12px;color:var(--green);cursor:pointer;margin-top:6px;margin-bottom:2px;background:none;border:none;width:100%;font-family:'Inter',sans-serif;}
-.btn-primary{width:100%;padding:15px;background:var(--green-dim);box-shadow:0 4px 20px rgba(0,200,83,0.25);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:8px;transition:transform 0.15s,opacity 0.15s;box-shadow:0 4px 20px rgba(0,158,96,0.2);}
+.btn-primary{width:100%;padding:15px;background:var(--blue-dim);box-shadow:0 4px 20px rgba(0,200,83,0.25);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:8px;transition:transform 0.15s,opacity 0.15s;box-shadow:0 4px 20px rgba(0,158,96,0.2);}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .btn-primary:active{transform:scale(0.97);}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
@@ -108,7 +112,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .faceid-icon{font-size:40px;text-align:center;margin-bottom:14px;}
 .faceid-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:8px;}
 .faceid-sub{font-size:13px;color:var(--text-3);text-align:center;line-height:1.6;margin-bottom:22px;}
-.btn-faceid-activate{width:100%;padding:15px;background:var(--green-dim);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;}
+.btn-faceid-activate{width:100%;padding:15px;background:var(--blue-dim);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;}
 .btn-faceid-later{width:100%;padding:13px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
 </style>
 
@@ -300,7 +304,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 const API='https://tdoli-backend.onrender.com';
 let loginEmail='',resendInterval=null;
 
-// Logique d'ouverture 
+// ── Logique d'ouverture ────────────────────────────────────────
 (async function onAppOpen() {
  const faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
  const savedEmail = localStorage.getItem('tdoli_email');
@@ -416,7 +420,7 @@ function dismissBioAuth() {
  }
 }
 
-// Phase 8 — WebAuthn / Face ID 
+// ── Phase 8 — WebAuthn / Face ID ──────────────────────────────
 
 // Afficher la popup Face ID après connexion réussie
 async function maybeShowBiometricPrompt(token, email) {
@@ -512,7 +516,7 @@ async function activateBiometric() {
  redirectAfterLogin();
 }
 
-// Helpers base64url 
+// ── Helpers base64url ──────────────────────────────────────────
 function base64urlToBuffer(base64url) {
  const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
  const bin = atob(base64);
@@ -528,7 +532,7 @@ function bufferToBase64url(buffer) {
  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
-// Modifier loginStep2 pour déclencher la popup 
+// ── Modifier loginStep2 pour déclencher la popup ──────────────
 
 function switchTab(tab){
  ['login-step1','login-step2','register','forgot'].forEach(p=>document.getElementById('panel-'+p).classList.remove('active'));
@@ -609,7 +613,7 @@ async function loginStep2(){
  localStorage.setItem('tdoli_token',data.token);
  localStorage.setItem('tdoli_email',loginEmail);
  localStorage.setItem('tdoli_username',data.username||loginEmail.split('@')[0]);
- // Phase 8 : proposer Face ID 
+ // ── Phase 8 : proposer Face ID ────────────────────────
  await maybeShowBiometricPrompt(data.token, loginEmail);
  }else{showMsg('msg-login-step2',data.message||'Code invalide');btn.disabled=false;btn.innerHTML='Connexion';}
  }catch(e){showMsg('msg-login-step2','Serveur inaccessible');btn.disabled=false;btn.innerHTML='Connexion';}

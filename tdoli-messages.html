@@ -7,18 +7,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
- --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
- --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
- --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
- --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
- --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --bg:#05090a;
+ --surface:#0a1018;
+ --card:#0d1520;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.1);
+ --yellow:#ffd740;
+ --blue:#2979ff;--blue-dim:#1a56d4;--blue-glow:rgba(41,121,255,0.12);
+ --red:#ff1744;
+ --text:#ecf4f0;--text-2:#7a9db5;--text-3:#3d6070;
+ --border:rgba(41,121,255,0.12);--border-active:rgba(0,230,118,0.25);
  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,0,0,0.08);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 12px rgba(0,0,0,0.3);}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(41,121,255,0.1);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 1px 16px rgba(0,0,0,0.4);}
 .topbar-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--text);}
 .topbar-sub{font-size:12px;color:var(--text-3);margin-top:1px;}
 
@@ -27,7 +31,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .conv-item{background:var(--card);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;box-shadow:var(--shadow-card);border:1px solid var(--border);position:relative;}
 .conv-item:active{background:#f8faf9;transform:scale(0.98);}
 .conv-item.unread{border-left:3px solid var(--green);}
-.conv-avatar{width:48px;height:48px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;position:relative;}
+.conv-avatar{width:48px;height:48px;border-radius:50%;background:var(--blue-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;position:relative;}
 .conv-avatar-online{position:absolute;bottom:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#00d982;border:2px solid #fff;}
 .conv-body{flex:1;min-width:0;}
 .conv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
@@ -42,7 +46,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .conv-deal-tag.completed{background:rgba(0,184,92,0.1);color:var(--green);}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);border-top:1px solid rgba(0,0,0,0.08);display:flex;padding:8px 0 24px;box-shadow:0 -2px 20px rgba(0,0,0,0.3);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(41,121,255,0.1);display:flex;padding:8px 0 24px;box-shadow:0 -2px 20px rgba(0,0,0,0.4);}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:all 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
