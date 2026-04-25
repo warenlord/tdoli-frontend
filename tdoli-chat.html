@@ -8,114 +8,122 @@
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <style>
 :root{
- --bg:#05090a;--surface:#0a1018;--card:#0e1a1e;
- --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.1);
- --yellow:#ffd740;--blue:#2979ff;--blue-dim:#1a56d4;--blue-glow:rgba(41,121,255,0.1);
- --red:#ff1744;
- --text:#ecf4f0;--text-2:#8aabb5;--text-3:#3d5a65;
- --border:rgba(41,121,255,0.1);--border-active:rgba(0,230,118,0.22);
- --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
+  --bg:#05090a;--surface:#0a1018;--card:#0e1a1e;
+  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.1);
+  --yellow:#ffd740;--blue:#2979ff;--blue-dim:#1a56d4;--blue-glow:rgba(41,121,255,0.1);
+  --red:#ff1744;
+  --text:#ecf4f0;--text-2:#8aabb5;--text-3:#3d5a65;
+  --border:rgba(41,121,255,0.1);--border-active:rgba(0,230,118,0.22);
+  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 
-/* TOPBAR style Le Bon Coin */
+/* ── TOPBAR style Le Bon Coin ── */
 .topbar{
- flex-shrink:0;
- background:rgba(5,9,10,0.97);
- backdrop-filter:blur(24px);
- -webkit-backdrop-filter:blur(24px);
- border-bottom:1px solid var(--border);
- padding:10px 16px 10px;
- display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+  background:rgba(5,9,10,0.97);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px 10px;
+  display:flex;align-items:center;gap:10px;
 }
 .back-btn{
- width:36px;height:36px;border-radius:50%;
- background:var(--surface);border:1px solid var(--border);
- color:var(--text-2);display:flex;align-items:center;justify-content:center;
- cursor:pointer;flex-shrink:0;text-decoration:none;transition:all 0.2s;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-2);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;text-decoration:none;transition:all 0.2s;
 }
 .back-btn:active{background:var(--card);}
 .partner-avatar{
- width:40px;height:40px;border-radius:50%;flex-shrink:0;
- background:linear-gradient(135deg,#007a3d,#1a3a8f);
- display:flex;align-items:center;justify-content:center;
- font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;
- border:1px solid var(--border-active);
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#007a3d,#1a3a8f);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;
+  border:1px solid var(--border-active);
 }
 .partner-info{flex:1;min-width:0;}
 .partner-name{
- font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
- white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .partner-status{
- font-size:11px;color:var(--text-3);margin-top:1px;
- display:flex;align-items:center;gap:4px;
+  font-size:11px;color:var(--text-3);margin-top:1px;
+  display:flex;align-items:center;gap:4px;
 }
 .online-dot{
- width:6px;height:6px;border-radius:50%;background:var(--green);
- box-shadow:0 0 4px var(--green);flex-shrink:0;
- animation:blink 2s ease infinite;
+  width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 4px var(--green);flex-shrink:0;
+  animation:blink 2s ease infinite;
 }
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.4;}}
 .menu-btn{
- width:36px;height:36px;border-radius:50%;
- background:transparent;border:none;
- color:var(--text-2);display:flex;align-items:center;justify-content:center;
- cursor:pointer;flex-shrink:0;transition:all 0.2s;
+  width:36px;height:36px;border-radius:50%;
+  background:transparent;border:none;
+  color:var(--text-2);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:all 0.2s;
 }
 .menu-btn:active{background:var(--surface);}
 
-/* BANDEAU DEAL */
+/* ── BANDEAU DEAL ── */
 .deal-banner{
- flex-shrink:0;
- background:var(--surface);
- border-bottom:1px solid var(--border);
- padding:10px 16px;
- display:flex;align-items:center;justify-content:space-between;
- cursor:pointer;
- transition:background 0.15s;
+  flex-shrink:0;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;
+  transition:background 0.15s;
 }
 .deal-banner:active{background:var(--card);}
 .deal-banner-left{display:flex;flex-direction:column;gap:2px;}
 .deal-banner-code{
- font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
- color:var(--blue);letter-spacing:1px;
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  color:var(--blue);letter-spacing:1px;
 }
 .deal-banner-amount{
- font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
- color:var(--yellow);
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
+  color:var(--yellow);
 }
 .deal-banner-dir{font-size:11px;color:var(--text-3);}
 .deal-banner-status{
- font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
- padding:4px 10px;border-radius:20px;
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  padding:4px 10px;border-radius:20px;
 }
 .deal-banner-status.matched{background:rgba(0,230,118,0.1);color:var(--green);}
 .deal-banner-status.completed{background:rgba(41,121,255,0.1);color:var(--blue);}
 .deal-banner-status.dispute{background:rgba(255,23,68,0.1);color:var(--red);}
 
-/* MESSAGES AREA */
+
+/* ── CARTE MEMBRE ── */
+.member-card{flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.member-card-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#007a3d,#1a3a8f);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;}
+.member-card-info{flex:1;min-width:0;}
+.member-card-label{font-size:10px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
+.member-card-meta{font-size:12px;color:var(--text-2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ── MESSAGES AREA ── */
 .messages-area{
- flex:1;overflow-y:auto;
- -webkit-overflow-scrolling:touch;
- padding:16px 14px;
- display:flex;flex-direction:column;gap:2px;
- scroll-behavior:smooth;
+  flex:1;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:16px 14px;
+  display:flex;flex-direction:column;gap:2px;
+  scroll-behavior:smooth;
 }
 
 /* Séparateur de date */
 .date-sep{
- display:flex;align-items:center;gap:10px;
- margin:12px 0 8px;
+  display:flex;align-items:center;gap:10px;
+  margin:12px 0 8px;
 }
 .date-sep-line{flex:1;height:1px;background:var(--border);}
 .date-sep-text{
- font-size:11px;color:var(--text-3);
- font-family:'Syne',sans-serif;font-weight:700;
- white-space:nowrap;
+  font-size:11px;color:var(--text-3);
+  font-family:'Syne',sans-serif;font-weight:700;
+  white-space:nowrap;
 }
 
 /* Bulles */
@@ -124,33 +132,33 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .msg-wrap.mine{align-items:flex-end;}
 .msg-wrap.theirs{align-items:flex-start;}
 .msg-bubble{
- max-width:78%;padding:10px 14px;
- font-size:14px;line-height:1.55;word-break:break-word;
+  max-width:78%;padding:10px 14px;
+  font-size:14px;line-height:1.55;word-break:break-word;
 }
 .msg-bubble.mine{
- background:var(--green-dim);color:#fff;
- border-radius:18px 18px 4px 18px;
+  background:var(--green-dim);color:#fff;
+  border-radius:18px 18px 4px 18px;
 }
 .msg-bubble.theirs{
- background:var(--card);border:1px solid var(--border);color:var(--text);
- border-radius:18px 18px 18px 4px;
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  border-radius:18px 18px 18px 4px;
 }
 .msg-bubble.mm-card{
- background:rgba(255,215,64,0.06);border:1px solid rgba(255,215,64,0.2);
- color:var(--text);border-radius:12px;max-width:92%;
+  background:rgba(255,215,64,0.06);border:1px solid rgba(255,215,64,0.2);
+  color:var(--text);border-radius:12px;max-width:92%;
 }
 .msg-meta{
- display:flex;align-items:center;gap:4px;
- font-size:10px;color:var(--text-3);
- margin-top:3px;padding:0 4px;
+  display:flex;align-items:center;gap:4px;
+  font-size:10px;color:var(--text-3);
+  margin-top:3px;padding:0 4px;
 }
 .msg-read{color:var(--green);font-size:10px;}
 
 /* Indicateur frappe */
 .typing-indicator{
- display:none;align-items:center;gap:5px;
- padding:10px 14px;background:var(--card);border:1px solid var(--border);
- border-radius:18px 18px 18px 4px;max-width:70px;margin-bottom:4px;
+  display:none;align-items:center;gap:5px;
+  padding:10px 14px;background:var(--card);border:1px solid var(--border);
+  border-radius:18px 18px 18px 4px;max-width:70px;margin-bottom:4px;
 }
 .typing-indicator.show{display:flex;}
 .typing-dot{width:5px;height:5px;border-radius:50%;background:var(--text-3);animation:typingBounce 1.2s ease infinite;}
@@ -163,70 +171,70 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .empty-chat-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
 .empty-chat-hint{font-size:12px;color:var(--text-3);line-height:1.6;max-width:240px;}
 
-/* ZONE SAISIE */
+/* ── ZONE SAISIE ── */
 .input-area{
- flex-shrink:0;
- background:rgba(5,9,10,0.98);
- backdrop-filter:blur(24px);
- border-top:1px solid var(--border);
- padding:10px 14px;
- padding-bottom:max(10px,env(safe-area-inset-bottom));
- display:flex;align-items:flex-end;gap:8px;
+  flex-shrink:0;
+  background:rgba(5,9,10,0.98);
+  backdrop-filter:blur(24px);
+  border-top:1px solid var(--border);
+  padding:10px 14px;
+  padding-bottom:max(10px,env(safe-area-inset-bottom));
+  display:flex;align-items:flex-end;gap:8px;
 }
 .msg-input{
- flex:1;padding:11px 14px;
- background:var(--surface);border:1px solid var(--border);
- border-radius:22px;color:var(--text);
- font-family:'Inter',sans-serif;font-size:15px;
- resize:none;max-height:80px;overflow-y:auto;line-height:1.4;
- transition:border-color 0.2s;
+  flex:1;padding:11px 14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:22px;color:var(--text);
+  font-family:'Inter',sans-serif;font-size:15px;
+  resize:none;max-height:80px;overflow-y:auto;line-height:1.4;
+  transition:border-color 0.2s;
 }
 .msg-input:focus{outline:none;border-color:var(--green);}
 .msg-input::placeholder{color:var(--text-3);opacity:0.6;}
 .send-btn{
- width:44px;height:44px;border-radius:50%;
- background:var(--green-dim);border:none;color:#fff;
- cursor:pointer;display:flex;align-items:center;justify-content:center;
- flex-shrink:0;transition:transform 0.15s;
- box-shadow:0 3px 12px rgba(0,200,83,0.35);
+  width:44px;height:44px;border-radius:50%;
+  background:var(--green-dim);border:none;color:#fff;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:transform 0.15s;
+  box-shadow:0 3px 12px rgba(0,200,83,0.35);
 }
 .send-btn:active{transform:scale(0.9);}
 .send-btn:disabled{opacity:0.35;}
 
-/* MENU CONTEXTUEL (sheet `...`) */
+/* ── MENU CONTEXTUEL (sheet `...`) ── */
 .overlay{
- position:fixed;inset:0;z-index:300;
- background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);
- display:none;align-items:flex-end;
+  position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);
+  display:none;align-items:flex-end;
 }
 .overlay.open{display:flex;}
 .sheet{
- background:var(--card);border:1px solid var(--border);
- border-top:2px solid var(--green);
- border-radius:22px 22px 0 0;
- padding:0 0 48px;
- width:100%;max-width:480px;margin:0 auto;
- animation:slideUp 0.3s cubic-bezier(0.19,1,0.22,1);
+  background:var(--card);border:1px solid var(--border);
+  border-top:2px solid var(--green);
+  border-radius:22px 22px 0 0;
+  padding:0 0 48px;
+  width:100%;max-width:480px;margin:0 auto;
+  animation:slideUp 0.3s cubic-bezier(0.19,1,0.22,1);
 }
 @keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
 .sheet-handle-row{padding:14px 0 8px;display:flex;justify-content:center;}
 .sheet-handle{width:32px;height:3px;border-radius:2px;background:var(--border);}
 .sheet-title{
- font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
- padding:0 22px 12px;border-bottom:1px solid var(--border);
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
+  padding:0 22px 12px;border-bottom:1px solid var(--border);
 }
 .sheet-action{
- display:flex;align-items:center;gap:14px;
- padding:16px 22px;cursor:pointer;transition:background 0.15s;
- font-size:15px;font-weight:500;
- border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:14px;
+  padding:16px 22px;cursor:pointer;transition:background 0.15s;
+  font-size:15px;font-weight:500;
+  border-bottom:1px solid var(--border);
 }
 .sheet-action:last-child{border-bottom:none;}
 .sheet-action:active{background:var(--surface);}
 .sheet-action-icon{
- width:36px;height:36px;border-radius:50%;
- display:flex;align-items:center;justify-content:center;
- flex-shrink:0;
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
 }
 .sheet-action-icon.green{background:rgba(0,230,118,0.1);color:var(--green);}
 .sheet-action-icon.blue{background:rgba(41,121,255,0.1);color:var(--blue);}
@@ -236,10 +244,10 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
 /* Statut connexion */
 .conn-status{
- position:fixed;top:70px;left:50%;transform:translateX(-50%);
- background:var(--card);border:1px solid var(--border);border-radius:20px;
- padding:6px 14px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;
- z-index:200;display:none;gap:6px;align-items:center;
+  position:fixed;top:70px;left:50%;transform:translateX(-50%);
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:6px 14px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;
+  z-index:200;display:none;gap:6px;align-items:center;
 }
 .conn-status.show{display:flex;}
 .conn-status.reconnecting{color:var(--yellow);border-color:rgba(255,215,64,0.3);}
@@ -256,11 +264,11 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
 /* Toast */
 .toast{
- position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);
- color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
- padding:10px 22px;border-radius:30px;z-index:500;
- opacity:0;pointer-events:none;white-space:nowrap;
- transition:opacity 0.25s,transform 0.25s;
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);
+  color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  padding:10px 22px;border-radius:30px;z-index:500;
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity 0.25s,transform 0.25s;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
@@ -271,22 +279,22 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 <meta name="apple-mobile-web-app-title" content="TDOLI">
 <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
 <script>
- if('serviceWorker' in navigator){
- window.addEventListener('load',()=>{
- navigator.serviceWorker.register('/service-worker.js');
- });
- }
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.register('/service-worker.js');
+    });
+  }
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
 firebase.initializeApp({
- apiKey:"AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
- authDomain:"tdoli-c47a1.firebaseapp.com",
- projectId:"tdoli-c47a1",
- storageBucket:"tdoli-c47a1.appspot.com",
- messagingSenderId:"416651280494",
- appId:"1:416651280494:web:de03eb6a47204031f1267f"
+  apiKey:"AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
+  authDomain:"tdoli-c47a1.firebaseapp.com",
+  projectId:"tdoli-c47a1",
+  storageBucket:"tdoli-c47a1.appspot.com",
+  messagingSenderId:"416651280494",
+  appId:"1:416651280494:web:de03eb6a47204031f1267f"
 });
 </script>
 <script src="/fcm-init.js"></script>
@@ -297,148 +305,158 @@ firebase.initializeApp({
 
 <!-- TOPBAR style Le Bon Coin -->
 <div class="topbar">
- <a class="back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Retour">
- <svg viewBox="0 0 24 24" width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
- </a>
- <div class="partner-avatar" id="partnerAvatar">?</div>
- <div class="partner-info">
- <div class="partner-name" id="partnerName">Chargement...</div>
- <div class="partner-status">
- <div class="online-dot" id="onlineDot" style="display:none"></div>
- <span id="partnerStatusText">Dernière activité...</span>
- </div>
- </div>
- <button class="menu-btn" onclick="openMenu()" aria-label="Menu">
- <svg viewBox="0 0 24 24" width="20" height="20">
- <circle cx="12" cy="5" r="1" fill="currentColor" stroke="none"/>
- <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>
- <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/>
- </svg>
- </button>
+  <a class="back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Retour">
+    <svg viewBox="0 0 24 24" width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+  </a>
+  <div class="partner-avatar" id="partnerAvatar">?</div>
+  <div class="partner-info">
+    <div class="partner-name" id="partnerName">Chargement...</div>
+    <div class="partner-status">
+      <div class="online-dot" id="onlineDot" style="display:none"></div>
+      <span id="partnerStatusText">Dernière activité...</span>
+    </div>
+  </div>
+  <button class="menu-btn" onclick="openMenu()" aria-label="Menu">
+    <svg viewBox="0 0 24 24" width="20" height="20">
+      <circle cx="12" cy="5" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/>
+    </svg>
+  </button>
 </div>
 
 <!-- BANDEAU DEAL cliquable -->
 <div class="deal-banner" id="dealBanner" style="display:none" onclick="goToDeal()">
- <div class="deal-banner-left">
- <div class="deal-banner-code" id="bannerCode">—</div>
- <div class="deal-banner-amount" id="bannerAmount">—</div>
- <div class="deal-banner-dir" id="bannerDir">—</div>
- </div>
- <div class="deal-banner-status matched" id="bannerStatus">En cours</div>
+  <div class="deal-banner-left">
+    <div class="deal-banner-code" id="bannerCode">—</div>
+    <div class="deal-banner-amount" id="bannerAmount">—</div>
+    <div class="deal-banner-dir" id="bannerDir">—</div>
+  </div>
+  <div class="deal-banner-status matched" id="bannerStatus">En cours</div>
+</div>
+
+
+<!-- CARTE MEMBRE -->
+<div class="member-card" id="memberCard" style="display:none;">
+  <div class="member-card-avatar" id="memberCardAvatar">?</div>
+  <div class="member-card-info">
+    <div class="member-card-label">A propos de ce membre</div>
+    <div class="member-card-meta" id="memberCardMeta">Chargement...</div>
+  </div>
 </div>
 
 <!-- MESSAGES -->
 <div class="messages-area" id="messagesArea">
- <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
+  <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
 </div>
 
 <!-- SAISIE -->
 <div class="input-area">
- <textarea class="msg-input" id="msgInput" placeholder="Message..." rows="1"
- onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
- <button class="send-btn" id="sendBtn" onclick="sendMessage()">
- <svg viewBox="0 0 24 24" width="18" height="18">
- <line x1="22" y1="2" x2="11" y2="13"/>
- <polygon points="22 2 15 22 11 13 2 9 22 2"/>
- </svg>
- </button>
+  <textarea class="msg-input" id="msgInput" placeholder="Message..." rows="1"
+    onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
+  <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+    <svg viewBox="0 0 24 24" width="18" height="18">
+      <line x1="22" y1="2" x2="11" y2="13"/>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+    </svg>
+  </button>
 </div>
 
 <!-- MENU CONTEXTUEL `...` -->
 <div class="overlay" id="menuOverlay" onclick="closeMenu(event)">
- <div class="sheet">
- <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
- <div class="sheet-title" id="menuTitle">Options</div>
- <div class="sheet-action" onclick="goToDeal()">
- <div class="sheet-action-icon blue">
- <svg viewBox="0 0 24 24" width="16" height="16"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
- </div>
- <div class="sheet-action-label">
- <div>Voir le deal</div>
- <div class="sheet-action-sub">Consulter les détails et actions</div>
- </div>
- <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
- </div>
- <div class="sheet-action" onclick="openDisputeSheet()">
- <div class="sheet-action-icon red">
- <svg viewBox="0 0 24 24" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
- </div>
- <div class="sheet-action-label">
- <div>Signaler un litige</div>
- <div class="sheet-action-sub">Paiement non reçu, preuve falsifiée...</div>
- </div>
- <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
- </div>
- <div class="sheet-action" onclick="openPartnerSheet()">
- <div class="sheet-action-icon green">
- <svg viewBox="0 0 24 24" width="16" height="16"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
- </div>
- <div class="sheet-action-label">
- <div>Informations du partenaire</div>
- <div class="sheet-action-sub">Profil, niveau, avis</div>
- </div>
- <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
- </div>
- </div>
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title" id="menuTitle">Options</div>
+    <div class="sheet-action" onclick="goToDeal()">
+      <div class="sheet-action-icon blue">
+        <svg viewBox="0 0 24 24" width="16" height="16"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div class="sheet-action-label">
+        <div>Voir le deal</div>
+        <div class="sheet-action-sub">Consulter les détails et actions</div>
+      </div>
+      <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="sheet-action" onclick="openDisputeSheet()">
+      <div class="sheet-action-icon red">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="sheet-action-label">
+        <div>Signaler un litige</div>
+        <div class="sheet-action-sub">Paiement non reçu, preuve falsifiée...</div>
+      </div>
+      <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="sheet-action" onclick="openPartnerSheet()">
+      <div class="sheet-action-icon green">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="sheet-action-label">
+        <div>Informations du partenaire</div>
+        <div class="sheet-action-sub">Profil, niveau, avis</div>
+      </div>
+      <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
 </div>
 
 <!-- SHEET LITIGE -->
 <div class="overlay" id="disputeOverlay" onclick="closeDispute(event)">
- <div class="sheet">
- <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
- <div class="sheet-title">Signaler un litige</div>
- <div style="padding:0 22px 16px">
- <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.6;">
- Choisis la raison du litige. L'équipe TDOLI sera notifiée immédiatement.
- </p>
- <div id="disputeOptions">
- <label class="dispute-option" onclick="selectDispute(this,'no_payment')">
- <input type="radio" name="dispute" value="no_payment" style="display:none">
- <div class="dispute-opt-inner">
- <div class="dispute-radio"></div>
- <div>
- <div style="font-size:14px;font-weight:600;">Paiement non reçu</div>
- <div style="font-size:12px;color:var(--text-3);margin-top:2px;">L'autre partie n'a pas envoyé les fonds</div>
- </div>
- </div>
- </label>
- <label class="dispute-option" onclick="selectDispute(this,'fake_proof')">
- <input type="radio" name="dispute" value="fake_proof" style="display:none">
- <div class="dispute-opt-inner">
- <div class="dispute-radio"></div>
- <div>
- <div style="font-size:14px;font-weight:600;">Preuve falsifiée</div>
- <div style="font-size:12px;color:var(--text-3);margin-top:2px;">La capture d'écran fournie est frauduleuse</div>
- </div>
- </div>
- </label>
- <label class="dispute-option" onclick="selectDispute(this,'no_response')">
- <input type="radio" name="dispute" value="no_response" style="display:none">
- <div class="dispute-opt-inner">
- <div class="dispute-radio"></div>
- <div>
- <div style="font-size:14px;font-weight:600;">Ne repond plus</div>
- <div style="font-size:12px;color:var(--text-3);margin-top:2px;">Le partenaire est injoignable depuis +12h</div>
- </div>
- </div>
- </label>
- <label class="dispute-option" onclick="selectDispute(this,'other')">
- <input type="radio" name="dispute" value="other" style="display:none">
- <div class="dispute-opt-inner">
- <div class="dispute-radio"></div>
- <div>
- <div style="font-size:14px;font-weight:600;">Autre raison</div>
- <div style="font-size:12px;color:var(--text-3);margin-top:2px;">Décris le problème dans le message</div>
- </div>
- </div>
- </label>
- </div>
- <button class="btn-dispute" id="btnDispute" onclick="submitDispute()" disabled>
- Confirmer le litige
- </button>
- <button class="btn-cancel-dispute" onclick="closeDispute()">Annuler</button>
- </div>
- </div>
+  <div class="sheet">
+    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+    <div class="sheet-title">Signaler un litige</div>
+    <div style="padding:0 22px 16px">
+      <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.6;">
+        Choisis la raison du litige. L'équipe TDOLI sera notifiée immédiatement.
+      </p>
+      <div id="disputeOptions">
+        <label class="dispute-option" onclick="selectDispute(this,'no_payment')">
+          <input type="radio" name="dispute" value="no_payment" style="display:none">
+          <div class="dispute-opt-inner">
+            <div class="dispute-radio"></div>
+            <div>
+              <div style="font-size:14px;font-weight:600;">Paiement non reçu</div>
+              <div style="font-size:12px;color:var(--text-3);margin-top:2px;">L'autre partie n'a pas envoyé les fonds</div>
+            </div>
+          </div>
+        </label>
+        <label class="dispute-option" onclick="selectDispute(this,'fake_proof')">
+          <input type="radio" name="dispute" value="fake_proof" style="display:none">
+          <div class="dispute-opt-inner">
+            <div class="dispute-radio"></div>
+            <div>
+              <div style="font-size:14px;font-weight:600;">Preuve falsifiée</div>
+              <div style="font-size:12px;color:var(--text-3);margin-top:2px;">La capture d'écran fournie est frauduleuse</div>
+            </div>
+          </div>
+        </label>
+        <label class="dispute-option" onclick="selectDispute(this,'no_response')">
+          <input type="radio" name="dispute" value="no_response" style="display:none">
+          <div class="dispute-opt-inner">
+            <div class="dispute-radio"></div>
+            <div>
+              <div style="font-size:14px;font-weight:600;">Ne repond plus</div>
+              <div style="font-size:12px;color:var(--text-3);margin-top:2px;">Le partenaire est injoignable depuis +12h</div>
+            </div>
+          </div>
+        </label>
+        <label class="dispute-option" onclick="selectDispute(this,'other')">
+          <input type="radio" name="dispute" value="other" style="display:none">
+          <div class="dispute-opt-inner">
+            <div class="dispute-radio"></div>
+            <div>
+              <div style="font-size:14px;font-weight:600;">Autre raison</div>
+              <div style="font-size:12px;color:var(--text-3);margin-top:2px;">Décris le problème dans le message</div>
+            </div>
+          </div>
+        </label>
+      </div>
+      <button class="btn-dispute" id="btnDispute" onclick="submitDispute()" disabled>
+        Confirmer le litige
+      </button>
+      <button class="btn-cancel-dispute" onclick="closeDispute()">Annuler</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -446,37 +464,37 @@ firebase.initializeApp({
 <style>
 .dispute-option{display:block;margin-bottom:10px;cursor:pointer;}
 .dispute-opt-inner{
- display:flex;align-items:center;gap:12px;
- padding:14px 16px;background:var(--surface);
- border:1px solid var(--border);border-radius:var(--r);
- transition:all 0.15s;
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--r);
+  transition:all 0.15s;
 }
 .dispute-option.selected .dispute-opt-inner{
- border-color:var(--red);background:rgba(255,23,68,0.06);
+  border-color:var(--red);background:rgba(255,23,68,0.06);
 }
 .dispute-radio{
- width:18px;height:18px;border-radius:50%;
- border:2px solid var(--text-3);flex-shrink:0;
- display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid var(--text-3);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:all 0.15s;
 }
 .dispute-option.selected .dispute-radio{
- border-color:var(--red);background:var(--red);
+  border-color:var(--red);background:var(--red);
 }
 .dispute-option.selected .dispute-radio::after{
- content:'';width:6px;height:6px;border-radius:50%;background:#fff;
+  content:'';width:6px;height:6px;border-radius:50%;background:#fff;
 }
 .btn-dispute{
- width:100%;padding:15px;margin-top:16px;
- background:var(--red);color:#fff;border:none;
- border-radius:var(--r);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
- cursor:pointer;transition:opacity 0.2s;
+  width:100%;padding:15px;margin-top:16px;
+  background:var(--red);color:#fff;border:none;
+  border-radius:var(--r);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:opacity 0.2s;
 }
 .btn-dispute:disabled{opacity:0.35;cursor:not-allowed;}
 .btn-cancel-dispute{
- width:100%;padding:12px;margin-top:8px;
- background:transparent;color:var(--text-3);
- border:1px solid var(--border);border-radius:var(--r);
- font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;
+  width:100%;padding:12px;margin-top:8px;
+  background:transparent;color:var(--text-3);
+  border:1px solid var(--border);border-radius:var(--r);
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;
 }
 </style>
 
@@ -498,334 +516,358 @@ let currentDeal = null;
 let selectedDisputeReason = null;
 let lastDate = null;
 
-// TOAST 
+// ── TOAST ────────────────────────────────────────────────────
 function showToast(msg, color) {
- const t = document.getElementById('toast');
- t.textContent = msg;
- t.style.background = color || 'var(--green-dim)';
- t.classList.add('show');
- setTimeout(() => t.classList.remove('show'), 2500);
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color || 'var(--green-dim)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// SOCKET 
+// ── SOCKET ───────────────────────────────────────────────────
 function connectSocket() {
- socket = io(API, {
- auth: { token },
- transports: ['websocket', 'polling'],
- reconnectionAttempts: 5,
- reconnectionDelay: 2000
- });
- socket.on('connect', () => {
- socket.emit('join_deal', dealId);
- showConnStatus('Connecte', 'connected');
- setTimeout(() => hideConnStatus(), 2000);
- document.getElementById('onlineDot').style.display = 'block';
- document.getElementById('partnerStatusText').textContent = 'En ligne';
- });
- socket.on('disconnect', () => {
- document.getElementById('onlineDot').style.display = 'none';
- document.getElementById('partnerStatusText').textContent = 'Deconnecte';
- });
- socket.on('connect_error', () => {
- showConnStatus('Reconnexion...', 'reconnecting');
- document.getElementById('partnerStatusText').textContent = 'Reconnexion...';
- });
- socket.on('reconnect', () => {
- socket.emit('join_deal', dealId);
- showConnStatus('Reconnecte', 'connected');
- setTimeout(() => hideConnStatus(), 2000);
- });
- socket.on('new_message', (msg) => {
- appendMessage(msg);
- const area = document.getElementById('messagesArea');
- area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
- });
- socket.on('user_typing', ({ email: typingEmail, isTyping: typing }) => {
- if (typingEmail !== email) {
- const indicator = document.getElementById('typingIndicator');
- if (indicator) indicator.className = 'typing-indicator' + (typing ? ' show' : '');
- }
- });
+  socket = io(API, {
+    auth: { token },
+    transports: ['websocket', 'polling'],
+    reconnectionAttempts: 5,
+    reconnectionDelay: 2000
+  });
+  socket.on('connect', () => {
+    socket.emit('join_deal', dealId);
+    showConnStatus('Connecte', 'connected');
+    setTimeout(() => hideConnStatus(), 2000);
+    document.getElementById('onlineDot').style.display = 'block';
+    document.getElementById('partnerStatusText').textContent = 'En ligne';
+  });
+  socket.on('disconnect', () => {
+    document.getElementById('onlineDot').style.display = 'none';
+    document.getElementById('partnerStatusText').textContent = 'Deconnecte';
+  });
+  socket.on('connect_error', () => {
+    showConnStatus('Reconnexion...', 'reconnecting');
+    document.getElementById('partnerStatusText').textContent = 'Reconnexion...';
+  });
+  socket.on('reconnect', () => {
+    socket.emit('join_deal', dealId);
+    showConnStatus('Reconnecte', 'connected');
+    setTimeout(() => hideConnStatus(), 2000);
+  });
+  socket.on('new_message', (msg) => {
+    appendMessage(msg);
+    const area = document.getElementById('messagesArea');
+    area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
+  });
+  socket.on('user_typing', ({ email: typingEmail, isTyping: typing }) => {
+    if (typingEmail !== email) {
+      const indicator = document.getElementById('typingIndicator');
+      if (indicator) indicator.className = 'typing-indicator' + (typing ? ' show' : '');
+    }
+  });
 }
 
 function showConnStatus(text, type) {
- const el = document.getElementById('connStatus');
- el.textContent = text;
- el.className = 'conn-status show ' + type;
+  const el = document.getElementById('connStatus');
+  el.textContent = text;
+  el.className = 'conn-status show ' + type;
 }
 function hideConnStatus() {
- document.getElementById('connStatus').className = 'conn-status';
+  document.getElementById('connStatus').className = 'conn-status';
 }
 
-// DEAL INFO 
+// ── DEAL INFO ────────────────────────────────────────────────
 async function loadDealInfo() {
- try {
- const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
- const deals = await res.json();
- const deal = deals.find(d => d._id === dealId);
- if (!deal) return;
- currentDeal = deal;
+  try {
+    const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+    const deals = await res.json();
+    const deal = deals.find(d => d._id === dealId);
+    if (!deal) return;
+    currentDeal = deal;
 
- const isSender = deal.sender === email;
- otherEmail = isSender ? deal.receiverEmail : deal.sender;
- const otherName = deal.senderUsername
- ? (isSender ? (deal.receiverUsername || otherEmail.split('@')[0]) : deal.senderUsername)
- : otherEmail.split('@')[0];
+    const isSender = deal.sender === email;
+    otherEmail = isSender ? deal.receiverEmail : deal.sender;
+    const otherName = deal.senderUsername
+      ? (isSender ? (deal.receiverUsername || otherEmail.split('@')[0]) : deal.senderUsername)
+      : otherEmail.split('@')[0];
 
- // Initiales avatar partenaire
- const parts = otherName.trim().split(' ').filter(p => p.length > 0);
- const initials = parts.length >= 2
- ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
- : otherName.substring(0, 2).toUpperCase();
+    // Initiales avatar partenaire
+    const parts = otherName.trim().split(' ').filter(p => p.length > 0);
+    const initials = parts.length >= 2
+      ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+      : otherName.substring(0, 2).toUpperCase();
 
- document.getElementById('partnerAvatar').textContent = initials;
- document.getElementById('partnerName').textContent = otherName;
- document.getElementById('menuTitle').textContent = 'Chat avec ' + otherName;
+    document.getElementById('partnerAvatar').textContent = initials;
+    document.getElementById('partnerName').textContent = otherName;
+    document.getElementById('menuTitle').textContent = 'Chat avec ' + otherName;
 
- // Bandeau deal
- document.getElementById('bannerCode').textContent = deal.dealCode || dealId.slice(-6).toUpperCase();
- document.getElementById('bannerAmount').textContent =
- Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
- document.getElementById('bannerDir').textContent =
- (deal.fromCountry || '?') + ' → ' + (deal.toCountry || '?');
+    // Bandeau deal
+    document.getElementById('bannerCode').textContent = deal.dealCode || dealId.slice(-6).toUpperCase();
+    document.getElementById('bannerAmount').textContent =
+      Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
+    document.getElementById('bannerDir').textContent =
+      (deal.fromCountry || '?') + ' → ' + (deal.toCountry || '?');
 
- const statusEl = document.getElementById('bannerStatus');
- if (deal.status === 'completed') {
- statusEl.textContent = 'Termine';
- statusEl.className = 'deal-banner-status completed';
- } else if (deal.status === 'dispute') {
- statusEl.textContent = 'Litige';
- statusEl.className = 'deal-banner-status dispute';
- } else {
- statusEl.textContent = 'En cours';
- statusEl.className = 'deal-banner-status matched';
- }
- document.getElementById('dealBanner').style.display = 'flex';
- } catch (e) {}
+    const statusEl = document.getElementById('bannerStatus');
+    if (deal.status === 'completed') {
+      statusEl.textContent = 'Termine';
+      statusEl.className = 'deal-banner-status completed';
+    } else if (deal.status === 'dispute') {
+      statusEl.textContent = 'Litige';
+      statusEl.className = 'deal-banner-status dispute';
+    } else {
+      statusEl.textContent = 'En cours';
+      statusEl.className = 'deal-banner-status matched';
+    }
+    document.getElementById('dealBanner').style.display = 'flex';
+  } catch (e) {}
 }
 
-// MESSAGES 
+// ── MESSAGES ─────────────────────────────────────────────────
 function formatTime(d) {
- return new Date(d).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  return new Date(d).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 }
 function formatDate(d) {
- const date = new Date(d);
- const today = new Date();
- const yesterday = new Date(today);
- yesterday.setDate(yesterday.getDate() - 1);
- if (date.toDateString() === today.toDateString()) return "Aujourd'hui";
- if (date.toDateString() === yesterday.toDateString()) return 'Hier';
- return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  const date = new Date(d);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (date.toDateString() === today.toDateString()) return "Aujourd'hui";
+  if (date.toDateString() === yesterday.toDateString()) return 'Hier';
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 function escHtml(str) {
- return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 function isMM(text) { return text.startsWith(' Infos Mobile Money'); }
 function renderMMCard(text) {
- const lines = text.split('\n');
- return '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:8px;">'
- + escHtml(lines[0]) + '</div>'
- + lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">' + escHtml(l) + '</div>').join('');
+  const lines = text.split('\n');
+  return '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:8px;">'
+    + escHtml(lines[0]) + '</div>'
+    + lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">' + escHtml(l) + '</div>').join('');
 }
 
 function dateSeparator(dateStr) {
- return `<div class="date-sep">
- <div class="date-sep-line"></div>
- <div class="date-sep-text">${formatDate(dateStr)}</div>
- <div class="date-sep-line"></div>
- </div>`;
+  return `<div class="date-sep">
+    <div class="date-sep-line"></div>
+    <div class="date-sep-text">${formatDate(dateStr)}</div>
+    <div class="date-sep-line"></div>
+  </div>`;
 }
 
 function buildMessageHTML(m, showDateSep) {
- const isMine = m.sender === email;
- let html = showDateSep ? dateSeparator(m.createdAt) : '';
- if (isMM(m.text)) {
- html += `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
- <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div>
- <div class="msg-meta">${formatTime(m.createdAt)}</div>
- </div>`;
- } else {
- html += `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
- <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div>
- <div class="msg-meta">
- ${formatTime(m.createdAt)}
- ${isMine ? '<span class="msg-read"></span>' : ''}
- </div>
- </div>`;
- }
- return html;
+  const isMine = m.sender === email;
+  let html = showDateSep ? dateSeparator(m.createdAt) : '';
+  if (isMM(m.text)) {
+    html += `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+      <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div>
+      <div class="msg-meta">${formatTime(m.createdAt)}</div>
+    </div>`;
+  } else {
+    html += `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+      <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div>
+      <div class="msg-meta">
+        ${formatTime(m.createdAt)}
+        ${isMine ? '<span class="msg-read">✓</span>' : ''}
+      </div>
+    </div>`;
+  }
+  return html;
 }
 
 async function loadInitialMessages() {
- try {
- const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
- const msgs = await res.json();
- const area = document.getElementById('messagesArea');
+  try {
+    const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
+    const msgs = await res.json();
+    const area = document.getElementById('messagesArea');
 
- if (!Array.isArray(msgs) || msgs.length === 0) {
- area.innerHTML = `
- <div class="empty-chat">
- <div class="empty-chat-title">Aucun message</div>
- <div class="empty-chat-hint">Commence la conversation avec ton partenaire.</div>
- </div>
- <div class="typing-indicator" id="typingIndicator">
- <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
- </div>`;
- return;
- }
+    if (!Array.isArray(msgs) || msgs.length === 0) {
+      area.innerHTML = `
+        <div class="empty-chat">
+          <div class="empty-chat-title">Aucun message</div>
+          <div class="empty-chat-hint">Commence la conversation avec ton partenaire.</div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+          <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+        </div>`;
+      return;
+    }
 
- let html = '';
- let prevDate = null;
- msgs.forEach(m => {
- const msgDate = new Date(m.createdAt).toDateString();
- const showSep = msgDate !== prevDate;
- html += buildMessageHTML(m, showSep);
- prevDate = msgDate;
- });
- html += '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
- area.innerHTML = html;
- area.scrollTop = area.scrollHeight;
- } catch (e) {
- document.getElementById('messagesArea').innerHTML =
- '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
- }
+    let html = '';
+    let prevDate = null;
+    msgs.forEach(m => {
+      const msgDate = new Date(m.createdAt).toDateString();
+      const showSep = msgDate !== prevDate;
+      html += buildMessageHTML(m, showSep);
+      prevDate = msgDate;
+    });
+    html += '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+    area.innerHTML = html;
+    area.scrollTop = area.scrollHeight;
+  } catch (e) {
+    document.getElementById('messagesArea').innerHTML =
+      '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
+  }
 }
 
 function appendMessage(m) {
- const area = document.getElementById('messagesArea');
- const emptyChat = area.querySelector('.empty-chat');
- if (emptyChat) emptyChat.remove();
+  const area = document.getElementById('messagesArea');
+  const emptyChat = area.querySelector('.empty-chat');
+  if (emptyChat) emptyChat.remove();
 
- // Séparateur de date si nouveau jour
- const msgDate = new Date(m.createdAt).toDateString();
- const lastMsg = area.querySelector('.msg-wrap:last-of-type');
- let showSep = false;
- if (!lastMsg) {
- showSep = true;
- } else {
- const lastTime = lastMsg.dataset.date;
- if (lastTime !== msgDate) showSep = true;
- }
+  // Séparateur de date si nouveau jour
+  const msgDate = new Date(m.createdAt).toDateString();
+  const lastMsg = area.querySelector('.msg-wrap:last-of-type');
+  let showSep = false;
+  if (!lastMsg) {
+    showSep = true;
+  } else {
+    const lastTime = lastMsg.dataset.date;
+    if (lastTime !== msgDate) showSep = true;
+  }
 
- const typingIndicator = document.getElementById('typingIndicator');
- const div = document.createElement('div');
- div.innerHTML = buildMessageHTML(m, showSep);
- Array.from(div.children).forEach(child => {
- if (child.classList.contains('msg-wrap')) child.dataset.date = msgDate;
- typingIndicator ? area.insertBefore(child, typingIndicator) : area.appendChild(child);
- });
+  const typingIndicator = document.getElementById('typingIndicator');
+  const div = document.createElement('div');
+  div.innerHTML = buildMessageHTML(m, showSep);
+  Array.from(div.children).forEach(child => {
+    if (child.classList.contains('msg-wrap')) child.dataset.date = msgDate;
+    typingIndicator ? area.insertBefore(child, typingIndicator) : area.appendChild(child);
+  });
 }
 
-// ENVOI 
+// ── ENVOI ────────────────────────────────────────────────────
 function sendMessage() {
- const input = document.getElementById('msgInput');
- const text = input.value.trim();
- if (!text || !socket) return;
- socket.emit('send_message', { dealId, text });
- input.value = '';
- input.style.height = 'auto';
- stopTyping();
- if (navigator.vibrate) navigator.vibrate(30);
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text || !socket) return;
+  socket.emit('send_message', { dealId, text });
+  input.value = '';
+  input.style.height = 'auto';
+  stopTyping();
+  if (navigator.vibrate) navigator.vibrate(30);
 }
 function handleInput(el) {
- el.style.height = 'auto';
- el.style.height = Math.min(el.scrollHeight, 80) + 'px';
- if (!isTyping && socket) { isTyping = true; socket.emit('typing', { dealId, isTyping: true }); }
- clearTimeout(typingTimer);
- typingTimer = setTimeout(stopTyping, 2000);
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+  if (!isTyping && socket) { isTyping = true; socket.emit('typing', { dealId, isTyping: true }); }
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(stopTyping, 2000);
 }
 function stopTyping() {
- if (isTyping && socket) { isTyping = false; socket.emit('typing', { dealId, isTyping: false }); }
- clearTimeout(typingTimer);
+  if (isTyping && socket) { isTyping = false; socket.emit('typing', { dealId, isTyping: false }); }
+  clearTimeout(typingTimer);
 }
 function handleKey(e) {
- if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
-// NAVIGATION 
+
+// ── INFOS PARTENAIRE ─────────────────────────────────────────
+async function loadPartnerInfo(partnerEmail) {
+  try {
+    const res = await fetch(API + '/profile/' + encodeURIComponent(partnerEmail), {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return;
+    const p = await res.json();
+    const rating = p.averageRating > 0
+      ? '★'.repeat(Math.round(p.averageRating)) + '☆'.repeat(5 - Math.round(p.averageRating)) + ' ' + p.averageRating.toFixed(1)
+      : 'Nouveau';
+    const deals = p.completedDeals || p.totalDeals || 0;
+    const since = p.createdAt
+      ? new Date(p.createdAt).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+      : null;
+    let meta = rating;
+    if (deals > 0) meta += ' · ' + deals + ' echange' + (deals > 1 ? 's' : '');
+    if (since) meta += ' · Depuis ' + since;
+    document.getElementById('memberCardMeta').textContent = meta;
+    document.getElementById('memberCard').style.display = 'flex';
+  } catch(e) {}
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────
 function goToDeal() {
- closeMenu();
- window.location.href = '/tdoli-deals.html';
+  closeMenu();
+  window.location.href = '/tdoli-deals.html';
 }
 
-// MENU `...` 
+// ── MENU `...` ───────────────────────────────────────────────
 function openMenu() {
- document.getElementById('menuOverlay').classList.add('open');
+  document.getElementById('menuOverlay').classList.add('open');
 }
 function closeMenu(e) {
- if (!e || e.target === document.getElementById('menuOverlay')) {
- document.getElementById('menuOverlay').classList.remove('open');
- }
+  if (!e || e.target === document.getElementById('menuOverlay')) {
+    document.getElementById('menuOverlay').classList.remove('open');
+  }
 }
 
-// SHEET LITIGE 
+// ── SHEET LITIGE ─────────────────────────────────────────────
 function openDisputeSheet() {
- closeMenu();
- setTimeout(() => document.getElementById('disputeOverlay').classList.add('open'), 200);
+  closeMenu();
+  setTimeout(() => document.getElementById('disputeOverlay').classList.add('open'), 200);
 }
 function closeDispute(e) {
- if (!e || e.target === document.getElementById('disputeOverlay')) {
- document.getElementById('disputeOverlay').classList.remove('open');
- selectedDisputeReason = null;
- document.querySelectorAll('.dispute-option').forEach(o => o.classList.remove('selected'));
- document.getElementById('btnDispute').disabled = true;
- }
+  if (!e || e.target === document.getElementById('disputeOverlay')) {
+    document.getElementById('disputeOverlay').classList.remove('open');
+    selectedDisputeReason = null;
+    document.querySelectorAll('.dispute-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('btnDispute').disabled = true;
+  }
 }
 function selectDispute(el, reason) {
- document.querySelectorAll('.dispute-option').forEach(o => o.classList.remove('selected'));
- el.classList.add('selected');
- selectedDisputeReason = reason;
- document.getElementById('btnDispute').disabled = false;
+  document.querySelectorAll('.dispute-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedDisputeReason = reason;
+  document.getElementById('btnDispute').disabled = false;
 }
 async function submitDispute() {
- if (!selectedDisputeReason || !currentDeal) return;
- const btn = document.getElementById('btnDispute');
- btn.disabled = true;
- btn.innerHTML = '<span class="spinner"></span>En cours...';
- try {
- const res = await fetch(API + '/deals/' + dealId + '/dispute', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
- body: JSON.stringify({ reason: selectedDisputeReason })
- });
- if (res.ok) {
- closeDispute();
- showToast('Litige signale — equipe notifiee', 'var(--red)');
- setTimeout(() => window.location.href = '/tdoli-deals.html', 2000);
- } else {
- const d = await res.json();
- showToast(d.message || 'Erreur', 'var(--red)');
- btn.disabled = false;
- btn.innerHTML = 'Confirmer le litige';
- }
- } catch(e) {
- showToast('Serveur inaccessible', 'var(--red)');
- btn.disabled = false;
- btn.innerHTML = 'Confirmer le litige';
- }
+  if (!selectedDisputeReason || !currentDeal) return;
+  const btn = document.getElementById('btnDispute');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>En cours...';
+  try {
+    const res = await fetch(API + '/deals/' + dealId + '/dispute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ reason: selectedDisputeReason })
+    });
+    if (res.ok) {
+      closeDispute();
+      showToast('Litige signale — equipe notifiee', 'var(--red)');
+      setTimeout(() => window.location.href = '/tdoli-deals.html', 2000);
+    } else {
+      const d = await res.json();
+      showToast(d.message || 'Erreur', 'var(--red)');
+      btn.disabled = false;
+      btn.innerHTML = 'Confirmer le litige';
+    }
+  } catch(e) {
+    showToast('Serveur inaccessible', 'var(--red)');
+    btn.disabled = false;
+    btn.innerHTML = 'Confirmer le litige';
+  }
 }
 
-// SHEET PARTENAIRE 
+// ── SHEET PARTENAIRE ─────────────────────────────────────────
 function openPartnerSheet() {
- closeMenu();
- if (otherEmail) window.location.href = '/tdoli-profile.html?user=' + encodeURIComponent(otherEmail);
+  closeMenu();
+  if (otherEmail) window.location.href = '/tdoli-profile.html?user=' + encodeURIComponent(otherEmail);
 }
 
-// INIT 
+// ── INIT ─────────────────────────────────────────────────────
 window.addEventListener('resize', () => {
- setTimeout(() => {
- const area = document.getElementById('messagesArea');
- area.scrollTop = area.scrollHeight;
- }, 100);
+  setTimeout(() => {
+    const area = document.getElementById('messagesArea');
+    area.scrollTop = area.scrollHeight;
+  }, 100);
 });
 document.getElementById('msgInput').addEventListener('focus', () => {
- setTimeout(() => {
- const area = document.getElementById('messagesArea');
- area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
- }, 300);
+  setTimeout(() => {
+    const area = document.getElementById('messagesArea');
+    area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
+  }, 300);
 });
 window.addEventListener('beforeunload', () => {
- if (socket) { socket.emit('leave_deal', dealId); socket.disconnect(); }
+  if (socket) { socket.emit('leave_deal', dealId); socket.disconnect(); }
 });
 
 loadDealInfo();
