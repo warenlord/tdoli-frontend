@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TDOLI — Chat</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <style>
 :root{
- --bg:#080c0a;--surface:#0e1612;--card:#131d16;
- --green:#00a854;--green-dim:#007a3d;--green-glow:rgba(0,168,84,0.1);
- --yellow:#c49a00;--blue:#2952cc;--red:#c0392b;
- --text:#ddeae2;--text-2:#8aab96;--text-3:#4a6654;
- --border:rgba(255,255,255,0.06);--border-active:rgba(0,168,84,0.25);
- --r:14px;
- --shadow:0 2px 16px rgba(0,0,0,0.4);
+  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+  --r:14px;
+  --shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
@@ -62,7 +62,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 .msg-input{flex:1;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;resize:none;max-height:80px;overflow-y:auto;line-height:1.4;transition:border-color 0.2s;-webkit-appearance:none;}
 .msg-input:focus{outline:none;border-color:var(--green);}
 .msg-input::placeholder{color:var(--text-3);opacity:0.6;}
-.send-btn{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#00d982,#00b368);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;box-shadow:0 3px 16px rgba(0,179,104,0.4);}
+.send-btn{width:46px;height:46px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;box-shadow:0 3px 16px rgba(0,179,104,0.4);}
 .send-btn:active{transform:scale(0.9);}
 .send-btn:disabled{opacity:0.35;}
 /* Sheet Mobile Money */
@@ -78,7 +78,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
 .form-input-field,.form-select-field{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
 .form-input-field:focus,.form-select-field:focus{outline:none;border-color:var(--green);}
-.btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;position:relative;overflow:hidden;}
+.btn-primary{width:100%;padding:15px;background:var(--green-dim);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;position:relative;overflow:hidden;}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .btn-primary:disabled{opacity:0.35;}
 .btn-cancel{width:100%;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
@@ -95,7 +95,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
  width: auto;
  display: block;
 }
-.user-avatar-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
+.user-avatar-btn{width:40px;height:40px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
 .share-btn{background:transparent;border:none;color:#fcd116;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;white-space:nowrap;}
 </style>
 

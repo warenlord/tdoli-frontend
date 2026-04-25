@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TDOLI — Messages</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
- --bg:#080c0a;--surface:#0e1612;--card:#131d16;
- --green:#00a854;--green-dim:#007a3d;--green-glow:rgba(0,168,84,0.1);
- --yellow:#c49a00;--blue:#2952cc;--red:#c0392b;
- --text:#ddeae2;--text-2:#8aab96;--text-3:#4a6654;
- --border:rgba(255,255,255,0.06);--border-active:rgba(0,168,84,0.25);
- --r:14px;
- --shadow:0 2px 16px rgba(0,0,0,0.4);
+  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+  --r:14px;
+  --shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;}
@@ -28,7 +28,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .conv-item{background:var(--card);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;box-shadow:var(--shadow-card);border:1px solid var(--border);position:relative;}
 .conv-item:active{background:#f8faf9;transform:scale(0.98);}
 .conv-item.unread{border-left:3px solid var(--green);}
-.conv-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;position:relative;}
+.conv-avatar{width:48px;height:48px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;position:relative;}
 .conv-avatar-online{position:absolute;bottom:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#00d982;border:2px solid #fff;}
 .conv-body{flex:1;min-width:0;}
 .conv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
