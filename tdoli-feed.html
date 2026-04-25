@@ -96,11 +96,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,83,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .fab:active{transform:scale(0.9);}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;color:var(--text-3);font-size:8px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
+.nav-item span{white-space:nowrap;}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
 .nav-icon-wrap{position:relative;}
-.deals-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--yellow);color:#000;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
+.nav-badge{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}
+.nav-badge.show{display:flex;}
+.nav-badge.yellow{background:var(--yellow);color:#000;}
+.nav-badge.red{background:var(--red);color:#fff;}
+/* Compat ancien deals-badge */
+.deals-badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:8px;background:var(--yellow);color:#000;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}
 .deals-badge.show{display:flex;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
@@ -245,52 +251,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .pub-test-text{font-size:12px;color:var(--text);line-height:1.5;font-style:italic;}
 .pub-empty{text-align:center;padding:20px;color:var(--text-3);font-size:13px;}
 
-
-/* UX Fluidité globale */
-
-/* Skeleton loader */
-.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--card) 50%,var(--surface) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.4s infinite;}
-@keyframes skeleton-shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-.skeleton-line{height:12px;border-radius:6px;margin-bottom:8px;}
-.skeleton-line.short{width:60%;}
-.skeleton-line.medium{width:80%;}
-.skeleton-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:8px;}
-
-/* Pull to refresh */
-.ptr-indicator{text-align:center;padding:12px;font-size:12px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;height:0;overflow:hidden;transition:height 0.2s;}
-.ptr-indicator.active{height:40px;}
-
-/* Transitions de pages */
-.page-enter{animation:pageEnter 0.2s ease-out;}
-@keyframes pageEnter{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-
-/* Feedback copier */
-.copy-feedback{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--green-dim);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:8px 20px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:999;}
-.copy-feedback.show{opacity:1;}
-
-/* Swipe sheet */
-.sheet{touch-action:pan-y;}
-
-/* Boutons actifs feedback haptique */
-.btn-primary:active,.btn-cancel:active,.annonce-item:active,.deal-item:active{transform:scale(0.97);}
-
-/* Progress bar deal */
-.deal-progress{height:3px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden;}
-.deal-progress-fill{height:100%;border-radius:2px;background:var(--green);transition:width 0.4s ease;}
-
-/* Compte à rebours timer */
-.timer-countdown{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);}
-.timer-countdown.urgent{color:var(--red);animation:blink 1s ease infinite;}
-
-/* Input focus amélioré */
-.form-input:focus,.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
-
-/* Scroll auto dans le chat */
-.messages-area{scroll-behavior:smooth;}
-
-/* Indicateur de chargement inline */
-.inline-loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
-
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#060d09">
@@ -372,22 +332,26 @@ firebase.initializeApp({
 
 <nav class="bottom-nav">
  <a class="nav-item active" href="/tdoli-feed.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+ <span>Feed</span>
  </a>
  <a class="nav-item" href="/tdoli-deals.html">
  <div class="nav-icon-wrap">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
- <div class="deals-badge" id="dealsBadge">!</div>
- </div>Deals
+ <div class="nav-badge yellow" id="dealsBadge"></div>
+ </div>
+ <span>Deals</span>
  </a>
  <a class="nav-item" href="/tdoli-messages.html">
  <div class="nav-icon-wrap">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
- <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div>
- </div>Messages
+ <div class="nav-badge red" id="msgBadge"></div>
+ </div>
+ <span>Messages</span>
  </a>
  <a class="nav-item" href="/tdoli-profile.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+ <span>Profil</span>
  </a>
 </nav>
 
@@ -629,7 +593,7 @@ const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] 
 const avatarUrl = localStorage.getItem('tdoli_avatar') || null;
 const RATE = 655.957;
 
-// Vérification Face ID à l'ouverture 
+// ── Vérification Face ID à l'ouverture ────────────────────────
 (async function checkFaceIdOnOpen() {
  const faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
 
@@ -657,7 +621,7 @@ const RATE = 655.957;
  // Token présent + pas de Face ID → feed directement
 })();
 
-// Auth biométrique depuis le feed 
+// ── Auth biométrique depuis le feed ───────────────────────────
 async function bioGateAuth() {
  const savedEmail = localStorage.getItem('tdoli_email');
  if (!savedEmail) { bioGateFallback(); return; }
@@ -739,7 +703,7 @@ function bioGateFallback() {
 
 function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);return buf.buffer;}
 function bufferToBase64url(b){const bytes=new Uint8Array(b);let bin='';for(const x of bytes)bin+=String.fromCharCode(x);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
-// 
+// ─────────────────────────────────────────────────────────────
 
 // FIX Phase 1: Initialiser l'avatar avec initiales ou photo Cloudinary
 function initAvatar() {
@@ -761,7 +725,7 @@ initAvatar();
 
 let allTransfers = [], currentFilter = 'all', pendingMatch = null, editingId = null;
 
-// Filtres avancés 
+// ── Filtres avancés ───────────────────────────────────────────
 let advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
 
 function setFilter(filter, el) {
@@ -888,7 +852,7 @@ function renderFeed() {
  list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
 }
 
-// Profil public 
+// ── Profil public ─────────────────────────────────────────────
 async function openPublicProfile(senderEmail) {
  document.getElementById('pubProfileContent').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
  document.getElementById('pubProfileOverlay').classList.add('open');
@@ -1054,7 +1018,7 @@ function renderList(data) {
  const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
  const initials = getInitials(displayName);
  const eurVal = convertToEur(t.amount, t.currency);
- const euroLabel = t.currency !== 'EUR' ? '' + eurVal.toFixed(0) + '€' : '';
+ const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
  // Trust line — "A aidé X membres"
  const dealsCount = t.senderDeals || t.senderCompletedDeals || 0;
  const trustLine = dealsCount > 0
@@ -1126,12 +1090,12 @@ function renderAirtelPreview(amount, currency, toCountry, fromCountry) {
 
  return '<div class="airtel-box">'+
  '<div class="airtel-scenario-title"> Scénario 1 — Tu envoies '+Number(depot).toLocaleString('fr-FR')+' FCFA</div>'+
- '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA ( '+eurBrut+' €)</span></div>'+
+ '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA (≈ '+eurBrut+' €)</span></div>'+
  '<div style="height:10px"></div>'+
  '<div class="airtel-scenario-title"> Scénario 2 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' FCFA</div>'+
- '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(netSiDeduit).toLocaleString('fr-FR')+' FCFA ( '+eurNet+' €)</span></div>'+
+ '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(netSiDeduit).toLocaleString('fr-FR')+' FCFA (≈ '+eurNet+' €)</span></div>'+
  '</div>';
  }
 
@@ -1145,7 +1109,7 @@ function renderAirtelPreview(amount, currency, toCountry, fromCountry) {
  return '<div class="airtel-box">'+
  '<div class="airtel-scenario-title"> Scénario 1 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' EUR</div>'+
  '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
  '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(xafNet).toLocaleString('fr-FR')+' FCFA</span></div>'+
  '<div style="height:10px"></div>'+
  '<div class="airtel-scenario-title"> Scénario 2 — Receveur reçoit '+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</div>'+
@@ -1183,7 +1147,7 @@ function renderList(data) {
  const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
  const initials = getInitials(displayName);
  const eurVal = convertToEur(t.amount, t.currency);
- const euroLabel = t.currency !== 'EUR' ? '' + eurVal.toFixed(0) + '€' : '';
+ const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
  return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
  '<div class="item-avatar">' + initials + '</div>' +
  '<div class="item-body">' +
@@ -1202,7 +1166,7 @@ function openDetail(id) {
  const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
  const initials = getInitials(displayName);
  const eurVal = convertToEur(t.amount, t.currency);
- const euroLabel = t.currency !== 'EUR' ? ' ' + eurVal.toFixed(0) + ' EUR' : '';
+ const euroLabel = t.currency !== 'EUR' ? '≈ ' + eurVal.toFixed(0) + ' EUR' : '';
  const matchAmt = formatMatchAmount(t.amount, t.currency, t.toCountry);
 
  let html = '<div class="detail-hero">' +
@@ -1356,7 +1320,7 @@ async function safeJson(res) {
 }
 
 async function loadFeed(silent) {
- if (!silent) document.getElementById('feedList').innerHTML = '<div class="annonce-list">' + [1,2,3].map(()=>'<div class="skeleton-card"><div style="display:flex;gap:12px;align-items:center;"><div class="skeleton" style="width:44px;height:44px;border-radius:50%;flex-shrink:0;"></div><div style="flex:1;"><div class="skeleton skeleton-line medium"></div><div class="skeleton skeleton-line short"></div></div></div></div>').join('') + '</div>';
+ if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
  try {
  const r = await safeJson(await fetch(API + '/transfers', { headers: { 'Authorization': 'Bearer ' + token } }));
  if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
@@ -1456,7 +1420,7 @@ function updatePreview(mode) {
  if (currency === 'EUR') {
  preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">' + Math.round(eur * RATE).toLocaleString('fr-FR') + ' XAF</span>';
  } else {
- preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount"> ' + eur.toFixed(2) + ' EUR</span>';
+ preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">≈ ' + eur.toFixed(2) + ' EUR</span>';
  }
  const fromCountry = document.getElementById('ann-from')?.value || '';
  if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry, fromCountry);
@@ -1488,7 +1452,7 @@ async function submitAnnonce() {
 }
 
 
-// Bénéficiaires 
+// ── Bénéficiaires ──────────────────────────────────────────────
 let allBeneficiaires = [];
 let selectedBenefId = null;
 let selectedEditBenefId = null;
@@ -1691,82 +1655,6 @@ async function checkUnreadMessages() {
 loadFeed();
 checkUnreadMessages();
 
-
-
-// UX Fluidité 
-
-// 1. Animation entrée de page
-document.body.classList.add('page-enter');
-
-// 2. Pull-to-refresh sur les pages avec feed/liste
-(function initPullToRefresh() {
- let startY = 0, pulling = false;
- const MIN_PULL = 80;
- const indicator = document.createElement('div');
- indicator.className = 'ptr-indicator';
- indicator.textContent = 'Relâcher pour actualiser';
- const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
- if (!firstChild) return;
- firstChild.parentNode.insertBefore(indicator, firstChild);
-
- document.addEventListener('touchstart', e => {
- if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
- }, { passive: true });
- document.addEventListener('touchmove', e => {
- if (!pulling) return;
- const dist = e.touches[0].pageY - startY;
- if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
- }, { passive: true });
- document.addEventListener('touchend', e => {
- if (!pulling) return;
- pulling = false;
- const dist = e.changedTouches[0].pageY - startY;
- indicator.classList.remove('active');
- if (dist > MIN_PULL) {
- indicator.classList.add('active');
- indicator.textContent = 'Actualisation...';
- setTimeout(() => { window.location.reload(); }, 500);
- }
- });
-})();
-
-// 3. Swipe bas pour fermer les sheets
-(function initSwipeSheet() {
- document.querySelectorAll('.sheet').forEach(sheet => {
- let startY = 0;
- sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
- sheet.addEventListener('touchend', e => {
- const dist = e.changedTouches[0].pageY - startY;
- if (dist > 80) {
- const overlay = sheet.closest('.overlay');
- if (overlay) overlay.classList.remove('open');
- }
- }, { passive: true });
- });
-})();
-
-// 4. Feedback copier avec vibration
-function copyWithFeedback(text, label) {
- navigator.clipboard.writeText(text).then(() => {
- if (navigator.vibrate) navigator.vibrate(50);
- let el = document.querySelector('.copy-feedback');
- if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
- el.textContent = label || 'Copié';
- el.classList.add('show');
- setTimeout(() => el.classList.remove('show'), 1800);
- });
-}
-
-// 5. Auto-focus sur le premier input des sheets à l'ouverture
-document.querySelectorAll('.overlay').forEach(overlay => {
- const observer = new MutationObserver(() => {
- if (overlay.classList.contains('open')) {
- const input = overlay.querySelector('input:not([type=hidden]), textarea');
- if (input) setTimeout(() => input.focus(), 300);
- }
- });
- observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
-});
 
 </script>
 </body>

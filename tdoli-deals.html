@@ -62,7 +62,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;color:var(--text-3);font-size:8px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
@@ -169,52 +169,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .method-tab.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
 .method-fields{display:none;}.method-fields.show{display:block;}
 
-
-/* UX Fluidité globale */
-
-/* Skeleton loader */
-.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--card) 50%,var(--surface) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.4s infinite;}
-@keyframes skeleton-shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-.skeleton-line{height:12px;border-radius:6px;margin-bottom:8px;}
-.skeleton-line.short{width:60%;}
-.skeleton-line.medium{width:80%;}
-.skeleton-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:8px;}
-
-/* Pull to refresh */
-.ptr-indicator{text-align:center;padding:12px;font-size:12px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;height:0;overflow:hidden;transition:height 0.2s;}
-.ptr-indicator.active{height:40px;}
-
-/* Transitions de pages */
-.page-enter{animation:pageEnter 0.2s ease-out;}
-@keyframes pageEnter{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-
-/* Feedback copier */
-.copy-feedback{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--green-dim);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:8px 20px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:999;}
-.copy-feedback.show{opacity:1;}
-
-/* Swipe sheet */
-.sheet{touch-action:pan-y;}
-
-/* Boutons actifs feedback haptique */
-.btn-primary:active,.btn-cancel:active,.annonce-item:active,.deal-item:active{transform:scale(0.97);}
-
-/* Progress bar deal */
-.deal-progress{height:3px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden;}
-.deal-progress-fill{height:100%;border-radius:2px;background:var(--green);transition:width 0.4s ease;}
-
-/* Compte à rebours timer */
-.timer-countdown{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);}
-.timer-countdown.urgent{color:var(--red);animation:blink 1s ease infinite;}
-
-/* Input focus amélioré */
-.form-input:focus,.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
-
-/* Scroll auto dans le chat */
-.messages-area{scroll-behavior:smooth;}
-
-/* Indicateur de chargement inline */
-.inline-loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
-
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#060d09">
@@ -261,9 +215,28 @@ firebase.initializeApp({
 <div class="content"><div id="dealsList"><div class="loading-wrap"><div class="loader"></div></div></div></div>
 
 <nav class="bottom-nav">
- <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
- <a class="nav-item active" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
- <a class="nav-item" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
+ <a class="nav-item" href="/tdoli-feed.html">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+ <span>Feed</span>
+ </a>
+ <a class="nav-item active" href="/tdoli-deals.html">
+ <div class="nav-icon-wrap">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+ <div class="nav-badge yellow" id="dealsBadge"></div>
+ </div>
+ <span>Deals</span>
+ </a>
+ <a class="nav-item" href="/tdoli-messages.html">
+ <div class="nav-icon-wrap">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+ <div class="nav-badge red" id="msgBadge"></div>
+ </div>
+ <span>Messages</span>
+ </a>
+ <a class="nav-item" href="/tdoli-profile.html">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+ <span>Profil</span>
+ </a>
 </nav>
 
 <!-- Sheet détail deal -->
@@ -395,7 +368,7 @@ const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] 
 
 if (!token) { window.location.replace('/tdoli-auth.html'); }
 
-// Avatar 
+// ── Avatar ─────────────────────────────────────────────────────
 function getInitials(name) {
  const p = (name||'?').trim().split(' ').filter(x=>x.length>0);
  return p.length>=2 ? (p[0][0]+p[p.length-1][0]).toUpperCase() : (name||'??').substring(0,2).toUpperCase();
@@ -413,7 +386,7 @@ function shareApp() {
  else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#fcd116')).catch(()=>{});
 }
 
-// Helpers 
+// ── Helpers ─────────────────────────────────────────────────────
 let allDeals=[], currentFilter='all', selectedRatings={}, ratedDeals=new Set();
 let currentDisputeId=null, currentProofDealId=null, selectedFiles=[], proofFile=null, proofUrl=null;
 
@@ -441,7 +414,7 @@ function timeAgo(d) {
 function convertToEur(amount,currency){const r={EUR:1,XAF:1/655.957,USD:0.92,CAD:0.68};return amount*(r[currency]||1);}
 
 function getStatusLabel(s) {
- if(s==='matched') return {cls:'matched',label:'En cours '};
+ if(s==='matched') return {cls:'matched',label:'En cours ●'};
  if(s==='completed') return {cls:'completed',label:'Complété '};
  if(s==='dispute') return {cls:'dispute',label:'Litige '};
  return {cls:'',label:s||'?'};
@@ -483,7 +456,7 @@ function renderDeals(data) {
  '<span class="deal-other">'+other+'</span>'+
  '</div>'+
  '<div class="deal-bottom">'+
- '<span class="deal-dir">'+((d.fromCountry||'?')+' '+(d.toCountry||'?'))+'</span>'+
+ '<span class="deal-dir">'+((d.fromCountry||'?')+' ⇄ '+(d.toCountry||'?'))+'</span>'+
  actionHtml+
  '</div>'+
  '</div>';
@@ -563,7 +536,7 @@ function openDeal(id) {
  const otherAmount = d.otherAmount || d.matchedAmount || 0;
  const otherCurrency = d.otherCurrency || d.matchedCurrency || '';
  const eur = convertToEur(amount, currency);
- const euroLabel = currency!=='EUR' ? ' '+eur.toFixed(0)+' EUR' : '';
+ const euroLabel = currency!=='EUR' ? '≈ '+eur.toFixed(0)+' EUR' : '';
 
  const iConfirmed = isSender ? d.confirmedBySender : d.confirmedByReceiver;
  const otherConfirmed = isSender ? d.confirmedByReceiver : d.confirmedBySender;
@@ -588,7 +561,7 @@ function openDeal(id) {
 
  const otherInfoHtml = otherInfoFilled
  ? renderPaymentInfo(otherPayInfo, ' Envoyer à')
- : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);"> En attente des coordonnées de l&#39;autre partie</div>';
+ : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l&#39;autre partie</div>';
 
  const myInfoHtml = myInfoFilled
  ? renderPaymentInfo(myPayInfo, ' Mon bénéficiaire')
@@ -612,7 +585,7 @@ function openDeal(id) {
 
  let instructionHtml = '';
  if(d.status==='matched') {
- instructionHtml = '<div class="instruction-box"><div class="instruction-title"> ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>'
+ instructionHtml = '<div class="instruction-box"><div class="instruction-title">⏳ ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>'
  + otherInfoHtml + myInfoHtml;
  } else if(d.status==='completed') {
  instructionHtml = '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);"> Deal complété avec succès !</div>';
@@ -646,7 +619,7 @@ function openDeal(id) {
 
  document.getElementById('detailContent').innerHTML =
  '<div class="detail-header"><span class="detail-ref">DEAL '+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span><span class="detail-badge '+st.cls+'">'+st.label+'</span></div>'+
- '<div class="detail-parties"><div class="party"><div class="party-label">Toi</div><div class="party-name">'+myName+'</div></div><div class="vs-sep"></div><div class="party"><div class="party-label">Partenaire</div><div class="party-name">'+otherName+'</div></div></div>'+
+ '<div class="detail-parties"><div class="party"><div class="party-label">Toi</div><div class="party-name">'+myName+'</div></div><div class="vs-sep">⇄</div><div class="party"><div class="party-label">Partenaire</div><div class="party-name">'+otherName+'</div></div></div>'+
  '<div class="detail-amount-row"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">TU ENVOIES</div><span class="detail-amt">'+Number(amount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+currency+'</span></div>'+(euroLabel?'<span class="detail-eur">'+euroLabel+'</span>':'')+'</div>'+
  (otherAmount?'<div class="detail-amount-row" style="margin-top:8px;"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">'+otherName.toUpperCase()+' ENVOIE</div><span class="detail-amt">'+Number(otherAmount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+otherCurrency+'</span></div></div>':'')+
  stepHtml + instructionHtml + actionsHtml + chatHtml + ratingHtml;
@@ -845,82 +818,6 @@ function copyCode(code) {
 }
 
 loadDeals();
-
-// UX Fluidité 
-
-// 1. Animation entrée de page
-document.body.classList.add('page-enter');
-
-// 2. Pull-to-refresh sur les pages avec feed/liste
-(function initPullToRefresh() {
- let startY = 0, pulling = false;
- const MIN_PULL = 80;
- const indicator = document.createElement('div');
- indicator.className = 'ptr-indicator';
- indicator.textContent = 'Relâcher pour actualiser';
- const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
- if (!firstChild) return;
- firstChild.parentNode.insertBefore(indicator, firstChild);
-
- document.addEventListener('touchstart', e => {
- if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
- }, { passive: true });
- document.addEventListener('touchmove', e => {
- if (!pulling) return;
- const dist = e.touches[0].pageY - startY;
- if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
- }, { passive: true });
- document.addEventListener('touchend', e => {
- if (!pulling) return;
- pulling = false;
- const dist = e.changedTouches[0].pageY - startY;
- indicator.classList.remove('active');
- if (dist > MIN_PULL) {
- indicator.classList.add('active');
- indicator.textContent = 'Actualisation...';
- setTimeout(() => { window.location.reload(); }, 500);
- }
- });
-})();
-
-// 3. Swipe bas pour fermer les sheets
-(function initSwipeSheet() {
- document.querySelectorAll('.sheet').forEach(sheet => {
- let startY = 0;
- sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
- sheet.addEventListener('touchend', e => {
- const dist = e.changedTouches[0].pageY - startY;
- if (dist > 80) {
- const overlay = sheet.closest('.overlay');
- if (overlay) overlay.classList.remove('open');
- }
- }, { passive: true });
- });
-})();
-
-// 4. Feedback copier avec vibration
-function copyWithFeedback(text, label) {
- navigator.clipboard.writeText(text).then(() => {
- if (navigator.vibrate) navigator.vibrate(50);
- let el = document.querySelector('.copy-feedback');
- if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
- el.textContent = label || 'Copié';
- el.classList.add('show');
- setTimeout(() => el.classList.remove('show'), 1800);
- });
-}
-
-// 5. Auto-focus sur le premier input des sheets à l'ouverture
-document.querySelectorAll('.overlay').forEach(overlay => {
- const observer = new MutationObserver(() => {
- if (overlay.classList.contains('open')) {
- const input = overlay.querySelector('input:not([type=hidden]), textarea');
- if (input) setTimeout(() => input.focus(), 300);
- }
- });
- observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
-});
-
 </script>
 </body>
 </html>
