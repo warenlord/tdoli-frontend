@@ -3,50 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TDOLI  Feed</title>
+<title>TDOLI — Feed</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
-  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
-  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
-  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
-  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
-  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
+ --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+ --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
 .bg-mesh{display:none;}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 1px 12px rgba(0,0,0,0.4);}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .topbar-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 
-/* AVATAR BTN  FIX Phase 1 */
+/* AVATAR BTN — FIX Phase 1 */
 .user-avatar-btn{
-  width:38px;height:38px;border-radius:50%;
-  background:var(--green-dim);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
-  color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;
-  border:1.5px solid var(--border-active);
-  overflow:hidden;
-  transition:transform 0.15s;
+ width:38px;height:38px;border-radius:50%;
+ background:var(--green-dim);
+ display:flex;align-items:center;justify-content:center;
+ font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+ color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;
+ border:1.5px solid var(--border-active);
+ overflow:hidden;
+ transition:transform 0.15s;
 }
 .user-avatar-btn:active{transform:scale(0.93);}
 .user-avatar-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 
-/* PARRAINER BTN  FIX Phase 1 (jaune) */
+/* PARRAINER BTN — FIX Phase 1 (jaune) */
 .share-btn{
-  background:rgba(252,209,22,0.1);
-  border:1px solid rgba(252,209,22,0.3);
-  color:var(--yellow);
-  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
-  cursor:pointer;padding:7px 12px;white-space:nowrap;
-  border-radius:20px;
-  transition:background 0.2s;
-  letter-spacing:0.3px;
+ background:rgba(252,209,22,0.1);
+ border:1px solid rgba(252,209,22,0.3);
+ color:var(--yellow);
+ font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+ cursor:pointer;padding:7px 12px;white-space:nowrap;
+ border-radius:20px;
+ transition:background 0.2s;
+ letter-spacing:0.3px;
 }
 .share-btn:active{background:rgba(252,209,22,0.2);}
 
@@ -68,13 +68,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .item-body{flex:1;min-width:0;}
 .item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
 .item-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
-.item-amount{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--green);letter-spacing:-0.3px;}
+.item-amount{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text);}
 .item-bottom{display:flex;align-items:center;justify-content:space-between;}
 .item-dir{font-size:12px;color:var(--text-2);font-weight:500;}
 .item-meta{display:flex;align-items:center;gap:6px;}
 .item-rating{font-size:11px;color:var(--yellow);font-weight:700;}
 .item-time{font-size:10px;color:var(--text-3);}
-.item-currency{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);margin-left:3px;}
+.item-currency{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text);margin-left:3px;}
 .mine-tag{font-size:9px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:4px;padding:1px 6px;font-family:'Syne',sans-serif;font-weight:700;}
 .status-dot-sm{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
 .trust-line{font-size:10px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:4px;}
@@ -94,7 +94,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 @keyframes spin{to{transform:rotate(360deg);}}
 .fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,83,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .fab:active{transform:scale(0.9);}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;box-shadow:0 -2px 20px rgba(0,0,0,0.4);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
@@ -117,8 +117,8 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .detail-flow{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
 .detail-country{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:500;text-align:center;}
 .detail-arrow{width:24px;height:24px;border-radius:50%;background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--yellow);flex-shrink:0;}
-.detail-amount{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--green);}
-.detail-currency{font-size:14px;color:var(--yellow);font-weight:700;margin-left:6px;}
+.detail-amount{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);}
+.detail-currency{font-size:14px;color:var(--text);font-weight:700;margin-left:6px;}
 .detail-eur{font-size:12px;color:var(--green);background:var(--green-glow);border-radius:6px;padding:3px 8px;margin-left:auto;}
 .match-info{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
 .match-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
@@ -157,7 +157,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .benef-selected-name{font-weight:600;color:var(--green);}
 .benef-selected-detail{font-size:11px;color:var(--text-3);}
 
-/* Phase 2  Airtel Money */
+/* Phase 2 — Airtel Money */
 .airtel-box{background:rgba(252,209,22,0.05);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-top:10px;margin-bottom:4px;}
 .airtel-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:3px 0;}
 .airtel-divider{border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:7px;}
@@ -170,7 +170,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .airtel-scenario-title{font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:var(--text-2);margin-bottom:4px;margin-top:2px;}
 .airtel-highlight{background:rgba(0,0,0,0.15);border-radius:6px;padding:4px 6px;margin:2px -6px;}
 
-/* Phase 5  Réputation communautaire */
+/* Phase 5 — Réputation communautaire */
 .activity-feed{margin-bottom:16px;}
 .activity-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;}
 .activity-emoji{font-size:16px;flex-shrink:0;}
@@ -216,7 +216,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .range-input{flex:1;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;-webkit-appearance:none;}
 .range-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
 .active-filters-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.active-filter-tag{display:flex;align-items:center;gap:5px;background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.2);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--yellow);font-family:'Syne',sans-serif;font-weight:700;}
+.active-filter-tag{display:flex;align-items:center;gap:5px;background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.2);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--text);font-family:'Syne',sans-serif;font-weight:700;}
 .active-filter-tag button{background:none;border:none;color:var(--yellow);cursor:pointer;font-size:12px;padding:0;line-height:1;}
 .btn-filter-apply{width:100%;padding:14px;background:var(--green-dim);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;}
 .btn-filter-reset{width:100%;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
@@ -254,57 +254,327 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 <script>
 // FIX: SW enregistrement sans crash si fichier absent
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(r => console.log('[SW] OK'))
-      .catch(e => console.warn('[SW] Non enregistré:', e.message));
-  });
+ window.addEventListener('load', () => {
+ navigator.serviceWorker.register('/service-worker.js')
+ .then(r => console.log('[SW] OK'))
+ .catch(e => console.warn('[SW] Non enregistré:', e.message));
+ });
 }
 </script>
-<!-- Phase 9  Firebase SDK -->
+<!-- Phase 9 — Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
 firebase.initializeApp({
-  apiKey:            "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
-  authDomain:        "tdoli-c47a1.firebaseapp.com",
-  projectId:         "tdoli-c47a1",
-  storageBucket:     "tdoli-c47a1.appspot.com",
-  messagingSenderId: "416651280494",
-  appId:             "1:416651280494:web:de03eb6a47204031f1267f"
+ apiKey: "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
+ authDomain: "tdoli-c47a1.firebaseapp.com",
+ projectId: "tdoli-c47a1",
+ storageBucket: "tdoli-c47a1.appspot.com",
+ messagingSenderId: "416651280494",
+ appId: "1:416651280494:web:de03eb6a47204031f1267f"
 });
 </script>
 <script src="/fcm-init.js"></script>
 </head>
 <body>
-<div class="bg-mesh"></div> <div class="topbar"> <div class="topbar-left"> <!-- FIX Phase 1: avatar initialisé avec initiales, photo si dispo --> <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a> </div> <div style="flex:1;"></div> <div class="topbar-right"> <!-- FIX Phase 1: bouton Parrainer jaune stylisé --> <button class="share-btn" onclick="shareApp()"> Parrainer</button> </div>
-</div> <div class="content"> <!-- Fil d'actualité communautaire --> <div class="activity-feed" id="activityFeed" style="display:none;"></div> <div class="section-header"> <div class="section-title">Annonces</div> <div class="badge" id="countBadge"></div> </div> <!-- Phase 5  Compteur hebdomadaire --> <div class="weekly-banner" id="weeklyBanner" style="display:none;"> <div class="weekly-pulse"></div> <div class="weekly-icon"></div> <div class="weekly-text"> <strong id="weeklyMembers"></strong> membres de la communauté ont échangé
-      <span class="vol" id="weeklyVolume"></span> cette semaine
-    </div> </div> <div class="filter-bar"> <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div> <div class="filter-chip" onclick="setFilter('mine',this)">Mes annonces</div> <div class="filter-advanced-btn" id="filterAdvancedBtn" onclick="openAdvancedFilters()"> Filtres avancés</div> </div> <!-- Tags filtres actifs --> <div class="active-filters-bar" id="activeFiltersBar" style="display:none;"></div> <div id="feedList"><div class="loading-wrap"><div class="loader"></div></div></div>
-</div> <button class="fab" onclick="openCreateSheet()">+</button> <nav class="bottom-nav"> <a class="nav-item active" href="/tdoli-feed.html"> <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
-  </a> <a class="nav-item" href="/tdoli-deals.html"> <div class="nav-icon-wrap"> <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div> <div class="deals-badge" id="dealsBadge">!</div> </div>Deals
-  </a> <a class="nav-item" href="/tdoli-messages.html"> <div class="nav-icon-wrap"> <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div> <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div> </div>Messages
-  </a> <a class="nav-item" href="/tdoli-profile.html"> <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
-  </a>
-</nav> <!-- Sheet détail annonce -->
-<div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')"> <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
-</div> <!-- Sheet créer annonce -->
-<div class="overlay" id="createOverlay" onclick="closeOnOverlay(event,'createOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Nouvelle annonce</div> <div class="form-row"> <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="ann-amount" placeholder="500" inputmode="numeric" oninput="updatePreview('create')"></div> <div class="form-group"><label class="form-label">Devise</label> <select class="form-select" id="ann-currency" onchange="updatePreview('create')"> <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option> </select> </div> </div> <div class="form-row"> <div class="form-group"><label class="form-label">De</label> <select class="form-select" id="ann-from" onchange="syncCountries();updatePreview('create')"> <option value="France">🇫🇷 France</option> <option value="Gabon">🇬🇦 Gabon</option> <option value="Etats-Unis">🇺🇸 Etats-Unis</option> <option value="Canada">🇨🇦 Canada</option> <option value="Burkina Faso">🇧🇫 Burkina Faso</option> <option value="Belgique">🇧🇪 Belgique</option> <option value="Suisse">🇨🇭 Suisse</option> </select> </div> <div class="form-group"><label class="form-label">Vers</label> <select class="form-select" id="ann-to" onchange="updatePreview('create')"> <option value="Gabon">🇬🇦 Gabon</option> <option value="France">🇫🇷 France</option> <option value="Etats-Unis">🇺🇸 Etats-Unis</option> <option value="Canada">🇨🇦 Canada</option> <option value="Burkina Faso">🇧🇫 Burkina Faso</option> <option value="Belgique">🇧🇪 Belgique</option> <option value="Suisse">🇨🇭 Suisse</option> </select> </div> </div> <div class="conv-preview" id="convPreview-create"><span class="conv-hint">Saisis un montant</span></div> <div id="airtel-preview-create"></div> <!-- Sélection bénéficiaire --> <div id="benef-selected-create"></div> <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('create')"> Choisir le bénéficiaire</button> <div id="airtel-preview-create"></div> <button class="btn-primary" id="btn-submit" onclick="submitAnnonce()">Publier</button> <button class="btn-cancel" onclick="closeSheet('createOverlay')">Annuler</button> <div class="msg" id="msg-create"></div> </div>
-</div> <!-- Sheet modifier annonce -->
-<div class="overlay" id="editOverlay" onclick="closeOnOverlay(event,'editOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Modifier l'annonce</div> <div class="form-row"> <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="edit-amount" inputmode="numeric" oninput="updatePreview('edit')"></div> <div class="form-group"><label class="form-label">Devise</label> <select class="form-select" id="edit-currency" onchange="updatePreview('edit')"> <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option> </select> </div> </div> <div class="conv-preview" id="convPreview-edit"><span class="conv-hint">Saisis un montant</span></div> <!-- Bénéficiaire --> <div id="benef-selected-edit" style="margin-bottom:8px;"></div> <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('edit')"> Changer le bénéficiaire</button> <button class="btn-primary" id="btn-edit-submit" onclick="submitEdit()">Enregistrer</button> <button class="btn-cancel" onclick="closeSheet('editOverlay')">Annuler</button> <div class="msg" id="msg-edit"></div> </div>
-</div> <!-- Sheet sélection bénéficiaire -->
-<div class="overlay" id="benefOverlay" onclick="closeOnOverlay(event,'benefOverlay')" style="z-index:500;"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Qui reçoit ?</div> <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Sélectionne le bénéficiaire pour cette annonce.</div> <div id="benefSelectList"><div class="loading-wrap"><div class="loader"></div></div></div> <button class="btn-cancel" style="margin-top:8px;" onclick="closeBenefSheet()">Fermer</button> </div>
-</div> <!-- Sheet confirmer match -->
-<div class="overlay" id="confirmOverlay" onclick="closeOnOverlay(event,'confirmOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Confirmer le match</div> <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Vérifie les détails avant de confirmer.</div> <div id="confirmDetail" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;"></div> <!-- Sélection bénéficiaire obligatoire pour le match --> <div id="confirm-benef-badge" style="margin-bottom:8px;"></div> <button class="btn-primary" id="btn-choose-benef-match" style="margin-bottom:12px;background:var(--surface);border:1px solid rgba(252,209,22,0.4);color:var(--yellow);" onclick="openBenefSheetForMatch()"> Choisir mon bénéficiaire <span style="font-size:10px;color:var(--red);">*obligatoire</span></button> <button class="btn-primary" id="btn-confirm-match" onclick="executeMatch()">Confirmer le match</button> <button class="btn-cancel" onclick="closeSheet('confirmOverlay')">Annuler</button> </div>
-</div> <!-- Sheet nouveau bénéficiaire inline (depuis feed) -->
-<div class="overlay" id="inlineBenefOverlay" onclick="closeOnOverlay(event,'inlineBenefOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Nouveau bénéficiaire</div> <div class="form-group"> <label class="form-label">Nom</label> <input class="form-input" type="text" id="ib-nom" placeholder="Ex: Maman, Jean Dupont"> </div> <div class="form-group"> <label class="form-label">Pays</label> <select class="form-select" id="ib-pays"> <option value="">Sélectionner</option> <option value="Gabon">🇬🇦 Gabon</option> <option value="France">🇫🇷 France</option> <option value="Burkina Faso">🇧🇫 Burkina Faso</option> <option value="Belgique">🇧🇪 Belgique</option> <option value="Suisse">🇨🇭 Suisse</option> <option value="Canada">🇨🇦 Canada</option> <option value="Etats-Unis">🇺🇸 États-Unis</option> </select> </div> <div class="form-group"> <label class="form-label">Méthode</label> <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;"> <div class="filter-chip active" id="ibm-mm" onclick="setIBMethod('mobilemoney',this)"> Mobile Money</div> <div class="filter-chip" id="ibm-vir" onclick="setIBMethod('virement',this)"> Virement</div> <div class="filter-chip" id="ibm-pp" onclick="setIBMethod('paypal',this)"> PayPal</div> <div class="filter-chip" id="ibm-wero" onclick="setIBMethod('wero',this)"> Wero</div> </div> </div> <div id="ib-fields-mobilemoney"> <div class="form-group"><label class="form-label">Numéro Mobile Money</label><input class="form-input" type="tel" id="ib-phone" placeholder="+241 06 00 00 00" inputmode="tel"></div> <div class="form-group"><label class="form-label">Opérateur</label> <select class="form-select" id="ib-operateur"> <option value="">Sélectionner</option> <option value="Airtel Money">Airtel Money</option> <option value="Moov Money">Moov Money</option> <option value="Orange Money">Orange Money</option> </select> </div> </div> <div id="ib-fields-virement" style="display:none;"> <div class="form-group"><label class="form-label">IBAN</label><input class="form-input" type="text" id="ib-iban" placeholder="FR76"></div> <div class="form-group"><label class="form-label">Banque</label><input class="form-input" type="text" id="ib-banque" placeholder="BNP, Société Générale"></div> </div> <div id="ib-fields-paypal" style="display:none;"> <div class="form-group"><label class="form-label">Email PayPal</label><input class="form-input" type="email" id="ib-paypal" placeholder="ton@email.com"></div> </div> <div id="ib-fields-wero" style="display:none;"> <div class="form-group"><label class="form-label">Numéro Wero</label><input class="form-input" type="tel" id="ib-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"></div> </div> <button class="btn-primary" id="btn-ib-save" onclick="saveInlineBenef()">Enregistrer et sélectionner</button> <button class="btn-cancel" onclick="closeSheet('inlineBenefOverlay');openBenefSheet('create')">Annuler</button> <div class="msg" id="msg-ib"></div> </div>
-</div> <!-- Sheet filtres avancés -->
-<div class="overlay" id="advancedFilterOverlay" onclick="closeOnOverlay(event,'advancedFilterOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Filtres avancés</div> <div class="filter-section-label">Devise</div> <div class="filter-chips-wrap"> <div class="filter-chip" id="af-eur" onclick="toggleAdvFilter('currency','EUR',this)">EUR</div> <div class="filter-chip" id="af-xaf" onclick="toggleAdvFilter('currency','XAF',this)">XAF</div> <div class="filter-chip" id="af-usd" onclick="toggleAdvFilter('currency','USD',this)">USD</div> <div class="filter-chip" id="af-cad" onclick="toggleAdvFilter('currency','CAD',this)">CAD</div> </div> <div class="filter-section-label">Direction</div> <div class="filter-chips-wrap"> <div class="filter-chip" id="af-fr-ga" onclick="toggleAdvFilter('direction','FranceGabon',this)">🇫🇷 France  🇬🇦 Gabon</div> <div class="filter-chip" id="af-ga-fr" onclick="toggleAdvFilter('direction','GabonFrance',this)">🇬🇦 Gabon  🇫🇷 France</div> <div class="filter-chip" id="af-fr-bf" onclick="toggleAdvFilter('direction','FranceBurkina Faso',this)">🇫🇷 France  🇧🇫 Burkina</div> <div class="filter-chip" id="af-bf-fr" onclick="toggleAdvFilter('direction','Burkina FasoFrance',this)">🇧🇫 Burkina  🇫🇷 France</div> </div> <div class="filter-section-label">Montant (EUR)</div> <div class="range-row"> <input class="range-input" type="number" id="af-min" placeholder="Min" inputmode="numeric"> <input class="range-input" type="number" id="af-max" placeholder="Max" inputmode="numeric"> </div> <div class="filter-section-label">Rang communautaire</div> <div class="filter-chips-wrap"> <div class="filter-chip" id="af-nouveau" onclick="toggleAdvFilter('rank','nouveau',this)">Nouveau</div> <div class="filter-chip" id="af-actif" onclick="toggleAdvFilter('rank','actif',this)">Membre actif</div> <div class="filter-chip" id="af-fiable" onclick="toggleAdvFilter('rank','fiable',this)">Membre fiable</div> <div class="filter-chip" id="af-pilier" onclick="toggleAdvFilter('rank','pilier',this)">Pilier </div> </div> <button class="btn-filter-apply" onclick="applyAdvancedFilters()">Appliquer</button> <button class="btn-filter-reset" onclick="resetAdvancedFilters()">Réinitialiser</button> </div>
-</div> <!-- Sheet profil public -->
-<div class="overlay" id="pubProfileOverlay" onclick="closeOnOverlay(event,'pubProfileOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div id="pubProfileContent"><div class="loading-wrap"><div class="loader"></div></div></div> <button class="btn-cancel" onclick="closeSheet('pubProfileOverlay')" style="margin-top:8px;">Fermer</button> </div>
-</div> <!-- Gate biométrique à l'ouverture -->
-<div class="bio-gate" id="bioGate"> <div class="bio-gate-sheet"> <div class="bio-gate-icon"></div> <div class="bio-gate-title">Connexion sécurisée</div> <div class="bio-gate-sub">Utilise ton Face ID ou empreinte digitale pour accéder à TDOLI.</div> <button class="btn-bio-confirm" id="btn-bio-confirm" onclick="bioGateAuth()"> <span id="bio-confirm-label">Se connecter avec Face ID</span> </button> <button class="btn-bio-fallback" onclick="bioGateFallback()">Utiliser mon mot de passe</button> <div class="bio-gate-msg" id="bio-gate-msg"></div> </div>
-</div> <div class="toast" id="toast"></div> <script>
+<div class="bg-mesh"></div>
+
+<div class="topbar">
+ <div class="topbar-left">
+ <!-- FIX Phase 1: avatar initialisé avec initiales, photo si dispo -->
+ <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a>
+ </div>
+ <div style="flex:1;"></div>
+ <div class="topbar-right">
+ <!-- FIX Phase 1: bouton Parrainer jaune stylisé -->
+ <button class="share-btn" onclick="shareApp()"> Parrainer</button>
+ </div>
+</div>
+
+<div class="content">
+ <!-- Fil d'actualité communautaire -->
+ <div class="activity-feed" id="activityFeed" style="display:none;"></div>
+
+ <div class="section-header">
+ <div class="section-title">Annonces</div>
+ <div class="badge" id="countBadge">—</div>
+ </div>
+
+ <!-- Phase 5 — Compteur hebdomadaire -->
+ <div class="weekly-banner" id="weeklyBanner" style="display:none;">
+ <div class="weekly-pulse"></div>
+ <div class="weekly-icon"></div>
+ <div class="weekly-text">
+ <strong id="weeklyMembers">—</strong> membres de la communauté ont échangé
+ <span class="vol" id="weeklyVolume">—</span> cette semaine
+ </div>
+ </div>
+
+ <div class="filter-bar">
+ <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div>
+ <div class="filter-chip" onclick="setFilter('mine',this)">Mes annonces</div>
+ <div class="filter-advanced-btn" id="filterAdvancedBtn" onclick="openAdvancedFilters()"> Filtres avancés</div>
+ </div>
+
+ <!-- Tags filtres actifs -->
+ <div class="active-filters-bar" id="activeFiltersBar" style="display:none;"></div>
+ <div id="feedList"><div class="loading-wrap"><div class="loader"></div></div></div>
+</div>
+
+<button class="fab" onclick="openCreateSheet()">+</button>
+
+<nav class="bottom-nav">
+ <a class="nav-item active" href="/tdoli-feed.html">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
+ </a>
+ <a class="nav-item" href="/tdoli-deals.html">
+ <div class="nav-icon-wrap">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+ <div class="deals-badge" id="dealsBadge">!</div>
+ </div>Deals
+ </a>
+ <a class="nav-item" href="/tdoli-messages.html">
+ <div class="nav-icon-wrap">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+ <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div>
+ </div>Messages
+ </a>
+ <a class="nav-item" href="/tdoli-profile.html">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
+ </a>
+</nav>
+
+<!-- Sheet détail annonce -->
+<div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')">
+ <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
+</div>
+
+<!-- Sheet créer annonce -->
+<div class="overlay" id="createOverlay" onclick="closeOnOverlay(event,'createOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Nouvelle annonce</div>
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="ann-amount" placeholder="500" inputmode="numeric" oninput="updatePreview('create')"></div>
+ <div class="form-group"><label class="form-label">Devise</label>
+ <select class="form-select" id="ann-currency" onchange="updatePreview('create')">
+ <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
+ </select>
+ </div>
+ </div>
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">De</label>
+ <select class="form-select" id="ann-from" onchange="syncCountries();updatePreview('create')">
+ <option value="France">🇫🇷 France</option>
+ <option value="Gabon">🇬🇦 Gabon</option>
+ <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
+ <option value="Canada">🇨🇦 Canada</option>
+ <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+ <option value="Belgique">🇧🇪 Belgique</option>
+ <option value="Suisse">🇨🇭 Suisse</option>
+ </select>
+ </div>
+ <div class="form-group"><label class="form-label">Vers</label>
+ <select class="form-select" id="ann-to" onchange="updatePreview('create')">
+ <option value="Gabon">🇬🇦 Gabon</option>
+ <option value="France">🇫🇷 France</option>
+ <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
+ <option value="Canada">🇨🇦 Canada</option>
+ <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+ <option value="Belgique">🇧🇪 Belgique</option>
+ <option value="Suisse">🇨🇭 Suisse</option>
+ </select>
+ </div>
+ </div>
+ <div class="conv-preview" id="convPreview-create"><span class="conv-hint">Saisis un montant</span></div>
+ <div id="airtel-preview-create"></div>
+ <!-- Sélection bénéficiaire -->
+ <div id="benef-selected-create"></div>
+ <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('create')"> Choisir le bénéficiaire</button>
+ <div id="airtel-preview-create"></div>
+ <button class="btn-primary" id="btn-submit" onclick="submitAnnonce()">Publier</button>
+ <button class="btn-cancel" onclick="closeSheet('createOverlay')">Annuler</button>
+ <div class="msg" id="msg-create"></div>
+ </div>
+</div>
+
+<!-- Sheet modifier annonce -->
+<div class="overlay" id="editOverlay" onclick="closeOnOverlay(event,'editOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Modifier l'annonce</div>
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="edit-amount" inputmode="numeric" oninput="updatePreview('edit')"></div>
+ <div class="form-group"><label class="form-label">Devise</label>
+ <select class="form-select" id="edit-currency" onchange="updatePreview('edit')">
+ <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
+ </select>
+ </div>
+ </div>
+ <div class="conv-preview" id="convPreview-edit"><span class="conv-hint">Saisis un montant</span></div>
+ <!-- Bénéficiaire -->
+ <div id="benef-selected-edit" style="margin-bottom:8px;"></div>
+ <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('edit')"> Changer le bénéficiaire</button>
+ <button class="btn-primary" id="btn-edit-submit" onclick="submitEdit()">Enregistrer</button>
+ <button class="btn-cancel" onclick="closeSheet('editOverlay')">Annuler</button>
+ <div class="msg" id="msg-edit"></div>
+ </div>
+</div>
+
+
+<!-- Sheet sélection bénéficiaire -->
+<div class="overlay" id="benefOverlay" onclick="closeOnOverlay(event,'benefOverlay')" style="z-index:500;">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Qui reçoit ?</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Sélectionne le bénéficiaire pour cette annonce.</div>
+ <div id="benefSelectList"><div class="loading-wrap"><div class="loader"></div></div></div>
+ <button class="btn-cancel" style="margin-top:8px;" onclick="closeBenefSheet()">Fermer</button>
+ </div>
+</div>
+
+<!-- Sheet confirmer match -->
+<div class="overlay" id="confirmOverlay" onclick="closeOnOverlay(event,'confirmOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Confirmer le match</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Vérifie les détails avant de confirmer.</div>
+ <div id="confirmDetail" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;"></div>
+ <!-- Sélection bénéficiaire obligatoire pour le match -->
+ <div id="confirm-benef-badge" style="margin-bottom:8px;"></div>
+ <button class="btn-primary" id="btn-choose-benef-match" style="margin-bottom:12px;background:var(--surface);border:1px solid rgba(252,209,22,0.4);color:var(--yellow);" onclick="openBenefSheetForMatch()"> Choisir mon bénéficiaire <span style="font-size:10px;color:var(--red);">*obligatoire</span></button>
+ <button class="btn-primary" id="btn-confirm-match" onclick="executeMatch()">Confirmer le match</button>
+ <button class="btn-cancel" onclick="closeSheet('confirmOverlay')">Annuler</button>
+ </div>
+</div>
+
+<!-- Sheet nouveau bénéficiaire inline (depuis feed) -->
+<div class="overlay" id="inlineBenefOverlay" onclick="closeOnOverlay(event,'inlineBenefOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Nouveau bénéficiaire</div>
+
+ <div class="form-group">
+ <label class="form-label">Nom</label>
+ <input class="form-input" type="text" id="ib-nom" placeholder="Ex: Maman, Jean Dupont…">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Pays</label>
+ <select class="form-select" id="ib-pays">
+ <option value="">Sélectionner…</option>
+ <option value="Gabon">🇬🇦 Gabon</option>
+ <option value="France">🇫🇷 France</option>
+ <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+ <option value="Belgique">🇧🇪 Belgique</option>
+ <option value="Suisse">🇨🇭 Suisse</option>
+ <option value="Canada">🇨🇦 Canada</option>
+ <option value="Etats-Unis">🇺🇸 États-Unis</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Méthode</label>
+ <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+ <div class="filter-chip active" id="ibm-mm" onclick="setIBMethod('mobilemoney',this)"> Mobile Money</div>
+ <div class="filter-chip" id="ibm-vir" onclick="setIBMethod('virement',this)"> Virement</div>
+ <div class="filter-chip" id="ibm-pp" onclick="setIBMethod('paypal',this)"> PayPal</div>
+ <div class="filter-chip" id="ibm-wero" onclick="setIBMethod('wero',this)"> Wero</div>
+ </div>
+ </div>
+ <div id="ib-fields-mobilemoney">
+ <div class="form-group"><label class="form-label">Numéro Mobile Money</label><input class="form-input" type="tel" id="ib-phone" placeholder="+241 06 00 00 00" inputmode="tel"></div>
+ <div class="form-group"><label class="form-label">Opérateur</label>
+ <select class="form-select" id="ib-operateur">
+ <option value="">Sélectionner…</option>
+ <option value="Airtel Money">Airtel Money</option>
+ <option value="Moov Money">Moov Money</option>
+ <option value="Orange Money">Orange Money</option>
+ </select>
+ </div>
+ </div>
+ <div id="ib-fields-virement" style="display:none;">
+ <div class="form-group"><label class="form-label">IBAN</label><input class="form-input" type="text" id="ib-iban" placeholder="FR76…"></div>
+ <div class="form-group"><label class="form-label">Banque</label><input class="form-input" type="text" id="ib-banque" placeholder="BNP, Société Générale…"></div>
+ </div>
+ <div id="ib-fields-paypal" style="display:none;">
+ <div class="form-group"><label class="form-label">Email PayPal</label><input class="form-input" type="email" id="ib-paypal" placeholder="ton@email.com"></div>
+ </div>
+ <div id="ib-fields-wero" style="display:none;">
+ <div class="form-group"><label class="form-label">Numéro Wero</label><input class="form-input" type="tel" id="ib-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"></div>
+ </div>
+
+ <button class="btn-primary" id="btn-ib-save" onclick="saveInlineBenef()">Enregistrer et sélectionner</button>
+ <button class="btn-cancel" onclick="closeSheet('inlineBenefOverlay');openBenefSheet('create')">Annuler</button>
+ <div class="msg" id="msg-ib"></div>
+ </div>
+</div>
+
+<!-- Sheet filtres avancés -->
+<div class="overlay" id="advancedFilterOverlay" onclick="closeOnOverlay(event,'advancedFilterOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Filtres avancés</div>
+
+ <div class="filter-section-label">Devise</div>
+ <div class="filter-chips-wrap">
+ <div class="filter-chip" id="af-eur" onclick="toggleAdvFilter('currency','EUR',this)">EUR</div>
+ <div class="filter-chip" id="af-xaf" onclick="toggleAdvFilter('currency','XAF',this)">XAF</div>
+ <div class="filter-chip" id="af-usd" onclick="toggleAdvFilter('currency','USD',this)">USD</div>
+ <div class="filter-chip" id="af-cad" onclick="toggleAdvFilter('currency','CAD',this)">CAD</div>
+ </div>
+
+ <div class="filter-section-label">Direction</div>
+ <div class="filter-chips-wrap">
+ <div class="filter-chip" id="af-fr-ga" onclick="toggleAdvFilter('direction','France→Gabon',this)">🇫🇷 France → 🇬🇦 Gabon</div>
+ <div class="filter-chip" id="af-ga-fr" onclick="toggleAdvFilter('direction','Gabon→France',this)">🇬🇦 Gabon → 🇫🇷 France</div>
+ <div class="filter-chip" id="af-fr-bf" onclick="toggleAdvFilter('direction','France→Burkina Faso',this)">🇫🇷 France → 🇧🇫 Burkina</div>
+ <div class="filter-chip" id="af-bf-fr" onclick="toggleAdvFilter('direction','Burkina Faso→France',this)">🇧🇫 Burkina → 🇫🇷 France</div>
+ </div>
+
+ <div class="filter-section-label">Montant (EUR)</div>
+ <div class="range-row">
+ <input class="range-input" type="number" id="af-min" placeholder="Min" inputmode="numeric">
+ <input class="range-input" type="number" id="af-max" placeholder="Max" inputmode="numeric">
+ </div>
+
+ <div class="filter-section-label">Rang communautaire</div>
+ <div class="filter-chips-wrap">
+ <div class="filter-chip" id="af-nouveau" onclick="toggleAdvFilter('rank','nouveau',this)">Nouveau</div>
+ <div class="filter-chip" id="af-actif" onclick="toggleAdvFilter('rank','actif',this)">Membre actif</div>
+ <div class="filter-chip" id="af-fiable" onclick="toggleAdvFilter('rank','fiable',this)">Membre fiable</div>
+ <div class="filter-chip" id="af-pilier" onclick="toggleAdvFilter('rank','pilier',this)">Pilier </div>
+ </div>
+
+ <button class="btn-filter-apply" onclick="applyAdvancedFilters()">Appliquer</button>
+ <button class="btn-filter-reset" onclick="resetAdvancedFilters()">Réinitialiser</button>
+ </div>
+</div>
+
+<!-- Sheet profil public -->
+<div class="overlay" id="pubProfileOverlay" onclick="closeOnOverlay(event,'pubProfileOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div id="pubProfileContent"><div class="loading-wrap"><div class="loader"></div></div></div>
+ <button class="btn-cancel" onclick="closeSheet('pubProfileOverlay')" style="margin-top:8px;">Fermer</button>
+ </div>
+</div>
+
+<!-- Gate biométrique à l'ouverture -->
+<div class="bio-gate" id="bioGate">
+ <div class="bio-gate-sheet">
+ <div class="bio-gate-icon"></div>
+ <div class="bio-gate-title">Connexion sécurisée</div>
+ <div class="bio-gate-sub">Utilise ton Face ID ou empreinte digitale pour accéder à TDOLI.</div>
+ <button class="btn-bio-confirm" id="btn-bio-confirm" onclick="bioGateAuth()">
+ <span id="bio-confirm-label">Se connecter avec Face ID</span>
+ </button>
+ <button class="btn-bio-fallback" onclick="bioGateFallback()">Utiliser mon mot de passe</button>
+ <div class="bio-gate-msg" id="bio-gate-msg"></div>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
 const API = 'https://tdoli-backend.onrender.com';
 const token = localStorage.getItem('tdoli_token');
 const email = localStorage.getItem('tdoli_email');
@@ -312,796 +582,799 @@ const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] 
 const avatarUrl = localStorage.getItem('tdoli_avatar') || null;
 const RATE = 655.957;
 
-// ── Vérification Face ID à l'ouverture ────────────────────────
+// Vérification Face ID à l'ouverture 
 (async function checkFaceIdOnOpen() {
-  const faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
+ const faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
 
-  // Pas de token → auth classique
-  if (!token) {
-    window.location.replace('/tdoli-auth.html');
-    return;
-  }
+ // Pas de token → auth classique
+ if (!token) {
+ window.location.replace('/tdoli-auth.html');
+ return;
+ }
 
-  // Vérifier si la session Face ID est encore valide (max 5 min)
-  // Utilise un timestamp car sessionStorage persiste sur iOS PWA entre les ouvertures
-  const lastVerified = parseInt(sessionStorage.getItem('tdoli_faceid_ts') || '0');
-  const SESSION_TIMEOUT = 5 * 60 * 1000; // 5 minutes
-  if (lastVerified && (Date.now() - lastVerified) < SESSION_TIMEOUT) {
-    return;
-  }
+ // Vérifier si la session Face ID est encore valide (max 5 min)
+ // Utilise un timestamp car sessionStorage persiste sur iOS PWA entre les ouvertures
+ const lastVerified = parseInt(sessionStorage.getItem('tdoli_faceid_ts') || '0');
+ const SESSION_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+ if (lastVerified && (Date.now() - lastVerified) < SESSION_TIMEOUT) {
+ return;
+ }
 
-  // Token présent + Face ID actif → vérifier biométrie
-  if (faceidActive && email && window.PublicKeyCredential) {
-    document.getElementById('bioGate').classList.add('open');
-    setTimeout(() => bioGateAuth(), 600);
-    return;
-  }
+ // Token présent + Face ID actif → vérifier biométrie
+ if (faceidActive && email && window.PublicKeyCredential) {
+ document.getElementById('bioGate').classList.add('open');
+ setTimeout(() => bioGateAuth(), 600);
+ return;
+ }
 
-  // Token présent + pas de Face ID → feed directement
+ // Token présent + pas de Face ID → feed directement
 })();
 
-// ── Auth biométrique depuis le feed ───────────────────────────
+// Auth biométrique depuis le feed 
 async function bioGateAuth() {
-  const savedEmail = localStorage.getItem('tdoli_email');
-  if (!savedEmail) { bioGateFallback(); return; }
+ const savedEmail = localStorage.getItem('tdoli_email');
+ if (!savedEmail) { bioGateFallback(); return; }
 
-  const btn = document.getElementById('btn-bio-confirm');
-  const lbl = document.getElementById('bio-confirm-label');
-  btn.disabled = true;
-  lbl.innerHTML = '<span style="display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;"></span> Vérification...';
+ const btn = document.getElementById('btn-bio-confirm');
+ const lbl = document.getElementById('bio-confirm-label');
+ btn.disabled = true;
+ lbl.innerHTML = '<span style="display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;"></span> Vérification...';
 
-  try {
-    const optRes = await fetch(API + '/webauthn/auth/options', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: savedEmail })
-    });
-    if (!optRes.ok) { bioGateFallback(); return; }
-    const options = await optRes.json();
+ try {
+ const optRes = await fetch(API + '/webauthn/auth/options', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ email: savedEmail })
+ });
+ if (!optRes.ok) { bioGateFallback(); return; }
+ const options = await optRes.json();
 
-    options.challenge = base64urlToBuffer(options.challenge);
-    options.allowCredentials = (options.allowCredentials || []).map(c => ({
-      ...c, id: base64urlToBuffer(c.id)
-    }));
+ options.challenge = base64urlToBuffer(options.challenge);
+ options.allowCredentials = (options.allowCredentials || []).map(c => ({
+ ...c, id: base64urlToBuffer(c.id)
+ }));
 
-    const assertion = await navigator.credentials.get({ publicKey: options });
+ const assertion = await navigator.credentials.get({ publicKey: options });
 
-    const assertionResponse = {
-      email: savedEmail,
-      id:    bufferToBase64url(assertion.rawId),
-      rawId: bufferToBase64url(assertion.rawId),
-      type:  assertion.type,
-      response: {
-        authenticatorData: bufferToBase64url(assertion.response.authenticatorData),
-        clientDataJSON:    bufferToBase64url(assertion.response.clientDataJSON),
-        signature:         bufferToBase64url(assertion.response.signature),
-        userHandle:        assertion.response.userHandle ? bufferToBase64url(assertion.response.userHandle) : null,
-      }
-    };
+ const assertionResponse = {
+ email: savedEmail,
+ id: bufferToBase64url(assertion.rawId),
+ rawId: bufferToBase64url(assertion.rawId),
+ type: assertion.type,
+ response: {
+ authenticatorData: bufferToBase64url(assertion.response.authenticatorData),
+ clientDataJSON: bufferToBase64url(assertion.response.clientDataJSON),
+ signature: bufferToBase64url(assertion.response.signature),
+ userHandle: assertion.response.userHandle ? bufferToBase64url(assertion.response.userHandle) : null,
+ }
+ };
 
-    const verRes = await fetch(API + '/webauthn/auth/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(assertionResponse)
-    });
-    const verData = await verRes.json();
+ const verRes = await fetch(API + '/webauthn/auth/verify', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify(assertionResponse)
+ });
+ const verData = await verRes.json();
 
-    if (verRes.ok && verData.token) {
-      // Mettre à jour le token
-      localStorage.setItem('tdoli_token', verData.token);
-      // Marquer le timestamp de vérification Face ID
-      sessionStorage.setItem('tdoli_faceid_ts', Date.now().toString());
-      // Fermer la gate et afficher le feed
-      document.getElementById('bioGate').classList.remove('open');
-      loadFeed();
-    } else {
-      const msg = document.getElementById('bio-gate-msg');
-      msg.textContent = 'Face ID échoué — utilise ton mot de passe';
-      msg.classList.add('show');
-      btn.disabled = false;
-      lbl.textContent = 'Réessayer';
-    }
-  } catch(err) {
-    if (err.name === 'NotAllowedError') {
-      bioGateFallback();
-    } else {
-      const msg = document.getElementById('bio-gate-msg');
-      msg.textContent = 'Erreur — utilise ton mot de passe';
-      msg.classList.add('show');
-      btn.disabled = false;
-      lbl.textContent = 'Réessayer';
-    }
-  }
+ if (verRes.ok && verData.token) {
+ // Mettre à jour le token
+ localStorage.setItem('tdoli_token', verData.token);
+ // Marquer le timestamp de vérification Face ID
+ sessionStorage.setItem('tdoli_faceid_ts', Date.now().toString());
+ // Fermer la gate et afficher le feed
+ document.getElementById('bioGate').classList.remove('open');
+ loadFeed();
+ } else {
+ const msg = document.getElementById('bio-gate-msg');
+ msg.textContent = 'Face ID échoué — utilise ton mot de passe';
+ msg.classList.add('show');
+ btn.disabled = false;
+ lbl.textContent = 'Réessayer';
+ }
+ } catch(err) {
+ if (err.name === 'NotAllowedError') {
+ bioGateFallback();
+ } else {
+ const msg = document.getElementById('bio-gate-msg');
+ msg.textContent = 'Erreur — utilise ton mot de passe';
+ msg.classList.add('show');
+ btn.disabled = false;
+ lbl.textContent = 'Réessayer';
+ }
+ }
 }
 
 function bioGateFallback() {
-  // Effacer token et Face ID → retour à la connexion classique
-  localStorage.removeItem('tdoli_token');
-  window.location.replace('/tdoli-auth.html');
+ // Effacer token et Face ID → retour à la connexion classique
+ localStorage.removeItem('tdoli_token');
+ window.location.replace('/tdoli-auth.html');
 }
 
 function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);return buf.buffer;}
 function bufferToBase64url(b){const bytes=new Uint8Array(b);let bin='';for(const x of bytes)bin+=String.fromCharCode(x);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
-// ─────────────────────────────────────────────────────────────
+// 
 
 // FIX Phase 1: Initialiser l'avatar avec initiales ou photo Cloudinary
 function initAvatar() {
-  const btn = document.getElementById('avatarBtn');
-  if (!btn) return;
-  const name = username || '?';
-  const parts = name.trim().split(' ').filter(p => p.length > 0);
-  const initials = parts.length >= 2
-    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-    : name.substring(0, 2).toUpperCase();
+ const btn = document.getElementById('avatarBtn');
+ if (!btn) return;
+ const name = username || '?';
+ const parts = name.trim().split(' ').filter(p => p.length > 0);
+ const initials = parts.length >= 2
+ ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+ : name.substring(0, 2).toUpperCase();
 
-  if (avatarUrl) {
-    btn.innerHTML = '<img src="' + avatarUrl + '" alt="' + initials + '">';
-  } else {
-    btn.textContent = initials;
-  }
+ if (avatarUrl) {
+ btn.innerHTML = '<img src="' + avatarUrl + '" alt="' + initials + '">';
+ } else {
+ btn.textContent = initials;
+ }
 }
 initAvatar();
 
 let allTransfers = [], currentFilter = 'all', pendingMatch = null, editingId = null;
 
-// ── Filtres avancés ───────────────────────────────────────────
+// Filtres avancés 
 let advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
 
 function setFilter(filter, el) {
-  currentFilter = filter;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  document.getElementById('filterAdvancedBtn').classList.remove('active');
-  if (el) el.classList.add('active');
-  renderFeed();
+ currentFilter = filter;
+ document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+ document.getElementById('filterAdvancedBtn').classList.remove('active');
+ if (el) el.classList.add('active');
+ renderFeed();
 }
 
 function openAdvancedFilters() {
-  document.getElementById('advancedFilterOverlay').classList.add('open');
+ document.getElementById('advancedFilterOverlay').classList.add('open');
 }
 
 function toggleAdvFilter(type, value, el) {
-  const isActive = el.classList.contains('active');
-  // Désactiver tous les chips du même groupe
-  const groupMap = {
-    currency: ['af-eur','af-xaf','af-usd','af-cad'],
-    direction: ['af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr'],
-    rank: ['af-nouveau','af-actif','af-fiable','af-pilier']
-  };
-  groupMap[type].forEach(id => document.getElementById(id)?.classList.remove('active'));
-  if (!isActive) {
-    el.classList.add('active');
-    advFilters[type] = value;
-  } else {
-    advFilters[type] = null;
-  }
+ const isActive = el.classList.contains('active');
+ // Désactiver tous les chips du même groupe
+ const groupMap = {
+ currency: ['af-eur','af-xaf','af-usd','af-cad'],
+ direction: ['af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr'],
+ rank: ['af-nouveau','af-actif','af-fiable','af-pilier']
+ };
+ groupMap[type].forEach(id => document.getElementById(id)?.classList.remove('active'));
+ if (!isActive) {
+ el.classList.add('active');
+ advFilters[type] = value;
+ } else {
+ advFilters[type] = null;
+ }
 }
 
 function applyAdvancedFilters() {
-  advFilters.minEur = parseFloat(document.getElementById('af-min').value) || null;
-  advFilters.maxEur = parseFloat(document.getElementById('af-max').value) || null;
-  closeSheet('advancedFilterOverlay');
+ advFilters.minEur = parseFloat(document.getElementById('af-min').value) || null;
+ advFilters.maxEur = parseFloat(document.getElementById('af-max').value) || null;
+ closeSheet('advancedFilterOverlay');
 
-  // Activer le bouton filtres avancés
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  document.getElementById('filterAdvancedBtn').classList.add('active');
-  currentFilter = 'advanced';
+ // Activer le bouton filtres avancés
+ document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+ document.getElementById('filterAdvancedBtn').classList.add('active');
+ currentFilter = 'advanced';
 
-  renderFeed();
-  renderActiveFilterTags();
+ renderFeed();
+ renderActiveFilterTags();
 }
 
 function resetAdvancedFilters() {
-  advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
-  ['af-eur','af-xaf','af-usd','af-cad','af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr','af-nouveau','af-actif','af-fiable','af-pilier']
-    .forEach(id => document.getElementById(id)?.classList.remove('active'));
-  document.getElementById('af-min').value = '';
-  document.getElementById('af-max').value = '';
-  closeSheet('advancedFilterOverlay');
-  document.getElementById('filterAdvancedBtn').classList.remove('active');
-  document.getElementById('activeFiltersBar').style.display = 'none';
-  currentFilter = 'all';
-  document.querySelector('.filter-chip').classList.add('active');
-  renderFeed();
+ advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
+ ['af-eur','af-xaf','af-usd','af-cad','af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr','af-nouveau','af-actif','af-fiable','af-pilier']
+ .forEach(id => document.getElementById(id)?.classList.remove('active'));
+ document.getElementById('af-min').value = '';
+ document.getElementById('af-max').value = '';
+ closeSheet('advancedFilterOverlay');
+ document.getElementById('filterAdvancedBtn').classList.remove('active');
+ document.getElementById('activeFiltersBar').style.display = 'none';
+ currentFilter = 'all';
+ document.querySelector('.filter-chip').classList.add('active');
+ renderFeed();
 }
 
 function renderActiveFilterTags() {
-  const bar = document.getElementById('activeFiltersBar');
-  const tags = [];
-  if (advFilters.currency) tags.push({ label: advFilters.currency, key: 'currency' });
-  if (advFilters.direction) tags.push({ label: advFilters.direction.replace('→', ' → '), key: 'direction' });
-  if (advFilters.minEur) tags.push({ label: 'Min ' + advFilters.minEur + '€', key: 'minEur' });
-  if (advFilters.maxEur) tags.push({ label: 'Max ' + advFilters.maxEur + '€', key: 'maxEur' });
-  if (advFilters.rank) tags.push({ label: advFilters.rank, key: 'rank' });
+ const bar = document.getElementById('activeFiltersBar');
+ const tags = [];
+ if (advFilters.currency) tags.push({ label: advFilters.currency, key: 'currency' });
+ if (advFilters.direction) tags.push({ label: advFilters.direction.replace('→', ' → '), key: 'direction' });
+ if (advFilters.minEur) tags.push({ label: 'Min ' + advFilters.minEur + '€', key: 'minEur' });
+ if (advFilters.maxEur) tags.push({ label: 'Max ' + advFilters.maxEur + '€', key: 'maxEur' });
+ if (advFilters.rank) tags.push({ label: advFilters.rank, key: 'rank' });
 
-  if (tags.length === 0) { bar.style.display = 'none'; return; }
-  bar.style.display = 'flex';
-  bar.innerHTML = tags.map(t => '<div class="active-filter-tag">' + t.label +
-    ' <button onclick="removeAdvFilter(\'' + t.key + '\')">×</button></div>'
-  ).join('');
+ if (tags.length === 0) { bar.style.display = 'none'; return; }
+ bar.style.display = 'flex';
+ bar.innerHTML = tags.map(t =>
+ '<div class="active-filter-tag">' + t.label +
+ ' <button onclick="removeAdvFilter(\'' + t.key + '\')">×</button></div>'
+ ).join('');
 }
 
 function removeAdvFilter(key) {
-  advFilters[key] = null;
-  if (key === 'minEur') document.getElementById('af-min').value = '';
-  if (key === 'maxEur') document.getElementById('af-max').value = '';
-  const chipMap = { currency: ['af-eur','af-xaf','af-usd','af-cad'], direction: ['af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr'], rank: ['af-nouveau','af-actif','af-fiable','af-pilier'] };
-  if (chipMap[key]) chipMap[key].forEach(id => document.getElementById(id)?.classList.remove('active'));
-  renderFeed();
-  renderActiveFilterTags();
-  const hasAny = Object.values(advFilters).some(v => v !== null);
-  if (!hasAny) {
-    currentFilter = 'all';
-    document.getElementById('filterAdvancedBtn').classList.remove('active');
-    document.querySelector('.filter-chip').classList.add('active');
-  }
+ advFilters[key] = null;
+ if (key === 'minEur') document.getElementById('af-min').value = '';
+ if (key === 'maxEur') document.getElementById('af-max').value = '';
+ const chipMap = { currency: ['af-eur','af-xaf','af-usd','af-cad'], direction: ['af-fr-ga','af-ga-fr','af-fr-bf','af-bf-fr'], rank: ['af-nouveau','af-actif','af-fiable','af-pilier'] };
+ if (chipMap[key]) chipMap[key].forEach(id => document.getElementById(id)?.classList.remove('active'));
+ renderFeed();
+ renderActiveFilterTags();
+ const hasAny = Object.values(advFilters).some(v => v !== null);
+ if (!hasAny) {
+ currentFilter = 'all';
+ document.getElementById('filterAdvancedBtn').classList.remove('active');
+ document.querySelector('.filter-chip').classList.add('active');
+ }
 }
 
 function applyAdvancedFilter(data) {
-  return data.filter(t => {
-    const eurVal = convertToEur(t.amount, t.currency);
-    if (advFilters.currency && t.currency !== advFilters.currency) return false;
-    if (advFilters.direction) {
-      const dir = t.fromCountry + '→' + t.toCountry;
-      if (dir !== advFilters.direction) return false;
-    }
-    if (advFilters.minEur !== null && eurVal < advFilters.minEur) return false;
-    if (advFilters.maxEur !== null && eurVal > advFilters.maxEur) return false;
-    if (advFilters.rank) {
-      const rank = communityRank(t.senderCommunityScore);
-      if (!rank || rank.cls !== advFilters.rank) return false;
-    }
-    return true;
-  });
+ return data.filter(t => {
+ const eurVal = convertToEur(t.amount, t.currency);
+ if (advFilters.currency && t.currency !== advFilters.currency) return false;
+ if (advFilters.direction) {
+ const dir = t.fromCountry + '→' + t.toCountry;
+ if (dir !== advFilters.direction) return false;
+ }
+ if (advFilters.minEur !== null && eurVal < advFilters.minEur) return false;
+ if (advFilters.maxEur !== null && eurVal > advFilters.maxEur) return false;
+ if (advFilters.rank) {
+ const rank = communityRank(t.senderCommunityScore);
+ if (!rank || rank.cls !== advFilters.rank) return false;
+ }
+ return true;
+ });
 }
 
 function renderFeed() {
-  let data = allTransfers;
-  if (currentFilter === 'mine') data = data.filter(t => t.sender === email);
-  else if (currentFilter === 'advanced') data = applyAdvancedFilter(data);
+ let data = allTransfers;
+ if (currentFilter === 'mine') data = data.filter(t => t.sender === email);
+ else if (currentFilter === 'advanced') data = applyAdvancedFilter(data);
 
-  const list = document.getElementById('feedList');
-  const badge = document.getElementById('countBadge');
-  if (data.length === 0) {
-    badge.textContent = '0';
-    list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
-    return;
-  }
-  badge.textContent = data.length;
-  list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
+ const list = document.getElementById('feedList');
+ const badge = document.getElementById('countBadge');
+ if (data.length === 0) {
+ badge.textContent = '0';
+ list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
+ return;
+ }
+ badge.textContent = data.length;
+ list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
 }
 
-// ── Profil public ─────────────────────────────────────────────
+// Profil public 
 async function openPublicProfile(senderEmail) {
-  document.getElementById('pubProfileContent').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
-  document.getElementById('pubProfileOverlay').classList.add('open');
+ document.getElementById('pubProfileContent').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+ document.getElementById('pubProfileOverlay').classList.add('open');
 
-  try {
-    // Récupérer les infos de l'utilisateur
-    const [profileRes, testimonialsRes] = await Promise.all([
-      fetch(API + '/profile/' + senderEmail, { headers: { 'Authorization': 'Bearer ' + token } }),
-      fetch(API + '/ratings/' + encodeURIComponent(senderEmail) + '/by-email', { headers: { 'Authorization': 'Bearer ' + token } })
-        .catch(() => null)
-    ]);
+ try {
+ // Récupérer les infos de l'utilisateur
+ const [profileRes, testimonialsRes] = await Promise.all([
+ fetch(API + '/profile/' + senderEmail, { headers: { 'Authorization': 'Bearer ' + token } }),
+ fetch(API + '/ratings/' + encodeURIComponent(senderEmail) + '/by-email', { headers: { 'Authorization': 'Bearer ' + token } })
+ .catch(() => null)
+ ]);
 
-    const profile = profileRes.ok ? await profileRes.json() : null;
-    if (!profile) {
-      document.getElementById('pubProfileContent').innerHTML = '<div class="pub-empty">Profil introuvable</div>';
-      return;
-    }
+ const profile = profileRes.ok ? await profileRes.json() : null;
+ if (!profile) {
+ document.getElementById('pubProfileContent').innerHTML = '<div class="pub-empty">Profil introuvable</div>';
+ return;
+ }
 
-    // Témoignages via userId si dispo
-    let testimonials = [];
-    if (profile._id) {
-      try {
-        const tRes = await fetch(API + '/ratings/' + profile._id + '/testimonials', { headers: { 'Authorization': 'Bearer ' + token } });
-        if (tRes.ok) { const tData = await tRes.json(); testimonials = tData.testimonials || []; }
-      } catch(e) {}
-    }
+ // Témoignages via userId si dispo
+ let testimonials = [];
+ if (profile._id) {
+ try {
+ const tRes = await fetch(API + '/ratings/' + profile._id + '/testimonials', { headers: { 'Authorization': 'Bearer ' + token } });
+ if (tRes.ok) { const tData = await tRes.json(); testimonials = tData.testimonials || []; }
+ } catch(e) {}
+ }
 
-    // Annonces actives de cet utilisateur
-    const userTransfers = allTransfers.filter(t => t.sender === senderEmail);
+ // Annonces actives de cet utilisateur
+ const userTransfers = allTransfers.filter(t => t.sender === senderEmail);
 
-    const rating = profile.averageRating || 0;
-    const ratingCount = (profile.ratings && profile.ratings.length) || 0;
-    const rank = communityRank(profile.communityScore);
-    const uname = profile.username || senderEmail.split('@')[0];
-    const initials = getInitials(uname);
-    const av = profile.avatarUrl;
+ const rating = profile.averageRating || 0;
+ const ratingCount = (profile.ratings && profile.ratings.length) || 0;
+ const rank = communityRank(profile.communityScore);
+ const uname = profile.username || senderEmail.split('@')[0];
+ const initials = getInitials(uname);
+ const av = profile.avatarUrl;
 
-    const avatarHtml = av
-      ? '<div class="pub-avatar"><img src="' + av + '" alt="' + initials + '"></div>'
-      : '<div class="pub-avatar">' + initials + '</div>';
+ const avatarHtml = av
+ ? '<div class="pub-avatar"><img src="' + av + '" alt="' + initials + '"></div>'
+ : '<div class="pub-avatar">' + initials + '</div>';
 
-    const starsHtml = rating > 0
-      ? '<div class="pub-rating"><span>' + '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating)) + '</span><strong>' + rating.toFixed(1) + '</strong><span style="color:var(--text-3);font-size:12px;">(' + ratingCount + ')</span></div>'
-      : '<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Aucun avis</div>';
+ const starsHtml = rating > 0
+ ? '<div class="pub-rating"><span>' + ''.repeat(Math.round(rating)) + ''.repeat(5 - Math.round(rating)) + '</span><strong>' + rating.toFixed(1) + '</strong><span style="color:var(--text-3);font-size:12px;">(' + ratingCount + ')</span></div>'
+ : '<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Aucun avis</div>';
 
-    const rankHtml = rank ? '<span class="rank-badge ' + rank.cls + '">' + rank.label + '</span>' : '';
-    const reactHtml = profile.reactivityBadge ? renderReactivityBadge(profile.reactivityBadge) : '';
+ const rankHtml = rank ? '<span class="rank-badge ' + rank.cls + '">' + rank.label + '</span>' : '';
+ const reactHtml = profile.reactivityBadge ? renderReactivityBadge(profile.reactivityBadge) : '';
 
-    // Annonces actives
-    const annoncesHtml = userTransfers.length > 0
-      ? userTransfers.map(t => '<div class="pub-annonce-item">' +
-          '<span class="pub-annonce-dir">' + t.fromCountry + ' → ' + t.toCountry + '</span>' +
-          '<span class="pub-annonce-amt">' + Number(t.amount).toLocaleString('fr-FR') + ' ' + t.currency + '</span>' +
-          '</div>'
-        ).join('')
-      : '<div class="pub-empty">Aucune annonce active</div>';
+ // Annonces actives
+ const annoncesHtml = userTransfers.length > 0
+ ? userTransfers.map(t =>
+ '<div class="pub-annonce-item">' +
+ '<span class="pub-annonce-dir">' + t.fromCountry + ' → ' + t.toCountry + '</span>' +
+ '<span class="pub-annonce-amt">' + Number(t.amount).toLocaleString('fr-FR') + ' ' + t.currency + '</span>' +
+ '</div>'
+ ).join('')
+ : '<div class="pub-empty">Aucune annonce active</div>';
 
-    // Témoignages
-    const testimonialsHtml = testimonials.length > 0
-      ? testimonials.slice(0, 5).map(t => '<div class="pub-testimonial">' +
-          '<div class="pub-test-header">' +
-          '<span class="pub-test-from">👤 ' + (t.fromUsername || 'Membre') + '</span>' +
-          '<span class="pub-test-stars">' + '★'.repeat(t.rating || 0) + '☆'.repeat(5 - (t.rating || 0)) + '</span>' +
-          '</div>' +
-          '<div class="pub-test-text">"' + t.comment + '"</div>' +
-          '</div>'
-        ).join('')
-      : '<div class="pub-empty">Aucun témoignage pour l\'instant</div>';
+ // Témoignages
+ const testimonialsHtml = testimonials.length > 0
+ ? testimonials.slice(0, 5).map(t =>
+ '<div class="pub-testimonial">' +
+ '<div class="pub-test-header">' +
+ '<span class="pub-test-from"> ' + (t.fromUsername || 'Membre') + '</span>' +
+ '<span class="pub-test-stars">' + ''.repeat(t.rating || 0) + ''.repeat(5 - (t.rating || 0)) + '</span>' +
+ '</div>' +
+ '<div class="pub-test-text">"' + t.comment + '"</div>' +
+ '</div>'
+ ).join('')
+ : '<div class="pub-empty">Aucun témoignage pour l\'instant</div>';
 
-    document.getElementById('pubProfileContent').innerHTML =
-      '<div class="pub-profile-hero">' +
-        avatarHtml +
-        '<div class="pub-username">' + uname + '</div>' +
-        starsHtml +
-        '<div class="pub-badges">' + rankHtml + (reactHtml ? reactHtml : '') + '</div>' +
-      '</div>' +
-      '<div class="pub-stats">' +
-        '<div class="pub-stat"><div class="pub-stat-val">' + (profile.completedDeals || 0) + '</div><div class="pub-stat-lbl">Deals</div></div>' +
-        '<div class="pub-stat"><div class="pub-stat-val">' + (profile.communityScore || '—') + '</div><div class="pub-stat-lbl">Score</div></div>' +
-      '</div>' +
-      '<div class="pub-section-title">Annonces actives</div>' + annoncesHtml +
-      '<div class="pub-section-title" style="margin-top:16px;">💬 Ce que disent les membres</div>' + testimonialsHtml;
+ document.getElementById('pubProfileContent').innerHTML =
+ '<div class="pub-profile-hero">' +
+ avatarHtml +
+ '<div class="pub-username">' + uname + '</div>' +
+ starsHtml +
+ '<div class="pub-badges">' + rankHtml + (reactHtml ? reactHtml : '') + '</div>' +
+ '</div>' +
+ '<div class="pub-stats">' +
+ '<div class="pub-stat"><div class="pub-stat-val">' + (profile.completedDeals || 0) + '</div><div class="pub-stat-lbl">Deals</div></div>' +
+ '<div class="pub-stat"><div class="pub-stat-val">' + (profile.communityScore || '—') + '</div><div class="pub-stat-lbl">Score</div></div>' +
+ '</div>' +
+ '<div class="pub-section-title">Annonces actives</div>' + annoncesHtml +
+ '<div class="pub-section-title" style="margin-top:16px;"> Ce que disent les membres</div>' + testimonialsHtml;
 
-  } catch(e) {
-    document.getElementById('pubProfileContent').innerHTML = '<div class="pub-empty">Erreur de chargement</div>';
-  }
+ } catch(e) {
+ document.getElementById('pubProfileContent').innerHTML = '<div class="pub-empty">Erreur de chargement</div>';
+ }
 }
 
 // FIX Phase 1: shareApp() fonctionnelle avec Web Share API + fallback copier
 function shareApp() {
-  const refCode = localStorage.getItem('tdoli_ref') || username;
-  const msg = '🦜 TDOLI — Transfert d\'argent entre particuliers, sans frais cachés !\nInscris-toi avec mon code parrain : ' + refCode + '\nhttps://tdoli-frontend.pages.dev';
-  if (navigator.share) {
-    navigator.share({ title: 'TDOLI', text: msg, url: 'https://tdoli-frontend.pages.dev' })
-      .catch(() => {});
-  } else {
-    navigator.clipboard.writeText(msg)
-      .then(() => showToast('Lien copié ! 🎁', '#fcd116'))
-      .catch(() => showToast('Partage: ' + msg.substring(0, 30) + '...', '#fcd116'));
-  }
+ const refCode = localStorage.getItem('tdoli_ref') || username;
+ const msg = ' TDOLI — Transfert d\'argent entre particuliers, sans frais cachés !\nInscris-toi avec mon code parrain : ' + refCode + '\nhttps://tdoli-frontend.pages.dev';
+ if (navigator.share) {
+ navigator.share({ title: 'TDOLI', text: msg, url: 'https://tdoli-frontend.pages.dev' })
+ .catch(() => {});
+ } else {
+ navigator.clipboard.writeText(msg)
+ .then(() => showToast('Lien copié ! ', '#fcd116'))
+ .catch(() => showToast('Partage: ' + msg.substring(0, 30) + '...', '#fcd116'));
+ }
 }
 
 function logout() {
-  localStorage.clear();
-  // Vider le cache SW pour forcer rechargement de auth.html
-  if ('caches' in window) {
-    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  }
-  window.location.replace('/tdoli-auth.html');
+ localStorage.clear();
+ // Vider le cache SW pour forcer rechargement de auth.html
+ if ('caches' in window) {
+ caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+ }
+ window.location.replace('/tdoli-auth.html');
 }
 
 function showToast(msg, color) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = color || 'var(--green-dim)';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
+ const t = document.getElementById('toast');
+ t.textContent = msg;
+ t.style.background = color || 'var(--green-dim)';
+ t.classList.add('show');
+ setTimeout(() => t.classList.remove('show'), 3500);
 }
 
 function timeAgo(dateStr) {
-  if (!dateStr) return '';
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const m = Math.floor(diff / 60000);
-  if (m < 1) return "À l'instant";
-  if (m < 60) return m + ' min';
-  const h = Math.floor(m / 60);
-  if (h < 24) return h + 'h';
-  return Math.floor(h / 24) + 'j';
+ if (!dateStr) return '';
+ const diff = Date.now() - new Date(dateStr).getTime();
+ const m = Math.floor(diff / 60000);
+ if (m < 1) return "À l'instant";
+ if (m < 60) return m + ' min';
+ const h = Math.floor(m / 60);
+ if (h < 24) return h + 'h';
+ return Math.floor(h / 24) + 'j';
 }
 
 function renderStars(r) {
-  if (!r || r === 0) return '';
-  const f = Math.round(r);
-  return '★'.repeat(f) + '☆'.repeat(5 - f) + ' ' + r.toFixed(1);
+ if (!r || r === 0) return '';
+ const f = Math.round(r);
+ return ''.repeat(f) + ''.repeat(5 - f) + ' ' + r.toFixed(1);
 }
 
 // Phase 5 — Réputation
 function renderReactivityBadge(badge) {
-  if (!badge) return '';
-  const labels = { fast: '⚡ Rapide', normal: '🕐 Normal', slow: '🐢 Lent' };
-  return '<span class="reactivity-badge ' + badge + '">' + labels[badge] + '</span>';
+ if (!badge) return '';
+ const labels = { fast: ' Rapide', normal: ' Normal', slow: ' Lent' };
+ return '<span class="reactivity-badge ' + badge + '">' + labels[badge] + '</span>';
 }
 
 function communityRank(score) {
-  if (score === null || score === undefined) return null;
-  if (score >= 86) return { cls: 'pilier', label: 'Pilier 🏆' };
-  if (score >= 66) return { cls: 'fiable', label: 'Membre fiable' };
-  if (score >= 41) return { cls: 'actif',  label: 'Membre actif' };
-  return { cls: 'nouveau', label: 'Nouveau' };
+ if (score === null || score === undefined) return null;
+ if (score >= 86) return { cls: 'pilier', label: 'Pilier ' };
+ if (score >= 66) return { cls: 'fiable', label: 'Membre fiable' };
+ if (score >= 41) return { cls: 'actif', label: 'Membre actif' };
+ return { cls: 'nouveau', label: 'Nouveau' };
 }
 
 function renderRankBadge(score) {
-  const rank = communityRank(score);
-  if (!rank) return '';
-  return '<span class="rank-badge ' + rank.cls + '">' + rank.label + '</span>';
+ const rank = communityRank(score);
+ if (!rank) return '';
+ return '<span class="rank-badge ' + rank.cls + '">' + rank.label + '</span>';
 }
 
 function renderList(data) {
-  return data.map((t, i) => {
-    const isOwn = t.sender === email;
-    const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
-    const initials = getInitials(displayName);
-    const eurVal = convertToEur(t.amount, t.currency);
-    const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
-    // Trust line — "A aidé X membres"
-    const dealsCount = t.senderDeals || t.senderCompletedDeals || 0;
-    const trustLine = dealsCount > 0
-      ? '<div class="trust-line">A aidé <span class="trust-members">' + dealsCount + ' membre' + (dealsCount > 1 ? 's' : '') + '</span></div>'
-      : '';
-    // Badge réactivité inline
-    const reactBadgeMap = { fast: '⚡ Répond vite', normal: '🕐 Répond en 1h', slow: '🐢 Répond lentement' };
-    const reactClass = { fast: 'fast', normal: 'normal', slow: 'slow' };
-    const reactInline = t.senderReactivityBadge && reactBadgeMap[t.senderReactivityBadge]
-      ? '<span class="reactivity-inline ' + reactClass[t.senderReactivityBadge] + '">' + reactBadgeMap[t.senderReactivityBadge] + '</span>'
-      : '';
-    return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
-      '<div class="item-avatar">' + initials + '</div>' +
-      '<div class="item-body">' +
-      '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
-      '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
-      '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
-      '<span class="item-meta">' +
-        (t.senderRating > 0 ? '<span class="item-rating">★' + t.senderRating.toFixed(1) + '</span>' : '') +
-        reactInline +
-        renderRankBadge(t.senderCommunityScore) +
-        '<span class="item-time">' + timeAgo(t.createdAt) + '</span>' +
-        '<div class="status-dot-sm"></div>' +
-      '</span></div>' +
-      trustLine +
-      '</div></div>';
-  }).join('');
+ return data.map((t, i) => {
+ const isOwn = t.sender === email;
+ const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
+ const initials = getInitials(displayName);
+ const eurVal = convertToEur(t.amount, t.currency);
+ const euroLabel = t.currency !== 'EUR' ? '' + eurVal.toFixed(0) + '€' : '';
+ // Trust line — "A aidé X membres"
+ const dealsCount = t.senderDeals || t.senderCompletedDeals || 0;
+ const trustLine = dealsCount > 0
+ ? '<div class="trust-line">A aidé <span class="trust-members">' + dealsCount + ' membre' + (dealsCount > 1 ? 's' : '') + '</span></div>'
+ : '';
+ // Badge réactivité inline
+ const reactBadgeMap = { fast: ' Répond vite', normal: ' Répond en 1h', slow: ' Répond lentement' };
+ const reactClass = { fast: 'fast', normal: 'normal', slow: 'slow' };
+ const reactInline = t.senderReactivityBadge && reactBadgeMap[t.senderReactivityBadge]
+ ? '<span class="reactivity-inline ' + reactClass[t.senderReactivityBadge] + '">' + reactBadgeMap[t.senderReactivityBadge] + '</span>'
+ : '';
+ return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
+ '<div class="item-avatar">' + initials + '</div>' +
+ '<div class="item-body">' +
+ '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
+ '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
+ '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
+ '<span class="item-meta">' +
+ (t.senderRating > 0 ? '<span class="item-rating">' + t.senderRating.toFixed(1) + '</span>' : '') +
+ reactInline +
+ renderRankBadge(t.senderCommunityScore) +
+ '<span class="item-time">' + timeAgo(t.createdAt) + '</span>' +
+ '<div class="status-dot-sm"></div>' +
+ '</span></div>' +
+ trustLine +
+ '</div></div>';
+ }).join('');
 }
 function calcAirtelFees(xafAmount) {
-  if (xafAmount <= 0) return 0;
-  // Grille officielle Airtel Money Gabon
-  if (xafAmount <= 1000)  return 30;
-  if (xafAmount <= 2000)  return 60;
-  if (xafAmount <= 3000)  return 90;
-  if (xafAmount <= 4000)  return 120;
-  if (xafAmount <= 5000)  return 150;
-  if (xafAmount <= 6000)  return 180;
-  if (xafAmount <= 7000)  return 210;
-  if (xafAmount <= 8000)  return 240;
-  if (xafAmount <= 9000)  return 270;
-  if (xafAmount <= 10000) return 300;
-  if (xafAmount <= 15000) return 450;
-  if (xafAmount <= 20000) return 600;
-  if (xafAmount <= 25000) return 750;
-  if (xafAmount <= 30000) return 900;
-  if (xafAmount <= 50000) return 1500;
-  if (xafAmount <= 60000) return 1800;
-  if (xafAmount <= 70000) return 2100;
-  if (xafAmount <= 80000) return 2400;
-  if (xafAmount <= 90000) return 2700;
-  // Plafonné à 5000 FCFA à partir de 100 000 FCFA
-  return 5000;
+ if (xafAmount <= 0) return 0;
+ // Grille officielle Airtel Money Gabon
+ if (xafAmount <= 1000) return 30;
+ if (xafAmount <= 2000) return 60;
+ if (xafAmount <= 3000) return 90;
+ if (xafAmount <= 4000) return 120;
+ if (xafAmount <= 5000) return 150;
+ if (xafAmount <= 6000) return 180;
+ if (xafAmount <= 7000) return 210;
+ if (xafAmount <= 8000) return 240;
+ if (xafAmount <= 9000) return 270;
+ if (xafAmount <= 10000) return 300;
+ if (xafAmount <= 15000) return 450;
+ if (xafAmount <= 20000) return 600;
+ if (xafAmount <= 25000) return 750;
+ if (xafAmount <= 30000) return 900;
+ if (xafAmount <= 50000) return 1500;
+ if (xafAmount <= 60000) return 1800;
+ if (xafAmount <= 70000) return 2100;
+ if (xafAmount <= 80000) return 2400;
+ if (xafAmount <= 90000) return 2700;
+ // Plafonné à 5000 FCFA à partir de 100 000 FCFA
+ return 5000;
 }
 
 function renderAirtelPreview(amount, currency, toCountry, fromCountry) {
-  if (!amount || isNaN(amount) || amount <= 0) return '';
-  const RATE = 655.957;
-  const isGabonDest = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
-  const isGabonSrc = fromCountry === 'Gabon' || fromCountry === 'Burkina Faso';
-  if (!isGabonDest && !isGabonSrc) return '';
+ if (!amount || isNaN(amount) || amount <= 0) return '';
+ const RATE = 655.957;
+ const isGabonDest = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
+ const isGabonSrc = fromCountry === 'Gabon' || fromCountry === 'Burkina Faso';
+ if (!isGabonDest && !isGabonSrc) return '';
 
-  if (currency === 'XAF') {
-    // XAF → autre pays : envoyeur utilise Airtel pour envoyer
-    const fees = calcAirtelFees(amount);
-    const depot = amount + fees;
-    const netSiDeduit = amount - fees;
-    const eurNet = (netSiDeduit / RATE).toFixed(2);
-    const eurBrut = (amount / RATE).toFixed(2);
+ if (currency === 'XAF') {
+ // XAF → autre pays : envoyeur utilise Airtel pour envoyer
+ const fees = calcAirtelFees(amount);
+ const depot = amount + fees;
+ const netSiDeduit = amount - fees;
+ const eurNet = (netSiDeduit / RATE).toFixed(2);
+ const eurBrut = (amount / RATE).toFixed(2);
 
-    return '<div class="airtel-box">'+
-      '<div class="airtel-scenario-title">📤 Scénario 1 — Tu envoies '+Number(depot).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA (≈ '+eurBrut+' €)</span></div>'+
-      '<div style="height:10px"></div>'+
-      '<div class="airtel-scenario-title">📤 Scénario 2 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(netSiDeduit).toLocaleString('fr-FR')+' FCFA (≈ '+eurNet+' €)</span></div>'+
-      '</div>';
-  }
+ return '<div class="airtel-box">'+
+ '<div class="airtel-scenario-title"> Scénario 1 — Tu envoies '+Number(depot).toLocaleString('fr-FR')+' FCFA</div>'+
+ '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA ( '+eurBrut+' €)</span></div>'+
+ '<div style="height:10px"></div>'+
+ '<div class="airtel-scenario-title"> Scénario 2 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' FCFA</div>'+
+ '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(netSiDeduit).toLocaleString('fr-FR')+' FCFA ( '+eurNet+' €)</span></div>'+
+ '</div>';
+ }
 
-  if (currency === 'EUR') {
-    // EUR → Gabon : receveur retire via Airtel
-    const xafBrut = Math.round(amount * RATE);
-    const fees = calcAirtelFees(xafBrut);
-    const xafNet = xafBrut - fees;
-    const eurPourCouvrir = ((xafBrut + fees) / RATE).toFixed(2);
+ if (currency === 'EUR') {
+ // EUR → Gabon : receveur retire via Airtel
+ const xafBrut = Math.round(amount * RATE);
+ const fees = calcAirtelFees(xafBrut);
+ const xafNet = xafBrut - fees;
+ const eurPourCouvrir = ((xafBrut + fees) / RATE).toFixed(2);
 
-    return '<div class="airtel-box">'+
-      '<div class="airtel-scenario-title">📤 Scénario 1 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' EUR</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(xafNet).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div style="height:10px"></div>'+
-      '<div class="airtel-scenario-title">📥 Scénario 2 — Receveur reçoit '+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</div>'+
-      '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel à couvrir</span><span class="airtel-val fees">+'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
-      '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Tu envoies</span><span class="airtel-val green">'+eurPourCouvrir+' EUR</span></div>'+
-      '</div>';
-  }
+ return '<div class="airtel-box">'+
+ '<div class="airtel-scenario-title"> Scénario 1 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' EUR</div>'+
+ '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(xafNet).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div style="height:10px"></div>'+
+ '<div class="airtel-scenario-title"> Scénario 2 — Receveur reçoit '+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</div>'+
+ '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel à couvrir</span><span class="airtel-val fees">+'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
+ '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Tu envoies</span><span class="airtel-val green">'+eurPourCouvrir+' EUR</span></div>'+
+ '</div>';
+ }
 
-  return '';
+ return '';
 }
 
 function convertToEur(amount, currency) {
-  const rates = { EUR: 1, XAF: 1 / 655.957, USD: 0.92, CAD: 0.68 };
-  return amount * (rates[currency] || 1);
+ const rates = { EUR: 1, XAF: 1 / 655.957, USD: 0.92, CAD: 0.68 };
+ return amount * (rates[currency] || 1);
 }
 
 function formatMatchAmount(amount, currency, toCountry) {
-  const eur = convertToEur(amount, currency);
-  if (toCountry === 'Gabon' || toCountry === 'Burkina Faso') return Math.round(eur * 655.957).toLocaleString('fr-FR') + ' XAF';
-  if (toCountry === 'Etats-Unis') return (eur / 0.92).toFixed(0) + ' USD';
-  if (toCountry === 'Canada') return (eur / 0.68).toFixed(0) + ' CAD';
-  return eur.toFixed(0) + ' EUR';
+ const eur = convertToEur(amount, currency);
+ if (toCountry === 'Gabon' || toCountry === 'Burkina Faso') return Math.round(eur * 655.957).toLocaleString('fr-FR') + ' XAF';
+ if (toCountry === 'Etats-Unis') return (eur / 0.92).toFixed(0) + ' USD';
+ if (toCountry === 'Canada') return (eur / 0.68).toFixed(0) + ' CAD';
+ return eur.toFixed(0) + ' EUR';
 }
 
 function getInitials(name) {
-  const parts = (name || '?').trim().split(' ').filter(p => p.length > 0);
-  return parts.length >= 2
-    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-    : (name || '??').substring(0, 2).toUpperCase();
+ const parts = (name || '?').trim().split(' ').filter(p => p.length > 0);
+ return parts.length >= 2
+ ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+ : (name || '??').substring(0, 2).toUpperCase();
 }
 
 function renderList(data) {
-  return data.map((t, i) => {
-    const isOwn = t.sender === email;
-    const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
-    const initials = getInitials(displayName);
-    const eurVal = convertToEur(t.amount, t.currency);
-    const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
-    return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
-      '<div class="item-avatar">' + initials + '</div>' +
-      '<div class="item-body">' +
-      '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
-      '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
-      '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
-      '<span class="item-meta">' + (t.senderRating > 0 ? '<span class="item-rating">★' + t.senderRating.toFixed(1) + '</span>' : '') + '<span class="item-time">' + timeAgo(t.createdAt) + '</span><div class="status-dot-sm"></div></span></div>' +
-      '</div></div>';
-  }).join('');
+ return data.map((t, i) => {
+ const isOwn = t.sender === email;
+ const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
+ const initials = getInitials(displayName);
+ const eurVal = convertToEur(t.amount, t.currency);
+ const euroLabel = t.currency !== 'EUR' ? '' + eurVal.toFixed(0) + '€' : '';
+ return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
+ '<div class="item-avatar">' + initials + '</div>' +
+ '<div class="item-body">' +
+ '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
+ '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
+ '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
+ '<span class="item-meta">' + (t.senderRating > 0 ? '<span class="item-rating">' + t.senderRating.toFixed(1) + '</span>' : '') + '<span class="item-time">' + timeAgo(t.createdAt) + '</span><div class="status-dot-sm"></div></span></div>' +
+ '</div></div>';
+ }).join('');
 }
 
 function openDetail(id) {
-  const t = allTransfers.find(x => x._id === id);
-  if (!t) return;
-  const isOwn = t.sender === email;
-  const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
-  const initials = getInitials(displayName);
-  const eurVal = convertToEur(t.amount, t.currency);
-  const euroLabel = t.currency !== 'EUR' ? '≈ ' + eurVal.toFixed(0) + ' EUR' : '';
-  const matchAmt = formatMatchAmount(t.amount, t.currency, t.toCountry);
+ const t = allTransfers.find(x => x._id === id);
+ if (!t) return;
+ const isOwn = t.sender === email;
+ const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
+ const initials = getInitials(displayName);
+ const eurVal = convertToEur(t.amount, t.currency);
+ const euroLabel = t.currency !== 'EUR' ? ' ' + eurVal.toFixed(0) + ' EUR' : '';
+ const matchAmt = formatMatchAmount(t.amount, t.currency, t.toCountry);
 
-  let html = '<div class="detail-hero">' +
-    '<div class="detail-user">' +
-    '<div class="detail-avatar" ' + (!isOwn ? 'onclick="closeSheet(\'detailOverlay\');openPublicProfile(\'' + t.sender + '\')" style="cursor:pointer;"' : '') + '>' + initials + '</div>' +
-    '<div>' +
-    '<div class="detail-uname" ' + (!isOwn ? 'onclick="closeSheet(\'detailOverlay\');openPublicProfile(\'' + t.sender + '\')" style="cursor:pointer;color:var(--green);text-decoration:underline;"' : '') + '>' + (isOwn ? 'Mon annonce' : displayName) + '</div>' +
-    (t.senderRating > 0 ? '<div class="detail-rating">' + renderStars(t.senderRating) + '</div>' : '<div style="font-size:11px;color:var(--text-3)">Nouveau</div>') +
-    (!isOwn ? '<div style="font-size:10px;color:var(--text-3);margin-top:2px;">Voir le profil →</div>' : '') +
-    '</div></div>' +
-    '<div class="detail-flow"><div class="detail-country">' + t.fromCountry + '</div><div class="detail-arrow">→</div><div class="detail-country">' + t.toCountry + '</div></div>' +
-    '<div style="display:flex;align-items:baseline;gap:6px"><span class="detail-amount">' + Number(t.amount).toLocaleString('fr-FR') + '</span><span class="detail-currency">' + t.currency + '</span>' + (euroLabel ? '<span class="detail-eur">' + euroLabel + '</span>' : '') + '</div></div>';
+ let html = '<div class="detail-hero">' +
+ '<div class="detail-user">' +
+ '<div class="detail-avatar" ' + (!isOwn ? 'onclick="closeSheet(\'detailOverlay\');openPublicProfile(\'' + t.sender + '\')" style="cursor:pointer;"' : '') + '>' + initials + '</div>' +
+ '<div>' +
+ '<div class="detail-uname" ' + (!isOwn ? 'onclick="closeSheet(\'detailOverlay\');openPublicProfile(\'' + t.sender + '\')" style="cursor:pointer;color:var(--green);text-decoration:underline;"' : '') + '>' + (isOwn ? 'Mon annonce' : displayName) + '</div>' +
+ (t.senderRating > 0 ? '<div class="detail-rating">' + renderStars(t.senderRating) + '</div>' : '<div style="font-size:11px;color:var(--text-3)">Nouveau</div>') +
+ (!isOwn ? '<div style="font-size:10px;color:var(--text-3);margin-top:2px;">Voir le profil →</div>' : '') +
+ '</div></div>' +
+ '<div class="detail-flow"><div class="detail-country">' + t.fromCountry + '</div><div class="detail-arrow">→</div><div class="detail-country">' + t.toCountry + '</div></div>' +
+ '<div style="display:flex;align-items:baseline;gap:6px"><span class="detail-amount">' + Number(t.amount).toLocaleString('fr-FR') + '</span><span class="detail-currency">' + t.currency + '</span>' + (euroLabel ? '<span class="detail-eur">' + euroLabel + '</span>' : '') + '</div></div>';
 
-  if (!isOwn) {
-    html += '<div class="match-info"><div class="match-row"><span class="match-label">Tu envoies</span><span class="match-val">' + matchAmt + '</span></div><div class="match-row"><span class="match-label">Sens</span><span class="match-val">' + t.toCountry + ' → ' + t.fromCountry + '</span></div></div>' +
-      '<button class="btn-primary" onclick="showConfirm(\'' + t._id + '\',\'' + t.fromCountry + '\',\'' + t.toCountry + '\',\'' + t.currency + '\',' + t.amount + ',\'' + matchAmt + '\')">Matcher cette annonce</button>';
-  } else {
-    html += '<div class="my-actions"><button class="btn-edit" onclick="openEdit(\'' + t._id + '\',' + t.amount + ',\'' + t.currency + '\')">✏ Modifier</button><button class="btn-delete" onclick="deleteAnnonce(\'' + t._id + '\')">🗑 Supprimer</button></div>';
-  }
+ if (!isOwn) {
+ html += '<div class="match-info"><div class="match-row"><span class="match-label">Tu envoies</span><span class="match-val">' + matchAmt + '</span></div><div class="match-row"><span class="match-label">Sens</span><span class="match-val">' + t.toCountry + ' → ' + t.fromCountry + '</span></div></div>' +
+ '<button class="btn-primary" onclick="showConfirm(\'' + t._id + '\',\'' + t.fromCountry + '\',\'' + t.toCountry + '\',\'' + t.currency + '\',' + t.amount + ',\'' + matchAmt + '\')">Matcher cette annonce</button>';
+ } else {
+ html += '<div class="my-actions"><button class="btn-edit" onclick="openEdit(\'' + t._id + '\',' + t.amount + ',\'' + t.currency + '\')"> Modifier</button><button class="btn-delete" onclick="deleteAnnonce(\'' + t._id + '\')"> Supprimer</button></div>';
+ }
 
-  document.getElementById('detailContent').innerHTML = html;
-  document.getElementById('detailOverlay').classList.add('open');
+ document.getElementById('detailContent').innerHTML = html;
+ document.getElementById('detailOverlay').classList.add('open');
 }
 
 function openEdit(id, amount, currency) {
-  editingId = id;
-  closeSheet('detailOverlay');
-  document.getElementById('edit-amount').value = amount;
-  document.getElementById('edit-currency').value = currency;
-  updatePreview('edit');
+ editingId = id;
+ closeSheet('detailOverlay');
+ document.getElementById('edit-amount').value = amount;
+ document.getElementById('edit-currency').value = currency;
+ updatePreview('edit');
 
-  // Charger le bénéficiaire actuel
-  const transfer = allTransfers.find(x => x._id === id);
-  selectedEditBenefId = transfer?.senderBeneficiaireId || null;
-  const container = document.getElementById('benef-selected-edit');
-  if (container) {
-    if (selectedEditBenefId) {
-      const b = allBeneficiaires.find(x => x._id === selectedEditBenefId);
-      if (b) container.innerHTML = '<div class="benef-selected-badge"><span style="font-size:18px;">✓</span><div><div class="benef-selected-name">'+b.nom+'</div><div class="benef-selected-detail">'+getBenefDetail(b)+'</div></div></div>';
-    } else { container.innerHTML = ''; }
-  }
-  document.getElementById('editOverlay').classList.add('open');
+ // Charger le bénéficiaire actuel
+ const transfer = allTransfers.find(x => x._id === id);
+ selectedEditBenefId = transfer?.senderBeneficiaireId || null;
+ const container = document.getElementById('benef-selected-edit');
+ if (container) {
+ if (selectedEditBenefId) {
+ const b = allBeneficiaires.find(x => x._id === selectedEditBenefId);
+ if (b) container.innerHTML = '<div class="benef-selected-badge"><span style="font-size:18px;"></span><div><div class="benef-selected-name">'+b.nom+'</div><div class="benef-selected-detail">'+getBenefDetail(b)+'</div></div></div>';
+ } else { container.innerHTML = ''; }
+ }
+ document.getElementById('editOverlay').classList.add('open');
 }
 
 async function deleteAnnonce(id) {
-  if (!confirm('Supprimer cette annonce ?')) return;
-  try {
-    const res = await fetch(API + '/transfer/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
-    const data = await res.json();
-    if (res.ok) { closeSheet('detailOverlay'); showToast('Annonce supprimée'); loadFeed(true); }
-    else showToast(data.message || 'Erreur', '#ff4444');
-  } catch (e) { showToast('Erreur', '#ff4444'); }
+ if (!confirm('Supprimer cette annonce ?')) return;
+ try {
+ const res = await fetch(API + '/transfer/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+ const data = await res.json();
+ if (res.ok) { closeSheet('detailOverlay'); showToast('Annonce supprimée'); loadFeed(true); }
+ else showToast(data.message || 'Erreur', '#ff4444');
+ } catch (e) { showToast('Erreur', '#ff4444'); }
 }
 
 async function submitEdit() {
-  const amount = document.getElementById('edit-amount').value;
-  const currency = document.getElementById('edit-currency').value;
-  if (!amount || Number(amount) <= 0) { showMsg('msg-edit', 'Montant invalide'); return; }
-  const btn = document.getElementById('btn-edit-submit');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
-  try {
-    const res = await fetch(API + '/transfer/' + editingId, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify({ amount: Number(amount), currency, beneficiaireId: selectedEditBenefId || null })
-    });
-    const data = await res.json();
-    if (res.ok) { closeSheet('editOverlay'); showToast('Annonce modifiée'); loadFeed(true); }
-    else showMsg('msg-edit', data.message || 'Erreur');
-  } catch (e) { showMsg('msg-edit', 'Serveur inaccessible'); }
-  btn.disabled = false; btn.innerHTML = 'Enregistrer';
+ const amount = document.getElementById('edit-amount').value;
+ const currency = document.getElementById('edit-currency').value;
+ if (!amount || Number(amount) <= 0) { showMsg('msg-edit', 'Montant invalide'); return; }
+ const btn = document.getElementById('btn-edit-submit');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+ try {
+ const res = await fetch(API + '/transfer/' + editingId, {
+ method: 'PUT',
+ headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+ body: JSON.stringify({ amount: Number(amount), currency, beneficiaireId: selectedEditBenefId || null })
+ });
+ const data = await res.json();
+ if (res.ok) { closeSheet('editOverlay'); showToast('Annonce modifiée'); loadFeed(true); }
+ else showMsg('msg-edit', data.message || 'Erreur');
+ } catch (e) { showMsg('msg-edit', 'Serveur inaccessible'); }
+ btn.disabled = false; btn.innerHTML = 'Enregistrer';
 }
 
 function showConfirm(id, fromCountry, toCountry, currency, amount, matchAmount) {
-  closeSheet('detailOverlay');
-  let targetCurrency = 'EUR';
-  if (toCountry === 'Gabon' || toCountry === 'Burkina Faso') targetCurrency = 'XAF';
-  else if (toCountry === 'Etats-Unis') targetCurrency = 'USD';
-  else if (toCountry === 'Canada') targetCurrency = 'CAD';
-  pendingMatch = { fromCountry: toCountry, toCountry: fromCountry, currency: targetCurrency, amount: parseFloat(matchAmount.replace(/[^\d.]/g, '')), beneficiaireId: selectedBenefId };
-  document.getElementById('confirmDetail').innerHTML =
-    '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--text-3)">Annonce</span><span style="font-weight:600">' + Number(amount).toLocaleString('fr-FR') + ' ' + currency + '</span></div>' +
-    '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--text-3)">Tu envoies</span><span style="font-weight:600">' + matchAmount + '</span></div>' +
-    '<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-3)">Sens</span><span style="font-weight:600">' + toCountry + ' → ' + fromCountry + '</span></div>';
-  document.getElementById('confirmOverlay').classList.add('open');
+ closeSheet('detailOverlay');
+ let targetCurrency = 'EUR';
+ if (toCountry === 'Gabon' || toCountry === 'Burkina Faso') targetCurrency = 'XAF';
+ else if (toCountry === 'Etats-Unis') targetCurrency = 'USD';
+ else if (toCountry === 'Canada') targetCurrency = 'CAD';
+ pendingMatch = { fromCountry: toCountry, toCountry: fromCountry, currency: targetCurrency, amount: parseFloat(matchAmount.replace(/[^\d.]/g, '')), beneficiaireId: selectedBenefId };
+ document.getElementById('confirmDetail').innerHTML =
+ '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--text-3)">Annonce</span><span style="font-weight:600">' + Number(amount).toLocaleString('fr-FR') + ' ' + currency + '</span></div>' +
+ '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--text-3)">Tu envoies</span><span style="font-weight:600">' + matchAmount + '</span></div>' +
+ '<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-3)">Sens</span><span style="font-weight:600">' + toCountry + ' → ' + fromCountry + '</span></div>';
+ document.getElementById('confirmOverlay').classList.add('open');
 }
 
 async function executeMatch() {
-  if (!pendingMatch) return;
-  if (!pendingMatch.beneficiaireId) {
-    showToast('Choisis ton bénéficiaire avant de matcher', '#ff4444');
-    return;
-  }
-  const btn = document.getElementById('btn-confirm-match');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Matching...';
-  try {
-    const payload = Object.assign({}, pendingMatch);
-    const res = await fetch(API + '/transfer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    closeSheet('confirmOverlay');
-    if (res.ok && data.dealCode) {
-      showToast('🎯 Match ! Code: ' + data.dealCode, '#fcd116');
-      setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
-    } else if (res.ok && data.message && data.message.includes('Match')) {
-      showToast('Match confirmé !', '#fcd116');
-      setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
-    } else if (res.ok) {
-      showToast('Annonce publiée');
-      loadFeed(true);
-    } else {
-      showToast(data.message || 'Erreur', '#ff4444');
-    }
-  } catch (e) {
-    showToast('Serveur inaccessible', '#ff4444');
-    closeSheet('confirmOverlay');
-  }
-  btn.disabled = false; btn.innerHTML = 'Confirmer le match';
+ if (!pendingMatch) return;
+ if (!pendingMatch.beneficiaireId) {
+ showToast('Choisis ton bénéficiaire avant de matcher', '#ff4444');
+ return;
+ }
+ const btn = document.getElementById('btn-confirm-match');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Matching...';
+ try {
+ const payload = Object.assign({}, pendingMatch);
+ const res = await fetch(API + '/transfer', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+ body: JSON.stringify(payload)
+ });
+ const data = await res.json();
+ closeSheet('confirmOverlay');
+ if (res.ok && data.dealCode) {
+ showToast(' Match ! Code: ' + data.dealCode, '#fcd116');
+ setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
+ } else if (res.ok && data.message && data.message.includes('Match')) {
+ showToast('Match confirmé !', '#fcd116');
+ setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
+ } else if (res.ok) {
+ showToast('Annonce publiée');
+ loadFeed(true);
+ } else {
+ showToast(data.message || 'Erreur', '#ff4444');
+ }
+ } catch (e) {
+ showToast('Serveur inaccessible', '#ff4444');
+ closeSheet('confirmOverlay');
+ }
+ btn.disabled = false; btn.innerHTML = 'Confirmer le match';
 }
 
 function setFilter(filter, el) {
-  currentFilter = filter;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  renderFeed();
+ currentFilter = filter;
+ document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+ el.classList.add('active');
+ renderFeed();
 }
 
 function renderFeed() {
-  let data = allTransfers;
-  if (currentFilter === 'mine') data = data.filter(t => t.sender === email);
-  else if (currentFilter !== 'all') data = data.filter(t => t.currency === currentFilter);
-  const list = document.getElementById('feedList');
-  const badge = document.getElementById('countBadge');
-  if (data.length === 0) {
-    badge.textContent = '0';
-    list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
-    return;
-  }
-  badge.textContent = data.length;
-  list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
+ let data = allTransfers;
+ if (currentFilter === 'mine') data = data.filter(t => t.sender === email);
+ else if (currentFilter !== 'all') data = data.filter(t => t.currency === currentFilter);
+ const list = document.getElementById('feedList');
+ const badge = document.getElementById('countBadge');
+ if (data.length === 0) {
+ badge.textContent = '0';
+ list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
+ return;
+ }
+ badge.textContent = data.length;
+ list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
 }
 
 // safeJson — évite crash si backend renvoie HTML
 async function safeJson(res) {
-  const text = await res.text();
-  try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
-  catch(e) { return { ok: false, status: res.status, data: null }; }
+ const text = await res.text();
+ try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+ catch(e) { return { ok: false, status: res.status, data: null }; }
 }
 
 async function loadFeed(silent) {
-  if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
-  try {
-    const r = await safeJson(await fetch(API + '/transfers', { headers: { 'Authorization': 'Bearer ' + token } }));
-    if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
-    allTransfers = Array.isArray(r.data) ? r.data : [];
-    renderFeed();
-    checkActiveDeals();
-    loadWeeklyStats();
-    loadActivityFeed();
-  } catch (e) {
-    if (!silent) document.getElementById('feedList').innerHTML = '<div class="empty-state"><div class="empty-title">Serveur inaccessible</div><div class="empty-sub">Vérifie ta connexion</div></div>';
-  }
+ if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+ try {
+ const r = await safeJson(await fetch(API + '/transfers', { headers: { 'Authorization': 'Bearer ' + token } }));
+ if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+ allTransfers = Array.isArray(r.data) ? r.data : [];
+ renderFeed();
+ checkActiveDeals();
+ loadWeeklyStats();
+ loadActivityFeed();
+ } catch (e) {
+ if (!silent) document.getElementById('feedList').innerHTML = '<div class="empty-state"><div class="empty-title">Serveur inaccessible</div><div class="empty-sub">Vérifie ta connexion</div></div>';
+ }
 }
 
 // Phase 5 — Stats hebdomadaires
 async function loadActivityFeed() {
-  try {
-    const res = await fetch(API + '/feed/activity', { headers: { 'Authorization': 'Bearer ' + token } });
-    if (!res.ok) return;
-    const events = await res.json();
-    if (!Array.isArray(events) || events.length === 0) return;
+ try {
+ const res = await fetch(API + '/feed/activity', { headers: { 'Authorization': 'Bearer ' + token } });
+ if (!res.ok) return;
+ const events = await res.json();
+ if (!Array.isArray(events) || events.length === 0) return;
 
-    const container = document.getElementById('activityFeed');
-    container.innerHTML = events.slice(0, 5).map(e => {
-      const emoji = e.type === 'completed' ? '🎉' : e.type === 'match' ? '🤝' : '🌍';
-      return '<div class="activity-item">' +
-        '<span class="activity-emoji">' + emoji + '</span>' +
-        '<span class="activity-text">' + e.message + '</span>' +
-        '<span class="activity-time">' + timeAgo(e.createdAt) + '</span>' +
-        '</div>';
-    }).join('');
-    container.style.display = 'block';
-  } catch(e) {}
+ const container = document.getElementById('activityFeed');
+ container.innerHTML = events.slice(0, 5).map(e => {
+ const emoji = e.type === 'completed' ? '' : e.type === 'match' ? '' : '';
+ return '<div class="activity-item">' +
+ '<span class="activity-emoji">' + emoji + '</span>' +
+ '<span class="activity-text">' + e.message + '</span>' +
+ '<span class="activity-time">' + timeAgo(e.createdAt) + '</span>' +
+ '</div>';
+ }).join('');
+ container.style.display = 'block';
+ } catch(e) {}
 }
 
 async function loadWeeklyStats() {
-  try {
-    const res = await fetch(API + '/stats/weekly', { headers: { 'Authorization': 'Bearer ' + token } });
-    if (!res.ok) return;
-    const { memberCount, totalVolumeEur } = await res.json();
-    if (memberCount > 0) {
-      document.getElementById('weeklyMembers').textContent = memberCount;
-      document.getElementById('weeklyVolume').textContent =
-        totalVolumeEur >= 1000 ? (totalVolumeEur / 1000).toFixed(1) + 'k€' : totalVolumeEur + '€';
-      document.getElementById('weeklyBanner').style.display = 'flex';
-    }
-  } catch(e) {}
+ try {
+ const res = await fetch(API + '/stats/weekly', { headers: { 'Authorization': 'Bearer ' + token } });
+ if (!res.ok) return;
+ const { memberCount, totalVolumeEur } = await res.json();
+ if (memberCount > 0) {
+ document.getElementById('weeklyMembers').textContent = memberCount;
+ document.getElementById('weeklyVolume').textContent =
+ totalVolumeEur >= 1000 ? (totalVolumeEur / 1000).toFixed(1) + 'k€' : totalVolumeEur + '€';
+ document.getElementById('weeklyBanner').style.display = 'flex';
+ }
+ } catch(e) {}
 }
 
 async function checkActiveDeals() {
-  try {
-    const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
-    const deals = await res.json();
-    if (Array.isArray(deals)) {
-      const active = deals.filter(d => d.status === 'matched').length;
-      const badge = document.getElementById('dealsBadge');
-      if (active > 0) { badge.textContent = active; badge.classList.add('show'); }
-      else badge.classList.remove('show');
-    }
-  } catch (e) {}
+ try {
+ const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+ const deals = await res.json();
+ if (Array.isArray(deals)) {
+ const active = deals.filter(d => d.status === 'matched').length;
+ const badge = document.getElementById('dealsBadge');
+ if (active > 0) { badge.textContent = active; badge.classList.add('show'); }
+ else badge.classList.remove('show');
+ }
+ } catch (e) {}
 }
 
 function openCreateSheet() {
-  document.getElementById('createOverlay').classList.add('open');
-  // Charger bénéficiaires en arrière-plan sans bloquer
-  loadBeneficiaires().catch(() => {});
+ document.getElementById('createOverlay').classList.add('open');
+ // Charger bénéficiaires en arrière-plan sans bloquer
+ loadBeneficiaires().catch(() => {});
 }
 function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
 function closeOnOverlay(e, id) { if (e.target === document.getElementById(id)) closeSheet(id); }
@@ -1109,140 +1382,146 @@ function showMsg(id, text) { const el = document.getElementById(id); el.classNam
 
 
 function syncCountries() {
-  const from = document.getElementById('ann-from').value;
-  const toEl = document.getElementById('ann-to');
-  Array.from(toEl.options).forEach(opt => { opt.selected = opt.value !== from ? (toEl.value === from ? true : opt.selected) : false; });
-  if (toEl.value === from) { const other = Array.from(toEl.options).find(o => o.value !== from); if (other) toEl.value = other.value; }
+ const from = document.getElementById('ann-from').value;
+ const toEl = document.getElementById('ann-to');
+ Array.from(toEl.options).forEach(opt => { opt.selected = opt.value !== from ? (toEl.value === from ? true : opt.selected) : false; });
+ if (toEl.value === from) { const other = Array.from(toEl.options).find(o => o.value !== from); if (other) toEl.value = other.value; }
 }
 
 
 function updatePreview(mode) {
-  const amountEl = document.getElementById(mode === 'create' ? 'ann-amount' : 'edit-amount');
-  const currencyEl = document.getElementById(mode === 'create' ? 'ann-currency' : 'edit-currency');
-  const toEl = document.getElementById('ann-to');
-  const preview = document.getElementById('convPreview-' + mode);
-  const airtelContainer = document.getElementById('airtel-preview-' + mode);
-  if (!amountEl || !currencyEl || !preview) return;
-  const amount = parseFloat(amountEl.value);
-  const currency = currencyEl.value;
-  const toCountry = toEl ? toEl.value : '';
-  const isGabon = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
-  if (!amount || isNaN(amount)) {
-    preview.innerHTML = '<span class="conv-hint">Saisis un montant</span>';
-    if (airtelContainer) airtelContainer.innerHTML = '';
-    return;
-  }
-  const eur = convertToEur(amount, currency);
-  if (currency === 'EUR') {
-    preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">' + Math.round(eur * RATE).toLocaleString('fr-FR') + ' XAF</span>';
-  } else {
-    preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">≈ ' + eur.toFixed(2) + ' EUR</span>';
-  }
-  const fromCountry = document.getElementById('ann-from')?.value || '';
-  if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry, fromCountry);
+ const amountEl = document.getElementById(mode === 'create' ? 'ann-amount' : 'edit-amount');
+ const currencyEl = document.getElementById(mode === 'create' ? 'ann-currency' : 'edit-currency');
+ const toEl = document.getElementById('ann-to');
+ const preview = document.getElementById('convPreview-' + mode);
+ const airtelContainer = document.getElementById('airtel-preview-' + mode);
+ if (!amountEl || !currencyEl || !preview) return;
+ const amount = parseFloat(amountEl.value);
+ const currency = currencyEl.value;
+ const toCountry = toEl ? toEl.value : '';
+ const isGabon = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
+ if (!amount || isNaN(amount)) {
+ preview.innerHTML = '<span class="conv-hint">Saisis un montant</span>';
+ if (airtelContainer) airtelContainer.innerHTML = '';
+ return;
+ }
+ const eur = convertToEur(amount, currency);
+ if (currency === 'EUR') {
+ preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">' + Math.round(eur * RATE).toLocaleString('fr-FR') + ' XAF</span>';
+ } else {
+ preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount"> ' + eur.toFixed(2) + ' EUR</span>';
+ }
+ const fromCountry = document.getElementById('ann-from')?.value || '';
+ if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry, fromCountry);
 }
 
 async function submitAnnonce() {
-  const amount = document.getElementById('ann-amount').value;
-  const currency = document.getElementById('ann-currency').value;
-  const fromCountry = document.getElementById('ann-from').value;
-  const toCountry = document.getElementById('ann-to').value;
-  if (!amount || Number(amount) <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
-  if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
-  if (!selectedBenefId) { showMsg('msg-create', 'Choisis un bénéficiaire avant de publier'); return; }
-  const btn = document.getElementById('btn-submit');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
-  try {
-    const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount: Number(amount), currency, fromCountry, toCountry, beneficiaireId: selectedBenefId || null }) });
-    const data = await res.json();
-    if (res.ok) {
-      closeSheet('createOverlay');
-      document.getElementById('ann-amount').value = '';
-      selectedBenefId = null;
-      const bc = document.getElementById('benef-selected-create'); if(bc) bc.innerHTML = '';
-      if (data.message && data.message.includes('Match')) { showToast('Match immédiat ! 🎉', 'var(--yellow)'); setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000); }
-      else { showToast('Annonce publiée ✓'); loadFeed(true); }
-    } else showMsg('msg-create', data.message || 'Erreur');
-  } catch (e) { showMsg('msg-create', 'Serveur inaccessible'); }
-  btn.disabled = false; btn.innerHTML = 'Publier';
+ const amount = document.getElementById('ann-amount').value;
+ const currency = document.getElementById('ann-currency').value;
+ const fromCountry = document.getElementById('ann-from').value;
+ const toCountry = document.getElementById('ann-to').value;
+ if (!amount || Number(amount) <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
+ if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
+ if (!selectedBenefId) { showMsg('msg-create', 'Choisis un bénéficiaire avant de publier'); return; }
+ const btn = document.getElementById('btn-submit');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
+ try {
+ const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount: Number(amount), currency, fromCountry, toCountry, beneficiaireId: selectedBenefId || null }) });
+ const data = await res.json();
+ if (res.ok) {
+ closeSheet('createOverlay');
+ document.getElementById('ann-amount').value = '';
+ selectedBenefId = null;
+ const bc = document.getElementById('benef-selected-create'); if(bc) bc.innerHTML = '';
+ if (data.message && data.message.includes('Match')) { showToast('Match immédiat ! ', 'var(--yellow)'); setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000); }
+ else { showToast('Annonce publiée '); loadFeed(true); }
+ } else showMsg('msg-create', data.message || 'Erreur');
+ } catch (e) { showMsg('msg-create', 'Serveur inaccessible'); }
+ btn.disabled = false; btn.innerHTML = 'Publier';
 }
 
 
-// ── Bénéficiaires ──────────────────────────────────────────────
+// Bénéficiaires 
 let allBeneficiaires = [];
 let selectedBenefId = null;
 let selectedEditBenefId = null;
 
 async function loadBeneficiaires() {
-  try {
-    const r = await fetch(API + '/beneficiaires', { headers: { 'Authorization': 'Bearer ' + token } });
-    const data = await r.json();
-    if(Array.isArray(data)) allBeneficiaires = data;
-  } catch(e) {}
+ try {
+ const r = await fetch(API + '/beneficiaires', { headers: { 'Authorization': 'Bearer ' + token } });
+ const data = await r.json();
+ if(Array.isArray(data)) allBeneficiaires = data;
+ } catch(e) {}
 }
 
 function getBenefDetail(b) {
-  if(!b) return '';
-  if(b.phone) return b.phone + (b.operateur ? ' · ' + b.operateur : '');
-  if(b.iban) return b.iban.substring(0,12) + '…';
-  if(b.paypal) return b.paypal;
-  return '';
+ if(!b) return '';
+ if(b.phone) return b.phone + (b.operateur ? ' · ' + b.operateur : '');
+ if(b.iban) return b.iban.substring(0,12) + '…';
+ if(b.paypal) return b.paypal;
+ return '';
 }
 
 function renderBenefSelectList(onSelect) {
-  const list = document.getElementById('benefSelectList');
-  if(!list) return;
-  
-  if(allBeneficiaires.length === 0) {
-    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;">Aucun bénéficiaire enregistré</div>' +
-      '<button class="btn-primary" style="margin-top:8px;" onclick="openInlineBenefForm()">+ Créer un bénéficiaire</button>';
-    return;
-  }
+ const list = document.getElementById('benefSelectList');
+ if(!list) return;
+ 
+ if(allBeneficiaires.length === 0) {
+ list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;">Aucun bénéficiaire enregistré</div>' +
+ '<button class="btn-primary" style="margin-top:8px;" onclick="openInlineBenefForm()">+ Créer un bénéficiaire</button>';
+ return;
+ }
 
-  list.innerHTML = allBeneficiaires.map(b => {
-    const ini = (b.nom||'?').substring(0,2).toUpperCase();
-    const detail = getBenefDetail(b);
-    const type = b.type === 'moi' ? '🙋 ' : '';
-    return `<div class="benef-select-item ${selectedBenefId === b._id ? 'selected' : ''}" onclick="selectBenef('${b._id}','${onSelect}')"> <div class="benef-select-avatar">${ini}</div> <div> <div class="benef-select-name">${type}${b.nom}</div> <div class="benef-select-detail">${detail}${b.pays ? ' · '+b.pays : ''}</div> </div> ${selectedBenefId === b._id ? '<span style="margin-left:auto;color:var(--green);">✓</span>' : ''}
-    </div>`;
-  }).join('') +
-  '<button onclick="openInlineBenefForm()" style="background:none;border:none;color:var(--text-3);font-size:12px;cursor:pointer;width:100%;margin-top:12px;">+ Nouveau bénéficiaire</button>';
+ list.innerHTML = allBeneficiaires.map(b => {
+ const ini = (b.nom||'?').substring(0,2).toUpperCase();
+ const detail = getBenefDetail(b);
+ const type = b.type === 'moi' ? ' ' : '';
+ return `<div class="benef-select-item ${selectedBenefId === b._id ? 'selected' : ''}" onclick="selectBenef('${b._id}','${onSelect}')">
+ <div class="benef-select-avatar">${ini}</div>
+ <div>
+ <div class="benef-select-name">${type}${b.nom}</div>
+ <div class="benef-select-detail">${detail}${b.pays ? ' · '+b.pays : ''}</div>
+ </div>
+ ${selectedBenefId === b._id ? '<span style="margin-left:auto;color:var(--green);"></span>' : ''}
+ </div>`;
+ }).join('') +
+ '<button onclick="openInlineBenefForm()" style="background:none;border:none;color:var(--text-3);font-size:12px;cursor:pointer;width:100%;margin-top:12px;">+ Nouveau bénéficiaire</button>';
 }
 
 function selectBenef(id, context) {
-  selectedBenefId = id;
-  const b = allBeneficiaires.find(x => x._id === id);
-  if(!b) return;
-  closeSheet('benefOverlay');
+ selectedBenefId = id;
+ const b = allBeneficiaires.find(x => x._id === id);
+ if(!b) return;
+ closeSheet('benefOverlay');
 
-  const detail = getBenefDetail(b);
-  const badgeHtml = '<div class="benef-selected-badge"><span style="font-size:18px;">✓</span><div><div class="benef-selected-name">'+b.nom+'</div><div class="benef-selected-detail">'+detail+'</div></div><button onclick="openBenefSheet(this.getAttribute(\"data-ctx\"))" data-ctx="'+context+'" style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-left:auto;">Changer</button></div>';
+ const detail = getBenefDetail(b);
+ const badgeHtml = '<div class="benef-selected-badge"><span style="font-size:18px;"></span><div><div class="benef-selected-name">'+b.nom+'</div><div class="benef-selected-detail">'+detail+'</div></div><button onclick="openBenefSheet(this.getAttribute(\"data-ctx\"))" data-ctx="'+context+'" style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;margin-left:auto;">Changer</button></div>';
 
-  if(context === 'create') {
-    const container = document.getElementById('benef-selected-create');
-    if(container) container.innerHTML = badgeHtml;
-  } else if(context === 'edit') {
-    selectedEditBenefId = id;
-    const container = document.getElementById('benef-selected-edit');
-    if(container) container.innerHTML = badgeHtml;
-  } else if(context === 'match') {
-    // Fermer la liste bénéficiaires
-    closeSheet('benefOverlay');
-    // Mettre à jour le badge dans confirmOverlay
-    const container = document.getElementById('confirm-benef-badge');
-    if(container) container.innerHTML = badgeHtml;
-    // Mettre à jour pendingMatch
-    if(pendingMatch) pendingMatch.beneficiaireId = id;
-    // Changer le bouton en vert une fois sélectionné
-    const btn = document.getElementById('btn-choose-benef-match');
-    if(btn) { btn.style.borderColor = 'rgba(0,201,122,0.4)'; btn.style.color = 'var(--green)'; btn.innerHTML = '✓ Bénéficiaire sélectionné'; }
-    // confirmOverlay reste visible — pas de fermeture
-  }
+ if(context === 'create') {
+ const container = document.getElementById('benef-selected-create');
+ if(container) container.innerHTML = badgeHtml;
+ } else if(context === 'edit') {
+ selectedEditBenefId = id;
+ const container = document.getElementById('benef-selected-edit');
+ if(container) container.innerHTML = badgeHtml;
+ } else if(context === 'match') {
+ // Fermer la liste bénéficiaires
+ closeSheet('benefOverlay');
+ // Mettre à jour le badge dans confirmOverlay
+ const container = document.getElementById('confirm-benef-badge');
+ if(container) container.innerHTML = badgeHtml;
+ // Mettre à jour pendingMatch
+ if(pendingMatch) pendingMatch.beneficiaireId = id;
+ // Changer le bouton en vert une fois sélectionné
+ const btn = document.getElementById('btn-choose-benef-match');
+ if(btn) { btn.style.borderColor = 'rgba(0,201,122,0.4)'; btn.style.color = 'var(--green)'; btn.innerHTML = ' Bénéficiaire sélectionné'; }
+ // confirmOverlay reste visible — pas de fermeture
+ }
 }
 
 function openBenefSheet(context) {
-  renderBenefSelectList(context);
-  document.getElementById('benefOverlay').classList.add('open');
+ renderBenefSelectList(context);
+ document.getElementById('benefOverlay').classList.add('open');
 }
 
 // Charger bénéficiaires au démarrage
@@ -1252,113 +1531,113 @@ loadBeneficiaires();
 let currentIBMethod = 'mobilemoney';
 
 function setIBMethod(method, el) {
-  currentIBMethod = method;
-  ['mobilemoney','virement','paypal','wero'].forEach(m => {
-    document.getElementById('ib-fields-'+m).style.display = m === method ? 'block' : 'none';
-    const ibmMap = {mobilemoney:'mm', virement:'vir', paypal:'pp', wero:'wero'};
-    const el2 = document.getElementById('ibm-'+ibmMap[m]);
-    if(el2) el2.classList.toggle('active', m === method);
-  });
+ currentIBMethod = method;
+ ['mobilemoney','virement','paypal','wero'].forEach(m => {
+ document.getElementById('ib-fields-'+m).style.display = m === method ? 'block' : 'none';
+ const ibmMap = {mobilemoney:'mm', virement:'vir', paypal:'pp', wero:'wero'};
+ const el2 = document.getElementById('ibm-'+ibmMap[m]);
+ if(el2) el2.classList.toggle('active', m === method);
+ });
 }
 
 function openInlineBenefForm() {
-  closeSheet('benefOverlay');
-  // Reset form
-  ['ib-nom','ib-phone','ib-iban','ib-banque','ib-paypal','ib-wero'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('ib-pays').value = '';
-  document.getElementById('ib-operateur').value = '';
-  currentIBMethod = 'mobilemoney';
-  ['mobilemoney','virement','paypal','wero'].forEach(m => {
-    document.getElementById('ib-fields-'+m).style.display = m === 'mobilemoney' ? 'block' : 'none';
-  });
-  document.getElementById('ibm-mm').classList.add('active');
-  document.getElementById('ibm-vir').classList.remove('active');
-  document.getElementById('ibm-pp').classList.remove('active');
-  document.getElementById('ibm-wero').classList.remove('active');
-  const msg = document.getElementById('msg-ib');
-  if (msg) { msg.className = 'msg'; msg.textContent = ''; }
-  document.getElementById('inlineBenefOverlay').classList.add('open');
+ closeSheet('benefOverlay');
+ // Reset form
+ ['ib-nom','ib-phone','ib-iban','ib-banque','ib-paypal','ib-wero'].forEach(id => {
+ const el = document.getElementById(id);
+ if (el) el.value = '';
+ });
+ document.getElementById('ib-pays').value = '';
+ document.getElementById('ib-operateur').value = '';
+ currentIBMethod = 'mobilemoney';
+ ['mobilemoney','virement','paypal','wero'].forEach(m => {
+ document.getElementById('ib-fields-'+m).style.display = m === 'mobilemoney' ? 'block' : 'none';
+ });
+ document.getElementById('ibm-mm').classList.add('active');
+ document.getElementById('ibm-vir').classList.remove('active');
+ document.getElementById('ibm-pp').classList.remove('active');
+ document.getElementById('ibm-wero').classList.remove('active');
+ const msg = document.getElementById('msg-ib');
+ if (msg) { msg.className = 'msg'; msg.textContent = ''; }
+ document.getElementById('inlineBenefOverlay').classList.add('open');
 }
 
 async function saveInlineBenef() {
-  const nom = document.getElementById('ib-nom').value.trim();
-  if (!nom) {
-    const el = document.getElementById('msg-ib');
-    el.className = 'msg error show'; el.textContent = 'Le nom est requis';
-    return;
-  }
-  const payload = {
-    type: 'beneficiaire',
-    nom,
-    methode: currentIBMethod,
-    pays: document.getElementById('ib-pays').value || '',
-    phone: document.getElementById('ib-phone')?.value.trim() || '',
-    operateur: document.getElementById('ib-operateur')?.value || '',
-    iban: document.getElementById('ib-iban')?.value.trim() || '',
-    banque: document.getElementById('ib-banque')?.value.trim() || '',
-    paypal: document.getElementById('ib-paypal')?.value.trim() || '',
-    wero: document.getElementById('ib-wero')?.value.trim() || '',
-  };
+ const nom = document.getElementById('ib-nom').value.trim();
+ if (!nom) {
+ const el = document.getElementById('msg-ib');
+ el.className = 'msg error show'; el.textContent = 'Le nom est requis';
+ return;
+ }
+ const payload = {
+ type: 'beneficiaire',
+ nom,
+ methode: currentIBMethod,
+ pays: document.getElementById('ib-pays').value || '',
+ phone: document.getElementById('ib-phone')?.value.trim() || '',
+ operateur: document.getElementById('ib-operateur')?.value || '',
+ iban: document.getElementById('ib-iban')?.value.trim() || '',
+ banque: document.getElementById('ib-banque')?.value.trim() || '',
+ paypal: document.getElementById('ib-paypal')?.value.trim() || '',
+ wero: document.getElementById('ib-wero')?.value.trim() || '',
+ };
 
-  const btn = document.getElementById('btn-ib-save');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+ const btn = document.getElementById('btn-ib-save');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
 
-  try {
-    const res = await fetch(API + '/beneficiaires', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (res.ok && data.beneficiaire) {
-      // Ajouter à la liste locale et sélectionner
-      allBeneficiaires.push(data.beneficiaire);
-      closeSheet('inlineBenefOverlay');
-      selectBenef(data.beneficiaire._id, 'create');
-      showToast('Bénéficiaire ajouté ✓');
-    } else {
-      const el = document.getElementById('msg-ib');
-      el.className = 'msg error show';
-      el.textContent = (data && data.message) || 'Erreur';
-    }
-  } catch(e) {
-    const el = document.getElementById('msg-ib');
-    el.className = 'msg error show'; el.textContent = 'Erreur réseau';
-  }
-  btn.disabled = false; btn.textContent = 'Enregistrer et sélectionner';
+ try {
+ const res = await fetch(API + '/beneficiaires', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+ body: JSON.stringify(payload)
+ });
+ const data = await res.json();
+ if (res.ok && data.beneficiaire) {
+ // Ajouter à la liste locale et sélectionner
+ allBeneficiaires.push(data.beneficiaire);
+ closeSheet('inlineBenefOverlay');
+ selectBenef(data.beneficiaire._id, 'create');
+ showToast('Bénéficiaire ajouté ');
+ } else {
+ const el = document.getElementById('msg-ib');
+ el.className = 'msg error show';
+ el.textContent = (data && data.message) || 'Erreur';
+ }
+ } catch(e) {
+ const el = document.getElementById('msg-ib');
+ el.className = 'msg error show'; el.textContent = 'Erreur réseau';
+ }
+ btn.disabled = false; btn.textContent = 'Enregistrer et sélectionner';
 }
 
 
 function closeBenefSheet() {
-  closeSheet('benefOverlay');
-  // confirmOverlay reste ouvert — rien à faire
+ closeSheet('benefOverlay');
+ // confirmOverlay reste ouvert — rien à faire
 }
 
 function openBenefSheetForMatch() {
-  // Ne PAS fermer confirmOverlay — juste ouvrir la liste par-dessus
-  loadBeneficiaires().then(() => {
-    renderBenefSelectList('match');
-    document.getElementById('benefOverlay').classList.add('open');
-  }).catch(() => {
-    renderBenefSelectList('match');
-    document.getElementById('benefOverlay').classList.add('open');
-  });
+ // Ne PAS fermer confirmOverlay — juste ouvrir la liste par-dessus
+ loadBeneficiaires().then(() => {
+ renderBenefSelectList('match');
+ document.getElementById('benefOverlay').classList.add('open');
+ }).catch(() => {
+ renderBenefSelectList('match');
+ document.getElementById('benefOverlay').classList.add('open');
+ });
 }
 
 async function checkUnreadMessages() {
-  try {
-    const res = await fetch(API + '/messages/unread', { headers: { 'Authorization': 'Bearer ' + token } });
-    if (!res.ok) return;
-    const data = await res.json();
-    const badge = document.getElementById('msgBadge');
-    if (badge) {
-      if (data.count > 0) { badge.textContent = data.count > 9 ? '9+' : data.count; badge.classList.add('show'); }
-      else badge.classList.remove('show');
-    }
-  } catch(e) {}
+ try {
+ const res = await fetch(API + '/messages/unread', { headers: { 'Authorization': 'Bearer ' + token } });
+ if (!res.ok) return;
+ const data = await res.json();
+ const badge = document.getElementById('msgBadge');
+ if (badge) {
+ if (data.count > 0) { badge.textContent = data.count > 9 ? '9+' : data.count; badge.classList.add('show'); }
+ else badge.classList.remove('show');
+ }
+ } catch(e) {}
 }
 
 // Démarrage

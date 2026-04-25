@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TDOLI  Chat</title>
+<title>TDOLI — Chat</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <style>
 :root{
-  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
-  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
-  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
-  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
-  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
-  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
+ --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+ --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 1px 12px rgba(0,0,0,0.4);}
+.topbar{flex-shrink:0;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:14px 16px 12px;display:flex;align-items:center;gap:12px;}
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;text-decoration:none;}
 .topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.5px;flex-shrink:0;}
 .topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
@@ -96,37 +96,60 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 }
 .user-avatar-btn{width:40px;height:40px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
 .share-btn{background:transparent;border:none;color:#fcd116;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;white-space:nowrap;}
-</style> <link rel="manifest" href="/manifest.json"> <meta name="theme-color" content="#060d09"> <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <meta name="apple-mobile-web-app-title" content="TDOLI"> <link rel="apple-touch-icon" href="/icons/icon-192x192.png"> <script> if('serviceWorker' in navigator){
-   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-     .then(r => console.log('[SW] Enregistre'))
-     .catch(e => console.error('[SW] Erreur:', e));
-   });
-  }
+</style>
+
+ <link rel="manifest" href="/manifest.json">
+ <meta name="theme-color" content="#060d09">
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <meta name="apple-mobile-web-app-title" content="TDOLI">
+ <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+ <script>
+ if('serviceWorker' in navigator){
+ window.addEventListener('load', () => {
+ navigator.serviceWorker.register('/service-worker.js')
+ .then(r => console.log('[SW] Enregistre'))
+ .catch(e => console.error('[SW] Erreur:', e));
+ });
+ }
  </script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
 firebase.initializeApp({
- apiKey:      "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
- authDomain:    "tdoli-c47a1.firebaseapp.com",
- projectId:     "tdoli-c47a1",
- storageBucket:   "tdoli-c47a1.appspot.com",
+ apiKey: "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
+ authDomain: "tdoli-c47a1.firebaseapp.com",
+ projectId: "tdoli-c47a1",
+ storageBucket: "tdoli-c47a1.appspot.com",
  messagingSenderId: "416651280494",
- appId:       "1:416651280494:web:de03eb6a47204031f1267f"
+ appId: "1:416651280494:web:de03eb6a47204031f1267f"
 });
 </script>
 <script src="/fcm-init.js"></script>
 </head>
 <body>
 <div class="conn-status" id="connStatus"></div>
-<div class="topbar"> <div class="topbar-left"> <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a> </div> <div style="flex:1;"></div> <div class="topbar-right"> <button class="share-btn" onclick="shareApp()">Parrainer</button> </div>
+<div class="topbar">
+ <div class="topbar-left">
+ <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a>
+ </div>
+ <div style="flex:1;"></div>
+ <div class="topbar-right">
+ <button class="share-btn" onclick="shareApp()">Parrainer</button>
+ </div>
 </div>
-<div class="deal-summary" id="dealSummary" style="display:none"> <div><div class="deal-sum-label">Montant</div><div class="deal-sum-val" id="dealAmt"></div></div> <div style="text-align:right"><div class="deal-sum-label">Sens</div><div class="deal-sum-val" id="dealDir"></div></div>
+<div class="deal-summary" id="dealSummary" style="display:none">
+ <div><div class="deal-sum-label">Montant</div><div class="deal-sum-val" id="dealAmt">—</div></div>
+ <div style="text-align:right"><div class="deal-sum-label">Sens</div><div class="deal-sum-val" id="dealDir">—</div></div>
 </div>
-<div class="messages-area" id="messagesArea"> <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
+<div class="messages-area" id="messagesArea">
+ <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
 </div>
-<div class="input-area"> <textarea class="msg-input" id="msgInput" placeholder="Ecris ton message..." rows="1" onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea> <button class="send-btn" id="sendBtn" onclick="sendMessage()"> <svg viewBox="0 0 24 24" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> </button>
+<div class="input-area">
+ <textarea class="msg-input" id="msgInput" placeholder="Ecris ton message..." rows="1" onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
+ <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+ <svg viewBox="0 0 24 24" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+ </button>
 </div>
 <script>
 const API = 'https://tdoli-backend.onrender.com';
@@ -143,62 +166,62 @@ let typingTimer = null;
 let isTyping = false;
 let otherEmail = '';
 
-// ─── CONNEXION SOCKET ─────────────────────────────────────────────────────────
+// CONNEXION SOCKET 
 
 function connectSocket() {
  socket = io(API, {
-  auth: { token },
-  transports: ['websocket', 'polling'],
-  reconnectionAttempts: 5,
-  reconnectionDelay: 2000
+ auth: { token },
+ transports: ['websocket', 'polling'],
+ reconnectionAttempts: 5,
+ reconnectionDelay: 2000
  });
 
  socket.on('connect', () => {
-  console.log('Socket connecté');
-  socket.emit('join_deal', dealId);
-  showConnStatus('Connecté', 'connected');
-  setTimeout(() => hideConnStatus(), 2000);
-  document.getElementById('onlineDot').style.display = 'block';
-  document.getElementById('chatSubText').textContent = 'En ligne';
+ console.log('Socket connecté');
+ socket.emit('join_deal', dealId);
+ showConnStatus('Connecté', 'connected');
+ setTimeout(() => hideConnStatus(), 2000);
+ document.getElementById('onlineDot').style.display = 'block';
+ document.getElementById('chatSubText').textContent = 'En ligne';
  });
 
  socket.on('disconnect', () => {
-  console.log('Socket déconnecté');
-  document.getElementById('onlineDot').style.display = 'none';
-  document.getElementById('chatSubText').textContent = 'Déconnecté';
+ console.log('Socket déconnecté');
+ document.getElementById('onlineDot').style.display = 'none';
+ document.getElementById('chatSubText').textContent = 'Déconnecté';
  });
 
  socket.on('connect_error', (err) => {
-  console.error('Erreur socket:', err.message);
-  showConnStatus('Reconnexion...', 'reconnecting');
-  document.getElementById('chatSubText').textContent = 'Reconnexion...';
+ console.error('Erreur socket:', err.message);
+ showConnStatus('Reconnexion...', 'reconnecting');
+ document.getElementById('chatSubText').textContent = 'Reconnexion...';
  });
 
  socket.on('reconnect', () => {
-  socket.emit('join_deal', dealId);
-  showConnStatus('Reconnecté', 'connected');
-  setTimeout(() => hideConnStatus(), 2000);
+ socket.emit('join_deal', dealId);
+ showConnStatus('Reconnecté', 'connected');
+ setTimeout(() => hideConnStatus(), 2000);
  });
 
  // Nouveau message reçu en temps réel
  socket.on('new_message', (msg) => {
-  appendMessage(msg);
-  const area = document.getElementById('messagesArea');
-  area.scrollTop = area.scrollHeight;
+ appendMessage(msg);
+ const area = document.getElementById('messagesArea');
+ area.scrollTop = area.scrollHeight;
  });
 
  // Indicateur de frappe
  socket.on('user_typing', ({ email: typingEmail, isTyping: typing }) => {
-  if (typingEmail !== email) {
-   const indicator = document.getElementById('typingIndicator');
-   if (indicator) {
-    indicator.className = 'typing-indicator' + (typing ? ' show' : '');
-   }
-  }
+ if (typingEmail !== email) {
+ const indicator = document.getElementById('typingIndicator');
+ if (indicator) {
+ indicator.className = 'typing-indicator' + (typing ? ' show' : '');
+ }
+ }
  });
 
  socket.on('message_error', ({ error }) => {
-  console.error('Erreur message:', error);
+ console.error('Erreur message:', error);
  });
 }
 
@@ -211,42 +234,49 @@ function hideConnStatus() {
  document.getElementById('connStatus').className = 'conn-status';
 }
 
-// ─── CHARGEMENT INITIAL DES MESSAGES ─────────────────────────────────────────
+// CHARGEMENT INITIAL DES MESSAGES 
 
 async function loadDealInfo() {
  try {
-  const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
-  const deals = await res.json();
-  const deal = deals.find(d => d._id === dealId);
-  if (deal) {
-   const isSender = deal.sender === email;
-   otherEmail = isSender ? deal.receiverEmail : deal.sender;
-   const otherName = otherEmail ? otherEmail.split('@')[0] : '...';
-   document.getElementById('chatTitle').textContent = 'Chat avec ' + otherName;
-   document.getElementById('dealAmt').textContent = Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
-   document.getElementById('dealDir').textContent = deal.fromCountry + ' → ' + deal.toCountry;
-   document.getElementById('dealSummary').style.display = 'flex';
-  }
+ const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+ const deals = await res.json();
+ const deal = deals.find(d => d._id === dealId);
+ if (deal) {
+ const isSender = deal.sender === email;
+ otherEmail = isSender ? deal.receiverEmail : deal.sender;
+ const otherName = otherEmail ? otherEmail.split('@')[0] : '...';
+ document.getElementById('chatTitle').textContent = 'Chat avec ' + otherName;
+ document.getElementById('dealAmt').textContent = Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
+ document.getElementById('dealDir').textContent = deal.fromCountry + ' → ' + deal.toCountry;
+ document.getElementById('dealSummary').style.display = 'flex';
+ }
  } catch (e) {}
 }
 
 async function loadInitialMessages() {
  try {
-  const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
-  const msgs = await res.json();
-  const area = document.getElementById('messagesArea');
+ const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
+ const msgs = await res.json();
+ const area = document.getElementById('messagesArea');
 
-  if (!Array.isArray(msgs) || msgs.length === 0) {
-   area.innerHTML = `
-    <div class="empty-chat"> <div class="empty-chat-icon">💬</div> <div class="empty-chat-title">Aucun message</div> <div class="empty-chat-hint">Commence la conversation.</div> </div> <div class="typing-indicator" id="typingIndicator"> <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div> </div>`;
-   return;
-  }
+ if (!Array.isArray(msgs) || msgs.length === 0) {
+ area.innerHTML = `
+ <div class="empty-chat">
+ <div class="empty-chat-icon"></div>
+ <div class="empty-chat-title">Aucun message</div>
+ <div class="empty-chat-hint">Commence la conversation.</div>
+ </div>
+ <div class="typing-indicator" id="typingIndicator">
+ <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+ </div>`;
+ return;
+ }
 
-  area.innerHTML = msgs.map(m => buildMessageHTML(m)).join('') +
-   '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
-  area.scrollTop = area.scrollHeight;
+ area.innerHTML = msgs.map(m => buildMessageHTML(m)).join('') +
+ '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+ area.scrollTop = area.scrollHeight;
  } catch (e) {
-  document.getElementById('messagesArea').innerHTML = '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
+ document.getElementById('messagesArea').innerHTML = '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
  }
 }
 
@@ -260,18 +290,24 @@ function isMM(text) { return text.startsWith(' Infos Mobile Money'); }
 function renderMMCard(text) {
  const lines = text.split('\n');
  return '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:8px;">'+escHtml(lines[0])+'</div>' +
-  lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">'+escHtml(l)+'</div>').join('');
+ lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">'+escHtml(l)+'</div>').join('');
 }
 
 function buildMessageHTML(m) {
  const isMine = m.sender === email;
  const name = m.sender ? m.sender.split('@')[0] : '?';
  if (isMM(m.text)) {
-  return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}"> ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
-   <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div> <div class="msg-time">${formatTime(m.createdAt)}</div> </div>`;
+ return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+ ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
+ <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div>
+ <div class="msg-time">${formatTime(m.createdAt)}</div>
+ </div>`;
  }
- return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}"> ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
-  <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div> <div class="msg-time">${formatTime(m.createdAt)}</div> </div>`;
+ return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+ ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
+ <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div>
+ <div class="msg-time">${formatTime(m.createdAt)}</div>
+ </div>`;
 }
 
 function appendMessage(m) {
@@ -286,13 +322,13 @@ function appendMessage(m) {
  div.innerHTML = buildMessageHTML(m);
  const msgEl = div.firstElementChild;
  if (typingIndicator) {
-  area.insertBefore(msgEl, typingIndicator);
+ area.insertBefore(msgEl, typingIndicator);
  } else {
-  area.appendChild(msgEl);
+ area.appendChild(msgEl);
  }
 }
 
-// ─── ENVOI DE MESSAGE ─────────────────────────────────────────────────────────
+// ENVOI DE MESSAGE 
 
 function sendMessage() {
  const input = document.getElementById('msgInput');
@@ -313,8 +349,8 @@ function handleInput(el) {
 
  // Indicateur de frappe
  if (!isTyping && socket) {
-  isTyping = true;
-  socket.emit('typing', { dealId, isTyping: true });
+ isTyping = true;
+ socket.emit('typing', { dealId, isTyping: true });
  }
  clearTimeout(typingTimer);
  typingTimer = setTimeout(stopTyping, 2000);
@@ -322,8 +358,8 @@ function handleInput(el) {
 
 function stopTyping() {
  if (isTyping && socket) {
-  isTyping = false;
-  socket.emit('typing', { dealId, isTyping: false });
+ isTyping = false;
+ socket.emit('typing', { dealId, isTyping: false });
  }
  clearTimeout(typingTimer);
 }
@@ -332,10 +368,10 @@ function handleKey(e) {
  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
-// ─── MOBILE MONEY ─────────────────────────────────────────────────────────────
+// MOBILE MONEY 
 
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+// INIT 
 
 window.addEventListener('resize', () => {
  setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 100);
@@ -356,9 +392,9 @@ function initAvatar(){
  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
  let initials='?';
  if(username){
-  const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
-  if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
-  else initials=username.substring(0,2).toUpperCase();
+ const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
+ if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
+ else initials=username.substring(0,2).toUpperCase();
  }
  const btn=document.getElementById('avatarBtn');
  if(btn)btn.textContent=initials;

@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>TDOLI  Nouveau mot de passe</title>
+<title>TDOLI — Nouveau mot de passe</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
-  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
-  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
-  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
-  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
-  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
+ --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+ --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -40,7 +40,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .req-item.ok{color:var(--green);}
 .req-dot{width:6px;height:6px;border-radius:50%;background:var(--text-3);flex-shrink:0;}
 .req-item.ok .req-dot{background:var(--green);}
-.btn-primary{width:100%;padding:15px;background:var(--green-dim);box-shadow:0 4px 16px rgba(0,200,83,0.25);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s;}
+.btn-primary{width:100%;padding:15px;background:var(--green-dim);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s;}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .btn-primary:active{transform:scale(0.97);}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
@@ -54,18 +54,57 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .back-link:hover{color:var(--green);}
 
 .topbar-logo img { height: 32px; width: auto; display: block; }
-</style> <link rel="manifest" href="/manifest.json"> <meta name="theme-color" content="#060d09"> <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <meta name="apple-mobile-web-app-title" content="TDOLI"> <link rel="apple-touch-icon" href="/icons/icon-192x192.png"> <script> if('serviceWorker' in navigator){
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(r => console.log('[SW] Enregistre'))
-          .catch(e => console.error('[SW] Erreur:', e));
-      });
-    }
-  </script>
+</style>
+
+ <link rel="manifest" href="/manifest.json">
+ <meta name="theme-color" content="#060d09">
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <meta name="apple-mobile-web-app-title" content="TDOLI">
+ <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+ <script>
+ if('serviceWorker' in navigator){
+ window.addEventListener('load', () => {
+ navigator.serviceWorker.register('/service-worker.js')
+ .then(r => console.log('[SW] Enregistre'))
+ .catch(e => console.error('[SW] Erreur:', e));
+ });
+ }
+ </script>
 </head>
 <body>
 <div class="bg-mesh"></div>
-<div class="wrap"> <img src="/TDOLI_APP.png" alt="TDOLI" style="width:56px;height:56px;margin:0 auto 10px;display:block;"> <div class="subtitle">Transfert Diaspora · P2P</div> <div class="card" id="resetCard"> <div class="card-title">Nouveau mot de passe</div> <div class="card-sub">Choisis un mot de passe fort pour sécuriser ton compte.</div> <div class="form-group"> <label class="form-label">Nouveau mot de passe</label> <div class="input-wrap"> <input class="form-input" type="password" id="new-password" placeholder="Minimum 8 caractères" oninput="checkStrength(this.value)"> <button class="input-toggle" onclick="togglePw('new-password',this)" type="button">Voir</button> </div> <div class="strength-bar"><div class="strength-seg" id="s1"></div><div class="strength-seg" id="s2"></div><div class="strength-seg" id="s3"></div><div class="strength-seg" id="s4"></div></div> </div> <div class="requirements"> <div class="req-item" id="req-length"><div class="req-dot"></div>Minimum 8 caractères</div> <div class="req-item" id="req-upper"><div class="req-dot"></div>Au moins 1 majuscule</div> <div class="req-item" id="req-number"><div class="req-dot"></div>Au moins 1 chiffre</div> <div class="req-item" id="req-special"><div class="req-dot"></div>Au moins 1 caractère spécial (!@#$...)</div> </div> <div class="form-group"> <label class="form-label">Confirmer le mot de passe</label> <div class="input-wrap"> <input class="form-input" type="password" id="confirm-password" placeholder="Répète le mot de passe"> <button class="input-toggle" onclick="togglePw('confirm-password',this)" type="button">Voir</button> </div> </div> <button class="btn-primary" id="btn-reset" onclick="doReset()">Enregistrer le mot de passe</button> <div class="msg" id="msg-reset"></div> <a href="/tdoli-auth.html" class="back-link"> Retour à la connexion</a> </div>
+<div class="wrap">
+ <img src="/TDOLI_APP.png" alt="TDOLI" style="width:56px;height:56px;margin:0 auto 10px;display:block;">
+ <div class="subtitle">Transfert Diaspora · P2P</div>
+ <div class="card" id="resetCard">
+ <div class="card-title">Nouveau mot de passe</div>
+ <div class="card-sub">Choisis un mot de passe fort pour sécuriser ton compte.</div>
+ <div class="form-group">
+ <label class="form-label">Nouveau mot de passe</label>
+ <div class="input-wrap">
+ <input class="form-input" type="password" id="new-password" placeholder="Minimum 8 caractères" oninput="checkStrength(this.value)">
+ <button class="input-toggle" onclick="togglePw('new-password',this)" type="button">Voir</button>
+ </div>
+ <div class="strength-bar"><div class="strength-seg" id="s1"></div><div class="strength-seg" id="s2"></div><div class="strength-seg" id="s3"></div><div class="strength-seg" id="s4"></div></div>
+ </div>
+ <div class="requirements">
+ <div class="req-item" id="req-length"><div class="req-dot"></div>Minimum 8 caractères</div>
+ <div class="req-item" id="req-upper"><div class="req-dot"></div>Au moins 1 majuscule</div>
+ <div class="req-item" id="req-number"><div class="req-dot"></div>Au moins 1 chiffre</div>
+ <div class="req-item" id="req-special"><div class="req-dot"></div>Au moins 1 caractère spécial (!@#$...)</div>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Confirmer le mot de passe</label>
+ <div class="input-wrap">
+ <input class="form-input" type="password" id="confirm-password" placeholder="Répète le mot de passe">
+ <button class="input-toggle" onclick="togglePw('confirm-password',this)" type="button">Voir</button>
+ </div>
+ </div>
+ <button class="btn-primary" id="btn-reset" onclick="doReset()">Enregistrer le mot de passe</button>
+ <div class="msg" id="msg-reset"></div>
+ <a href="/tdoli-auth.html" class="back-link">← Retour à la connexion</a>
+ </div>
 </div>
 <script>
 const API='https://tdoli-backend.onrender.com';
@@ -74,50 +113,50 @@ const token=params.get('token');
 const email=params.get('email');
 
 if(!token||!email){
-  document.getElementById('resetCard').innerHTML='<div style="text-align:center;padding:20px"><div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;margin-bottom:8px;color:#ff6b6b">Lien invalide</div><div style="font-size:13px;color:#5a7560">Ce lien est invalide ou a expiré.</div><a href="/tdoli-auth.html" style="display:block;margin-top:16px;color:#00c97a;font-size:13px;text-decoration:none">← Retour à la connexion</a></div>';
+ document.getElementById('resetCard').innerHTML='<div style="text-align:center;padding:20px"><div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;margin-bottom:8px;color:#ff6b6b">Lien invalide</div><div style="font-size:13px;color:#5a7560">Ce lien est invalide ou a expiré.</div><a href="/tdoli-auth.html" style="display:block;margin-top:16px;color:#00c97a;font-size:13px;text-decoration:none">← Retour à la connexion</a></div>';
 }
 
 function togglePw(inputId,btn){const inp=document.getElementById(inputId);if(inp.type==='password'){inp.type='text';btn.textContent='Cacher';}else{inp.type='password';btn.textContent='Voir';}}
 
 function checkStrength(val){
-  const segs=['s1','s2','s3','s4'];segs.forEach(s=>document.getElementById(s).className='strength-seg');
+ const segs=['s1','s2','s3','s4'];segs.forEach(s=>document.getElementById(s).className='strength-seg');
 
-  const hasLength=val.length>=8;
-  const hasUpper=/[A-Z]/.test(val);
-  const hasNumber=/[0-9]/.test(val);
-  const hasSpecial=/[^A-Za-z0-9]/.test(val);
+ const hasLength=val.length>=8;
+ const hasUpper=/[A-Z]/.test(val);
+ const hasNumber=/[0-9]/.test(val);
+ const hasSpecial=/[^A-Za-z0-9]/.test(val);
 
-  document.getElementById('req-length').className='req-item'+(hasLength?' ok':'');
-  document.getElementById('req-upper').className='req-item'+(hasUpper?' ok':'');
-  document.getElementById('req-number').className='req-item'+(hasNumber?' ok':'');
-  document.getElementById('req-special').className='req-item'+(hasSpecial?' ok':'');
+ document.getElementById('req-length').className='req-item'+(hasLength?' ok':'');
+ document.getElementById('req-upper').className='req-item'+(hasUpper?' ok':'');
+ document.getElementById('req-number').className='req-item'+(hasNumber?' ok':'');
+ document.getElementById('req-special').className='req-item'+(hasSpecial?' ok':'');
 
-  let score=[hasLength,hasUpper,hasNumber,hasSpecial].filter(Boolean).length;
-  const cls=score<=1?'weak':score<=2?'ok':'strong';
-  for(let i=0;i<score;i++)document.getElementById(segs[i]).classList.add(cls);
+ let score=[hasLength,hasUpper,hasNumber,hasSpecial].filter(Boolean).length;
+ const cls=score<=1?'weak':score<=2?'ok':'strong';
+ for(let i=0;i<score;i++)document.getElementById(segs[i]).classList.add(cls);
 }
 
 async function doReset(){
-  const password=document.getElementById('new-password').value;
-  const confirm=document.getElementById('confirm-password').value;
+ const password=document.getElementById('new-password').value;
+ const confirm=document.getElementById('confirm-password').value;
 
-  if(!password){showMsg('Saisis un mot de passe','error');return;}
-  if(password.length<8){showMsg('Minimum 8 caractères','error');return;}
-  if(!/[A-Z]/.test(password)){showMsg('Au moins 1 majuscule requise','error');return;}
-  if(!/[0-9]/.test(password)){showMsg('Au moins 1 chiffre requis','error');return;}
-  if(!/[^A-Za-z0-9]/.test(password)){showMsg('Au moins 1 caractère spécial requis','error');return;}
-  if(password!==confirm){showMsg('Les mots de passe ne correspondent pas','error');return;}
+ if(!password){showMsg('Saisis un mot de passe','error');return;}
+ if(password.length<8){showMsg('Minimum 8 caractères','error');return;}
+ if(!/[A-Z]/.test(password)){showMsg('Au moins 1 majuscule requise','error');return;}
+ if(!/[0-9]/.test(password)){showMsg('Au moins 1 chiffre requis','error');return;}
+ if(!/[^A-Za-z0-9]/.test(password)){showMsg('Au moins 1 caractère spécial requis','error');return;}
+ if(password!==confirm){showMsg('Les mots de passe ne correspondent pas','error');return;}
 
-  const btn=document.getElementById('btn-reset');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
-  try{
-    const res=await fetch(API+'/auth/reset-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,token,password})});
-    const data=await res.json();
-    if(res.ok){
-      showMsg('Mot de passe mis à jour ! Redirection...','success');
-      setTimeout(()=>{window.location.href='/tdoli-auth.html';},2000);
-    }else showMsg(data.message||'Erreur','error');
-  }catch(e){showMsg('Serveur inaccessible','error');}
-  btn.disabled=false;btn.innerHTML='Enregistrer le mot de passe';
+ const btn=document.getElementById('btn-reset');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
+ try{
+ const res=await fetch(API+'/auth/reset-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,token,password})});
+ const data=await res.json();
+ if(res.ok){
+ showMsg('Mot de passe mis à jour ! Redirection...','success');
+ setTimeout(()=>{window.location.href='/tdoli-auth.html';},2000);
+ }else showMsg(data.message||'Erreur','error');
+ }catch(e){showMsg('Serveur inaccessible','error');}
+ btn.disabled=false;btn.innerHTML='Enregistrer le mot de passe';
 }
 
 function showMsg(text,type){const el=document.getElementById('msg-reset');el.className='msg '+type+' show';el.textContent=text;}
