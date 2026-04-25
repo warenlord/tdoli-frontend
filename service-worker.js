@@ -1,6 +1,6 @@
 // TDOLI — Service Worker v1.4
 
-const CACHE_NAME = 'tdoli-v3.6';
+const CACHE_NAME = 'tdoli-v3.7';
 const STATIC_ASSETS = [
   '/tdoli-feed.html',
   '/tdoli-auth.html',

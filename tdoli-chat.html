@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- TDOLI Chat v3 - Build 20260425141537 -->
+<!-- TDOLI Chat v3 - Build 20260425145807 -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -614,7 +614,6 @@ async function loadDealInfo() {
 
     const isSender = deal.sender === email;
     otherEmail = isSender ? deal.receiverEmail : deal.sender;
-    // Utiliser otherUsername enrichi par le backend (firstName + lastName)
     const otherName = deal.otherUsername || otherEmail.split('@')[0];
 
     // Initiales avatar partenaire
