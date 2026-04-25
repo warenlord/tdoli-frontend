@@ -7,13 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
-  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
-  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
-  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
-  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
-  --r:14px;
-  --shadow:0 2px 20px rgba(0,0,0,0.5);
+ --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+ --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --r:14px;
+ --shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
@@ -112,7 +112,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .btn-faceid-activate{width:100%;padding:15px;background:var(--green-dim);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;}
 .btn-faceid-later{width:100%;padding:13px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
 
-/* ── UX Fluidité globale ─────────────────────────────────────── */
+/* UX Fluidité globale */
 
 /* Skeleton loader */
 .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--card) 50%,var(--surface) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.4s infinite;}
@@ -159,625 +159,625 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 </style>
 
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#060d09">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TDOLI">
-  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-  <script>
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(r => console.log('[SW] Enregistre'))
-          .catch(e => console.error('[SW] Erreur:', e));
-      });
-    }
-  </script>
-  <!-- Forcer rechargement sans cache si on revient sur auth -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
+ <link rel="manifest" href="/manifest.json">
+ <meta name="theme-color" content="#060d09">
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <meta name="apple-mobile-web-app-title" content="TDOLI">
+ <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+ <script>
+ if('serviceWorker' in navigator){
+ window.addEventListener('load', () => {
+ navigator.serviceWorker.register('/service-worker.js')
+ .then(r => console.log('[SW] Enregistre'))
+ .catch(e => console.error('[SW] Erreur:', e));
+ });
+ }
+ </script>
+ <!-- Forcer rechargement sans cache si on revient sur auth -->
+ <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+ <meta http-equiv="Pragma" content="no-cache">
+ <meta http-equiv="Expires" content="0">
 </head>
 <body>
 <div class="bg-mesh"></div>
 <div class="redirect-overlay" id="redirectOverlay">
-  <img src="/TDOLI_APP.png" alt="TDOLI" style="width:72px;height:72px;margin:0 auto 10px;display:block;animation:breathe 1.2s ease infinite;">
-  <img src="/TD_LI.png" alt="TDOLI" style="height:28px;width:auto;margin:0 auto 16px;display:block;animation:breathe 1.2s ease infinite;">
-  <div class="redirect-bar"><div class="redirect-bar-fill"></div></div>
-  <div class="redirect-text">Connexion en cours</div>
+ <img src="/TDOLI_APP.png" alt="TDOLI" style="width:72px;height:72px;margin:0 auto 10px;display:block;animation:breathe 1.2s ease infinite;">
+ <img src="/TD_LI.png" alt="TDOLI" style="height:28px;width:auto;margin:0 auto 16px;display:block;animation:breathe 1.2s ease infinite;">
+ <div class="redirect-bar"><div class="redirect-bar-fill"></div></div>
+ <div class="redirect-text">Connexion en cours</div>
 </div>
 <div class="wrap">
-  <div class="header">
-    <img src="/TDOLI_APP.png" alt="TDOLI" style="width:88px;height:88px;margin:0 auto 14px;display:block;">
-    <img src="/TD_LI.png" alt="TDOLI" style="height:36px;width:auto;margin:0 auto;display:block;">
-    <div class="tagline">Transfert Diaspora · P2P</div>
-  </div>
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('login')">Connexion</button>
-    <button class="tab-btn" onclick="switchTab('register')">Inscription</button>
-  </div>
-  <div class="form-card">
-    <!-- LOGIN STEP 1 -->
-    <div class="panel active" id="panel-login-step1">
-      <div class="step-indicator">
-        <div class="step-node active">1</div>
-        <div class="step-line"></div>
-        <div class="step-node pending">2</div>
-        <div style="margin-left:8px">
-          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;">Identifiants</div>
-          <div style="font-size:11px;color:var(--text-3);">Etape 1 sur 2</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="login-email" placeholder="votre@email.com" autocomplete="email">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <div class="input-wrap">
-          <input class="form-input-pw" type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password">
-          <button class="input-toggle" onclick="togglePw('login-password',this)" type="button">Voir</button>
-        </div>
-        <button class="forgot-link" onclick="switchTab('forgot')">Mot de passe oublié ?</button>
-      </div>
-      <button class="btn-primary" id="btn-login-step1" onclick="loginStep1()">Continuer</button>
-      <div class="msg" id="msg-login-step1"></div>
-    </div>
-    <!-- LOGIN STEP 2 OTP -->
-    <div class="panel" id="panel-login-step2">
-      <div class="step-indicator">
-        <div class="step-node done">✓</div>
-        <div class="step-line done"></div>
-        <div class="step-node active">2</div>
-        <div style="margin-left:8px">
-          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;">Verification</div>
-          <div style="font-size:11px;color:var(--text-3);">Etape 2 sur 2</div>
-        </div>
-      </div>
-      <div class="otp-hint" style="margin-bottom:16px;">Code envoye a <strong id="otp-email-display" style="color:var(--text)"></strong></div>
-      <div class="otp-wrap">
-        <input class="otp-digit" type="tel" maxlength="1" id="otp0" oninput="otpInput(0)" onpaste="handleOtpPaste(event)">
-        <input class="otp-digit" type="tel" maxlength="1" id="otp1" oninput="otpInput(1)">
-        <input class="otp-digit" type="tel" maxlength="1" id="otp2" oninput="otpInput(2)">
-        <input class="otp-digit" type="tel" maxlength="1" id="otp3" oninput="otpInput(3)">
-        <input class="otp-digit" type="tel" maxlength="1" id="otp4" oninput="otpInput(4)">
-        <input class="otp-digit" type="tel" maxlength="1" id="otp5" oninput="otpInput(5)">
-      </div>
-      <div class="otp-hint">Le code expire dans 10 minutes.</div>
-      <button class="otp-resend" id="btn-resend" onclick="resendOTP()" disabled>Renvoyer (<span id="resend-timer">60</span>s)</button>
-      <button class="btn-primary" id="btn-login-step2" onclick="loginStep2()" style="margin-top:16px">Connexion</button>
-      <div class="msg" id="msg-login-step2"></div>
-      <button class="btn-secondary" onclick="backToStep1()">Retour</button>
-    </div>
-    <!-- MOT DE PASSE OUBLIÉ -->
-    <div class="panel" id="panel-forgot">
-      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:8px;">Mot de passe oublié</div>
-      <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Entre ton email — tu recevras un lien pour réinitialiser ton mot de passe.</div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="forgot-email" placeholder="votre@email.com" autocomplete="email">
-      </div>
-      <button class="btn-primary" id="btn-forgot" onclick="doForgot()">Envoyer le lien</button>
-      <div class="msg" id="msg-forgot"></div>
-      <button class="btn-secondary" onclick="switchTab('login')">Retour à la connexion</button>
-    </div>
-    <!-- REGISTER -->
-    <div class="panel" id="panel-register">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Prénom</label>
-          <input class="form-input" type="text" id="reg-firstname" placeholder="Jean" autocomplete="given-name">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nom</label>
-          <input class="form-input" type="text" id="reg-lastname" placeholder="Dupont" autocomplete="family-name">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="reg-email" placeholder="votre@email.com" autocomplete="email">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <div class="input-wrap">
-          <input class="form-input-pw" type="password" id="reg-password" placeholder="Minimum 8 caractères" autocomplete="new-password" oninput="checkRegStrength(this.value)">
-          <button class="input-toggle" onclick="togglePw('reg-password',this)" type="button">Voir</button>
-        </div>
-        <div class="strength-bar"><div class="strength-seg" id="s1"></div><div class="strength-seg" id="s2"></div><div class="strength-seg" id="s3"></div><div class="strength-seg" id="s4"></div></div>
-        <div class="requirements">
-          <div class="req-item" id="r-length"><div class="req-dot"></div>Minimum 8 caractères</div>
-          <div class="req-item" id="r-upper"><div class="req-dot"></div>Au moins 1 majuscule</div>
-          <div class="req-item" id="r-number"><div class="req-dot"></div>Au moins 1 chiffre</div>
-          <div class="req-item" id="r-special"><div class="req-dot"></div>Au moins 1 caractère spécial</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Pays de résidence</label>
-        <select class="form-select" id="reg-country">
-          <option value="">Sélectionne ton pays</option>
-          <option value="France">🇫🇷 France</option>
-          <option value="Gabon">🇬🇦 Gabon</option>
-          <option value="Etats-Unis">🇺🇸 États-Unis</option>
-          <option value="Canada">🇨🇦 Canada</option>
-          <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-          <option value="Belgique">🇧🇪 Belgique</option>
-          <option value="Suisse">🇨🇭 Suisse</option>
-          <option value="Cameroun">🇨🇲 Cameroun</option>
-          <option value="Congo">🇨🇬 Congo</option>
-          <option value="Senegal">🇸🇳 Sénégal</option>
-          <option value="Cote d'Ivoire">🇨🇮 Côte d'Ivoire</option>
-          <option value="Autre">🌍 Autre</option>
-        </select>
-      </div>
-      <button class="btn-primary" id="btn-register" onclick="doRegister()">Créer mon compte</button>
-      <div class="msg" id="msg-register"></div>
-    </div>
-  </div>
-  <div class="footer">
-    <div class="footer-text">TDOLI · Transfert P2P · tdoli.com</div>
-  </div>
+ <div class="header">
+ <img src="/TDOLI_APP.png" alt="TDOLI" style="width:88px;height:88px;margin:0 auto 14px;display:block;">
+ <img src="/TD_LI.png" alt="TDOLI" style="height:36px;width:auto;margin:0 auto;display:block;">
+ <div class="tagline">Transfert Diaspora · P2P</div>
+ </div>
+ <div class="tabs">
+ <button class="tab-btn active" onclick="switchTab('login')">Connexion</button>
+ <button class="tab-btn" onclick="switchTab('register')">Inscription</button>
+ </div>
+ <div class="form-card">
+ <!-- LOGIN STEP 1 -->
+ <div class="panel active" id="panel-login-step1">
+ <div class="step-indicator">
+ <div class="step-node active">1</div>
+ <div class="step-line"></div>
+ <div class="step-node pending">2</div>
+ <div style="margin-left:8px">
+ <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;">Identifiants</div>
+ <div style="font-size:11px;color:var(--text-3);">Etape 1 sur 2</div>
+ </div>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Email</label>
+ <input class="form-input" type="email" id="login-email" placeholder="votre@email.com" autocomplete="email">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Mot de passe</label>
+ <div class="input-wrap">
+ <input class="form-input-pw" type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password">
+ <button class="input-toggle" onclick="togglePw('login-password',this)" type="button">Voir</button>
+ </div>
+ <button class="forgot-link" onclick="switchTab('forgot')">Mot de passe oublié ?</button>
+ </div>
+ <button class="btn-primary" id="btn-login-step1" onclick="loginStep1()">Continuer</button>
+ <div class="msg" id="msg-login-step1"></div>
+ </div>
+ <!-- LOGIN STEP 2 OTP -->
+ <div class="panel" id="panel-login-step2">
+ <div class="step-indicator">
+ <div class="step-node done"></div>
+ <div class="step-line done"></div>
+ <div class="step-node active">2</div>
+ <div style="margin-left:8px">
+ <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;">Verification</div>
+ <div style="font-size:11px;color:var(--text-3);">Etape 2 sur 2</div>
+ </div>
+ </div>
+ <div class="otp-hint" style="margin-bottom:16px;">Code envoye a <strong id="otp-email-display" style="color:var(--text)"></strong></div>
+ <div class="otp-wrap">
+ <input class="otp-digit" type="tel" maxlength="1" id="otp0" oninput="otpInput(0)" onpaste="handleOtpPaste(event)">
+ <input class="otp-digit" type="tel" maxlength="1" id="otp1" oninput="otpInput(1)">
+ <input class="otp-digit" type="tel" maxlength="1" id="otp2" oninput="otpInput(2)">
+ <input class="otp-digit" type="tel" maxlength="1" id="otp3" oninput="otpInput(3)">
+ <input class="otp-digit" type="tel" maxlength="1" id="otp4" oninput="otpInput(4)">
+ <input class="otp-digit" type="tel" maxlength="1" id="otp5" oninput="otpInput(5)">
+ </div>
+ <div class="otp-hint">Le code expire dans 10 minutes.</div>
+ <button class="otp-resend" id="btn-resend" onclick="resendOTP()" disabled>Renvoyer (<span id="resend-timer">60</span>s)</button>
+ <button class="btn-primary" id="btn-login-step2" onclick="loginStep2()" style="margin-top:16px">Connexion</button>
+ <div class="msg" id="msg-login-step2"></div>
+ <button class="btn-secondary" onclick="backToStep1()">Retour</button>
+ </div>
+ <!-- MOT DE PASSE OUBLIÉ -->
+ <div class="panel" id="panel-forgot">
+ <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:8px;">Mot de passe oublié</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Entre ton email — tu recevras un lien pour réinitialiser ton mot de passe.</div>
+ <div class="form-group">
+ <label class="form-label">Email</label>
+ <input class="form-input" type="email" id="forgot-email" placeholder="votre@email.com" autocomplete="email">
+ </div>
+ <button class="btn-primary" id="btn-forgot" onclick="doForgot()">Envoyer le lien</button>
+ <div class="msg" id="msg-forgot"></div>
+ <button class="btn-secondary" onclick="switchTab('login')">Retour à la connexion</button>
+ </div>
+ <!-- REGISTER -->
+ <div class="panel" id="panel-register">
+ <div class="form-row">
+ <div class="form-group">
+ <label class="form-label">Prénom</label>
+ <input class="form-input" type="text" id="reg-firstname" placeholder="Jean" autocomplete="given-name">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Nom</label>
+ <input class="form-input" type="text" id="reg-lastname" placeholder="Dupont" autocomplete="family-name">
+ </div>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Email</label>
+ <input class="form-input" type="email" id="reg-email" placeholder="votre@email.com" autocomplete="email">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Mot de passe</label>
+ <div class="input-wrap">
+ <input class="form-input-pw" type="password" id="reg-password" placeholder="Minimum 8 caractères" autocomplete="new-password" oninput="checkRegStrength(this.value)">
+ <button class="input-toggle" onclick="togglePw('reg-password',this)" type="button">Voir</button>
+ </div>
+ <div class="strength-bar"><div class="strength-seg" id="s1"></div><div class="strength-seg" id="s2"></div><div class="strength-seg" id="s3"></div><div class="strength-seg" id="s4"></div></div>
+ <div class="requirements">
+ <div class="req-item" id="r-length"><div class="req-dot"></div>Minimum 8 caractères</div>
+ <div class="req-item" id="r-upper"><div class="req-dot"></div>Au moins 1 majuscule</div>
+ <div class="req-item" id="r-number"><div class="req-dot"></div>Au moins 1 chiffre</div>
+ <div class="req-item" id="r-special"><div class="req-dot"></div>Au moins 1 caractère spécial</div>
+ </div>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Pays de résidence</label>
+ <select class="form-select" id="reg-country">
+ <option value="">Sélectionne ton pays</option>
+ <option value="France">🇫🇷 France</option>
+ <option value="Gabon">🇬🇦 Gabon</option>
+ <option value="Etats-Unis">🇺🇸 États-Unis</option>
+ <option value="Canada">🇨🇦 Canada</option>
+ <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+ <option value="Belgique">🇧🇪 Belgique</option>
+ <option value="Suisse">🇨🇭 Suisse</option>
+ <option value="Cameroun">🇨🇲 Cameroun</option>
+ <option value="Congo">🇨🇬 Congo</option>
+ <option value="Senegal">🇸🇳 Sénégal</option>
+ <option value="Cote d'Ivoire">🇨🇮 Côte d'Ivoire</option>
+ <option value="Autre"> Autre</option>
+ </select>
+ </div>
+ <button class="btn-primary" id="btn-register" onclick="doRegister()">Créer mon compte</button>
+ <div class="msg" id="msg-register"></div>
+ </div>
+ </div>
+ <div class="footer">
+ <div class="footer-text">TDOLI · Transfert P2P · tdoli.com</div>
+ </div>
 </div>
 <!-- Sheet auth biométrique automatique à l'ouverture -->
 <div class="faceid-overlay" id="bioAuthOverlay">
-  <div class="biometric-sheet">
-    <div class="biometric-icon">🔐</div>
-    <div class="biometric-title">Connexion sécurisée</div>
-    <div class="biometric-sub">Utilise ton Face ID ou empreinte digitale pour te connecter.</div>
-    <button class="btn-faceid-activate" id="btn-bio-auth" onclick="triggerBiometricAuth()">
-      <span id="bio-auth-label">Se connecter avec Face ID</span>
-    </button>
-    <button class="btn-faceid-later" onclick="dismissBioAuth()">Utiliser mon mot de passe</button>
-    <div class="msg" id="msg-bio-auth" style="margin-top:12px;"></div>
-  </div>
+ <div class="biometric-sheet">
+ <div class="biometric-icon"></div>
+ <div class="biometric-title">Connexion sécurisée</div>
+ <div class="biometric-sub">Utilise ton Face ID ou empreinte digitale pour te connecter.</div>
+ <button class="btn-faceid-activate" id="btn-bio-auth" onclick="triggerBiometricAuth()">
+ <span id="bio-auth-label">Se connecter avec Face ID</span>
+ </button>
+ <button class="btn-faceid-later" onclick="dismissBioAuth()">Utiliser mon mot de passe</button>
+ <div class="msg" id="msg-bio-auth" style="margin-top:12px;"></div>
+ </div>
 </div>
 
 <!-- Popup activation Face ID -->
 <div class="faceid-overlay" id="faceidOverlay">
-  <div class="faceid-sheet">
-    <div class="faceid-icon">🔐</div>
-    <div class="faceid-title">Activer Face ID ?</div>
-    <div class="faceid-sub">Connecte-toi en un instant avec ton empreinte digitale ou Face ID. Plus rapide, plus sécurisé.</div>
-    <button class="btn-faceid-activate" id="btn-faceid-activate" onclick="activateBiometric()">Activer maintenant</button>
-    <button class="btn-faceid-later" onclick="dismissBiometric()">Plus tard</button>
-  </div>
+ <div class="faceid-sheet">
+ <div class="faceid-icon"></div>
+ <div class="faceid-title">Activer Face ID ?</div>
+ <div class="faceid-sub">Connecte-toi en un instant avec ton empreinte digitale ou Face ID. Plus rapide, plus sécurisé.</div>
+ <button class="btn-faceid-activate" id="btn-faceid-activate" onclick="activateBiometric()">Activer maintenant</button>
+ <button class="btn-faceid-later" onclick="dismissBiometric()">Plus tard</button>
+ </div>
 </div>
 
 <script>
 const API='https://tdoli-backend.onrender.com';
 let loginEmail='',resendInterval=null;
 
-// ── Logique d'ouverture ────────────────────────────────────────
+// Logique d'ouverture 
 (async function onAppOpen() {
-  const faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
-  const savedEmail   = localStorage.getItem('tdoli_email');
+ const faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
+ const savedEmail = localStorage.getItem('tdoli_email');
 
-  // Face ID activé → déclenchement automatique
-  // Pas de vérification de token ici — c'est Face ID qui génère un nouveau token
-  if (faceidActive && savedEmail && window.PublicKeyCredential) {
-    const emailInput = document.getElementById('login-email');
-    if (emailInput) emailInput.value = savedEmail;
-    document.getElementById('bioAuthOverlay').classList.add('open');
-    setTimeout(() => triggerBiometricAuth(), 600);
-    return;
-  }
+ // Face ID activé → déclenchement automatique
+ // Pas de vérification de token ici — c'est Face ID qui génère un nouveau token
+ if (faceidActive && savedEmail && window.PublicKeyCredential) {
+ const emailInput = document.getElementById('login-email');
+ if (emailInput) emailInput.value = savedEmail;
+ document.getElementById('bioAuthOverlay').classList.add('open');
+ setTimeout(() => triggerBiometricAuth(), 600);
+ return;
+ }
 
-  // Pas de Face ID → formulaire classique
-  // Pré-remplir l'email si connu
-  if (savedEmail) {
-    const emailInput = document.getElementById('login-email');
-    if (emailInput) emailInput.value = savedEmail;
-  }
+ // Pas de Face ID → formulaire classique
+ // Pré-remplir l'email si connu
+ if (savedEmail) {
+ const emailInput = document.getElementById('login-email');
+ if (emailInput) emailInput.value = savedEmail;
+ }
 })();
 
 async function triggerBiometricAuth() {
-  const savedEmail = localStorage.getItem('tdoli_email');
-  if (!savedEmail) { dismissBioAuth(); return; }
+ const savedEmail = localStorage.getItem('tdoli_email');
+ if (!savedEmail) { dismissBioAuth(); return; }
 
-  const btn = document.getElementById('btn-bio-auth');
-  const lbl = document.getElementById('bio-auth-label');
-  btn.disabled = true;
-  lbl.innerHTML = '<span class="btn-spinner"></span> Vérification...';
+ const btn = document.getElementById('btn-bio-auth');
+ const lbl = document.getElementById('bio-auth-label');
+ btn.disabled = true;
+ lbl.innerHTML = '<span class="btn-spinner"></span> Vérification...';
 
-  try {
-    // 1. Obtenir les options d'authentification
-    const optRes = await fetch(API + '/webauthn/auth/options', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: savedEmail })
-    });
-    if (!optRes.ok) {
-      // Pas de credential enregistré → fallback silencieux
-      dismissBioAuth();
-      return;
-    }
-    const options = await optRes.json();
+ try {
+ // 1. Obtenir les options d'authentification
+ const optRes = await fetch(API + '/webauthn/auth/options', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ email: savedEmail })
+ });
+ if (!optRes.ok) {
+ // Pas de credential enregistré → fallback silencieux
+ dismissBioAuth();
+ return;
+ }
+ const options = await optRes.json();
 
-    // 2. Convertir les buffers
-    options.challenge = base64urlToBuffer(options.challenge);
-    options.allowCredentials = (options.allowCredentials || []).map(c => ({
-      ...c, id: base64urlToBuffer(c.id)
-    }));
+ // 2. Convertir les buffers
+ options.challenge = base64urlToBuffer(options.challenge);
+ options.allowCredentials = (options.allowCredentials || []).map(c => ({
+ ...c, id: base64urlToBuffer(c.id)
+ }));
 
-    // 3. Déclencher la biométrie native
-    const assertion = await navigator.credentials.get({ publicKey: options });
+ // 3. Déclencher la biométrie native
+ const assertion = await navigator.credentials.get({ publicKey: options });
 
-    // 4. Préparer la réponse
-    const assertionResponse = {
-      email: savedEmail,
-      id:    bufferToBase64url(assertion.rawId),
-      rawId: bufferToBase64url(assertion.rawId),
-      type:  assertion.type,
-      response: {
-        authenticatorData: bufferToBase64url(assertion.response.authenticatorData),
-        clientDataJSON:    bufferToBase64url(assertion.response.clientDataJSON),
-        signature:         bufferToBase64url(assertion.response.signature),
-        userHandle:        assertion.response.userHandle ? bufferToBase64url(assertion.response.userHandle) : null,
-      }
-    };
+ // 4. Préparer la réponse
+ const assertionResponse = {
+ email: savedEmail,
+ id: bufferToBase64url(assertion.rawId),
+ rawId: bufferToBase64url(assertion.rawId),
+ type: assertion.type,
+ response: {
+ authenticatorData: bufferToBase64url(assertion.response.authenticatorData),
+ clientDataJSON: bufferToBase64url(assertion.response.clientDataJSON),
+ signature: bufferToBase64url(assertion.response.signature),
+ userHandle: assertion.response.userHandle ? bufferToBase64url(assertion.response.userHandle) : null,
+ }
+ };
 
-    // 5. Vérifier côté backend
-    const verRes = await fetch(API + '/webauthn/auth/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(assertionResponse)
-    });
-    const verData = await verRes.json();
+ // 5. Vérifier côté backend
+ const verRes = await fetch(API + '/webauthn/auth/verify', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify(assertionResponse)
+ });
+ const verData = await verRes.json();
 
-    if (verRes.ok && verData.token) {
-      localStorage.setItem('tdoli_token',    verData.token);
-      localStorage.setItem('tdoli_email',    verData.email);
-      localStorage.setItem('tdoli_username', verData.username || verData.email.split('@')[0]);
-      document.getElementById('bioAuthOverlay').classList.remove('open');
-      redirectAfterLogin();
-    } else {
-      // Échec → fallback mot de passe
-      const msgEl = document.getElementById('msg-bio-auth');
-      msgEl.className = 'msg error show';
-      msgEl.textContent = 'Face ID échoué — utilise ton mot de passe';
-      btn.disabled = false;
-      lbl.textContent = 'Réessayer';
-    }
+ if (verRes.ok && verData.token) {
+ localStorage.setItem('tdoli_token', verData.token);
+ localStorage.setItem('tdoli_email', verData.email);
+ localStorage.setItem('tdoli_username', verData.username || verData.email.split('@')[0]);
+ document.getElementById('bioAuthOverlay').classList.remove('open');
+ redirectAfterLogin();
+ } else {
+ // Échec → fallback mot de passe
+ const msgEl = document.getElementById('msg-bio-auth');
+ msgEl.className = 'msg error show';
+ msgEl.textContent = 'Face ID échoué — utilise ton mot de passe';
+ btn.disabled = false;
+ lbl.textContent = 'Réessayer';
+ }
 
-  } catch (err) {
-    // Annulé ou erreur → fallback silencieux vers formulaire
-    if (err.name === 'NotAllowedError') {
-      dismissBioAuth();
-    } else {
-      const msgEl = document.getElementById('msg-bio-auth');
-      msgEl.className = 'msg error show';
-      msgEl.textContent = 'Erreur — utilise ton mot de passe';
-      btn.disabled = false;
-      lbl.textContent = 'Réessayer';
-    }
-  }
+ } catch (err) {
+ // Annulé ou erreur → fallback silencieux vers formulaire
+ if (err.name === 'NotAllowedError') {
+ dismissBioAuth();
+ } else {
+ const msgEl = document.getElementById('msg-bio-auth');
+ msgEl.className = 'msg error show';
+ msgEl.textContent = 'Erreur — utilise ton mot de passe';
+ btn.disabled = false;
+ lbl.textContent = 'Réessayer';
+ }
+ }
 }
 
 function dismissBioAuth() {
-  document.getElementById('bioAuthOverlay').classList.remove('open');
-  // Pré-remplir l'email dans le formulaire
-  const savedEmail = localStorage.getItem('tdoli_email');
-  if (savedEmail) {
-    const emailInput = document.getElementById('login-email');
-    if (emailInput) emailInput.value = savedEmail;
-  }
+ document.getElementById('bioAuthOverlay').classList.remove('open');
+ // Pré-remplir l'email dans le formulaire
+ const savedEmail = localStorage.getItem('tdoli_email');
+ if (savedEmail) {
+ const emailInput = document.getElementById('login-email');
+ if (emailInput) emailInput.value = savedEmail;
+ }
 }
 
-// ── Phase 8 — WebAuthn / Face ID ──────────────────────────────
+// Phase 8 — WebAuthn / Face ID 
 
 // Afficher la popup Face ID après connexion réussie
 async function maybeShowBiometricPrompt(token, email) {
-  // Vérifier support WebAuthn
-  if (!window.PublicKeyCredential) return redirectAfterLogin();
+ // Vérifier support WebAuthn
+ if (!window.PublicKeyCredential) return redirectAfterLogin();
 
-  // Ne pas redemander si déjà activé ou refusé récemment (7 jours)
-  const dismissed = localStorage.getItem('tdoli_faceid_dismissed');
-  const activated  = localStorage.getItem('tdoli_faceid_active');
-  if (activated === '1') return redirectAfterLogin();
-  if (dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000) return redirectAfterLogin();
+ // Ne pas redemander si déjà activé ou refusé récemment (7 jours)
+ const dismissed = localStorage.getItem('tdoli_faceid_dismissed');
+ const activated = localStorage.getItem('tdoli_faceid_active');
+ if (activated === '1') return redirectAfterLogin();
+ if (dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000) return redirectAfterLogin();
 
-  // Stocker token temporairement pour l'activation
-  window._pendingToken = token;
-  window._pendingEmail = email;
+ // Stocker token temporairement pour l'activation
+ window._pendingToken = token;
+ window._pendingEmail = email;
 
-  // Afficher la popup
-  document.getElementById('faceidOverlay').classList.add('open');
+ // Afficher la popup
+ document.getElementById('faceidOverlay').classList.add('open');
 }
 
 function redirectAfterLogin() {
-  sessionStorage.setItem('tdoli_faceid_verified', '1');
-  document.getElementById('redirectOverlay').classList.add('show');
-  setTimeout(() => window.location.href = '/tdoli-feed.html', 1000);
+ sessionStorage.setItem('tdoli_faceid_verified', '1');
+ document.getElementById('redirectOverlay').classList.add('show');
+ setTimeout(() => window.location.href = '/tdoli-feed.html', 1000);
 }
 
 function dismissBiometric() {
-  localStorage.setItem('tdoli_faceid_dismissed', Date.now().toString());
-  document.getElementById('faceidOverlay').classList.remove('open');
-  redirectAfterLogin();
+ localStorage.setItem('tdoli_faceid_dismissed', Date.now().toString());
+ document.getElementById('faceidOverlay').classList.remove('open');
+ redirectAfterLogin();
 }
 
 async function activateBiometric() {
-  const btn = document.getElementById('btn-faceid-activate');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="btn-spinner"></span> Activation...';
+ const btn = document.getElementById('btn-faceid-activate');
+ btn.disabled = true;
+ btn.innerHTML = '<span class="btn-spinner"></span> Activation...';
 
-  try {
-    // 1. Obtenir les options d'enregistrement
-    const optRes = await fetch(API + '/webauthn/register/options', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + window._pendingToken
-      }
-    });
-    if (!optRes.ok) throw new Error('options_failed');
-    const options = await optRes.json();
+ try {
+ // 1. Obtenir les options d'enregistrement
+ const optRes = await fetch(API + '/webauthn/register/options', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Authorization': 'Bearer ' + window._pendingToken
+ }
+ });
+ if (!optRes.ok) throw new Error('options_failed');
+ const options = await optRes.json();
 
-    // 2. Convertir challenge et excludeCredentials
-    options.challenge = base64urlToBuffer(options.challenge);
-    options.user.id   = base64urlToBuffer(options.user.id);
-    options.excludeCredentials = (options.excludeCredentials || []).map(c => ({
-      ...c, id: base64urlToBuffer(c.id)
-    }));
+ // 2. Convertir challenge et excludeCredentials
+ options.challenge = base64urlToBuffer(options.challenge);
+ options.user.id = base64urlToBuffer(options.user.id);
+ options.excludeCredentials = (options.excludeCredentials || []).map(c => ({
+ ...c, id: base64urlToBuffer(c.id)
+ }));
 
-    // 3. Déclencher la biométrie native
-    const credential = await navigator.credentials.create({ publicKey: options });
+ // 3. Déclencher la biométrie native
+ const credential = await navigator.credentials.create({ publicKey: options });
 
-    // 4. Préparer la réponse
-    const regResponse = {
-      id:    bufferToBase64url(credential.rawId),
-      rawId: bufferToBase64url(credential.rawId),
-      type:  credential.type,
-      response: {
-        attestationObject: bufferToBase64url(credential.response.attestationObject),
-        clientDataJSON:    bufferToBase64url(credential.response.clientDataJSON),
-        transports:        credential.response.getTransports?.() || [],
-      }
-    };
+ // 4. Préparer la réponse
+ const regResponse = {
+ id: bufferToBase64url(credential.rawId),
+ rawId: bufferToBase64url(credential.rawId),
+ type: credential.type,
+ response: {
+ attestationObject: bufferToBase64url(credential.response.attestationObject),
+ clientDataJSON: bufferToBase64url(credential.response.clientDataJSON),
+ transports: credential.response.getTransports?.() || [],
+ }
+ };
 
-    // 5. Vérifier côté backend
-    const verRes = await fetch(API + '/webauthn/register/verify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + window._pendingToken
-      },
-      body: JSON.stringify(regResponse)
-    });
+ // 5. Vérifier côté backend
+ const verRes = await fetch(API + '/webauthn/register/verify', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Authorization': 'Bearer ' + window._pendingToken
+ },
+ body: JSON.stringify(regResponse)
+ });
 
-    if (verRes.ok) {
-      localStorage.setItem('tdoli_faceid_active', '1');
-    }
+ if (verRes.ok) {
+ localStorage.setItem('tdoli_faceid_active', '1');
+ }
 
-  } catch (err) {
-    if (err.name !== 'NotAllowedError') {
-      console.error('[WebAuthn] activation error:', err);
-    }
-  }
+ } catch (err) {
+ if (err.name !== 'NotAllowedError') {
+ console.error('[WebAuthn] activation error:', err);
+ }
+ }
 
-  document.getElementById('faceidOverlay').classList.remove('open');
-  redirectAfterLogin();
+ document.getElementById('faceidOverlay').classList.remove('open');
+ redirectAfterLogin();
 }
 
-// ── Helpers base64url ──────────────────────────────────────────
+// Helpers base64url 
 function base64urlToBuffer(base64url) {
-  const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
-  const bin = atob(base64);
-  const buf = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
-  return buf.buffer;
+ const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+ const bin = atob(base64);
+ const buf = new Uint8Array(bin.length);
+ for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+ return buf.buffer;
 }
 
 function bufferToBase64url(buffer) {
-  const bytes = new Uint8Array(buffer);
-  let bin = '';
-  for (const b of bytes) bin += String.fromCharCode(b);
-  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+ const bytes = new Uint8Array(buffer);
+ let bin = '';
+ for (const b of bytes) bin += String.fromCharCode(b);
+ return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
-// ── Modifier loginStep2 pour déclencher la popup ──────────────
+// Modifier loginStep2 pour déclencher la popup 
 
 function switchTab(tab){
-  ['login-step1','login-step2','register','forgot'].forEach(p=>document.getElementById('panel-'+p).classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&(tab==='login'||tab==='forgot'))||(i===1&&tab==='register')));
-  document.getElementById('panel-'+(tab==='login'?'login-step1':tab==='forgot'?'forgot':tab==='register'?'register':'login-step1')).classList.add('active');
+ ['login-step1','login-step2','register','forgot'].forEach(p=>document.getElementById('panel-'+p).classList.remove('active'));
+ document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&(tab==='login'||tab==='forgot'))||(i===1&&tab==='register')));
+ document.getElementById('panel-'+(tab==='login'?'login-step1':tab==='forgot'?'forgot':tab==='register'?'register':'login-step1')).classList.add('active');
 }
 
 function showMsg(id,text,type){const el=document.getElementById(id);el.className='msg '+(type||'error')+' show';el.textContent=text;}
 function togglePw(inputId,btn){const inp=document.getElementById(inputId);if(inp.type==='password'){inp.type='text';btn.textContent='Cacher';}else{inp.type='password';btn.textContent='Voir';}}
 
 function checkRegStrength(val){
-  const segs=['s1','s2','s3','s4'];segs.forEach(s=>document.getElementById(s).className='strength-seg');
-  const hasLength=val.length>=8;const hasUpper=/[A-Z]/.test(val);const hasNumber=/[0-9]/.test(val);const hasSpecial=/[^A-Za-z0-9]/.test(val);
-  document.getElementById('r-length').className='req-item'+(hasLength?' ok':'');
-  document.getElementById('r-upper').className='req-item'+(hasUpper?' ok':'');
-  document.getElementById('r-number').className='req-item'+(hasNumber?' ok':'');
-  document.getElementById('r-special').className='req-item'+(hasSpecial?' ok':'');
-  let score=[hasLength,hasUpper,hasNumber,hasSpecial].filter(Boolean).length;
-  const cls=score<=1?'weak':score<=2?'ok':'strong';
-  for(let i=0;i<score;i++)document.getElementById(segs[i]).classList.add(cls);
+ const segs=['s1','s2','s3','s4'];segs.forEach(s=>document.getElementById(s).className='strength-seg');
+ const hasLength=val.length>=8;const hasUpper=/[A-Z]/.test(val);const hasNumber=/[0-9]/.test(val);const hasSpecial=/[^A-Za-z0-9]/.test(val);
+ document.getElementById('r-length').className='req-item'+(hasLength?' ok':'');
+ document.getElementById('r-upper').className='req-item'+(hasUpper?' ok':'');
+ document.getElementById('r-number').className='req-item'+(hasNumber?' ok':'');
+ document.getElementById('r-special').className='req-item'+(hasSpecial?' ok':'');
+ let score=[hasLength,hasUpper,hasNumber,hasSpecial].filter(Boolean).length;
+ const cls=score<=1?'weak':score<=2?'ok':'strong';
+ for(let i=0;i<score;i++)document.getElementById(segs[i]).classList.add(cls);
 }
 
 function validatePassword(password){
-  if(password.length<8)return 'Minimum 8 caractères';
-  if(!/[A-Z]/.test(password))return 'Au moins 1 majuscule requise';
-  if(!/[0-9]/.test(password))return 'Au moins 1 chiffre requis';
-  if(!/[^A-Za-z0-9]/.test(password))return 'Au moins 1 caractère spécial requis (!@#$...)';
-  return null;
+ if(password.length<8)return 'Minimum 8 caractères';
+ if(!/[A-Z]/.test(password))return 'Au moins 1 majuscule requise';
+ if(!/[0-9]/.test(password))return 'Au moins 1 chiffre requis';
+ if(!/[^A-Za-z0-9]/.test(password))return 'Au moins 1 caractère spécial requis (!@#$...)';
+ return null;
 }
 
 function otpInput(idx){
-  const val=document.getElementById('otp'+idx).value;
-  if(val&&idx<5)document.getElementById('otp'+(idx+1)).focus();
-  const code=[0,1,2,3,4,5].map(i=>document.getElementById('otp'+i).value).join('');
-  if(code.length===6)loginStep2();
+ const val=document.getElementById('otp'+idx).value;
+ if(val&&idx<5)document.getElementById('otp'+(idx+1)).focus();
+ const code=[0,1,2,3,4,5].map(i=>document.getElementById('otp'+i).value).join('');
+ if(code.length===6)loginStep2();
 }
 function handleOtpPaste(e){
-  e.preventDefault();
-  const pasted=(e.clipboardData||window.clipboardData).getData('text');
-  const digits=pasted.replace(/\D/g,'').slice(0,6);
-  if(digits.length===0)return;
-  digits.split('').forEach((d,i)=>{
-    const input=document.getElementById('otp'+i);
-    if(input)input.value=d;
-  });
-  const lastIdx=Math.min(digits.length-1,5);
-  document.getElementById('otp'+lastIdx)?.focus();
-  if(digits.length===6)setTimeout(loginStep2,200);
+ e.preventDefault();
+ const pasted=(e.clipboardData||window.clipboardData).getData('text');
+ const digits=pasted.replace(/\D/g,'').slice(0,6);
+ if(digits.length===0)return;
+ digits.split('').forEach((d,i)=>{
+ const input=document.getElementById('otp'+i);
+ if(input)input.value=d;
+ });
+ const lastIdx=Math.min(digits.length-1,5);
+ document.getElementById('otp'+lastIdx)?.focus();
+ if(digits.length===6)setTimeout(loginStep2,200);
 }
 
 function startResendTimer(){
-  let t=60;document.getElementById('resend-timer').textContent=t;document.getElementById('btn-resend').disabled=true;
-  resendInterval=setInterval(()=>{t--;const el=document.getElementById('resend-timer');if(el)el.textContent=t;if(t<=0){clearInterval(resendInterval);document.getElementById('btn-resend').disabled=false;document.getElementById('btn-resend').textContent='Renvoyer le code';}},1000);
+ let t=60;document.getElementById('resend-timer').textContent=t;document.getElementById('btn-resend').disabled=true;
+ resendInterval=setInterval(()=>{t--;const el=document.getElementById('resend-timer');if(el)el.textContent=t;if(t<=0){clearInterval(resendInterval);document.getElementById('btn-resend').disabled=false;document.getElementById('btn-resend').textContent='Renvoyer le code';}},1000);
 }
 
 async function loginStep1(){
-  const email=document.getElementById('login-email').value.trim();
-  const password=document.getElementById('login-password').value;
-  if(!email||!password){showMsg('msg-login-step1','Remplis tous les champs');return;}
-  const btn=document.getElementById('btn-login-step1');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
-  try{
-    const res=await fetch(API+'/auth/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
-    const data=await res.json();
-    if(res.ok){loginEmail=email;document.getElementById('otp-email-display').textContent=email;document.getElementById('panel-login-step1').classList.remove('active');document.getElementById('panel-login-step2').classList.add('active');document.getElementById('otp0').focus();startResendTimer();}
-    else showMsg('msg-login-step1',data.message||'Identifiants incorrects');
-  }catch(e){showMsg('msg-login-step1','Serveur inaccessible');}
-  btn.disabled=false;btn.innerHTML='Continuer';
+ const email=document.getElementById('login-email').value.trim();
+ const password=document.getElementById('login-password').value;
+ if(!email||!password){showMsg('msg-login-step1','Remplis tous les champs');return;}
+ const btn=document.getElementById('btn-login-step1');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
+ try{
+ const res=await fetch(API+'/auth/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+ const data=await res.json();
+ if(res.ok){loginEmail=email;document.getElementById('otp-email-display').textContent=email;document.getElementById('panel-login-step1').classList.remove('active');document.getElementById('panel-login-step2').classList.add('active');document.getElementById('otp0').focus();startResendTimer();}
+ else showMsg('msg-login-step1',data.message||'Identifiants incorrects');
+ }catch(e){showMsg('msg-login-step1','Serveur inaccessible');}
+ btn.disabled=false;btn.innerHTML='Continuer';
 }
 
 async function loginStep2(){
-  const code=[0,1,2,3,4,5].map(i=>document.getElementById('otp'+i).value).join('');
-  if(code.length<6){showMsg('msg-login-step2','Saisis les 6 chiffres');return;}
-  const btn=document.getElementById('btn-login-step2');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
-  try{
-    const res=await fetch(API+'/auth/verify-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:loginEmail,code})});
-    const data=await res.json();
-    if(res.ok&&data.token){
-      localStorage.setItem('tdoli_token',data.token);
-      localStorage.setItem('tdoli_email',loginEmail);
-      localStorage.setItem('tdoli_username',data.username||loginEmail.split('@')[0]);
-      // ── Phase 8 : proposer Face ID ────────────────────────
-      await maybeShowBiometricPrompt(data.token, loginEmail);
-    }else{showMsg('msg-login-step2',data.message||'Code invalide');btn.disabled=false;btn.innerHTML='Connexion';}
-  }catch(e){showMsg('msg-login-step2','Serveur inaccessible');btn.disabled=false;btn.innerHTML='Connexion';}
+ const code=[0,1,2,3,4,5].map(i=>document.getElementById('otp'+i).value).join('');
+ if(code.length<6){showMsg('msg-login-step2','Saisis les 6 chiffres');return;}
+ const btn=document.getElementById('btn-login-step2');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
+ try{
+ const res=await fetch(API+'/auth/verify-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:loginEmail,code})});
+ const data=await res.json();
+ if(res.ok&&data.token){
+ localStorage.setItem('tdoli_token',data.token);
+ localStorage.setItem('tdoli_email',loginEmail);
+ localStorage.setItem('tdoli_username',data.username||loginEmail.split('@')[0]);
+ // Phase 8 : proposer Face ID 
+ await maybeShowBiometricPrompt(data.token, loginEmail);
+ }else{showMsg('msg-login-step2',data.message||'Code invalide');btn.disabled=false;btn.innerHTML='Connexion';}
+ }catch(e){showMsg('msg-login-step2','Serveur inaccessible');btn.disabled=false;btn.innerHTML='Connexion';}
 }
 
 async function resendOTP(){
-  const password=document.getElementById('login-password').value;
-  try{await fetch(API+'/auth/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:loginEmail,password})});startResendTimer();}catch(e){}
+ const password=document.getElementById('login-password').value;
+ try{await fetch(API+'/auth/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:loginEmail,password})});startResendTimer();}catch(e){}
 }
 
 function backToStep1(){
-  document.getElementById('panel-login-step2').classList.remove('active');
-  document.getElementById('panel-login-step1').classList.add('active');
-  [0,1,2,3,4,5].forEach(i=>document.getElementById('otp'+i).value='');
-  if(resendInterval)clearInterval(resendInterval);
+ document.getElementById('panel-login-step2').classList.remove('active');
+ document.getElementById('panel-login-step1').classList.add('active');
+ [0,1,2,3,4,5].forEach(i=>document.getElementById('otp'+i).value='');
+ if(resendInterval)clearInterval(resendInterval);
 }
 
 async function doForgot(){
-  const email=document.getElementById('forgot-email').value.trim();
-  if(!email){showMsg('msg-forgot','Entre ton adresse email');return;}
-  const btn=document.getElementById('btn-forgot');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
-  try{
-    const res=await fetch(API+'/auth/forgot-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
-    const data=await res.json();
-    showMsg('msg-forgot',data.message||'Email envoyé','success');
-  }catch(e){showMsg('msg-forgot','Serveur inaccessible');}
-  btn.disabled=false;btn.innerHTML='Envoyer le lien';
+ const email=document.getElementById('forgot-email').value.trim();
+ if(!email){showMsg('msg-forgot','Entre ton adresse email');return;}
+ const btn=document.getElementById('btn-forgot');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
+ try{
+ const res=await fetch(API+'/auth/forgot-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+ const data=await res.json();
+ showMsg('msg-forgot',data.message||'Email envoyé','success');
+ }catch(e){showMsg('msg-forgot','Serveur inaccessible');}
+ btn.disabled=false;btn.innerHTML='Envoyer le lien';
 }
 
 async function doRegister(){
-  const firstName=document.getElementById('reg-firstname').value.trim();
-  const lastName=document.getElementById('reg-lastname').value.trim();
-  const email=document.getElementById('reg-email').value.trim();
-  const password=document.getElementById('reg-password').value;
-  const country=document.getElementById('reg-country').value;
-  if(!firstName||!lastName||!email||!password){showMsg('msg-register','Remplis tous les champs');return;}
-  const pwError=validatePassword(password);
-  if(pwError){showMsg('msg-register',pwError);return;}
-  const btn=document.getElementById('btn-register');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
-  try{
-    const res=await fetch(API+'/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,firstName,lastName,country,username:firstName+' '+lastName})});
-    const data=await res.json();
-    if(res.ok){showMsg('msg-register','Compte créé ! Connecte-toi.','success');setTimeout(()=>{switchTab('login');document.getElementById('login-email').value=email;},1500);}
-    else showMsg('msg-register',data.message||'Erreur');
-  }catch(e){showMsg('msg-register','Serveur inaccessible');}
-  btn.disabled=false;btn.innerHTML='Créer mon compte';
+ const firstName=document.getElementById('reg-firstname').value.trim();
+ const lastName=document.getElementById('reg-lastname').value.trim();
+ const email=document.getElementById('reg-email').value.trim();
+ const password=document.getElementById('reg-password').value;
+ const country=document.getElementById('reg-country').value;
+ if(!firstName||!lastName||!email||!password){showMsg('msg-register','Remplis tous les champs');return;}
+ const pwError=validatePassword(password);
+ if(pwError){showMsg('msg-register',pwError);return;}
+ const btn=document.getElementById('btn-register');btn.disabled=true;btn.innerHTML='<span class="btn-spinner"></span>';
+ try{
+ const res=await fetch(API+'/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,firstName,lastName,country,username:firstName+' '+lastName})});
+ const data=await res.json();
+ if(res.ok){showMsg('msg-register','Compte créé ! Connecte-toi.','success');setTimeout(()=>{switchTab('login');document.getElementById('login-email').value=email;},1500);}
+ else showMsg('msg-register',data.message||'Erreur');
+ }catch(e){showMsg('msg-register','Serveur inaccessible');}
+ btn.disabled=false;btn.innerHTML='Créer mon compte';
 }
 
-// ── UX Fluidité ───────────────────────────────────────────────
+// UX Fluidité 
 
 // 1. Animation entrée de page
 document.body.classList.add('page-enter');
 
 // 2. Pull-to-refresh sur les pages avec feed/liste
 (function initPullToRefresh() {
-  let startY = 0, pulling = false;
-  const MIN_PULL = 80;
-  const indicator = document.createElement('div');
-  indicator.className = 'ptr-indicator';
-  indicator.textContent = 'Relâcher pour actualiser';
-  const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
-  if (!firstChild) return;
-  firstChild.parentNode.insertBefore(indicator, firstChild);
+ let startY = 0, pulling = false;
+ const MIN_PULL = 80;
+ const indicator = document.createElement('div');
+ indicator.className = 'ptr-indicator';
+ indicator.textContent = 'Relâcher pour actualiser';
+ const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
+ if (!firstChild) return;
+ firstChild.parentNode.insertBefore(indicator, firstChild);
 
-  document.addEventListener('touchstart', e => {
-    if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
-  }, { passive: true });
-  document.addEventListener('touchmove', e => {
-    if (!pulling) return;
-    const dist = e.touches[0].pageY - startY;
-    if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
-  }, { passive: true });
-  document.addEventListener('touchend', e => {
-    if (!pulling) return;
-    pulling = false;
-    const dist = e.changedTouches[0].pageY - startY;
-    indicator.classList.remove('active');
-    if (dist > MIN_PULL) {
-      indicator.classList.add('active');
-      indicator.textContent = 'Actualisation...';
-      setTimeout(() => { window.location.reload(); }, 500);
-    }
-  });
+ document.addEventListener('touchstart', e => {
+ if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
+ }, { passive: true });
+ document.addEventListener('touchmove', e => {
+ if (!pulling) return;
+ const dist = e.touches[0].pageY - startY;
+ if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
+ }, { passive: true });
+ document.addEventListener('touchend', e => {
+ if (!pulling) return;
+ pulling = false;
+ const dist = e.changedTouches[0].pageY - startY;
+ indicator.classList.remove('active');
+ if (dist > MIN_PULL) {
+ indicator.classList.add('active');
+ indicator.textContent = 'Actualisation...';
+ setTimeout(() => { window.location.reload(); }, 500);
+ }
+ });
 })();
 
 // 3. Swipe bas pour fermer les sheets
 (function initSwipeSheet() {
-  document.querySelectorAll('.sheet').forEach(sheet => {
-    let startY = 0;
-    sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
-    sheet.addEventListener('touchend', e => {
-      const dist = e.changedTouches[0].pageY - startY;
-      if (dist > 80) {
-        const overlay = sheet.closest('.overlay');
-        if (overlay) overlay.classList.remove('open');
-      }
-    }, { passive: true });
-  });
+ document.querySelectorAll('.sheet').forEach(sheet => {
+ let startY = 0;
+ sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
+ sheet.addEventListener('touchend', e => {
+ const dist = e.changedTouches[0].pageY - startY;
+ if (dist > 80) {
+ const overlay = sheet.closest('.overlay');
+ if (overlay) overlay.classList.remove('open');
+ }
+ }, { passive: true });
+ });
 })();
 
 // 4. Feedback copier avec vibration
 function copyWithFeedback(text, label) {
-  navigator.clipboard.writeText(text).then(() => {
-    if (navigator.vibrate) navigator.vibrate(50);
-    let el = document.querySelector('.copy-feedback');
-    if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
-    el.textContent = label || 'Copié';
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 1800);
-  });
+ navigator.clipboard.writeText(text).then(() => {
+ if (navigator.vibrate) navigator.vibrate(50);
+ let el = document.querySelector('.copy-feedback');
+ if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
+ el.textContent = label || 'Copié';
+ el.classList.add('show');
+ setTimeout(() => el.classList.remove('show'), 1800);
+ });
 }
 
 // 5. Auto-focus sur le premier input des sheets à l'ouverture
 document.querySelectorAll('.overlay').forEach(overlay => {
-  const observer = new MutationObserver(() => {
-    if (overlay.classList.contains('open')) {
-      const input = overlay.querySelector('input:not([type=hidden]), textarea');
-      if (input) setTimeout(() => input.focus(), 300);
-    }
-  });
-  observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+ const observer = new MutationObserver(() => {
+ if (overlay.classList.contains('open')) {
+ const input = overlay.querySelector('input:not([type=hidden]), textarea');
+ if (input) setTimeout(() => input.focus(), 300);
+ }
+ });
+ observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
 });
 
 </script>

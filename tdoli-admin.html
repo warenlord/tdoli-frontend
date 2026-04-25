@@ -88,9 +88,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .img-viewer-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
 .topbar-logo img {
-  height: 32px;
-  width: auto;
-  display: block;
+ height: 32px;
+ width: auto;
+ display: block;
 }
 
 .user-avatar-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
@@ -99,55 +99,55 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;transition:all 0.2s;}
 </style>
 
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#060d09">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TDOLI">
-  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-  <script>
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(r => console.log('[SW] Enregistre'))
-          .catch(e => console.error('[SW] Erreur:', e));
-      });
-    }
-  </script>
+ <link rel="manifest" href="/manifest.json">
+ <meta name="theme-color" content="#060d09">
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <meta name="apple-mobile-web-app-title" content="TDOLI">
+ <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+ <script>
+ if('serviceWorker' in navigator){
+ window.addEventListener('load', () => {
+ navigator.serviceWorker.register('/service-worker.js')
+ .then(r => console.log('[SW] Enregistre'))
+ .catch(e => console.error('[SW] Erreur:', e));
+ });
+ }
+ </script>
 </head>
 <body>
 <div class="topbar">
-  <a class="back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Retour"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></a>
-  <div class="topbar-logo"><img src="/TDOLI_APP.png" alt="TDOLI" style="height:32px;width:auto;display:block;"></div>
-  <div style="display:flex;align-items:center;gap:10px">
-    <div class="admin-badge">ADMIN</div>
-    <button class="logout-btn" onclick="adminLogout()">Déconnexion</button>
-  </div>
+ <a class="back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Retour"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></a>
+ <div class="topbar-logo"><img src="/TDOLI_APP.png" alt="TDOLI" style="height:32px;width:auto;display:block;"></div>
+ <div style="display:flex;align-items:center;gap:10px">
+ <div class="admin-badge">ADMIN</div>
+ <button class="logout-btn" onclick="adminLogout()">Déconnexion</button>
+ </div>
 </div>
 <div id="loginScreen">
-  <div class="login-card">
-    <div class="login-title">Espace Admin</div>
-    <div class="login-sub">Accès réservé à l'administrateur TDOLI</div>
-    <input class="form-input" type="password" id="admin-password" placeholder="Mot de passe admin" onkeydown="if(event.key==='Enter')adminLogin()">
-    <button class="btn-primary" onclick="adminLogin()">Accéder</button>
-    <div class="msg" id="msg-login"></div>
-  </div>
+ <div class="login-card">
+ <div class="login-title">Espace Admin</div>
+ <div class="login-sub">Accès réservé à l'administrateur TDOLI</div>
+ <input class="form-input" type="password" id="admin-password" placeholder="Mot de passe admin" onkeydown="if(event.key==='Enter')adminLogin()">
+ <button class="btn-primary" onclick="adminLogin()">Accéder</button>
+ <div class="msg" id="msg-login"></div>
+ </div>
 </div>
 <div id="adminScreen">
-  <div class="stats-row" id="statsRow"></div>
-  <div class="section-title">Litiges</div>
-  <div class="filter-bar">
-    <div class="filter-btn active" onclick="setFilter('all',this)">Tous</div>
-    <div class="filter-btn" onclick="setFilter('pending',this)">En attente</div>
-    <div class="filter-btn" onclick="setFilter('reviewing',this)">En cours</div>
-    <div class="filter-btn" onclick="setFilter('resolved_sender',this)">Résolus</div>
-    <div class="filter-btn" onclick="setFilter('cancelled',this)">Annulés</div>
-  </div>
-  <div id="disputesList"></div>
+ <div class="stats-row" id="statsRow"></div>
+ <div class="section-title">Litiges</div>
+ <div class="filter-bar">
+ <div class="filter-btn active" onclick="setFilter('all',this)">Tous</div>
+ <div class="filter-btn" onclick="setFilter('pending',this)">En attente</div>
+ <div class="filter-btn" onclick="setFilter('reviewing',this)">En cours</div>
+ <div class="filter-btn" onclick="setFilter('resolved_sender',this)">Résolus</div>
+ <div class="filter-btn" onclick="setFilter('cancelled',this)">Annulés</div>
+ </div>
+ <div id="disputesList"></div>
 </div>
 <div class="img-viewer" id="imgViewer" onclick="closeViewer()">
-  <img id="viewerImg" src="">
-  <div class="img-viewer-close">✕</div>
+ <img id="viewerImg" src="">
+ <div class="img-viewer-close"></div>
 </div>
 <script>
 const API='https://tdoli-backend.onrender.com';
@@ -155,103 +155,103 @@ let adminToken=localStorage.getItem('tdoli_admin_token');
 let allDisputes=[],currentFilter='all';
 if(adminToken){document.getElementById('loginScreen').style.display='none';document.getElementById('adminScreen').style.display='block';loadDisputes();}
 async function adminLogin(){
-  const password=document.getElementById('admin-password').value;
-  try{const res=await fetch(API+'/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password})});const data=await res.json();
-    if(res.ok){adminToken=data.token;localStorage.setItem('tdoli_admin_token',adminToken);document.getElementById('loginScreen').style.display='none';document.getElementById('adminScreen').style.display='block';loadDisputes();}
-    else{document.getElementById('msg-login').textContent=data.message||'Mot de passe incorrect';document.getElementById('msg-login').className='msg error';}
-  }catch(e){document.getElementById('msg-login').textContent='Serveur inaccessible';document.getElementById('msg-login').className='msg error';}
+ const password=document.getElementById('admin-password').value;
+ try{const res=await fetch(API+'/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password})});const data=await res.json();
+ if(res.ok){adminToken=data.token;localStorage.setItem('tdoli_admin_token',adminToken);document.getElementById('loginScreen').style.display='none';document.getElementById('adminScreen').style.display='block';loadDisputes();}
+ else{document.getElementById('msg-login').textContent=data.message||'Mot de passe incorrect';document.getElementById('msg-login').className='msg error';}
+ }catch(e){document.getElementById('msg-login').textContent='Serveur inaccessible';document.getElementById('msg-login').className='msg error';}
 }
 function adminLogout(){localStorage.removeItem('tdoli_admin_token');adminToken=null;document.getElementById('loginScreen').style.display='flex';document.getElementById('adminScreen').style.display='none';}
 async function loadDisputes(){
-  document.getElementById('disputesList').innerHTML='<div class="loading-wrap"><div class="loader"></div></div>';
-  try{const res=await fetch(API+'/admin/disputes',{headers:{'x-admin-token':adminToken}});if(res.status===401){adminLogout();return;}allDisputes=await res.json();renderStats();renderDisputes();}
-  catch(e){document.getElementById('disputesList').innerHTML='<div class="empty-state">Erreur de chargement</div>';}
+ document.getElementById('disputesList').innerHTML='<div class="loading-wrap"><div class="loader"></div></div>';
+ try{const res=await fetch(API+'/admin/disputes',{headers:{'x-admin-token':adminToken}});if(res.status===401){adminLogout();return;}allDisputes=await res.json();renderStats();renderDisputes();}
+ catch(e){document.getElementById('disputesList').innerHTML='<div class="empty-state">Erreur de chargement</div>';}
 }
 function renderStats(){
-  const total=allDisputes.length;const pending=allDisputes.filter(d=>d.status==='pending').length;const reviewing=allDisputes.filter(d=>d.status==='reviewing').length;const resolved=allDisputes.filter(d=>d.status.startsWith('resolved')).length;
-  document.getElementById('statsRow').innerHTML='<div class="stat-card"><div class="stat-val yellow">'+pending+'</div><div class="stat-label">En attente</div></div><div class="stat-card"><div class="stat-val blue">'+reviewing+'</div><div class="stat-label">En cours</div></div><div class="stat-card"><div class="stat-val green">'+resolved+'</div><div class="stat-label">Résolus</div></div><div class="stat-card"><div class="stat-val">'+total+'</div><div class="stat-label">Total</div></div>';
+ const total=allDisputes.length;const pending=allDisputes.filter(d=>d.status==='pending').length;const reviewing=allDisputes.filter(d=>d.status==='reviewing').length;const resolved=allDisputes.filter(d=>d.status.startsWith('resolved')).length;
+ document.getElementById('statsRow').innerHTML='<div class="stat-card"><div class="stat-val yellow">'+pending+'</div><div class="stat-label">En attente</div></div><div class="stat-card"><div class="stat-val blue">'+reviewing+'</div><div class="stat-label">En cours</div></div><div class="stat-card"><div class="stat-val green">'+resolved+'</div><div class="stat-label">Résolus</div></div><div class="stat-card"><div class="stat-val">'+total+'</div><div class="stat-label">Total</div></div>';
 }
 function setFilter(filter,el){currentFilter=filter;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderDisputes();}
 function renderDisputes(){
-  let data=allDisputes;
-  if(currentFilter==='resolved_sender')data=data.filter(d=>d.status.startsWith('resolved'));
-  else if(currentFilter!=='all')data=data.filter(d=>d.status===currentFilter);
-  const list=document.getElementById('disputesList');
-  if(data.length===0){list.innerHTML='<div class="empty-state">Aucun litige dans cette catégorie</div>';return;}
-  list.innerHTML=data.map(d=>{
-    const transfer=d.transferId||{};const statusText={pending:'En attente',reviewing:'En cours',resolved_sender:'Résolu — Envoyeur',resolved_receiver:'Résolu — Receveur',cancelled:'Annulé'}[d.status]||d.status;
-    const isResolved=d.status.startsWith('resolved')||d.status==='cancelled';
-    const dateStr=new Date(d.createdAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    let justifHtml='';
-    if(d.justificatifs&&d.justificatifs.length>0){
-      justifHtml='<div style="margin-bottom:14px"><div style="font-size:11px;color:var(--text-3);margin-bottom:8px;font-family:Syne,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Justificatifs ('+d.justificatifs.length+')</div><div class="justificatifs-row">'+
-        d.justificatifs.map(j=>j.type==='pdf'?'<a href="'+j.url+'" target="_blank" class="justif-pdf"><div class="justif-pdf-icon">📄</div><div class="justif-pdf-label">PDF</div></a>':'<img src="'+j.url+'" class="justif-thumb" onclick="viewImg(\''+j.url+'\')" alt="Justificatif">').join('')+
-      '</div></div>';
-    }
-    return '<div class="dispute-card '+d.status+'">'+
-      '<div class="dispute-header"><div><div class="dispute-ref">ID: '+d._id.slice(-8).toUpperCase()+'</div><div class="dispute-date">'+dateStr+'</div></div><div class="status-badge '+d.status+'">'+statusText+'</div></div>'+
-      '<div class="dispute-parties"><div class="party-box"><div class="party-label">Signalé par</div><div class="party-name">'+d.reportedBy+'</div></div><div class="party-box"><div class="party-label">Contre</div><div class="party-name">'+d.against+'</div></div></div>'+
-      (transfer.amount?'<div class="dispute-deal"><div><div class="deal-amt">'+Number(transfer.amount).toLocaleString('fr-FR')+' '+(transfer.currency||'')+'</div><div class="deal-dir">'+(transfer.fromCountry||'')+' → '+(transfer.toCountry||'')+'</div></div><div style="font-size:11px;color:var(--text-3)">REF: '+(transfer._id||'').toString().slice(-6).toUpperCase()+'</div></div>':'')+
-      '<div class="dispute-desc"><div class="desc-label">Description</div><div class="desc-text">'+d.description+'</div></div>'+
-      justifHtml+
-      (!isResolved?
-        '<textarea class="admin-note-area" id="note-'+d._id+'" placeholder="Note admin visible par les parties..."></textarea>'+
-        '<textarea class="admin-note-area" id="doc-msg-'+d._id+'" placeholder="Message demande de documents (optionnel)..." style="border-color:rgba(252,209,22,0.2);"></textarea>'+
-        '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">'+
-          '<select id="doc-target-'+d._id+'" style="padding:8px 12px;background:#0c1710;border:1px solid rgba(252,209,22,0.2);border-radius:8px;color:#fcd116;font-family:Syne,sans-serif;font-size:11px;font-weight:700;cursor:pointer;">'+
-            '<option value="both">Les deux parties</option>'+
-            '<option value="reporter">Déclarant seulement</option>'+
-            '<option value="against">Mis en cause seulement</option>'+
-          '</select>'+
-          '<button class="btn-action" style="background:rgba(252,209,22,0.08);color:#fcd116;border:1px solid rgba(252,209,22,0.2);" onclick="requestDocs(\''+d._id+'\')">📎 Demander des documents</button>'+
-        '</div>'+
-        '<div class="actions-row">'+(d.status==='pending'?'<button class="btn-action btn-review" onclick="takeReview(\''+d._id+'\')">Prendre en charge</button>':'')+
-        '<button class="btn-action btn-resolve-s" onclick="resolve(\''+d._id+'\',\'resolved_sender\')">✓ Faveur Envoyeur</button>'+
-        '<button class="btn-action btn-resolve-r" onclick="resolve(\''+d._id+'\',\'resolved_receiver\')">✓ Faveur Receveur</button>'+
-        '<button class="btn-action btn-cancel-d" onclick="resolve(\''+d._id+'\',\'cancelled\')">Annuler</button></div>'
-      :(d.adminNote?'<div class="resolved-note"><div class="resolved-label">Note admin</div><div class="resolved-text">'+d.adminNote+'</div></div>':''))+
-    '</div>';
-  }).join('');
+ let data=allDisputes;
+ if(currentFilter==='resolved_sender')data=data.filter(d=>d.status.startsWith('resolved'));
+ else if(currentFilter!=='all')data=data.filter(d=>d.status===currentFilter);
+ const list=document.getElementById('disputesList');
+ if(data.length===0){list.innerHTML='<div class="empty-state">Aucun litige dans cette catégorie</div>';return;}
+ list.innerHTML=data.map(d=>{
+ const transfer=d.transferId||{};const statusText={pending:'En attente',reviewing:'En cours',resolved_sender:'Résolu — Envoyeur',resolved_receiver:'Résolu — Receveur',cancelled:'Annulé'}[d.status]||d.status;
+ const isResolved=d.status.startsWith('resolved')||d.status==='cancelled';
+ const dateStr=new Date(d.createdAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+ let justifHtml='';
+ if(d.justificatifs&&d.justificatifs.length>0){
+ justifHtml='<div style="margin-bottom:14px"><div style="font-size:11px;color:var(--text-3);margin-bottom:8px;font-family:Syne,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Justificatifs ('+d.justificatifs.length+')</div><div class="justificatifs-row">'+
+ d.justificatifs.map(j=>j.type==='pdf'?'<a href="'+j.url+'" target="_blank" class="justif-pdf"><div class="justif-pdf-icon"></div><div class="justif-pdf-label">PDF</div></a>':'<img src="'+j.url+'" class="justif-thumb" onclick="viewImg(\''+j.url+'\')" alt="Justificatif">').join('')+
+ '</div></div>';
+ }
+ return '<div class="dispute-card '+d.status+'">'+
+ '<div class="dispute-header"><div><div class="dispute-ref">ID: '+d._id.slice(-8).toUpperCase()+'</div><div class="dispute-date">'+dateStr+'</div></div><div class="status-badge '+d.status+'">'+statusText+'</div></div>'+
+ '<div class="dispute-parties"><div class="party-box"><div class="party-label">Signalé par</div><div class="party-name">'+d.reportedBy+'</div></div><div class="party-box"><div class="party-label">Contre</div><div class="party-name">'+d.against+'</div></div></div>'+
+ (transfer.amount?'<div class="dispute-deal"><div><div class="deal-amt">'+Number(transfer.amount).toLocaleString('fr-FR')+' '+(transfer.currency||'')+'</div><div class="deal-dir">'+(transfer.fromCountry||'')+' → '+(transfer.toCountry||'')+'</div></div><div style="font-size:11px;color:var(--text-3)">REF: '+(transfer._id||'').toString().slice(-6).toUpperCase()+'</div></div>':'')+
+ '<div class="dispute-desc"><div class="desc-label">Description</div><div class="desc-text">'+d.description+'</div></div>'+
+ justifHtml+
+ (!isResolved?
+ '<textarea class="admin-note-area" id="note-'+d._id+'" placeholder="Note admin visible par les parties..."></textarea>'+
+ '<textarea class="admin-note-area" id="doc-msg-'+d._id+'" placeholder="Message demande de documents (optionnel)..." style="border-color:rgba(252,209,22,0.2);"></textarea>'+
+ '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">'+
+ '<select id="doc-target-'+d._id+'" style="padding:8px 12px;background:#0c1710;border:1px solid rgba(252,209,22,0.2);border-radius:8px;color:#fcd116;font-family:Syne,sans-serif;font-size:11px;font-weight:700;cursor:pointer;">'+
+ '<option value="both">Les deux parties</option>'+
+ '<option value="reporter">Déclarant seulement</option>'+
+ '<option value="against">Mis en cause seulement</option>'+
+ '</select>'+
+ '<button class="btn-action" style="background:rgba(252,209,22,0.08);color:#fcd116;border:1px solid rgba(252,209,22,0.2);" onclick="requestDocs(\''+d._id+'\')"> Demander des documents</button>'+
+ '</div>'+
+ '<div class="actions-row">'+(d.status==='pending'?'<button class="btn-action btn-review" onclick="takeReview(\''+d._id+'\')">Prendre en charge</button>':'')+
+ '<button class="btn-action btn-resolve-s" onclick="resolve(\''+d._id+'\',\'resolved_sender\')"> Faveur Envoyeur</button>'+
+ '<button class="btn-action btn-resolve-r" onclick="resolve(\''+d._id+'\',\'resolved_receiver\')"> Faveur Receveur</button>'+
+ '<button class="btn-action btn-cancel-d" onclick="resolve(\''+d._id+'\',\'cancelled\')">Annuler</button></div>'
+ :(d.adminNote?'<div class="resolved-note"><div class="resolved-label">Note admin</div><div class="resolved-text">'+d.adminNote+'</div></div>':''))+
+ '</div>';
+ }).join('');
 }
 async function requestDocs(id){
-  const msgEl=document.getElementById('doc-msg-'+id);const targetEl=document.getElementById('doc-target-'+id);
-  const message=msgEl?msgEl.value.trim():'';const target=targetEl?targetEl.value:'both';
-  if(!message){alert('Ecris le message de demande de documents');return;}
-  try{const res=await fetch(API+'/admin/disputes/'+id+'/request-documents',{method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({message,target})});
-    const data=await res.json();if(res.ok){alert(data.message);if(msgEl)msgEl.value='';}else alert(data.message||'Erreur');}catch(e){alert('Erreur');}
+ const msgEl=document.getElementById('doc-msg-'+id);const targetEl=document.getElementById('doc-target-'+id);
+ const message=msgEl?msgEl.value.trim():'';const target=targetEl?targetEl.value:'both';
+ if(!message){alert('Ecris le message de demande de documents');return;}
+ try{const res=await fetch(API+'/admin/disputes/'+id+'/request-documents',{method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({message,target})});
+ const data=await res.json();if(res.ok){alert(data.message);if(msgEl)msgEl.value='';}else alert(data.message||'Erreur');}catch(e){alert('Erreur');}
 }
 async function takeReview(id){try{const res=await fetch(API+'/admin/disputes/'+id+'/review',{method:'PUT',headers:{'x-admin-token':adminToken}});if(res.ok)loadDisputes();}catch(e){}}
 async function resolve(id,status){
-  const noteEl=document.getElementById('note-'+id);const adminNote=noteEl?noteEl.value.trim():'';
-  const labels={resolved_sender:'Résoudre en faveur de l\'envoyeur ?',resolved_receiver:'Résoudre en faveur du receveur ?',cancelled:'Annuler ce litige ?'};
-  if(!confirm(labels[status]||'Confirmer ?'))return;
-  try{const res=await fetch(API+'/admin/disputes/'+id+'/resolve',{method:'PUT',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({status,adminNote})});if(res.ok)loadDisputes();}catch(e){}
+ const noteEl=document.getElementById('note-'+id);const adminNote=noteEl?noteEl.value.trim():'';
+ const labels={resolved_sender:'Résoudre en faveur de l\'envoyeur ?',resolved_receiver:'Résoudre en faveur du receveur ?',cancelled:'Annuler ce litige ?'};
+ if(!confirm(labels[status]||'Confirmer ?'))return;
+ try{const res=await fetch(API+'/admin/disputes/'+id+'/resolve',{method:'PUT',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({status,adminNote})});if(res.ok)loadDisputes();}catch(e){}
 }
 function viewImg(url){document.getElementById('viewerImg').src=url;document.getElementById('imgViewer').classList.add('open');}
 function closeViewer(){document.getElementById('imgViewer').classList.remove('open');}
 setInterval(()=>{if(adminToken)loadDisputes();},60000);
 
 function initAvatar(){
-  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
-  let initials='?';
-  if(username){
-    const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
-    if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
-    else initials=username.substring(0,2).toUpperCase();
-  }
-  const btn=document.getElementById('avatarBtn');
-  if(btn)btn.textContent=initials;
+ const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
+ let initials='?';
+ if(username){
+ const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
+ if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
+ else initials=username.substring(0,2).toUpperCase();
+ }
+ const btn=document.getElementById('avatarBtn');
+ if(btn)btn.textContent=initials;
 }
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAvatar);}
 else{initAvatar();}
 window.addEventListener('storage',initAvatar);
 function shareApp(){
-  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
-  const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
-  if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
-  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+ const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
+ const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
+ if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
+ else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
 });}
-  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+ else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
 }
 </script>
 </body>

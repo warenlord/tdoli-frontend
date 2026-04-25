@@ -7,13 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
-  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
-  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
-  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
-  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
-  --r:14px;
-  --shadow:0 2px 20px rgba(0,0,0,0.5);
+ --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+ --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --r:14px;
+ --shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;}
@@ -79,7 +79,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .search-wrap{position:relative;}
 .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-3);pointer-events:none;}
 
-/* ── UX Fluidité globale ─────────────────────────────────────── */
+/* UX Fluidité globale */
 
 /* Skeleton loader */
 .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--card) 50%,var(--surface) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.4s infinite;}
@@ -133,15 +133,15 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
 <div class="topbar">
  <div>
-  <div class="topbar-title"> Messages</div>
-  <div class="topbar-sub" id="convCount">Chargement...</div>
+ <div class="topbar-title"> Messages</div>
+ <div class="topbar-sub" id="convCount">Chargement...</div>
  </div>
 </div>
 
 <div class="search-bar">
  <div class="search-wrap">
-  <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-  <input class="search-input" type="text" id="searchInput" placeholder="Rechercher une conversation..." oninput="filterConvs(this.value)">
+ <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+ <input class="search-input" type="text" id="searchInput" placeholder="Rechercher une conversation..." oninput="filterConvs(this.value)">
  </div>
 </div>
 
@@ -151,22 +151,22 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
 <nav class="bottom-nav">
  <a class="nav-item" href="/tdoli-feed.html">
-  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
  </a>
  <a class="nav-item" href="/tdoli-deals.html">
-  <div class="nav-icon-wrap">
-   <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
-   <div class="deals-badge" id="dealsBadge">!</div>
-  </div>Deals
+ <div class="nav-icon-wrap">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+ <div class="deals-badge" id="dealsBadge">!</div>
+ </div>Deals
  </a>
  <a class="nav-item active" href="/tdoli-messages.html">
-  <div class="nav-icon-wrap">
-   <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-   <div class="msg-badge-nav" id="msgBadgeNav"></div>
-  </div>Messages
+ <div class="nav-icon-wrap">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+ <div class="msg-badge-nav" id="msgBadgeNav"></div>
+ </div>Messages
  </a>
  <a class="nav-item" href="/tdoli-profile.html">
-  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
  </a>
 </nav>
 
@@ -210,45 +210,45 @@ function renderConvs(convs) {
  const count = document.getElementById('convCount');
 
  if (convs.length === 0) {
-  count.textContent = 'Aucune conversation';
-  list.innerHTML = `<div class="empty-state">
-   <div class="empty-icon">💬</div>
-   <div class="empty-title">Aucun message</div>
-   <div class="empty-sub">Tes conversations avec tes partenaires d'échange apparaîtront ici.</div>
-  </div>`;
-  return;
+ count.textContent = 'Aucune conversation';
+ list.innerHTML = `<div class="empty-state">
+ <div class="empty-icon"></div>
+ <div class="empty-title">Aucun message</div>
+ <div class="empty-sub">Tes conversations avec tes partenaires d'échange apparaîtront ici.</div>
+ </div>`;
+ return;
  }
 
  const totalUnread = convs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
  count.textContent = convs.length + ' conversation' + (convs.length > 1 ? 's' : '') +
-  (totalUnread > 0 ? ' · ' + totalUnread + ' non lu' + (totalUnread > 1 ? 's' : '') : '');
+ (totalUnread > 0 ? ' · ' + totalUnread + ' non lu' + (totalUnread > 1 ? 's' : '') : '');
 
  list.innerHTML = convs.map(c => {
-  const isUnread = c.unreadCount > 0;
-  const ini = getInitials(c.otherUsername);
-  const statusCls = c.dealStatus === 'completed' ? 'completed' : 'matched';
-  const statusLabel = c.dealStatus === 'completed' ? 'Terminé' : ' En cours';
-  const preview = c.lastMessage
-   ? (c.lastMessage.sender === email ? 'Vous : ' : '') + c.lastMessage.text.substring(0, 50) + (c.lastMessage.text.length > 50 ? '…' : '')
-   : 'Aucun message — Commence la conversation !';
+ const isUnread = c.unreadCount > 0;
+ const ini = getInitials(c.otherUsername);
+ const statusCls = c.dealStatus === 'completed' ? 'completed' : 'matched';
+ const statusLabel = c.dealStatus === 'completed' ? 'Terminé' : ' En cours';
+ const preview = c.lastMessage
+ ? (c.lastMessage.sender === email ? 'Vous : ' : '') + c.lastMessage.text.substring(0, 50) + (c.lastMessage.text.length > 50 ? '…' : '')
+ : 'Aucun message — Commence la conversation !';
 
-  return `<div class="conv-item ${isUnread ? 'unread' : ''}" onclick="openChat('${c.dealId}')">
-   <div class="conv-avatar">
-    ${ini}
-    ${c.isOnline ? '<div class="conv-avatar-online"></div>' : ''}
-   </div>
-   <div class="conv-body">
-    <div class="conv-top">
-     <div class="conv-name">${c.otherUsername}</div>
-     <div class="conv-time">${timeAgo(c.lastMessage?.createdAt)}</div>
-    </div>
-    <div class="conv-bottom">
-     <div class="conv-preview ${isUnread ? 'unread' : ''}">${preview}</div>
-     ${isUnread ? `<div class="conv-badge">${c.unreadCount}</div>` : ''}
-    </div>
-    <span class="conv-deal-tag ${statusCls}">${statusLabel} · ${c.dealCode}</span>
-   </div>
-  </div>`;
+ return `<div class="conv-item ${isUnread ? 'unread' : ''}" onclick="openChat('${c.dealId}')">
+ <div class="conv-avatar">
+ ${ini}
+ ${c.isOnline ? '<div class="conv-avatar-online"></div>' : ''}
+ </div>
+ <div class="conv-body">
+ <div class="conv-top">
+ <div class="conv-name">${c.otherUsername}</div>
+ <div class="conv-time">${timeAgo(c.lastMessage?.createdAt)}</div>
+ </div>
+ <div class="conv-bottom">
+ <div class="conv-preview ${isUnread ? 'unread' : ''}">${preview}</div>
+ ${isUnread ? `<div class="conv-badge">${c.unreadCount}</div>` : ''}
+ </div>
+ <span class="conv-deal-tag ${statusCls}">${statusLabel} · ${c.dealCode}</span>
+ </div>
+ </div>`;
  }).join('');
 }
 
@@ -256,9 +256,9 @@ function filterConvs(query) {
  if (!query.trim()) { renderConvs(allConvs); return; }
  const q = query.toLowerCase();
  const filtered = allConvs.filter(c =>
-  c.otherUsername?.toLowerCase().includes(q) ||
-  c.dealCode?.toLowerCase().includes(q) ||
-  c.lastMessage?.text?.toLowerCase().includes(q)
+ c.otherUsername?.toLowerCase().includes(q) ||
+ c.dealCode?.toLowerCase().includes(q) ||
+ c.lastMessage?.text?.toLowerCase().includes(q)
  );
  renderConvs(filtered);
 }
@@ -269,121 +269,121 @@ function openChat(dealId) {
 
 async function loadConversations() {
  try {
-  const res = await fetch(API + '/messages/conversations', {
-   headers: { 'Authorization': 'Bearer ' + token }
-  });
-  if (!res.ok) {
-   if (res.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
-   throw new Error('Erreur serveur');
-  }
-  const data = await res.json();
-  allConvs = Array.isArray(data) ? data : [];
-  renderConvs(allConvs);
+ const res = await fetch(API + '/messages/conversations', {
+ headers: { 'Authorization': 'Bearer ' + token }
+ });
+ if (!res.ok) {
+ if (res.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+ throw new Error('Erreur serveur');
+ }
+ const data = await res.json();
+ allConvs = Array.isArray(data) ? data : [];
+ renderConvs(allConvs);
 
-  // Badge nav
-  const totalUnread = allConvs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
-  const badge = document.getElementById('msgBadgeNav');
-  if (badge) {
-   if (totalUnread > 0) { badge.textContent = totalUnread > 9 ? '9+' : totalUnread; badge.classList.add('show'); }
-   else badge.classList.remove('show');
-  }
+ // Badge nav
+ const totalUnread = allConvs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
+ const badge = document.getElementById('msgBadgeNav');
+ if (badge) {
+ if (totalUnread > 0) { badge.textContent = totalUnread > 9 ? '9+' : totalUnread; badge.classList.add('show'); }
+ else badge.classList.remove('show');
+ }
  } catch(e) {
-  document.getElementById('convList').innerHTML = `<div class="empty-state">
-   <div class="empty-icon">️</div>
-   <div class="empty-title">Erreur de connexion</div>
-   <div class="empty-sub">Vérifie ta connexion internet.</div>
-  </div>`;
+ document.getElementById('convList').innerHTML = `<div class="empty-state">
+ <div class="empty-icon"></div>
+ <div class="empty-title">Erreur de connexion</div>
+ <div class="empty-sub">Vérifie ta connexion internet.</div>
+ </div>`;
  }
 }
 
 async function checkDeals() {
  try {
-  const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
-  const deals = await res.json();
-  if (Array.isArray(deals)) {
-   const active = deals.filter(d => d.status === 'matched').length;
-   const badge = document.getElementById('dealsBadge');
-   if (badge) { if (active > 0) { badge.textContent = active; badge.classList.add('show'); } else badge.classList.remove('show'); }
-  }
+ const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+ const deals = await res.json();
+ if (Array.isArray(deals)) {
+ const active = deals.filter(d => d.status === 'matched').length;
+ const badge = document.getElementById('dealsBadge');
+ if (badge) { if (active > 0) { badge.textContent = active; badge.classList.add('show'); } else badge.classList.remove('show'); }
+ }
  } catch(e) {}
 }
 
 loadConversations();
 checkDeals();
 
-// ── UX Fluidité ───────────────────────────────────────────────
+// UX Fluidité 
 
 // 1. Animation entrée de page
 document.body.classList.add('page-enter');
 
 // 2. Pull-to-refresh sur les pages avec feed/liste
 (function initPullToRefresh() {
-  let startY = 0, pulling = false;
-  const MIN_PULL = 80;
-  const indicator = document.createElement('div');
-  indicator.className = 'ptr-indicator';
-  indicator.textContent = 'Relâcher pour actualiser';
-  const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
-  if (!firstChild) return;
-  firstChild.parentNode.insertBefore(indicator, firstChild);
+ let startY = 0, pulling = false;
+ const MIN_PULL = 80;
+ const indicator = document.createElement('div');
+ indicator.className = 'ptr-indicator';
+ indicator.textContent = 'Relâcher pour actualiser';
+ const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
+ if (!firstChild) return;
+ firstChild.parentNode.insertBefore(indicator, firstChild);
 
-  document.addEventListener('touchstart', e => {
-    if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
-  }, { passive: true });
-  document.addEventListener('touchmove', e => {
-    if (!pulling) return;
-    const dist = e.touches[0].pageY - startY;
-    if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
-  }, { passive: true });
-  document.addEventListener('touchend', e => {
-    if (!pulling) return;
-    pulling = false;
-    const dist = e.changedTouches[0].pageY - startY;
-    indicator.classList.remove('active');
-    if (dist > MIN_PULL) {
-      indicator.classList.add('active');
-      indicator.textContent = 'Actualisation...';
-      setTimeout(() => { window.location.reload(); }, 500);
-    }
-  });
+ document.addEventListener('touchstart', e => {
+ if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
+ }, { passive: true });
+ document.addEventListener('touchmove', e => {
+ if (!pulling) return;
+ const dist = e.touches[0].pageY - startY;
+ if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
+ }, { passive: true });
+ document.addEventListener('touchend', e => {
+ if (!pulling) return;
+ pulling = false;
+ const dist = e.changedTouches[0].pageY - startY;
+ indicator.classList.remove('active');
+ if (dist > MIN_PULL) {
+ indicator.classList.add('active');
+ indicator.textContent = 'Actualisation...';
+ setTimeout(() => { window.location.reload(); }, 500);
+ }
+ });
 })();
 
 // 3. Swipe bas pour fermer les sheets
 (function initSwipeSheet() {
-  document.querySelectorAll('.sheet').forEach(sheet => {
-    let startY = 0;
-    sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
-    sheet.addEventListener('touchend', e => {
-      const dist = e.changedTouches[0].pageY - startY;
-      if (dist > 80) {
-        const overlay = sheet.closest('.overlay');
-        if (overlay) overlay.classList.remove('open');
-      }
-    }, { passive: true });
-  });
+ document.querySelectorAll('.sheet').forEach(sheet => {
+ let startY = 0;
+ sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
+ sheet.addEventListener('touchend', e => {
+ const dist = e.changedTouches[0].pageY - startY;
+ if (dist > 80) {
+ const overlay = sheet.closest('.overlay');
+ if (overlay) overlay.classList.remove('open');
+ }
+ }, { passive: true });
+ });
 })();
 
 // 4. Feedback copier avec vibration
 function copyWithFeedback(text, label) {
-  navigator.clipboard.writeText(text).then(() => {
-    if (navigator.vibrate) navigator.vibrate(50);
-    let el = document.querySelector('.copy-feedback');
-    if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
-    el.textContent = label || 'Copié';
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 1800);
-  });
+ navigator.clipboard.writeText(text).then(() => {
+ if (navigator.vibrate) navigator.vibrate(50);
+ let el = document.querySelector('.copy-feedback');
+ if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
+ el.textContent = label || 'Copié';
+ el.classList.add('show');
+ setTimeout(() => el.classList.remove('show'), 1800);
+ });
 }
 
 // 5. Auto-focus sur le premier input des sheets à l'ouverture
 document.querySelectorAll('.overlay').forEach(overlay => {
-  const observer = new MutationObserver(() => {
-    if (overlay.classList.contains('open')) {
-      const input = overlay.querySelector('input:not([type=hidden]), textarea');
-      if (input) setTimeout(() => input.focus(), 300);
-    }
-  });
-  observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+ const observer = new MutationObserver(() => {
+ if (overlay.classList.contains('open')) {
+ const input = overlay.querySelector('input:not([type=hidden]), textarea');
+ if (input) setTimeout(() => input.focus(), 300);
+ }
+ });
+ observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
 });
 
 </script>

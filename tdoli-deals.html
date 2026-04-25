@@ -7,13 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
-  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
-  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
-  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
-  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
-  --r:14px;
-  --shadow:0 2px 20px rgba(0,0,0,0.5);
+ --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+ --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --r:14px;
+ --shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
@@ -170,7 +170,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .method-fields{display:none;}.method-fields.show{display:block;}
 
 
-/* ── UX Fluidité globale ─────────────────────────────────────── */
+/* UX Fluidité globale */
 
 /* Skeleton loader */
 .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--card) 50%,var(--surface) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.4s infinite;}
@@ -229,12 +229,12 @@ if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.s
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
 firebase.initializeApp({
-  apiKey:            "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
-  authDomain:        "tdoli-c47a1.firebaseapp.com",
-  projectId:         "tdoli-c47a1",
-  storageBucket:     "tdoli-c47a1.appspot.com",
-  messagingSenderId: "416651280494",
-  appId:             "1:416651280494:web:de03eb6a47204031f1267f"
+ apiKey: "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
+ authDomain: "tdoli-c47a1.firebaseapp.com",
+ projectId: "tdoli-c47a1",
+ storageBucket: "tdoli-c47a1.appspot.com",
+ messagingSenderId: "416651280494",
+ appId: "1:416651280494:web:de03eb6a47204031f1267f"
 });
 </script>
 <script src="/fcm-init.js"></script>
@@ -242,147 +242,147 @@ firebase.initializeApp({
 <body>
 <div class="bg-mesh"></div>
 <div class="topbar">
-  <div class="topbar-left">
-    <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a>
-  </div>
-  <div class="topbar-center"><span class="topbar-title">Mes Deals</span></div>
-  <div class="topbar-right">
-    <button class="share-btn" onclick="shareApp()">🎁 Parrainer</button>
-  </div>
+ <div class="topbar-left">
+ <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a>
+ </div>
+ <div class="topbar-center"><span class="topbar-title">Mes Deals</span></div>
+ <div class="topbar-right">
+ <button class="share-btn" onclick="shareApp()"> Parrainer</button>
+ </div>
 </div>
 
 <div class="filter-tabs">
-  <div class="filter-tab active" onclick="setFilter('all',this)">Tous</div>
-  <div class="filter-tab" onclick="setFilter('matched',this)">En cours</div>
-  <div class="filter-tab" onclick="setFilter('completed',this)">Complétés</div>
-  <div class="filter-tab" onclick="setFilter('dispute',this)">Litiges</div>
+ <div class="filter-tab active" onclick="setFilter('all',this)">Tous</div>
+ <div class="filter-tab" onclick="setFilter('matched',this)">En cours</div>
+ <div class="filter-tab" onclick="setFilter('completed',this)">Complétés</div>
+ <div class="filter-tab" onclick="setFilter('dispute',this)">Litiges</div>
 </div>
 
 <div class="content"><div id="dealsList"><div class="loading-wrap"><div class="loader"></div></div></div></div>
 
 <nav class="bottom-nav">
-  <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
-  <a class="nav-item active" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
-  <a class="nav-item" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
+ <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
+ <a class="nav-item active" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
+ <a class="nav-item" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
 </nav>
 
 <!-- Sheet détail deal -->
 <div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')">
-  <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
+ <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
 </div>
 
 <!-- Sheet preuve -->
 <div class="overlay" id="proofOverlay" onclick="closeOnOverlay(event,'proofOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Preuve de paiement</div>
-    <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Fournis une capture d'écran ou un reçu.</div>
-    <div style="background:rgba(252,209,22,0.04);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--text-3);line-height:1.7;">
-      ✓ Capture écran virement bancaire<br>✓ Reçu Airtel Money / Moov / Orange<br>✓ Confirmation PayPal / Virement
-    </div>
-    <div onclick="document.getElementById('proof-file-input').click()" style="width:100%;padding:20px;background:var(--surface);border:2px dashed var(--border-active);border-radius:12px;text-align:center;cursor:pointer;margin-bottom:12px;" id="proof-upload-area">
-      <div style="font-size:28px;margin-bottom:8px;">📎</div>
-      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--green);">Ajouter une preuve</div>
-      <div style="font-size:11px;color:var(--text-3);margin-top:4px;">Photo ou PDF — max 10MB</div>
-    </div>
-    <input type="file" id="proof-file-input" accept="image/*,.pdf" style="display:none" onchange="previewProof(this)">
-    <div id="proof-preview-container"></div>
-    <button class="btn-primary" id="btn-submit-proof" onclick="submitProof()" disabled>Confirmer la réception</button>
-    <button class="btn-cancel" onclick="closeSheet('proofOverlay')">Annuler</button>
-    <div class="msg" id="msg-proof"></div>
-  </div>
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Preuve de paiement</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Fournis une capture d'écran ou un reçu.</div>
+ <div style="background:rgba(252,209,22,0.04);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--text-3);line-height:1.7;">
+ Capture écran virement bancaire<br> Reçu Airtel Money / Moov / Orange<br> Confirmation PayPal / Virement
+ </div>
+ <div onclick="document.getElementById('proof-file-input').click()" style="width:100%;padding:20px;background:var(--surface);border:2px dashed var(--border-active);border-radius:12px;text-align:center;cursor:pointer;margin-bottom:12px;" id="proof-upload-area">
+ <div style="font-size:28px;margin-bottom:8px;"></div>
+ <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--green);">Ajouter une preuve</div>
+ <div style="font-size:11px;color:var(--text-3);margin-top:4px;">Photo ou PDF — max 10MB</div>
+ </div>
+ <input type="file" id="proof-file-input" accept="image/*,.pdf" style="display:none" onchange="previewProof(this)">
+ <div id="proof-preview-container"></div>
+ <button class="btn-primary" id="btn-submit-proof" onclick="submitProof()" disabled>Confirmer la réception</button>
+ <button class="btn-cancel" onclick="closeSheet('proofOverlay')">Annuler</button>
+ <div class="msg" id="msg-proof"></div>
+ </div>
 </div>
 
 <!-- Sheet litige -->
 <div class="overlay" id="disputeOverlay" onclick="closeOnOverlay(event,'disputeOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;color:var(--red);">Signaler un litige</div>
-    <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;">Décris le problème et joins des justificatifs.</div>
-    <div class="form-group">
-      <label class="form-label">Description</label>
-      <textarea class="form-textarea" id="dispute-description" placeholder="Ex: J'ai envoyé les fonds mais l'autre partie ne confirme pas..."></textarea>
-    </div>
-    <label class="form-label">Justificatifs (optionnel)</label>
-    <div class="upload-area" onclick="document.getElementById('dispute-files').click()">
-      <div style="font-size:24px;margin-bottom:6px;">📎</div>
-      <div style="font-size:13px;color:var(--text-3);">Ajouter des preuves</div>
-    </div>
-    <input type="file" id="dispute-files" multiple accept="image/*,.pdf" style="display:none" onchange="previewFiles(this)">
-    <div class="files-preview" id="files-preview"></div>
-    <button class="btn-primary dispute-btn" id="btn-submit-dispute" onclick="submitDispute()">Envoyer le litige</button>
-    <button class="btn-cancel" onclick="closeSheet('disputeOverlay')">Annuler</button>
-    <div class="msg" id="msg-dispute"></div>
-  </div>
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;color:var(--red);">Signaler un litige</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;">Décris le problème et joins des justificatifs.</div>
+ <div class="form-group">
+ <label class="form-label">Description</label>
+ <textarea class="form-textarea" id="dispute-description" placeholder="Ex: J'ai envoyé les fonds mais l'autre partie ne confirme pas..."></textarea>
+ </div>
+ <label class="form-label">Justificatifs (optionnel)</label>
+ <div class="upload-area" onclick="document.getElementById('dispute-files').click()">
+ <div style="font-size:24px;margin-bottom:6px;"></div>
+ <div style="font-size:13px;color:var(--text-3);">Ajouter des preuves</div>
+ </div>
+ <input type="file" id="dispute-files" multiple accept="image/*,.pdf" style="display:none" onchange="previewFiles(this)">
+ <div class="files-preview" id="files-preview"></div>
+ <button class="btn-primary dispute-btn" id="btn-submit-dispute" onclick="submitDispute()">Envoyer le litige</button>
+ <button class="btn-cancel" onclick="closeSheet('disputeOverlay')">Annuler</button>
+ <div class="msg" id="msg-dispute"></div>
+ </div>
 </div>
 
 
 <!-- Sheet infos de paiement -->
 <div class="overlay" id="paymentInfoOverlay" onclick="closeOnOverlay(event,'paymentInfoOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Infos de paiement</div>
-    <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Renseigne tes coordonnées pour que l'autre partie sache où envoyer les fonds.</div>
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Infos de paiement</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Renseigne tes coordonnées pour que l'autre partie sache où envoyer les fonds.</div>
 
-    <div class="method-tabs">
-      <div class="method-tab active" onclick="setMethod('mobilemoney',this)">📱 Mobile Money</div>
-      <div class="method-tab" onclick="setMethod('virement',this)">🏦 Virement</div>
-      <div class="method-tab" onclick="setMethod('paypal',this)">💳 PayPal</div>
-    </div>
+ <div class="method-tabs">
+ <div class="method-tab active" onclick="setMethod('mobilemoney',this)"> Mobile Money</div>
+ <div class="method-tab" onclick="setMethod('virement',this)"> Virement</div>
+ <div class="method-tab" onclick="setMethod('paypal',this)"> PayPal</div>
+ </div>
 
-    <!-- Mobile Money -->
-    <div class="method-fields show" id="fields-mobilemoney">
-      <div class="form-group">
-        <label class="form-label">Nom complet</label>
-        <input class="form-input" type="text" id="pi-name-mm" placeholder="Jean Dupont">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Numéro Mobile Money</label>
-        <input class="form-input" type="tel" id="pi-phone" placeholder="+241 06 00 00 00" inputmode="tel">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Opérateur</label>
-        <input class="form-input" type="text" id="pi-operator" placeholder="Airtel Money / Moov / Orange">
-      </div>
-    </div>
+ <!-- Mobile Money -->
+ <div class="method-fields show" id="fields-mobilemoney">
+ <div class="form-group">
+ <label class="form-label">Nom complet</label>
+ <input class="form-input" type="text" id="pi-name-mm" placeholder="Jean Dupont">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Numéro Mobile Money</label>
+ <input class="form-input" type="tel" id="pi-phone" placeholder="+241 06 00 00 00" inputmode="tel">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Opérateur</label>
+ <input class="form-input" type="text" id="pi-operator" placeholder="Airtel Money / Moov / Orange">
+ </div>
+ </div>
 
-    <!-- Virement bancaire -->
-    <div class="method-fields" id="fields-virement">
-      <div class="form-group">
-        <label class="form-label">Nom complet</label>
-        <input class="form-input" type="text" id="pi-name-vir" placeholder="Jean Dupont">
-      </div>
-      <div class="form-group">
-        <label class="form-label">IBAN</label>
-        <input class="form-input" type="text" id="pi-iban" placeholder="FR76 3000 6000 0112 3456 7890 189">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Banque</label>
-        <input class="form-input" type="text" id="pi-bank" placeholder="BNP Paribas, Société Générale…">
-      </div>
-    </div>
+ <!-- Virement bancaire -->
+ <div class="method-fields" id="fields-virement">
+ <div class="form-group">
+ <label class="form-label">Nom complet</label>
+ <input class="form-input" type="text" id="pi-name-vir" placeholder="Jean Dupont">
+ </div>
+ <div class="form-group">
+ <label class="form-label">IBAN</label>
+ <input class="form-input" type="text" id="pi-iban" placeholder="FR76 3000 6000 0112 3456 7890 189">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Banque</label>
+ <input class="form-input" type="text" id="pi-bank" placeholder="BNP Paribas, Société Générale…">
+ </div>
+ </div>
 
-    <!-- PayPal -->
-    <div class="method-fields" id="fields-paypal">
-      <div class="form-group">
-        <label class="form-label">Email PayPal</label>
-        <input class="form-input" type="email" id="pi-paypal" placeholder="ton@email.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Nom complet</label>
-        <input class="form-input" type="text" id="pi-name-pp" placeholder="Jean Dupont">
-      </div>
-    </div>
+ <!-- PayPal -->
+ <div class="method-fields" id="fields-paypal">
+ <div class="form-group">
+ <label class="form-label">Email PayPal</label>
+ <input class="form-input" type="email" id="pi-paypal" placeholder="ton@email.com">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Nom complet</label>
+ <input class="form-input" type="text" id="pi-name-pp" placeholder="Jean Dupont">
+ </div>
+ </div>
 
-    <div class="form-group">
-      <label class="form-label">Note (optionnel)</label>
-      <input class="form-input" type="text" id="pi-note" placeholder="Ex: Envoyer entre 9h et 18h">
-    </div>
+ <div class="form-group">
+ <label class="form-label">Note (optionnel)</label>
+ <input class="form-input" type="text" id="pi-note" placeholder="Ex: Envoyer entre 9h et 18h">
+ </div>
 
-    <button class="btn-primary" id="btn-save-payment" onclick="savePaymentInfo()">Enregistrer</button>
-    <button class="btn-cancel" onclick="closeSheet('paymentInfoOverlay')">Plus tard</button>
-    <div class="msg" id="msg-payment"></div>
-  </div>
+ <button class="btn-primary" id="btn-save-payment" onclick="savePaymentInfo()">Enregistrer</button>
+ <button class="btn-cancel" onclick="closeSheet('paymentInfoOverlay')">Plus tard</button>
+ <div class="msg" id="msg-payment"></div>
+ </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -395,351 +395,351 @@ const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] 
 
 if (!token) { window.location.replace('/tdoli-auth.html'); }
 
-// ── Avatar ─────────────────────────────────────────────────────
+// Avatar 
 function getInitials(name) {
-  const p = (name||'?').trim().split(' ').filter(x=>x.length>0);
-  return p.length>=2 ? (p[0][0]+p[p.length-1][0]).toUpperCase() : (name||'??').substring(0,2).toUpperCase();
+ const p = (name||'?').trim().split(' ').filter(x=>x.length>0);
+ return p.length>=2 ? (p[0][0]+p[p.length-1][0]).toUpperCase() : (name||'??').substring(0,2).toUpperCase();
 }
 (function(){
-  const btn = document.getElementById('avatarBtn');
-  const av = localStorage.getItem('tdoli_avatar');
-  const ini = getInitials(username);
-  if(btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
+ const btn = document.getElementById('avatarBtn');
+ const av = localStorage.getItem('tdoli_avatar');
+ const ini = getInitials(username);
+ if(btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
 })();
 
 function shareApp() {
-  const msg = '🦜 TDOLI\nhttps://tdoli-frontend.pages.dev';
-  if(navigator.share) navigator.share({title:'TDOLI',url:'https://tdoli-frontend.pages.dev'}).catch(()=>{});
-  else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! 🎁','#fcd116')).catch(()=>{});
+ const msg = ' TDOLI\nhttps://tdoli-frontend.pages.dev';
+ if(navigator.share) navigator.share({title:'TDOLI',url:'https://tdoli-frontend.pages.dev'}).catch(()=>{});
+ else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#fcd116')).catch(()=>{});
 }
 
-// ── Helpers ─────────────────────────────────────────────────────
+// Helpers 
 let allDeals=[], currentFilter='all', selectedRatings={}, ratedDeals=new Set();
 let currentDisputeId=null, currentProofDealId=null, selectedFiles=[], proofFile=null, proofUrl=null;
 
 // FIX: safeJson — évite "Unexpected token '<'" quand le backend renvoie HTML
 async function safeJson(res) {
-  const text = await res.text();
-  try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
-  catch(e) { return { ok: false, status: res.status, data: null }; }
+ const text = await res.text();
+ try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+ catch(e) { return { ok: false, status: res.status, data: null }; }
 }
 
 function showToast(msg, color) {
-  const t = document.getElementById('toast');
-  t.textContent=msg; t.style.background=color||'var(--green-dim)';
-  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
+ const t = document.getElementById('toast');
+ t.textContent=msg; t.style.background=color||'var(--green-dim)';
+ t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
 }
 function showMsg(id, text) { const el=document.getElementById(id); el.className='msg error show'; el.textContent=text; }
 function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
 function closeOnOverlay(e,id) { if(e.target===document.getElementById(id)) closeSheet(id); }
 function timeAgo(d) {
-  if(!d) return '';
-  const diff=Date.now()-new Date(d).getTime(), m=Math.floor(diff/60000);
-  if(m<1) return "À l'instant"; if(m<60) return m+' min';
-  const h=Math.floor(m/60); if(h<24) return h+'h'; return Math.floor(h/24)+'j';
+ if(!d) return '';
+ const diff=Date.now()-new Date(d).getTime(), m=Math.floor(diff/60000);
+ if(m<1) return "À l'instant"; if(m<60) return m+' min';
+ const h=Math.floor(m/60); if(h<24) return h+'h'; return Math.floor(h/24)+'j';
 }
 function convertToEur(amount,currency){const r={EUR:1,XAF:1/655.957,USD:0.92,CAD:0.68};return amount*(r[currency]||1);}
 
 function getStatusLabel(s) {
-  if(s==='matched') return {cls:'matched',label:'En cours ●'};
-  if(s==='completed') return {cls:'completed',label:'Complété ✓'};
-  if(s==='dispute') return {cls:'dispute',label:'Litige ⚠'};
-  return {cls:'',label:s||'?'};
+ if(s==='matched') return {cls:'matched',label:'En cours '};
+ if(s==='completed') return {cls:'completed',label:'Complété '};
+ if(s==='dispute') return {cls:'dispute',label:'Litige '};
+ return {cls:'',label:s||'?'};
 }
 
 function renderDeals(data) {
-  if(!data.length) {
-    document.getElementById('dealsList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce depuis le Feed pour démarrer un deal.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
-    return;
-  }
-  const list = document.createElement('div');
-  list.className = 'deal-list';
-  data.forEach((d,i) => {
-    const other = d.otherUsername || '?';
-    const ini = getInitials(other);
-    const st = getStatusLabel(d.status);
-    const myAmt = d.myAmount || d.amount || 0;
-    const myCur = d.myCurrency || d.currency || '';
-    const iConfirmed = d.iConfirmed || false;
-    const ref = d.dealCode || ('#' + d._id.slice(-6).toUpperCase());
-    const actionHtml = d.status==='matched'
-      ? (iConfirmed ? '<span style="font-size:10px;color:var(--green)">✓ Envoyé · En attente</span>' : '<span class="deal-action-hint">Action requise →</span>')
-      : '<span style="font-size:10px;color:var(--text-3)">'+timeAgo(d.updatedAt||d.createdAt)+'</span>';
+ if(!data.length) {
+ document.getElementById('dealsList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce depuis le Feed pour démarrer un deal.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
+ return;
+ }
+ const list = document.createElement('div');
+ list.className = 'deal-list';
+ data.forEach((d,i) => {
+ const other = d.otherUsername || '?';
+ const ini = getInitials(other);
+ const st = getStatusLabel(d.status);
+ const myAmt = d.myAmount || d.amount || 0;
+ const myCur = d.myCurrency || d.currency || '';
+ const iConfirmed = d.iConfirmed || false;
+ const ref = d.dealCode || ('#' + d._id.slice(-6).toUpperCase());
+ const actionHtml = d.status==='matched'
+ ? (iConfirmed ? '<span style="font-size:10px;color:var(--green)"> Envoyé · En attente</span>' : '<span class="deal-action-hint">Action requise →</span>')
+ : '<span style="font-size:10px;color:var(--text-3)">'+timeAgo(d.updatedAt||d.createdAt)+'</span>';
 
-    const div = document.createElement('div');
-    div.className = 'deal-item ' + d.status;
-    div.style.animationDelay = (i*0.04) + 's';
-    div.dataset.id = d._id;
-    div.addEventListener('click', () => openDeal(d._id));
-    div.innerHTML =
-      '<div class="deal-avatar">'+ini+'</div>'+
-      '<div class="deal-body">'+
-        '<div class="deal-top">'+
-          '<span class="deal-ref">'+ref+'</span>'+
-          '<span class="deal-badge-sm '+st.cls+'">'+st.label+'</span>'+
-        '</div>'+
-        '<div class="deal-mid">'+
-          '<span class="deal-amount-sm">'+Number(myAmt).toLocaleString('fr-FR')+' '+myCur+'</span>'+
-          '<span class="deal-other">'+other+'</span>'+
-        '</div>'+
-        '<div class="deal-bottom">'+
-          '<span class="deal-dir">'+((d.fromCountry||'?')+' ⇄ '+(d.toCountry||'?'))+'</span>'+
-          actionHtml+
-        '</div>'+
-      '</div>';
-    list.appendChild(div);
-  });
-  document.getElementById('dealsList').innerHTML = '';
-  document.getElementById('dealsList').appendChild(list);
+ const div = document.createElement('div');
+ div.className = 'deal-item ' + d.status;
+ div.style.animationDelay = (i*0.04) + 's';
+ div.dataset.id = d._id;
+ div.addEventListener('click', () => openDeal(d._id));
+ div.innerHTML =
+ '<div class="deal-avatar">'+ini+'</div>'+
+ '<div class="deal-body">'+
+ '<div class="deal-top">'+
+ '<span class="deal-ref">'+ref+'</span>'+
+ '<span class="deal-badge-sm '+st.cls+'">'+st.label+'</span>'+
+ '</div>'+
+ '<div class="deal-mid">'+
+ '<span class="deal-amount-sm">'+Number(myAmt).toLocaleString('fr-FR')+' '+myCur+'</span>'+
+ '<span class="deal-other">'+other+'</span>'+
+ '</div>'+
+ '<div class="deal-bottom">'+
+ '<span class="deal-dir">'+((d.fromCountry||'?')+' '+(d.toCountry||'?'))+'</span>'+
+ actionHtml+
+ '</div>'+
+ '</div>';
+ list.appendChild(div);
+ });
+ document.getElementById('dealsList').innerHTML = '';
+ document.getElementById('dealsList').appendChild(list);
 }
 
 
 function setFilter(f, el) {
-  currentFilter=f;
-  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  const filtered = f==='all' ? allDeals : allDeals.filter(d=>d.status===f);
-  renderDeals(filtered);
+ currentFilter=f;
+ document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+ el.classList.add('active');
+ const filtered = f==='all' ? allDeals : allDeals.filter(d=>d.status===f);
+ renderDeals(filtered);
 }
 
 // FIX: loadDeals avec safeJson + stop spinner sur erreur
 async function loadDeals(silent) {
-  if(!silent) document.getElementById('dealsList').innerHTML='<div class="loading-wrap"><div class="loader"></div></div>';
-  try {
-    const r = await safeJson(await fetch(API+'/deals/mine', {headers:{'Authorization':'Bearer '+token}}));
-    if(r.status===401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
-    if(!r.ok || !r.data) {
-      document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce pour démarrer.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
-      allDeals=[];
-      return;
-    }
-    // Accepter tableau ou objet
-    allDeals = Array.isArray(r.data) ? r.data : [];
-    if(allDeals.length > 0) console.log('[DEBUG] premier deal:', JSON.stringify(allDeals[0], null, 2));
-    if(allDeals.length === 0) {
-      document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce pour démarrer.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
-      return;
-    }
-    const filtered = currentFilter==='all' ? allDeals : allDeals.filter(d=>d.status===currentFilter);
-    try {
-      renderDeals(filtered);
-    } catch(renderErr) {
-      console.error('[renderDeals]', renderErr);
-      // Affichage de secours si renderDeals plante
-      const fallbackList = document.createElement('div');
-      fallbackList.className = 'deal-list';
-      allDeals.forEach(d => {
-        const st = getStatusLabel(d.status);
-        const amt = d.myAmount || d.amount || 0;
-        const cur = d.myCurrency || d.currency || '';
-        const other = d.otherUsername || d.receiverEmail?.split('@')[0] || '?';
-        const el = document.createElement('div');
-        el.className = 'deal-item ' + d.status;
-        el.style.padding = '14px 16px';
-        el.addEventListener('click', () => openDeal(d._id));
-        el.innerHTML =
-          '<div class="deal-body">' +
-            '<div class="deal-top"><span class="deal-ref">' + (d.dealCode || '#' + d._id.slice(-6).toUpperCase()) + '</span><span class="deal-badge-sm ' + st.cls + '">' + st.label + '</span></div>' +
-            '<div class="deal-mid"><span class="deal-amount-sm">' + Number(amt).toLocaleString('fr-FR') + ' ' + cur + '</span><span class="deal-other"> \xB7 ' + other + '</span></div>' +
-          '</div>';
-        fallbackList.appendChild(el);
-      });
-      document.getElementById('dealsList').innerHTML = '';
-      document.getElementById('dealsList').appendChild(fallbackList);
-    }
-  } catch(e) {
-    document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Erreur réseau</div><div class="empty-sub">'+e.message+'</div></div>';
-  }
+ if(!silent) document.getElementById('dealsList').innerHTML='<div class="loading-wrap"><div class="loader"></div></div>';
+ try {
+ const r = await safeJson(await fetch(API+'/deals/mine', {headers:{'Authorization':'Bearer '+token}}));
+ if(r.status===401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+ if(!r.ok || !r.data) {
+ document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce pour démarrer.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
+ allDeals=[];
+ return;
+ }
+ // Accepter tableau ou objet
+ allDeals = Array.isArray(r.data) ? r.data : [];
+ if(allDeals.length > 0) console.log('[DEBUG] premier deal:', JSON.stringify(allDeals[0], null, 2));
+ if(allDeals.length === 0) {
+ document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Aucun deal</div><div class="empty-sub">Matche une annonce pour démarrer.</div><a href="/tdoli-feed.html" class="empty-cta">Voir le Feed →</a></div>';
+ return;
+ }
+ const filtered = currentFilter==='all' ? allDeals : allDeals.filter(d=>d.status===currentFilter);
+ try {
+ renderDeals(filtered);
+ } catch(renderErr) {
+ console.error('[renderDeals]', renderErr);
+ // Affichage de secours si renderDeals plante
+ const fallbackList = document.createElement('div');
+ fallbackList.className = 'deal-list';
+ allDeals.forEach(d => {
+ const st = getStatusLabel(d.status);
+ const amt = d.myAmount || d.amount || 0;
+ const cur = d.myCurrency || d.currency || '';
+ const other = d.otherUsername || d.receiverEmail?.split('@')[0] || '?';
+ const el = document.createElement('div');
+ el.className = 'deal-item ' + d.status;
+ el.style.padding = '14px 16px';
+ el.addEventListener('click', () => openDeal(d._id));
+ el.innerHTML =
+ '<div class="deal-body">' +
+ '<div class="deal-top"><span class="deal-ref">' + (d.dealCode || '#' + d._id.slice(-6).toUpperCase()) + '</span><span class="deal-badge-sm ' + st.cls + '">' + st.label + '</span></div>' +
+ '<div class="deal-mid"><span class="deal-amount-sm">' + Number(amt).toLocaleString('fr-FR') + ' ' + cur + '</span><span class="deal-other"> \xB7 ' + other + '</span></div>' +
+ '</div>';
+ fallbackList.appendChild(el);
+ });
+ document.getElementById('dealsList').innerHTML = '';
+ document.getElementById('dealsList').appendChild(fallbackList);
+ }
+ } catch(e) {
+ document.getElementById('dealsList').innerHTML='<div class="empty-state"><div class="empty-title">Erreur réseau</div><div class="empty-sub">'+e.message+'</div></div>';
+ }
 }
 
 function openDeal(id) {
-  const d = allDeals.find(x=>x._id===id); if(!d) return;
-  const isSender = d.sender === email;
-  const otherName = d.otherUsername || '?';
-  const myName = localStorage.getItem('tdoli_username') || email?.split('@')[0] || '?';
-  const st = getStatusLabel(d.status);
-  const amount = d.myAmount || d.amount || 0;
-  const currency = d.myCurrency || d.currency || '';
-  const otherAmount = d.otherAmount || d.matchedAmount || 0;
-  const otherCurrency = d.otherCurrency || d.matchedCurrency || '';
-  const eur = convertToEur(amount, currency);
-  const euroLabel = currency!=='EUR' ? '≈ '+eur.toFixed(0)+' EUR' : '';
+ const d = allDeals.find(x=>x._id===id); if(!d) return;
+ const isSender = d.sender === email;
+ const otherName = d.otherUsername || '?';
+ const myName = localStorage.getItem('tdoli_username') || email?.split('@')[0] || '?';
+ const st = getStatusLabel(d.status);
+ const amount = d.myAmount || d.amount || 0;
+ const currency = d.myCurrency || d.currency || '';
+ const otherAmount = d.otherAmount || d.matchedAmount || 0;
+ const otherCurrency = d.otherCurrency || d.matchedCurrency || '';
+ const eur = convertToEur(amount, currency);
+ const euroLabel = currency!=='EUR' ? ' '+eur.toFixed(0)+' EUR' : '';
 
-  const iConfirmed = isSender ? d.confirmedBySender : d.confirmedByReceiver;
-  const otherConfirmed = isSender ? d.confirmedByReceiver : d.confirmedBySender;
+ const iConfirmed = isSender ? d.confirmedBySender : d.confirmedByReceiver;
+ const otherConfirmed = isSender ? d.confirmedByReceiver : d.confirmedBySender;
 
-  // Code TDL
-  const tdlCode = d.dealCode || 'En attente';
-  const tdlHtml = '<div class="tdl-code-box"><div><div class="tdl-code-label">Code du deal</div><div class="tdl-code-val">'+tdlCode+'</div></div><button class="tdl-copy-btn" data-code="'+tdlCode+'" onclick="copyCode(this.dataset.code)">📋 Copier</button></div>';
+ // Code TDL
+ const tdlCode = d.dealCode || 'En attente';
+ const tdlHtml = '<div class="tdl-code-box"><div><div class="tdl-code-label">Code du deal</div><div class="tdl-code-val">'+tdlCode+'</div></div><button class="tdl-copy-btn" data-code="'+tdlCode+'" onclick="copyCode(this.dataset.code)"> Copier</button></div>';
 
-  // Stepper
-  const stepHtml = '<div class="stepper">' + [
-    {label:'Match', done:true},
-    {label:'J\u2019envoie', done:iConfirmed||d.status==='completed', active:!iConfirmed&&d.status==='matched'},
-    {label:'Autre', done:otherConfirmed||d.status==='completed', active:!otherConfirmed&&d.status==='matched'},
-    {label:'Terminé', done:d.status==='completed'}
-  ].map((s,j)=>'<div class="step '+(s.done?'done':s.active?'active':'')+'"><div class="step-dot '+(s.done?'done':s.active?'active':'pending')+'">'+(s.done?'✓':j+1)+'</div><div class="step-label">'+s.label+'</div></div>').join('') + '</div>';
+ // Stepper
+ const stepHtml = '<div class="stepper">' + [
+ {label:'Match', done:true},
+ {label:'J\u2019envoie', done:iConfirmed||d.status==='completed', active:!iConfirmed&&d.status==='matched'},
+ {label:'Autre', done:otherConfirmed||d.status==='completed', active:!otherConfirmed&&d.status==='matched'},
+ {label:'Terminé', done:d.status==='completed'}
+ ].map((s,j)=>'<div class="step '+(s.done?'done':s.active?'active':'')+'"><div class="step-dot '+(s.done?'done':s.active?'active':'pending')+'">'+(s.done?'':j+1)+'</div><div class="step-label">'+s.label+'</div></div>').join('') + '</div>';
 
-  // Infos bénéficiaire + instruction
-  const myPayInfo = isSender ? d.senderPaymentInfo : d.receiverPaymentInfo;
-  const otherPayInfo = isSender ? d.receiverPaymentInfo : d.senderPaymentInfo;
-  const otherInfoFilled = otherPayInfo && (otherPayInfo.name || otherPayInfo.phone || otherPayInfo.iban || otherPayInfo.paypal);
-  const myInfoFilled = myPayInfo && (myPayInfo.name || myPayInfo.phone || myPayInfo.iban || myPayInfo.paypal);
+ // Infos bénéficiaire + instruction
+ const myPayInfo = isSender ? d.senderPaymentInfo : d.receiverPaymentInfo;
+ const otherPayInfo = isSender ? d.receiverPaymentInfo : d.senderPaymentInfo;
+ const otherInfoFilled = otherPayInfo && (otherPayInfo.name || otherPayInfo.phone || otherPayInfo.iban || otherPayInfo.paypal);
+ const myInfoFilled = myPayInfo && (myPayInfo.name || myPayInfo.phone || myPayInfo.iban || myPayInfo.paypal);
 
-  const otherInfoHtml = otherInfoFilled
-    ? renderPaymentInfo(otherPayInfo, '📍 Envoyer à')
-    : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">⏳ En attente des coordonnées de l&#39;autre partie</div>';
+ const otherInfoHtml = otherInfoFilled
+ ? renderPaymentInfo(otherPayInfo, ' Envoyer à')
+ : '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);"> En attente des coordonnées de l&#39;autre partie</div>';
 
-  const myInfoHtml = myInfoFilled
-    ? renderPaymentInfo(myPayInfo, '✅ Mon bénéficiaire')
-    : '';
+ const myInfoHtml = myInfoFilled
+ ? renderPaymentInfo(myPayInfo, ' Mon bénéficiaire')
+ : '';
 
-  // OCR résultat
-  const myOcr = isSender ? d.ocrSender : d.ocrReceiver;
-  let ocrHtml = '';
-  if (myOcr && myOcr.reason) {
-    const ocrCls = myOcr.validated ? 'validated' : myOcr.score >= 30 ? 'pending' : 'failed';
-    const ocrIcon = myOcr.validated ? '✅' : myOcr.score >= 30 ? '⚠️' : '❌';
-    let checksHtml = '';
-    if (myOcr.checks) {
-      if (myOcr.checks.nom !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.nom?'ok':'ko')+'">Nom '+(myOcr.checks.nom?'✓':'✗')+'</span>';
-      if (myOcr.checks.phone !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.phone?'ok':'ko')+'">Téléphone '+(myOcr.checks.phone?'✓':'✗')+'</span>';
-      if (myOcr.checks.iban !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.iban?'ok':'ko')+'">IBAN '+(myOcr.checks.iban?'✓':'✗')+'</span>';
-      if (myOcr.checks.montant !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.montant?'ok':'ko')+'">Montant '+(myOcr.checks.montant?'✓':'✗')+'</span>';
-    }
-    ocrHtml = '<div class="ocr-result '+ocrCls+'">'+ocrIcon+' '+myOcr.reason+'<span class="ocr-score">'+myOcr.score+'%</span><div class="ocr-checks">'+checksHtml+'</div></div>';
-  }
+ // OCR résultat
+ const myOcr = isSender ? d.ocrSender : d.ocrReceiver;
+ let ocrHtml = '';
+ if (myOcr && myOcr.reason) {
+ const ocrCls = myOcr.validated ? 'validated' : myOcr.score >= 30 ? 'pending' : 'failed';
+ const ocrIcon = myOcr.validated ? '' : myOcr.score >= 30 ? '' : '';
+ let checksHtml = '';
+ if (myOcr.checks) {
+ if (myOcr.checks.nom !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.nom?'ok':'ko')+'">Nom '+(myOcr.checks.nom?'':'')+'</span>';
+ if (myOcr.checks.phone !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.phone?'ok':'ko')+'">Téléphone '+(myOcr.checks.phone?'':'')+'</span>';
+ if (myOcr.checks.iban !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.iban?'ok':'ko')+'">IBAN '+(myOcr.checks.iban?'':'')+'</span>';
+ if (myOcr.checks.montant !== undefined) checksHtml += '<span class="ocr-check '+(myOcr.checks.montant?'ok':'ko')+'">Montant '+(myOcr.checks.montant?'':'')+'</span>';
+ }
+ ocrHtml = '<div class="ocr-result '+ocrCls+'">'+ocrIcon+' '+myOcr.reason+'<span class="ocr-score">'+myOcr.score+'%</span><div class="ocr-checks">'+checksHtml+'</div></div>';
+ }
 
-  let instructionHtml = '';
-  if(d.status==='matched') {
-    instructionHtml = '<div class="instruction-box"><div class="instruction-title">⏳ ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>'
-      + otherInfoHtml + myInfoHtml;
-  } else if(d.status==='completed') {
-    instructionHtml = '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);">✓ Deal complété avec succès !</div>';
-  } else if(d.status==='dispute') {
-    instructionHtml = '<div style="background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);">⚠ Litige en cours de traitement.</div>';
-  }
+ let instructionHtml = '';
+ if(d.status==='matched') {
+ instructionHtml = '<div class="instruction-box"><div class="instruction-title"> ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>'
+ + otherInfoHtml + myInfoHtml;
+ } else if(d.status==='completed') {
+ instructionHtml = '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);"> Deal complété avec succès !</div>';
+ } else if(d.status==='dispute') {
+ instructionHtml = '<div style="background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);"> Litige en cours de traitement.</div>';
+ }
 
-  let actionsHtml = '';
-  if(d.status==='matched' && !iConfirmed) {
-    actionsHtml = tdlHtml + ocrHtml + '<div class="deal-actions">' +
-      '<button class="btn-confirm" onclick="openProof(\'' + d._id + '\')" >📎 J&#39;ai envoyé</button>' +
-      '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')" >⚠ Litige</button>' +
-      '</div>';
-  } else if(d.status==='matched' && iConfirmed) {
-    actionsHtml = tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);">✓ Tu as confirmé — en attente de l&#39;autre partie</div>';  }
+ let actionsHtml = '';
+ if(d.status==='matched' && !iConfirmed) {
+ actionsHtml = tdlHtml + ocrHtml + '<div class="deal-actions">' +
+ '<button class="btn-confirm" onclick="openProof(\'' + d._id + '\')" > J&#39;ai envoyé</button>' +
+ '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')" > Litige</button>' +
+ '</div>';
+ } else if(d.status==='matched' && iConfirmed) {
+ actionsHtml = tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);"> Tu as confirmé — en attente de l&#39;autre partie</div>'; }
 
-  const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;">💬</div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
+ const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;"></div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
 
-  // Notation
-  let ratingHtml = '';
-  if(d.status==='completed') {
-    if(ratedDeals.has(d._id)) {
-      ratingHtml = '<div class="rating-section"><div class="rated-done">✓ Tu as déjà noté ce deal</div></div>';
-    } else {
-      const r = selectedRatings[d._id] || 0;
-      ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+d._id+'">'
-        +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+d._id+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)">★</span>').join('')
-        +'</div><textarea class="rating-comment" id="comment-'+d._id+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" data-deal="'+d._id+'" onclick="submitRating(this.dataset.deal)">Envoyer la note</button></div>';
-    }
-  }
+ // Notation
+ let ratingHtml = '';
+ if(d.status==='completed') {
+ if(ratedDeals.has(d._id)) {
+ ratingHtml = '<div class="rating-section"><div class="rated-done"> Tu as déjà noté ce deal</div></div>';
+ } else {
+ const r = selectedRatings[d._id] || 0;
+ ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+d._id+'">'
+ +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+d._id+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)"></span>').join('')
+ +'</div><textarea class="rating-comment" id="comment-'+d._id+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" data-deal="'+d._id+'" onclick="submitRating(this.dataset.deal)">Envoyer la note</button></div>';
+ }
+ }
 
-  document.getElementById('detailContent').innerHTML =
-    '<div class="detail-header"><span class="detail-ref">DEAL '+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span><span class="detail-badge '+st.cls+'">'+st.label+'</span></div>'+
-    '<div class="detail-parties"><div class="party"><div class="party-label">Toi</div><div class="party-name">'+myName+'</div></div><div class="vs-sep">⇄</div><div class="party"><div class="party-label">Partenaire</div><div class="party-name">'+otherName+'</div></div></div>'+
-    '<div class="detail-amount-row"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">TU ENVOIES</div><span class="detail-amt">'+Number(amount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+currency+'</span></div>'+(euroLabel?'<span class="detail-eur">'+euroLabel+'</span>':'')+'</div>'+
-    (otherAmount?'<div class="detail-amount-row" style="margin-top:8px;"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">'+otherName.toUpperCase()+' ENVOIE</div><span class="detail-amt">'+Number(otherAmount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+otherCurrency+'</span></div></div>':'')+
-    stepHtml + instructionHtml + actionsHtml + chatHtml + ratingHtml;
+ document.getElementById('detailContent').innerHTML =
+ '<div class="detail-header"><span class="detail-ref">DEAL '+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span><span class="detail-badge '+st.cls+'">'+st.label+'</span></div>'+
+ '<div class="detail-parties"><div class="party"><div class="party-label">Toi</div><div class="party-name">'+myName+'</div></div><div class="vs-sep"></div><div class="party"><div class="party-label">Partenaire</div><div class="party-name">'+otherName+'</div></div></div>'+
+ '<div class="detail-amount-row"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">TU ENVOIES</div><span class="detail-amt">'+Number(amount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+currency+'</span></div>'+(euroLabel?'<span class="detail-eur">'+euroLabel+'</span>':'')+'</div>'+
+ (otherAmount?'<div class="detail-amount-row" style="margin-top:8px;"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">'+otherName.toUpperCase()+' ENVOIE</div><span class="detail-amt">'+Number(otherAmount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+otherCurrency+'</span></div></div>':'')+
+ stepHtml + instructionHtml + actionsHtml + chatHtml + ratingHtml;
 
-  document.getElementById('detailOverlay').classList.add('open');
+ document.getElementById('detailOverlay').classList.add('open');
 }
 
 
 function setRating(dealId, stars) {
-  selectedRatings[dealId] = stars;
-  const container = document.getElementById('stars-'+dealId);
-  if(!container) return;
-  container.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<stars));
+ selectedRatings[dealId] = stars;
+ const container = document.getElementById('stars-'+dealId);
+ if(!container) return;
+ container.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<stars));
 }
 
 async function submitRating(dealId) {
-  const stars = selectedRatings[dealId];
-  if(!stars) { showToast('Sélectionne une note','#ff4444'); return; }
-  const comment = document.getElementById('comment-'+dealId)?.value||'';
-  try {
-    const r = await safeJson(await fetch(API+'/deals/'+dealId+'/rate',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({rating:stars,comment})}));
-    if(r.ok) { ratedDeals.add(dealId); openDeal(dealId); showToast('Note envoyée ★','var(--yellow)'); }
-    else showToast((r.data&&r.data.message)||'Erreur','#ff4444');
-  } catch(e) { showToast('Erreur réseau','#ff4444'); }
+ const stars = selectedRatings[dealId];
+ if(!stars) { showToast('Sélectionne une note','#ff4444'); return; }
+ const comment = document.getElementById('comment-'+dealId)?.value||'';
+ try {
+ const r = await safeJson(await fetch(API+'/deals/'+dealId+'/rate',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({rating:stars,comment})}));
+ if(r.ok) { ratedDeals.add(dealId); openDeal(dealId); showToast('Note envoyée ','var(--yellow)'); }
+ else showToast((r.data&&r.data.message)||'Erreur','#ff4444');
+ } catch(e) { showToast('Erreur réseau','#ff4444'); }
 }
 
 function openProof(dealId) { currentProofDealId=dealId; proofFile=null; proofUrl=null; document.getElementById('proof-preview-container').innerHTML=''; document.getElementById('btn-submit-proof').disabled=true; document.getElementById('proofOverlay').classList.add('open'); closeSheet('detailOverlay'); }
 function openDispute(dealId) { currentDisputeId=dealId; selectedFiles=[]; document.getElementById('files-preview').innerHTML=''; document.getElementById('disputeOverlay').classList.add('open'); closeSheet('detailOverlay'); }
 
 function previewProof(input) {
-  if(!input.files[0]) return;
-  proofFile = input.files[0];
-  const reader=new FileReader();
-  reader.onload=e=>{
-    proofUrl=e.target.result;
-    document.getElementById('proof-preview-container').innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--border-active);border-radius:10px;margin-bottom:12px;"><img src="${proofUrl}" style="width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;"><span style="font-size:12px;color:var(--green);flex:1;">${proofFile.name}</span></div>`;
-    document.getElementById('btn-submit-proof').disabled=false;
-  };
-  reader.readAsDataURL(proofFile);
+ if(!input.files[0]) return;
+ proofFile = input.files[0];
+ const reader=new FileReader();
+ reader.onload=e=>{
+ proofUrl=e.target.result;
+ document.getElementById('proof-preview-container').innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--border-active);border-radius:10px;margin-bottom:12px;"><img src="${proofUrl}" style="width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;"><span style="font-size:12px;color:var(--green);flex:1;">${proofFile.name}</span></div>`;
+ document.getElementById('btn-submit-proof').disabled=false;
+ };
+ reader.readAsDataURL(proofFile);
 }
 
 async function submitProof() {
-  if(!proofFile||!currentProofDealId) return;
-  const btn=document.getElementById('btn-submit-proof');
-  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Analyse OCR…';
-  try {
-    const fd=new FormData(); fd.append('proof',proofFile);
-    const res=await fetch(API+'/deal/'+currentProofDealId+'/proof-ocr',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
-    const r=await safeJson(res);
-    if(r.ok) {
-      closeSheet('proofOverlay');
-      if(r.data&&r.data.autoConfirmed) showToast('✅ Preuve validée automatiquement !','var(--green-dim)');
-      else showToast('Preuve envoyée — vérification en cours','#b8960c');
-      loadDeals(true);
-    } else {
-      // Fallback route classique
-      const fd2=new FormData(); fd2.append('proof',proofFile);
-      const res2=await fetch(API+'/deal/proof',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd2});
-      const r2=await safeJson(res2);
-      if(r2.ok&&r2.data&&r2.data.url) {
-        await fetch(API+'/deal/'+currentProofDealId+'/confirm',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({proofUrl:r2.data.url})});
-        closeSheet('proofOverlay'); showToast('Preuve envoyée ✓'); loadDeals(true);
-      } else showMsg('msg-proof',(r.data&&r.data.message)||'Erreur upload');
-    }
-  } catch(e) { showMsg('msg-proof','Erreur réseau: '+e.message); }
-  btn.disabled=false; btn.innerHTML='Confirmer la réception';
+ if(!proofFile||!currentProofDealId) return;
+ const btn=document.getElementById('btn-submit-proof');
+ btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Analyse OCR…';
+ try {
+ const fd=new FormData(); fd.append('proof',proofFile);
+ const res=await fetch(API+'/deal/'+currentProofDealId+'/proof-ocr',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
+ const r=await safeJson(res);
+ if(r.ok) {
+ closeSheet('proofOverlay');
+ if(r.data&&r.data.autoConfirmed) showToast(' Preuve validée automatiquement !','var(--green-dim)');
+ else showToast('Preuve envoyée — vérification en cours','#b8960c');
+ loadDeals(true);
+ } else {
+ // Fallback route classique
+ const fd2=new FormData(); fd2.append('proof',proofFile);
+ const res2=await fetch(API+'/deal/proof',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd2});
+ const r2=await safeJson(res2);
+ if(r2.ok&&r2.data&&r2.data.url) {
+ await fetch(API+'/deal/'+currentProofDealId+'/confirm',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({proofUrl:r2.data.url})});
+ closeSheet('proofOverlay'); showToast('Preuve envoyée '); loadDeals(true);
+ } else showMsg('msg-proof',(r.data&&r.data.message)||'Erreur upload');
+ }
+ } catch(e) { showMsg('msg-proof','Erreur réseau: '+e.message); }
+ btn.disabled=false; btn.innerHTML='Confirmer la réception';
 }
 
 function previewFiles(input) {
-  selectedFiles=Array.from(input.files).slice(0,5);
-  document.getElementById('files-preview').innerHTML=selectedFiles.map((f,i)=>{
-    const url=URL.createObjectURL(f);
-    return `<div class="file-preview"><img src="${url}"><button class="file-remove" onclick="removeFile(${i})">×</button></div>`;
-  }).join('');
+ selectedFiles=Array.from(input.files).slice(0,5);
+ document.getElementById('files-preview').innerHTML=selectedFiles.map((f,i)=>{
+ const url=URL.createObjectURL(f);
+ return `<div class="file-preview"><img src="${url}"><button class="file-remove" onclick="removeFile(${i})">×</button></div>`;
+ }).join('');
 }
 function removeFile(i) { selectedFiles.splice(i,1); document.getElementById('files-preview').innerHTML=selectedFiles.map((f,j)=>`<div class="file-preview"><img src="${URL.createObjectURL(f)}"><button class="file-remove" onclick="removeFile(${j})">×</button></div>`).join(''); }
 
 async function submitDispute() {
-  const desc=document.getElementById('dispute-description').value.trim();
-  if(!desc) { showMsg('msg-dispute','Décris le problème'); return; }
-  const btn=document.getElementById('btn-submit-dispute');
-  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
-  try {
-    const fd=new FormData();
-    fd.append('transferId', currentDisputeId);
-    fd.append('description', desc);
-    selectedFiles.forEach(f=>fd.append('justificatifs',f));
-    const res=await fetch(API+'/dispute',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
-    const r=await safeJson(res);
-    if(r.ok) { closeSheet('disputeOverlay'); showToast('Litige signalé','#ff6b6b'); loadDeals(true); }
-    else showMsg('msg-dispute',(r.data&&r.data.message)||'Erreur');
-  } catch(e) { showMsg('msg-dispute','Erreur réseau'); }
-  btn.disabled=false; btn.innerHTML='Envoyer le litige';
+ const desc=document.getElementById('dispute-description').value.trim();
+ if(!desc) { showMsg('msg-dispute','Décris le problème'); return; }
+ const btn=document.getElementById('btn-submit-dispute');
+ btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
+ try {
+ const fd=new FormData();
+ fd.append('transferId', currentDisputeId);
+ fd.append('description', desc);
+ selectedFiles.forEach(f=>fd.append('justificatifs',f));
+ const res=await fetch(API+'/dispute',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
+ const r=await safeJson(res);
+ if(r.ok) { closeSheet('disputeOverlay'); showToast('Litige signalé','#ff6b6b'); loadDeals(true); }
+ else showMsg('msg-dispute',(r.data&&r.data.message)||'Erreur');
+ } catch(e) { showMsg('msg-dispute','Erreur réseau'); }
+ btn.disabled=false; btn.innerHTML='Envoyer le litige';
 }
 
 
@@ -747,178 +747,178 @@ let currentPaymentDealId = null;
 let currentPaymentMethod = 'mobilemoney';
 
 function setMethod(method, el) {
-  currentPaymentMethod = method;
-  document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.method-fields').forEach(f => f.classList.remove('show'));
-  document.getElementById('fields-' + method).classList.add('show');
+ currentPaymentMethod = method;
+ document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+ el.classList.add('active');
+ document.querySelectorAll('.method-fields').forEach(f => f.classList.remove('show'));
+ document.getElementById('fields-' + method).classList.add('show');
 }
 
 function openPaymentInfo(dealId) {
-  currentPaymentDealId = dealId;
-  document.getElementById('paymentInfoOverlay').classList.add('open');
+ currentPaymentDealId = dealId;
+ document.getElementById('paymentInfoOverlay').classList.add('open');
 }
 
 async function savePaymentInfo() {
-  if (!currentPaymentDealId) return;
-  const method = currentPaymentMethod;
-  let name = '', phone = '', iban = '', bankName = '', paypal = '', note = '';
+ if (!currentPaymentDealId) return;
+ const method = currentPaymentMethod;
+ let name = '', phone = '', iban = '', bankName = '', paypal = '', note = '';
 
-  if (method === 'mobilemoney') {
-    name = document.getElementById('pi-name-mm').value.trim();
-    phone = document.getElementById('pi-phone').value.trim();
-    const op = document.getElementById('pi-operator').value.trim();
-    note = op ? 'Opérateur: ' + op + (document.getElementById('pi-note').value ? ' — ' + document.getElementById('pi-note').value : '') : document.getElementById('pi-note').value;
-  } else if (method === 'virement') {
-    name = document.getElementById('pi-name-vir').value.trim();
-    iban = document.getElementById('pi-iban').value.trim();
-    bankName = document.getElementById('pi-bank').value.trim();
-    note = document.getElementById('pi-note').value.trim();
-  } else if (method === 'paypal') {
-    paypal = document.getElementById('pi-paypal').value.trim();
-    name = document.getElementById('pi-name-pp').value.trim();
-    note = document.getElementById('pi-note').value.trim();
-  }
+ if (method === 'mobilemoney') {
+ name = document.getElementById('pi-name-mm').value.trim();
+ phone = document.getElementById('pi-phone').value.trim();
+ const op = document.getElementById('pi-operator').value.trim();
+ note = op ? 'Opérateur: ' + op + (document.getElementById('pi-note').value ? ' — ' + document.getElementById('pi-note').value : '') : document.getElementById('pi-note').value;
+ } else if (method === 'virement') {
+ name = document.getElementById('pi-name-vir').value.trim();
+ iban = document.getElementById('pi-iban').value.trim();
+ bankName = document.getElementById('pi-bank').value.trim();
+ note = document.getElementById('pi-note').value.trim();
+ } else if (method === 'paypal') {
+ paypal = document.getElementById('pi-paypal').value.trim();
+ name = document.getElementById('pi-name-pp').value.trim();
+ note = document.getElementById('pi-note').value.trim();
+ }
 
-  if (!name && !phone && !iban && !paypal) {
-    showMsg('msg-payment', 'Renseigne au moins un champ');
-    return;
-  }
+ if (!name && !phone && !iban && !paypal) {
+ showMsg('msg-payment', 'Renseigne au moins un champ');
+ return;
+ }
 
-  const btn = document.getElementById('btn-save-payment');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+ const btn = document.getElementById('btn-save-payment');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
 
-  const r = await safeJson(await fetch(API + '/deal/' + currentPaymentDealId + '/payment-info', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-    body: JSON.stringify({ name, phone, iban, bankName, paypal, method, note })
-  })).catch(() => ({ ok: false, data: null }));
+ const r = await safeJson(await fetch(API + '/deal/' + currentPaymentDealId + '/payment-info', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+ body: JSON.stringify({ name, phone, iban, bankName, paypal, method, note })
+ })).catch(() => ({ ok: false, data: null }));
 
-  if (r.ok) {
-    closeSheet('paymentInfoOverlay');
-    showToast('Infos sauvegardées ✓');
-    loadDeals(true);
-  } else {
-    showMsg('msg-payment', (r.data && r.data.message) || 'Erreur');
-  }
-  btn.disabled = false; btn.innerHTML = 'Enregistrer';
+ if (r.ok) {
+ closeSheet('paymentInfoOverlay');
+ showToast('Infos sauvegardées ');
+ loadDeals(true);
+ } else {
+ showMsg('msg-payment', (r.data && r.data.message) || 'Erreur');
+ }
+ btn.disabled = false; btn.innerHTML = 'Enregistrer';
 }
 
 function renderPaymentInfo(info, label) {
-  if (!info || (!info.name && !info.phone && !info.iban && !info.paypal && !info.wero)) {
-    return '<div style="font-size:12px;color:var(--text-3);font-style:italic;">Pas encore renseigné</div>';
-  }
+ if (!info || (!info.name && !info.phone && !info.iban && !info.paypal && !info.wero)) {
+ return '<div style="font-size:12px;color:var(--text-3);font-style:italic;">Pas encore renseigné</div>';
+ }
 
-  // Icône et label de la méthode
-  const methodIcons = {
-    mobilemoney: '📱 Mobile Money',
-    virement:    '🏦 Virement bancaire',
-    paypal:      '💳 PayPal',
-    wero:        '🟣 Wero'
-  };
-  const methodLabel = info.method ? (methodIcons[info.method] || info.method) : null;
+ // Icône et label de la méthode
+ const methodIcons = {
+ mobilemoney: ' Mobile Money',
+ virement: ' Virement bancaire',
+ paypal: ' PayPal',
+ wero: ' Wero'
+ };
+ const methodLabel = info.method ? (methodIcons[info.method] || info.method) : null;
 
-  let html = '<div class="payment-info-box">';
-  html += '<div class="payment-info-title">' + label + '</div>';
+ let html = '<div class="payment-info-box">';
+ html += '<div class="payment-info-title">' + label + '</div>';
 
-  // Plateforme en évidence
-  if (methodLabel) {
-    html += '<div class="payment-info-row" style="margin-bottom:10px;"><span style="background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);border-radius:6px;padding:3px 10px;font-size:12px;font-family:Syne,sans-serif;font-weight:700;color:var(--yellow);">' + methodLabel + '</span></div>';
-  }
+ // Plateforme en évidence
+ if (methodLabel) {
+ html += '<div class="payment-info-row" style="margin-bottom:10px;"><span style="background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);border-radius:6px;padding:3px 10px;font-size:12px;font-family:Syne,sans-serif;font-weight:700;color:var(--yellow);">' + methodLabel + '</span></div>';
+ }
 
-  if (info.name)    html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">' + info.name + '</span></div>';
-  if (info.phone)   html += '<div class="payment-info-row"><span class="payment-info-label">Numéro</span><span class="payment-info-val" style="color:var(--green);font-size:15px;font-family:Syne,sans-serif;">' + info.phone + '</span></div>';
-  if (info.wero)    html += '<div class="payment-info-row"><span class="payment-info-label">Wero</span><span class="payment-info-val" style="color:#a78bfa;font-size:15px;font-family:Syne,sans-serif;">' + info.wero + '</span></div>';
-  if (info.paypal)  html += '<div class="payment-info-row"><span class="payment-info-label">Email</span><span class="payment-info-val" style="color:#60a5fa;">' + info.paypal + '</span></div>';
-  if (info.iban)    html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px;letter-spacing:1px;">' + info.iban + '</span></div>';
-  if (info.bankName)html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">' + info.bankName + '</span></div>';
-  if (info.note)    html += '<div class="payment-info-row"><span class="payment-info-label">Note</span><span class="payment-info-val" style="color:var(--text-3)">' + info.note + '</span></div>';
+ if (info.name) html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">' + info.name + '</span></div>';
+ if (info.phone) html += '<div class="payment-info-row"><span class="payment-info-label">Numéro</span><span class="payment-info-val" style="color:var(--green);font-size:15px;font-family:Syne,sans-serif;">' + info.phone + '</span></div>';
+ if (info.wero) html += '<div class="payment-info-row"><span class="payment-info-label">Wero</span><span class="payment-info-val" style="color:#a78bfa;font-size:15px;font-family:Syne,sans-serif;">' + info.wero + '</span></div>';
+ if (info.paypal) html += '<div class="payment-info-row"><span class="payment-info-label">Email</span><span class="payment-info-val" style="color:#60a5fa;">' + info.paypal + '</span></div>';
+ if (info.iban) html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px;letter-spacing:1px;">' + info.iban + '</span></div>';
+ if (info.bankName)html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">' + info.bankName + '</span></div>';
+ if (info.note) html += '<div class="payment-info-row"><span class="payment-info-label">Note</span><span class="payment-info-val" style="color:var(--text-3)">' + info.note + '</span></div>';
 
-  html += '</div>';
-  return html;
+ html += '</div>';
+ return html;
 }
 
 function copyCode(code) {
-  navigator.clipboard.writeText(code)
-    .then(() => showToast('Code copié ! ' + code, 'var(--blue)'))
-    .catch(() => showToast(code, 'var(--blue)'));
+ navigator.clipboard.writeText(code)
+ .then(() => showToast('Code copié ! ' + code, 'var(--blue)'))
+ .catch(() => showToast(code, 'var(--blue)'));
 }
 
 loadDeals();
 
-// ── UX Fluidité ───────────────────────────────────────────────
+// UX Fluidité 
 
 // 1. Animation entrée de page
 document.body.classList.add('page-enter');
 
 // 2. Pull-to-refresh sur les pages avec feed/liste
 (function initPullToRefresh() {
-  let startY = 0, pulling = false;
-  const MIN_PULL = 80;
-  const indicator = document.createElement('div');
-  indicator.className = 'ptr-indicator';
-  indicator.textContent = 'Relâcher pour actualiser';
-  const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
-  if (!firstChild) return;
-  firstChild.parentNode.insertBefore(indicator, firstChild);
+ let startY = 0, pulling = false;
+ const MIN_PULL = 80;
+ const indicator = document.createElement('div');
+ indicator.className = 'ptr-indicator';
+ indicator.textContent = 'Relâcher pour actualiser';
+ const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
+ if (!firstChild) return;
+ firstChild.parentNode.insertBefore(indicator, firstChild);
 
-  document.addEventListener('touchstart', e => {
-    if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
-  }, { passive: true });
-  document.addEventListener('touchmove', e => {
-    if (!pulling) return;
-    const dist = e.touches[0].pageY - startY;
-    if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
-  }, { passive: true });
-  document.addEventListener('touchend', e => {
-    if (!pulling) return;
-    pulling = false;
-    const dist = e.changedTouches[0].pageY - startY;
-    indicator.classList.remove('active');
-    if (dist > MIN_PULL) {
-      indicator.classList.add('active');
-      indicator.textContent = 'Actualisation...';
-      setTimeout(() => { window.location.reload(); }, 500);
-    }
-  });
+ document.addEventListener('touchstart', e => {
+ if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
+ }, { passive: true });
+ document.addEventListener('touchmove', e => {
+ if (!pulling) return;
+ const dist = e.touches[0].pageY - startY;
+ if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
+ }, { passive: true });
+ document.addEventListener('touchend', e => {
+ if (!pulling) return;
+ pulling = false;
+ const dist = e.changedTouches[0].pageY - startY;
+ indicator.classList.remove('active');
+ if (dist > MIN_PULL) {
+ indicator.classList.add('active');
+ indicator.textContent = 'Actualisation...';
+ setTimeout(() => { window.location.reload(); }, 500);
+ }
+ });
 })();
 
 // 3. Swipe bas pour fermer les sheets
 (function initSwipeSheet() {
-  document.querySelectorAll('.sheet').forEach(sheet => {
-    let startY = 0;
-    sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
-    sheet.addEventListener('touchend', e => {
-      const dist = e.changedTouches[0].pageY - startY;
-      if (dist > 80) {
-        const overlay = sheet.closest('.overlay');
-        if (overlay) overlay.classList.remove('open');
-      }
-    }, { passive: true });
-  });
+ document.querySelectorAll('.sheet').forEach(sheet => {
+ let startY = 0;
+ sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
+ sheet.addEventListener('touchend', e => {
+ const dist = e.changedTouches[0].pageY - startY;
+ if (dist > 80) {
+ const overlay = sheet.closest('.overlay');
+ if (overlay) overlay.classList.remove('open');
+ }
+ }, { passive: true });
+ });
 })();
 
 // 4. Feedback copier avec vibration
 function copyWithFeedback(text, label) {
-  navigator.clipboard.writeText(text).then(() => {
-    if (navigator.vibrate) navigator.vibrate(50);
-    let el = document.querySelector('.copy-feedback');
-    if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
-    el.textContent = label || 'Copié';
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 1800);
-  });
+ navigator.clipboard.writeText(text).then(() => {
+ if (navigator.vibrate) navigator.vibrate(50);
+ let el = document.querySelector('.copy-feedback');
+ if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
+ el.textContent = label || 'Copié';
+ el.classList.add('show');
+ setTimeout(() => el.classList.remove('show'), 1800);
+ });
 }
 
 // 5. Auto-focus sur le premier input des sheets à l'ouverture
 document.querySelectorAll('.overlay').forEach(overlay => {
-  const observer = new MutationObserver(() => {
-    if (overlay.classList.contains('open')) {
-      const input = overlay.querySelector('input:not([type=hidden]), textarea');
-      if (input) setTimeout(() => input.focus(), 300);
-    }
-  });
-  observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+ const observer = new MutationObserver(() => {
+ if (overlay.classList.contains('open')) {
+ const input = overlay.querySelector('input:not([type=hidden]), textarea');
+ if (input) setTimeout(() => input.focus(), 300);
+ }
+ });
+ observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
 });
 
 </script>

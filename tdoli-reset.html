@@ -4,23 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>TDOLI — Nouveau mot de passe</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{
- --bg:#05090a;
- --surface:#0a1018;
- --card:#0e1a1e;
- --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.1);
- --yellow:#ffd740;
- --blue:#2979ff;--blue-dim:#1a56d4;--blue-glow:rgba(41,121,255,0.1);
- --red:#ff1744;
- --text:#ecf4f0;--text-2:#8aabb5;--text-3:#3d5a65;
- --border:rgba(41,121,255,0.1);--border-active:rgba(0,230,118,0.22);
- --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
-}
+:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.3);--red:#ff4444;--r:16px;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-.bg-mesh{display:none;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(0,180,90,0.08) 0%,transparent 60%);}
 .wrap{position:relative;z-index:1;width:100%;max-width:420px;}
 .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--green);text-align:center;margin-bottom:8px;}
 .subtitle{font-size:13px;color:var(--text-3);text-align:center;margin-bottom:28px;}
@@ -30,7 +19,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .form-group{margin-bottom:14px;}
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:7px;letter-spacing:1.2px;text-transform:uppercase;}
 .input-wrap{position:relative;}
-.form-input{width:100%;padding:13px 44px 13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;transition:all 0.2s;-webkit-appearance:none;}
+.form-input{width:100%;padding:13px 44px 13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;transition:all 0.2s;-webkit-appearance:none;}
 .form-input.no-icon{padding-right:14px;}
 .form-input:focus{outline:none;border-color:var(--green);background:rgba(0,201,122,0.04);box-shadow:0 0 0 3px var(--green-glow);}
 .form-input::placeholder{color:var(--text-3);opacity:0.5;}
@@ -44,7 +33,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .req-item.ok{color:var(--green);}
 .req-dot{width:6px;height:6px;border-radius:50%;background:var(--text-3);flex-shrink:0;}
 .req-item.ok .req-dot{background:var(--green);}
-.btn-primary{width:100%;padding:15px;background:var(--green-dim);box-shadow:0 4px 16px rgba(0,200,83,0.2);box-shadow:0 4px 16px rgba(0,200,83,0.2);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s;}
+.btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s;}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .btn-primary:active{transform:scale(0.97);}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
@@ -58,6 +47,58 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .back-link:hover{color:var(--green);}
 
 .topbar-logo img { height: 32px; width: auto; display: block; }
+
+/* UX Fluide */
+
+/* Transition de page */
+body { animation: pageFadeIn 0.2s ease; }
+@keyframes pageFadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+/* Swipe to close sheet */
+.sheet { touch-action: pan-y; }
+
+/* Pull-to-refresh indicator */
+.ptr-indicator { position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-48px);z-index:200;width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;box-shadow:var(--shadow); }
+.ptr-indicator.visible { transform:translateX(-50%) translateY(8px); }
+.ptr-spinner { width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 0.6s linear infinite; }
+
+/* Skeleton loader */
+.skeleton { background:linear-gradient(90deg,var(--surface) 25%,var(--card) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:var(--r); }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skeleton-item { height:72px;margin-bottom:8px;border-radius:var(--r); }
+.skeleton-line { height:12px;margin-bottom:6px; }
+.skeleton-line.short { width:40%; }
+.skeleton-line.medium { width:65%; }
+
+/* Feedback copie */
+.copy-feedback { position:fixed;bottom:110px;left:50%;transform:translateX(-50%) translateY(4px);background:var(--green-dim);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:8px 18px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity 0.2s,transform 0.2s;z-index:600; }
+.copy-feedback.show { opacity:1;transform:translateX(-50%) translateY(0); }
+
+/* Progress bar étapes deal */
+.step-line { flex:1;height:2px;background:var(--border);transition:background 0.4s; }
+.step-line.done { background:var(--green); }
+.step-node { transition:all 0.3s; }
+
+/* Timer countdown */
+.timer-bar { height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:6px; }
+.timer-fill { height:100%;background:var(--green);transition:width 1s linear; }
+.timer-fill.warning { background:var(--yellow); }
+.timer-fill.danger { background:var(--red); }
+.timer-label { font-size:11px;font-family:'Syne',sans-serif;font-weight:700;margin-top:4px; }
+.timer-label.warning { color:var(--yellow); }
+.timer-label.danger { color:var(--red); }
+
+/* Bouton primaire feedback */
+.btn-primary { transition:transform 0.12s,opacity 0.12s,box-shadow 0.12s; }
+.btn-primary:active { transform:scale(0.97); }
+
+/* Card hover */
+.annonce-item { transition:transform 0.12s,box-shadow 0.12s; }
+.annonce-item:active { transform:scale(0.985); }
+
+/* Chat message sent feedback */
+.msg-sending { opacity:0.6; }
+.msg-sent { opacity:1;transition:opacity 0.2s; }
 </style>
 
  <link rel="manifest" href="/manifest.json">
@@ -164,6 +205,110 @@ async function doReset(){
 }
 
 function showMsg(text,type){const el=document.getElementById('msg-reset');el.className='msg '+type+' show';el.textContent=text;}
+
+// UX Fluide 
+
+// 1. Swipe-to-close pour toutes les sheets
+function initSwipeToClose() {
+ document.querySelectorAll('.sheet').forEach(sheet => {
+ let startY = 0, isDragging = false;
+ const overlay = sheet.closest('.overlay');
+ if (!overlay) return;
+ sheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; isDragging = true; }, { passive: true });
+ sheet.addEventListener('touchmove', e => {
+ if (!isDragging) return;
+ const dy = e.touches[0].clientY - startY;
+ if (dy > 0) sheet.style.transform = `translateY(${dy}px)`;
+ }, { passive: true });
+ sheet.addEventListener('touchend', e => {
+ isDragging = false;
+ const dy = e.changedTouches[0].clientY - startY;
+ if (dy > 80) {
+ sheet.style.transform = '';
+ overlay.classList.remove('open');
+ } else {
+ sheet.style.transform = '';
+ }
+ });
+ });
+}
+document.addEventListener('DOMContentLoaded', initSwipeToClose);
+
+// Observer pour initier swipe sur nouvelles sheets
+const _swipeObserver = new MutationObserver(() => initSwipeToClose());
+_swipeObserver.observe(document.body, { childList:true, subtree:true });
+
+// 2. Copier avec feedback visuel
+function copyWithFeedback(text, label) {
+ navigator.clipboard.writeText(text).then(() => {
+ let fb = document.querySelector('.copy-feedback');
+ if (!fb) { fb = document.createElement('div'); fb.className = 'copy-feedback'; document.body.appendChild(fb); }
+ fb.textContent = label || 'Copié !';
+ fb.classList.add('show');
+ setTimeout(() => fb.classList.remove('show'), 1800);
+ });
+}
+
+// 3. Skeleton loaders
+function showSkeletons(containerId, count) {
+ const el = document.getElementById(containerId);
+ if (!el) return;
+ el.innerHTML = Array(count).fill('<div class="skeleton skeleton-item"></div>').join('');
+}
+
+// 4. Pull-to-refresh
+function initPullToRefresh(onRefresh) {
+ let startY = 0, pulling = false;
+ const indicator = document.createElement('div');
+ indicator.className = 'ptr-indicator';
+ indicator.innerHTML = '<div class="ptr-spinner"></div>';
+ document.body.appendChild(indicator);
+
+ document.addEventListener('touchstart', e => {
+ if (window.scrollY === 0) { startY = e.touches[0].clientY; pulling = true; }
+ }, { passive: true });
+ document.addEventListener('touchmove', e => {
+ if (!pulling) return;
+ const dy = e.touches[0].clientY - startY;
+ if (dy > 60) indicator.classList.add('visible');
+ }, { passive: true });
+ document.addEventListener('touchend', e => {
+ if (!pulling) return;
+ pulling = false;
+ const dy = e.changedTouches[0].clientY - startY;
+ if (dy > 80) { onRefresh && onRefresh(); }
+ setTimeout(() => indicator.classList.remove('visible'), 300);
+ });
+}
+
+// 5. Auto-focus premier input à l'ouverture des sheets
+document.addEventListener('click', e => {
+ const btn = e.target.closest('[onclick*="Sheet"], [onclick*="openCreate"], [onclick*="openEdit"]');
+ if (!btn) return;
+ setTimeout(() => {
+ const sheet = document.querySelector('.overlay.open .form-input:not([type=hidden])');
+ if (sheet) sheet.focus();
+ }, 350);
+});
+
+// 6. Timer countdown visuel
+function renderTimerCountdown(deadlineStr, containerId) {
+ const el = document.getElementById(containerId);
+ if (!el || !deadlineStr) return;
+ function update() {
+ const left = new Date(deadlineStr) - Date.now();
+ if (left <= 0) { el.innerHTML = '<div class="timer-label danger">Expiré</div>'; return; }
+ const h = Math.floor(left / 3600000);
+ const m = Math.floor((left % 3600000) / 60000);
+ const pct = Math.min(100, (left / 86400000) * 100);
+ const cls = pct < 20 ? 'danger' : pct < 50 ? 'warning' : '';
+ el.innerHTML = '<div class="timer-bar"><div class="timer-fill ' + cls + '" style="width:' + pct + '%"></div></div>'
+ + '<div class="timer-label ' + cls + '">' + h + 'h ' + m + 'min restantes</div>';
+ }
+ update();
+ setInterval(update, 60000);
+}
+
 </script>
 </body>
 </html>

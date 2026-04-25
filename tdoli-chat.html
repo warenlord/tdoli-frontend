@@ -8,196 +8,478 @@
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <style>
 :root{
-  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
-  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
-  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
-  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
-  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
-  --r:14px;
-  --shadow:0 2px 20px rgba(0,0,0,0.5);
+ --bg:#05090a;--surface:#0a1018;--card:#0e1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.1);
+ --yellow:#ffd740;--blue:#2979ff;--blue-dim:#1a56d4;--blue-glow:rgba(41,121,255,0.1);
+ --red:#ff1744;
+ --text:#ecf4f0;--text-2:#8aabb5;--text-3:#3d5a65;
+ --border:rgba(41,121,255,0.1);--border-active:rgba(0,230,118,0.22);
+ --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
-.topbar{flex-shrink:0;background:rgba(6,13,9,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 16px 12px;display:flex;align-items:center;gap:12px;}
-.back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;text-decoration:none;}
-.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.5px;flex-shrink:0;}
-.topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
-.chat-header{flex:1;min-width:0;}
-.chat-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.chat-sub{font-size:11px;color:var(--text-3);margin-top:2px;display:flex;align-items:center;gap:5px;}
-.online-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);}
-.deal-summary{flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;}
-.deal-sum-label{font-size:10px;color:var(--text-3);}
-.deal-sum-val{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green);margin-top:2px;}
-.mm-bar{flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;}
-.messages-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px;display:flex;flex-direction:column;gap:8px;}
-.empty-chat{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;gap:8px;}
-.empty-chat-icon{font-size:32px;opacity:0.4;}
-.empty-chat-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
-.empty-chat-hint{font-size:12px;color:var(--text-3);line-height:1.6;max-width:260px;}
-.msg-wrap{display:flex;flex-direction:column;animation:msgIn 0.2s cubic-bezier(0.19,1,0.22,1);}
-@keyframes msgIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+
+/* TOPBAR style Le Bon Coin */
+.topbar{
+ flex-shrink:0;
+ background:rgba(5,9,10,0.97);
+ backdrop-filter:blur(24px);
+ -webkit-backdrop-filter:blur(24px);
+ border-bottom:1px solid var(--border);
+ padding:10px 16px 10px;
+ display:flex;align-items:center;gap:10px;
+}
+.back-btn{
+ width:36px;height:36px;border-radius:50%;
+ background:var(--surface);border:1px solid var(--border);
+ color:var(--text-2);display:flex;align-items:center;justify-content:center;
+ cursor:pointer;flex-shrink:0;text-decoration:none;transition:all 0.2s;
+}
+.back-btn:active{background:var(--card);}
+.partner-avatar{
+ width:40px;height:40px;border-radius:50%;flex-shrink:0;
+ background:linear-gradient(135deg,#007a3d,#1a3a8f);
+ display:flex;align-items:center;justify-content:center;
+ font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;
+ border:1px solid var(--border-active);
+}
+.partner-info{flex:1;min-width:0;}
+.partner-name{
+ font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.partner-status{
+ font-size:11px;color:var(--text-3);margin-top:1px;
+ display:flex;align-items:center;gap:4px;
+}
+.online-dot{
+ width:6px;height:6px;border-radius:50%;background:var(--green);
+ box-shadow:0 0 4px var(--green);flex-shrink:0;
+ animation:blink 2s ease infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.menu-btn{
+ width:36px;height:36px;border-radius:50%;
+ background:transparent;border:none;
+ color:var(--text-2);display:flex;align-items:center;justify-content:center;
+ cursor:pointer;flex-shrink:0;transition:all 0.2s;
+}
+.menu-btn:active{background:var(--surface);}
+
+/* BANDEAU DEAL */
+.deal-banner{
+ flex-shrink:0;
+ background:var(--surface);
+ border-bottom:1px solid var(--border);
+ padding:10px 16px;
+ display:flex;align-items:center;justify-content:space-between;
+ cursor:pointer;
+ transition:background 0.15s;
+}
+.deal-banner:active{background:var(--card);}
+.deal-banner-left{display:flex;flex-direction:column;gap:2px;}
+.deal-banner-code{
+ font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+ color:var(--blue);letter-spacing:1px;
+}
+.deal-banner-amount{
+ font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
+ color:var(--yellow);
+}
+.deal-banner-dir{font-size:11px;color:var(--text-3);}
+.deal-banner-status{
+ font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+ padding:4px 10px;border-radius:20px;
+}
+.deal-banner-status.matched{background:rgba(0,230,118,0.1);color:var(--green);}
+.deal-banner-status.completed{background:rgba(41,121,255,0.1);color:var(--blue);}
+.deal-banner-status.dispute{background:rgba(255,23,68,0.1);color:var(--red);}
+
+/* MESSAGES AREA */
+.messages-area{
+ flex:1;overflow-y:auto;
+ -webkit-overflow-scrolling:touch;
+ padding:16px 14px;
+ display:flex;flex-direction:column;gap:2px;
+ scroll-behavior:smooth;
+}
+
+/* Séparateur de date */
+.date-sep{
+ display:flex;align-items:center;gap:10px;
+ margin:12px 0 8px;
+}
+.date-sep-line{flex:1;height:1px;background:var(--border);}
+.date-sep-text{
+ font-size:11px;color:var(--text-3);
+ font-family:'Syne',sans-serif;font-weight:700;
+ white-space:nowrap;
+}
+
+/* Bulles */
+.msg-wrap{display:flex;flex-direction:column;margin-bottom:4px;animation:msgIn 0.2s ease-out;}
+@keyframes msgIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 .msg-wrap.mine{align-items:flex-end;}
 .msg-wrap.theirs{align-items:flex-start;}
-.msg-sender{font-size:10px;color:var(--text-3);margin-bottom:3px;padding:0 4px;}
-.msg-bubble{max-width:82%;padding:11px 15px;border-radius:20px;font-size:14px;line-height:1.55;word-break:break-word;}
-.msg-bubble.mine{background:linear-gradient(135deg,#00c86e,#00a558);color:#fff;border-bottom-right-radius:5px;box-shadow:0 2px 12px rgba(0,179,104,0.3);}
-.msg-bubble.theirs{background:#1e2b22;border:1px solid rgba(255,255,255,0.08);color:var(--text);border-bottom-left-radius:5px;}
-.msg-bubble.mm-card{background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.25);color:var(--text);border-radius:12px;max-width:90%;}
-.msg-time{font-size:10px;opacity:0.55;margin-top:4px;padding:0 4px;}
-/* Indicateur de frappe */
-.typing-indicator{display:none;align-items:center;gap:6px;padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:16px;border-bottom-left-radius:4px;max-width:80px;}
+.msg-bubble{
+ max-width:78%;padding:10px 14px;
+ font-size:14px;line-height:1.55;word-break:break-word;
+}
+.msg-bubble.mine{
+ background:var(--green-dim);color:#fff;
+ border-radius:18px 18px 4px 18px;
+}
+.msg-bubble.theirs{
+ background:var(--card);border:1px solid var(--border);color:var(--text);
+ border-radius:18px 18px 18px 4px;
+}
+.msg-bubble.mm-card{
+ background:rgba(255,215,64,0.06);border:1px solid rgba(255,215,64,0.2);
+ color:var(--text);border-radius:12px;max-width:92%;
+}
+.msg-meta{
+ display:flex;align-items:center;gap:4px;
+ font-size:10px;color:var(--text-3);
+ margin-top:3px;padding:0 4px;
+}
+.msg-read{color:var(--green);font-size:10px;}
+
+/* Indicateur frappe */
+.typing-indicator{
+ display:none;align-items:center;gap:5px;
+ padding:10px 14px;background:var(--card);border:1px solid var(--border);
+ border-radius:18px 18px 18px 4px;max-width:70px;margin-bottom:4px;
+}
 .typing-indicator.show{display:flex;}
 .typing-dot{width:5px;height:5px;border-radius:50%;background:var(--text-3);animation:typingBounce 1.2s ease infinite;}
 .typing-dot:nth-child(2){animation-delay:0.2s;}
 .typing-dot:nth-child(3){animation-delay:0.4s;}
 @keyframes typingBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-4px);}}
-/* Statut connexion */
-.conn-status{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;z-index:200;display:none;gap:6px;align-items:center;}
-.conn-status.show{display:flex;}
-.conn-status.reconnecting{color:var(--yellow);border-color:rgba(252,209,22,0.3);}
-.conn-status.connected{color:var(--green);border-color:rgba(0,201,122,0.3);}
-.input-area{flex-shrink:0;background:rgba(10,15,13,0.98);backdrop-filter:blur(24px);border-top:1px solid rgba(0,217,130,0.1);padding:12px 14px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:10px;}
-.msg-input{flex:1;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;resize:none;max-height:80px;overflow-y:auto;line-height:1.4;transition:border-color 0.2s;-webkit-appearance:none;}
+
+/* Empty state */
+.empty-chat{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;gap:8px;}
+.empty-chat-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
+.empty-chat-hint{font-size:12px;color:var(--text-3);line-height:1.6;max-width:240px;}
+
+/* ZONE SAISIE */
+.input-area{
+ flex-shrink:0;
+ background:rgba(5,9,10,0.98);
+ backdrop-filter:blur(24px);
+ border-top:1px solid var(--border);
+ padding:10px 14px;
+ padding-bottom:max(10px,env(safe-area-inset-bottom));
+ display:flex;align-items:flex-end;gap:8px;
+}
+.msg-input{
+ flex:1;padding:11px 14px;
+ background:var(--surface);border:1px solid var(--border);
+ border-radius:22px;color:var(--text);
+ font-family:'Inter',sans-serif;font-size:15px;
+ resize:none;max-height:80px;overflow-y:auto;line-height:1.4;
+ transition:border-color 0.2s;
+}
 .msg-input:focus{outline:none;border-color:var(--green);}
 .msg-input::placeholder{color:var(--text-3);opacity:0.6;}
-.send-btn{width:46px;height:46px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;box-shadow:0 3px 16px rgba(0,179,104,0.4);}
+.send-btn{
+ width:44px;height:44px;border-radius:50%;
+ background:var(--green-dim);border:none;color:#fff;
+ cursor:pointer;display:flex;align-items:center;justify-content:center;
+ flex-shrink:0;transition:transform 0.15s;
+ box-shadow:0 3px 12px rgba(0,200,83,0.35);
+}
 .send-btn:active{transform:scale(0.9);}
 .send-btn:disabled{opacity:0.35;}
-/* Sheet Mobile Money */
-.overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
+
+/* MENU CONTEXTUEL (sheet `...`) */
+.overlay{
+ position:fixed;inset:0;z-index:300;
+ background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);
+ display:none;align-items:flex-end;
+}
 .overlay.open{display:flex;}
-.sheet{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);}
+.sheet{
+ background:var(--card);border:1px solid var(--border);
+ border-top:2px solid var(--green);
+ border-radius:22px 22px 0 0;
+ padding:0 0 48px;
+ width:100%;max-width:480px;margin:0 auto;
+ animation:slideUp 0.3s cubic-bezier(0.19,1,0.22,1);
+}
 @keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
-.sheet-handle-row{padding:16px 0 18px;display:flex;justify-content:center;}
-.sheet-handle{width:34px;height:3px;border-radius:2px;background:var(--border);}
-.sheet-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;}
-.sheet-sub{font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.5;}
-.form-group{margin-bottom:16px;}
-.form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.form-input-field,.form-select-field{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
-.form-input-field:focus,.form-select-field:focus{outline:none;border-color:var(--green);}
-.btn-primary{width:100%;padding:15px;background:var(--green-dim);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;position:relative;overflow:hidden;}
-.btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
-.btn-primary:disabled{opacity:0.35;}
-.btn-cancel{width:100%;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+.sheet-handle-row{padding:14px 0 8px;display:flex;justify-content:center;}
+.sheet-handle{width:32px;height:3px;border-radius:2px;background:var(--border);}
+.sheet-title{
+ font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
+ padding:0 22px 12px;border-bottom:1px solid var(--border);
+}
+.sheet-action{
+ display:flex;align-items:center;gap:14px;
+ padding:16px 22px;cursor:pointer;transition:background 0.15s;
+ font-size:15px;font-weight:500;
+ border-bottom:1px solid var(--border);
+}
+.sheet-action:last-child{border-bottom:none;}
+.sheet-action:active{background:var(--surface);}
+.sheet-action-icon{
+ width:36px;height:36px;border-radius:50%;
+ display:flex;align-items:center;justify-content:center;
+ flex-shrink:0;
+}
+.sheet-action-icon.green{background:rgba(0,230,118,0.1);color:var(--green);}
+.sheet-action-icon.blue{background:rgba(41,121,255,0.1);color:var(--blue);}
+.sheet-action-icon.red{background:rgba(255,23,68,0.1);color:var(--red);}
+.sheet-action-label{flex:1;}
+.sheet-action-sub{font-size:12px;color:var(--text-3);margin-top:2px;}
+
+/* Statut connexion */
+.conn-status{
+ position:fixed;top:70px;left:50%;transform:translateX(-50%);
+ background:var(--card);border:1px solid var(--border);border-radius:20px;
+ padding:6px 14px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;
+ z-index:200;display:none;gap:6px;align-items:center;
+}
+.conn-status.show{display:flex;}
+.conn-status.reconnecting{color:var(--yellow);border-color:rgba(255,215,64,0.3);}
+.conn-status.connected{color:var(--green);border-color:rgba(0,230,118,0.3);}
+
+/* Loader */
 .loader-wrap{display:flex;align-items:center;justify-content:center;padding:30px;gap:10px;color:var(--text-3);font-size:13px;}
 .loader{width:22px;height:22px;position:relative;}
 .loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
-.loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
+.loader::before{border-top-color:var(--green);}
+.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
 @keyframes spin{to{transform:rotate(360deg);}}
-svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
 
-.topbar-logo img {
- height: 32px;
- width: auto;
- display: block;
+/* Toast */
+.toast{
+ position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);
+ color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+ padding:10px 22px;border-radius:30px;z-index:500;
+ opacity:0;pointer-events:none;white-space:nowrap;
+ transition:opacity 0.25s,transform 0.25s;
 }
-.user-avatar-btn{width:40px;height:40px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
-.share-btn{background:transparent;border:none;color:#fcd116;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;white-space:nowrap;}
-
-/* ── UX Fluidité globale ─────────────────────────────────────── */
-
-/* Skeleton loader */
-.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--card) 50%,var(--surface) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.4s infinite;}
-@keyframes skeleton-shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-.skeleton-line{height:12px;border-radius:6px;margin-bottom:8px;}
-.skeleton-line.short{width:60%;}
-.skeleton-line.medium{width:80%;}
-.skeleton-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:8px;}
-
-/* Pull to refresh */
-.ptr-indicator{text-align:center;padding:12px;font-size:12px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;height:0;overflow:hidden;transition:height 0.2s;}
-.ptr-indicator.active{height:40px;}
-
-/* Transitions de pages */
-.page-enter{animation:pageEnter 0.2s ease-out;}
-@keyframes pageEnter{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-
-/* Feedback copier */
-.copy-feedback{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--green-dim);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:8px 20px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:999;}
-.copy-feedback.show{opacity:1;}
-
-/* Swipe sheet */
-.sheet{touch-action:pan-y;}
-
-/* Boutons actifs feedback haptique */
-.btn-primary:active,.btn-cancel:active,.annonce-item:active,.deal-item:active{transform:scale(0.97);}
-
-/* Progress bar deal */
-.deal-progress{height:3px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden;}
-.deal-progress-fill{height:100%;border-radius:2px;background:var(--green);transition:width 0.4s ease;}
-
-/* Compte à rebours timer */
-.timer-countdown{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);}
-.timer-countdown.urgent{color:var(--red);animation:blink 1s ease infinite;}
-
-/* Input focus amélioré */
-.form-input:focus,.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
-
-/* Scroll auto dans le chat */
-.messages-area{scroll-behavior:smooth;}
-
-/* Indicateur de chargement inline */
-.inline-loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
-
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
-
- <link rel="manifest" href="/manifest.json">
- <meta name="theme-color" content="#060d09">
- <meta name="apple-mobile-web-app-capable" content="yes">
- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
- <meta name="apple-mobile-web-app-title" content="TDOLI">
- <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
- <script>
-  if('serviceWorker' in navigator){
-   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-     .then(r => console.log('[SW] Enregistre'))
-     .catch(e => console.error('[SW] Erreur:', e));
-   });
-  }
- </script>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#05090a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TDOLI">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+<script>
+ if('serviceWorker' in navigator){
+ window.addEventListener('load',()=>{
+ navigator.serviceWorker.register('/service-worker.js');
+ });
+ }
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
 firebase.initializeApp({
- apiKey:      "AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
- authDomain:    "tdoli-c47a1.firebaseapp.com",
- projectId:     "tdoli-c47a1",
- storageBucket:   "tdoli-c47a1.appspot.com",
- messagingSenderId: "416651280494",
- appId:       "1:416651280494:web:de03eb6a47204031f1267f"
+ apiKey:"AIzaSyCYnExAh_LVE6QyhVIR2icN2xC82lqiYfQ",
+ authDomain:"tdoli-c47a1.firebaseapp.com",
+ projectId:"tdoli-c47a1",
+ storageBucket:"tdoli-c47a1.appspot.com",
+ messagingSenderId:"416651280494",
+ appId:"1:416651280494:web:de03eb6a47204031f1267f"
 });
 </script>
 <script src="/fcm-init.js"></script>
 </head>
 <body>
+
 <div class="conn-status" id="connStatus"></div>
+
+<!-- TOPBAR style Le Bon Coin -->
 <div class="topbar">
- <div class="topbar-left">
-  <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a>
+ <a class="back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Retour">
+ <svg viewBox="0 0 24 24" width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+ </a>
+ <div class="partner-avatar" id="partnerAvatar">?</div>
+ <div class="partner-info">
+ <div class="partner-name" id="partnerName">Chargement...</div>
+ <div class="partner-status">
+ <div class="online-dot" id="onlineDot" style="display:none"></div>
+ <span id="partnerStatusText">Dernière activité...</span>
  </div>
- <div style="flex:1;"></div>
- <div class="topbar-right">
-  <button class="share-btn" onclick="shareApp()">Parrainer</button>
  </div>
+ <button class="menu-btn" onclick="openMenu()" aria-label="Menu">
+ <svg viewBox="0 0 24 24" width="20" height="20">
+ <circle cx="12" cy="5" r="1" fill="currentColor" stroke="none"/>
+ <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>
+ <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/>
+ </svg>
+ </button>
 </div>
-<div class="deal-summary" id="dealSummary" style="display:none">
- <div><div class="deal-sum-label">Montant</div><div class="deal-sum-val" id="dealAmt">—</div></div>
- <div style="text-align:right"><div class="deal-sum-label">Sens</div><div class="deal-sum-val" id="dealDir">—</div></div>
+
+<!-- BANDEAU DEAL cliquable -->
+<div class="deal-banner" id="dealBanner" style="display:none" onclick="goToDeal()">
+ <div class="deal-banner-left">
+ <div class="deal-banner-code" id="bannerCode">—</div>
+ <div class="deal-banner-amount" id="bannerAmount">—</div>
+ <div class="deal-banner-dir" id="bannerDir">—</div>
+ </div>
+ <div class="deal-banner-status matched" id="bannerStatus">En cours</div>
 </div>
+
+<!-- MESSAGES -->
 <div class="messages-area" id="messagesArea">
  <div class="loader-wrap"><div class="loader"></div>Chargement...</div>
 </div>
+
+<!-- SAISIE -->
 <div class="input-area">
- <textarea class="msg-input" id="msgInput" placeholder="Ecris ton message..." rows="1" onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
+ <textarea class="msg-input" id="msgInput" placeholder="Message..." rows="1"
+ onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
  <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-  <svg viewBox="0 0 24 24" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+ <svg viewBox="0 0 24 24" width="18" height="18">
+ <line x1="22" y1="2" x2="11" y2="13"/>
+ <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+ </svg>
  </button>
 </div>
+
+<!-- MENU CONTEXTUEL `...` -->
+<div class="overlay" id="menuOverlay" onclick="closeMenu(event)">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title" id="menuTitle">Options</div>
+ <div class="sheet-action" onclick="goToDeal()">
+ <div class="sheet-action-icon blue">
+ <svg viewBox="0 0 24 24" width="16" height="16"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+ </div>
+ <div class="sheet-action-label">
+ <div>Voir le deal</div>
+ <div class="sheet-action-sub">Consulter les détails et actions</div>
+ </div>
+ <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+ </div>
+ <div class="sheet-action" onclick="openDisputeSheet()">
+ <div class="sheet-action-icon red">
+ <svg viewBox="0 0 24 24" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+ </div>
+ <div class="sheet-action-label">
+ <div>Signaler un litige</div>
+ <div class="sheet-action-sub">Paiement non reçu, preuve falsifiée...</div>
+ </div>
+ <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+ </div>
+ <div class="sheet-action" onclick="openPartnerSheet()">
+ <div class="sheet-action-icon green">
+ <svg viewBox="0 0 24 24" width="16" height="16"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+ </div>
+ <div class="sheet-action-label">
+ <div>Informations du partenaire</div>
+ <div class="sheet-action-sub">Profil, niveau, avis</div>
+ </div>
+ <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+ </div>
+ </div>
+</div>
+
+<!-- SHEET LITIGE -->
+<div class="overlay" id="disputeOverlay" onclick="closeDispute(event)">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Signaler un litige</div>
+ <div style="padding:0 22px 16px">
+ <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.6;">
+ Choisis la raison du litige. L'équipe TDOLI sera notifiée immédiatement.
+ </p>
+ <div id="disputeOptions">
+ <label class="dispute-option" onclick="selectDispute(this,'no_payment')">
+ <input type="radio" name="dispute" value="no_payment" style="display:none">
+ <div class="dispute-opt-inner">
+ <div class="dispute-radio"></div>
+ <div>
+ <div style="font-size:14px;font-weight:600;">Paiement non reçu</div>
+ <div style="font-size:12px;color:var(--text-3);margin-top:2px;">L'autre partie n'a pas envoyé les fonds</div>
+ </div>
+ </div>
+ </label>
+ <label class="dispute-option" onclick="selectDispute(this,'fake_proof')">
+ <input type="radio" name="dispute" value="fake_proof" style="display:none">
+ <div class="dispute-opt-inner">
+ <div class="dispute-radio"></div>
+ <div>
+ <div style="font-size:14px;font-weight:600;">Preuve falsifiée</div>
+ <div style="font-size:12px;color:var(--text-3);margin-top:2px;">La capture d'écran fournie est frauduleuse</div>
+ </div>
+ </div>
+ </label>
+ <label class="dispute-option" onclick="selectDispute(this,'no_response')">
+ <input type="radio" name="dispute" value="no_response" style="display:none">
+ <div class="dispute-opt-inner">
+ <div class="dispute-radio"></div>
+ <div>
+ <div style="font-size:14px;font-weight:600;">Ne repond plus</div>
+ <div style="font-size:12px;color:var(--text-3);margin-top:2px;">Le partenaire est injoignable depuis +12h</div>
+ </div>
+ </div>
+ </label>
+ <label class="dispute-option" onclick="selectDispute(this,'other')">
+ <input type="radio" name="dispute" value="other" style="display:none">
+ <div class="dispute-opt-inner">
+ <div class="dispute-radio"></div>
+ <div>
+ <div style="font-size:14px;font-weight:600;">Autre raison</div>
+ <div style="font-size:12px;color:var(--text-3);margin-top:2px;">Décris le problème dans le message</div>
+ </div>
+ </div>
+ </label>
+ </div>
+ <button class="btn-dispute" id="btnDispute" onclick="submitDispute()" disabled>
+ Confirmer le litige
+ </button>
+ <button class="btn-cancel-dispute" onclick="closeDispute()">Annuler</button>
+ </div>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<style>
+.dispute-option{display:block;margin-bottom:10px;cursor:pointer;}
+.dispute-opt-inner{
+ display:flex;align-items:center;gap:12px;
+ padding:14px 16px;background:var(--surface);
+ border:1px solid var(--border);border-radius:var(--r);
+ transition:all 0.15s;
+}
+.dispute-option.selected .dispute-opt-inner{
+ border-color:var(--red);background:rgba(255,23,68,0.06);
+}
+.dispute-radio{
+ width:18px;height:18px;border-radius:50%;
+ border:2px solid var(--text-3);flex-shrink:0;
+ display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+}
+.dispute-option.selected .dispute-radio{
+ border-color:var(--red);background:var(--red);
+}
+.dispute-option.selected .dispute-radio::after{
+ content:'';width:6px;height:6px;border-radius:50%;background:#fff;
+}
+.btn-dispute{
+ width:100%;padding:15px;margin-top:16px;
+ background:var(--red);color:#fff;border:none;
+ border-radius:var(--r);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+ cursor:pointer;transition:opacity 0.2s;
+}
+.btn-dispute:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-cancel-dispute{
+ width:100%;padding:12px;margin-top:8px;
+ background:transparent;color:var(--text-3);
+ border:1px solid var(--border);border-radius:var(--r);
+ font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;
+}
+</style>
+
 <script>
 const API = 'https://tdoli-backend.onrender.com';
 const token = localStorage.getItem('tdoli_token');
@@ -212,63 +494,57 @@ let socket = null;
 let typingTimer = null;
 let isTyping = false;
 let otherEmail = '';
+let currentDeal = null;
+let selectedDisputeReason = null;
+let lastDate = null;
 
-// ─── CONNEXION SOCKET ─────────────────────────────────────────────────────────
+// TOAST 
+function showToast(msg, color) {
+ const t = document.getElementById('toast');
+ t.textContent = msg;
+ t.style.background = color || 'var(--green-dim)';
+ t.classList.add('show');
+ setTimeout(() => t.classList.remove('show'), 2500);
+}
 
+// SOCKET 
 function connectSocket() {
  socket = io(API, {
-  auth: { token },
-  transports: ['websocket', 'polling'],
-  reconnectionAttempts: 5,
-  reconnectionDelay: 2000
+ auth: { token },
+ transports: ['websocket', 'polling'],
+ reconnectionAttempts: 5,
+ reconnectionDelay: 2000
  });
-
  socket.on('connect', () => {
-  console.log('Socket connecté');
-  socket.emit('join_deal', dealId);
-  showConnStatus('Connecté', 'connected');
-  setTimeout(() => hideConnStatus(), 2000);
-  document.getElementById('onlineDot').style.display = 'block';
-  document.getElementById('chatSubText').textContent = 'En ligne';
+ socket.emit('join_deal', dealId);
+ showConnStatus('Connecte', 'connected');
+ setTimeout(() => hideConnStatus(), 2000);
+ document.getElementById('onlineDot').style.display = 'block';
+ document.getElementById('partnerStatusText').textContent = 'En ligne';
  });
-
  socket.on('disconnect', () => {
-  console.log('Socket déconnecté');
-  document.getElementById('onlineDot').style.display = 'none';
-  document.getElementById('chatSubText').textContent = 'Déconnecté';
+ document.getElementById('onlineDot').style.display = 'none';
+ document.getElementById('partnerStatusText').textContent = 'Deconnecte';
  });
-
- socket.on('connect_error', (err) => {
-  console.error('Erreur socket:', err.message);
-  showConnStatus('Reconnexion...', 'reconnecting');
-  document.getElementById('chatSubText').textContent = 'Reconnexion...';
+ socket.on('connect_error', () => {
+ showConnStatus('Reconnexion...', 'reconnecting');
+ document.getElementById('partnerStatusText').textContent = 'Reconnexion...';
  });
-
  socket.on('reconnect', () => {
-  socket.emit('join_deal', dealId);
-  showConnStatus('Reconnecté', 'connected');
-  setTimeout(() => hideConnStatus(), 2000);
+ socket.emit('join_deal', dealId);
+ showConnStatus('Reconnecte', 'connected');
+ setTimeout(() => hideConnStatus(), 2000);
  });
-
- // Nouveau message reçu en temps réel
  socket.on('new_message', (msg) => {
-  appendMessage(msg);
-  const area = document.getElementById('messagesArea');
-  area.scrollTop = area.scrollHeight;
+ appendMessage(msg);
+ const area = document.getElementById('messagesArea');
+ area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
  });
-
- // Indicateur de frappe
  socket.on('user_typing', ({ email: typingEmail, isTyping: typing }) => {
-  if (typingEmail !== email) {
-   const indicator = document.getElementById('typingIndicator');
-   if (indicator) {
-    indicator.className = 'typing-indicator' + (typing ? ' show' : '');
-   }
-  }
- });
-
- socket.on('message_error', ({ error }) => {
-  console.error('Erreur message:', error);
+ if (typingEmail !== email) {
+ const indicator = document.getElementById('typingIndicator');
+ if (indicator) indicator.className = 'typing-indicator' + (typing ? ' show' : '');
+ }
  });
 }
 
@@ -281,54 +557,65 @@ function hideConnStatus() {
  document.getElementById('connStatus').className = 'conn-status';
 }
 
-// ─── CHARGEMENT INITIAL DES MESSAGES ─────────────────────────────────────────
-
+// DEAL INFO 
 async function loadDealInfo() {
  try {
-  const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
-  const deals = await res.json();
-  const deal = deals.find(d => d._id === dealId);
-  if (deal) {
-   const isSender = deal.sender === email;
-   otherEmail = isSender ? deal.receiverEmail : deal.sender;
-   const otherName = otherEmail ? otherEmail.split('@')[0] : '...';
-   document.getElementById('chatTitle').textContent = 'Chat avec ' + otherName;
-   document.getElementById('dealAmt').textContent = Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
-   document.getElementById('dealDir').textContent = deal.fromCountry + ' → ' + deal.toCountry;
-   document.getElementById('dealSummary').style.display = 'flex';
-  }
+ const res = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+ const deals = await res.json();
+ const deal = deals.find(d => d._id === dealId);
+ if (!deal) return;
+ currentDeal = deal;
+
+ const isSender = deal.sender === email;
+ otherEmail = isSender ? deal.receiverEmail : deal.sender;
+ const otherName = deal.senderUsername
+ ? (isSender ? (deal.receiverUsername || otherEmail.split('@')[0]) : deal.senderUsername)
+ : otherEmail.split('@')[0];
+
+ // Initiales avatar partenaire
+ const parts = otherName.trim().split(' ').filter(p => p.length > 0);
+ const initials = parts.length >= 2
+ ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+ : otherName.substring(0, 2).toUpperCase();
+
+ document.getElementById('partnerAvatar').textContent = initials;
+ document.getElementById('partnerName').textContent = otherName;
+ document.getElementById('menuTitle').textContent = 'Chat avec ' + otherName;
+
+ // Bandeau deal
+ document.getElementById('bannerCode').textContent = deal.dealCode || dealId.slice(-6).toUpperCase();
+ document.getElementById('bannerAmount').textContent =
+ Number(deal.amount).toLocaleString('fr-FR') + ' ' + deal.currency;
+ document.getElementById('bannerDir').textContent =
+ (deal.fromCountry || '?') + ' → ' + (deal.toCountry || '?');
+
+ const statusEl = document.getElementById('bannerStatus');
+ if (deal.status === 'completed') {
+ statusEl.textContent = 'Termine';
+ statusEl.className = 'deal-banner-status completed';
+ } else if (deal.status === 'dispute') {
+ statusEl.textContent = 'Litige';
+ statusEl.className = 'deal-banner-status dispute';
+ } else {
+ statusEl.textContent = 'En cours';
+ statusEl.className = 'deal-banner-status matched';
+ }
+ document.getElementById('dealBanner').style.display = 'flex';
  } catch (e) {}
 }
 
-async function loadInitialMessages() {
- try {
-  const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
-  const msgs = await res.json();
-  const area = document.getElementById('messagesArea');
-
-  if (!Array.isArray(msgs) || msgs.length === 0) {
-   area.innerHTML = `
-    <div class="empty-chat">
-     <div class="empty-chat-icon">💬</div>
-     <div class="empty-chat-title">Aucun message</div>
-     <div class="empty-chat-hint">Commence la conversation.</div>
-    </div>
-    <div class="typing-indicator" id="typingIndicator">
-     <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
-    </div>`;
-   return;
-  }
-
-  area.innerHTML = msgs.map(m => buildMessageHTML(m)).join('') +
-   '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
-  area.scrollTop = area.scrollHeight;
- } catch (e) {
-  document.getElementById('messagesArea').innerHTML = '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
- }
+// MESSAGES 
+function formatTime(d) {
+ return new Date(d).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 }
-
-function formatTime(dateStr) {
- return new Date(dateStr).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+function formatDate(d) {
+ const date = new Date(d);
+ const today = new Date();
+ const yesterday = new Date(today);
+ yesterday.setDate(yesterday.getDate() - 1);
+ if (date.toDateString() === today.toDateString()) return "Aujourd'hui";
+ if (date.toDateString() === yesterday.toDateString()) return 'Hier';
+ return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 function escHtml(str) {
  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
@@ -336,97 +623,207 @@ function escHtml(str) {
 function isMM(text) { return text.startsWith(' Infos Mobile Money'); }
 function renderMMCard(text) {
  const lines = text.split('\n');
- return '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:8px;">'+escHtml(lines[0])+'</div>' +
-  lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">'+escHtml(l)+'</div>').join('');
+ return '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:8px;">'
+ + escHtml(lines[0]) + '</div>'
+ + lines.slice(1).map(l => '<div style="font-size:13px;margin-bottom:4px;">' + escHtml(l) + '</div>').join('');
 }
 
-function buildMessageHTML(m) {
- const isMine = m.sender === email;
- const name = m.sender ? m.sender.split('@')[0] : '?';
- if (isMM(m.text)) {
-  return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
-   ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
-   <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div>
-   <div class="msg-time">${formatTime(m.createdAt)}</div>
-  </div>`;
- }
- return `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
-  ${!isMine ? '<div class="msg-sender">'+name+'</div>' : ''}
-  <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div>
-  <div class="msg-time">${formatTime(m.createdAt)}</div>
+function dateSeparator(dateStr) {
+ return `<div class="date-sep">
+ <div class="date-sep-line"></div>
+ <div class="date-sep-text">${formatDate(dateStr)}</div>
+ <div class="date-sep-line"></div>
  </div>`;
+}
+
+function buildMessageHTML(m, showDateSep) {
+ const isMine = m.sender === email;
+ let html = showDateSep ? dateSeparator(m.createdAt) : '';
+ if (isMM(m.text)) {
+ html += `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+ <div class="msg-bubble mm-card">${renderMMCard(m.text)}</div>
+ <div class="msg-meta">${formatTime(m.createdAt)}</div>
+ </div>`;
+ } else {
+ html += `<div class="msg-wrap ${isMine ? 'mine' : 'theirs'}">
+ <div class="msg-bubble ${isMine ? 'mine' : 'theirs'}">${escHtml(m.text)}</div>
+ <div class="msg-meta">
+ ${formatTime(m.createdAt)}
+ ${isMine ? '<span class="msg-read"></span>' : ''}
+ </div>
+ </div>`;
+ }
+ return html;
+}
+
+async function loadInitialMessages() {
+ try {
+ const res = await fetch(API + '/messages/' + dealId, { headers: { 'Authorization': 'Bearer ' + token } });
+ const msgs = await res.json();
+ const area = document.getElementById('messagesArea');
+
+ if (!Array.isArray(msgs) || msgs.length === 0) {
+ area.innerHTML = `
+ <div class="empty-chat">
+ <div class="empty-chat-title">Aucun message</div>
+ <div class="empty-chat-hint">Commence la conversation avec ton partenaire.</div>
+ </div>
+ <div class="typing-indicator" id="typingIndicator">
+ <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+ </div>`;
+ return;
+ }
+
+ let html = '';
+ let prevDate = null;
+ msgs.forEach(m => {
+ const msgDate = new Date(m.createdAt).toDateString();
+ const showSep = msgDate !== prevDate;
+ html += buildMessageHTML(m, showSep);
+ prevDate = msgDate;
+ });
+ html += '<div class="typing-indicator" id="typingIndicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+ area.innerHTML = html;
+ area.scrollTop = area.scrollHeight;
+ } catch (e) {
+ document.getElementById('messagesArea').innerHTML =
+ '<div class="empty-chat"><div class="empty-chat-title">Erreur de connexion</div></div>';
+ }
 }
 
 function appendMessage(m) {
  const area = document.getElementById('messagesArea');
- // Supprimer le empty-chat si présent
  const emptyChat = area.querySelector('.empty-chat');
  if (emptyChat) emptyChat.remove();
 
- // Insérer avant l'indicateur de frappe
+ // Séparateur de date si nouveau jour
+ const msgDate = new Date(m.createdAt).toDateString();
+ const lastMsg = area.querySelector('.msg-wrap:last-of-type');
+ let showSep = false;
+ if (!lastMsg) {
+ showSep = true;
+ } else {
+ const lastTime = lastMsg.dataset.date;
+ if (lastTime !== msgDate) showSep = true;
+ }
+
  const typingIndicator = document.getElementById('typingIndicator');
  const div = document.createElement('div');
- div.innerHTML = buildMessageHTML(m);
- const msgEl = div.firstElementChild;
- if (typingIndicator) {
-  area.insertBefore(msgEl, typingIndicator);
- } else {
-  area.appendChild(msgEl);
- }
+ div.innerHTML = buildMessageHTML(m, showSep);
+ Array.from(div.children).forEach(child => {
+ if (child.classList.contains('msg-wrap')) child.dataset.date = msgDate;
+ typingIndicator ? area.insertBefore(child, typingIndicator) : area.appendChild(child);
+ });
 }
 
-// ─── ENVOI DE MESSAGE ─────────────────────────────────────────────────────────
-
+// ENVOI 
 function sendMessage() {
  const input = document.getElementById('msgInput');
  const text = input.value.trim();
  if (!text || !socket) return;
-
  socket.emit('send_message', { dealId, text });
  input.value = '';
  input.style.height = 'auto';
-
- // Arrêter l'indicateur de frappe
  stopTyping();
+ if (navigator.vibrate) navigator.vibrate(30);
 }
-
 function handleInput(el) {
  el.style.height = 'auto';
  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
-
- // Indicateur de frappe
- if (!isTyping && socket) {
-  isTyping = true;
-  socket.emit('typing', { dealId, isTyping: true });
- }
+ if (!isTyping && socket) { isTyping = true; socket.emit('typing', { dealId, isTyping: true }); }
  clearTimeout(typingTimer);
  typingTimer = setTimeout(stopTyping, 2000);
 }
-
 function stopTyping() {
- if (isTyping && socket) {
-  isTyping = false;
-  socket.emit('typing', { dealId, isTyping: false });
- }
+ if (isTyping && socket) { isTyping = false; socket.emit('typing', { dealId, isTyping: false }); }
  clearTimeout(typingTimer);
 }
-
 function handleKey(e) {
  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
-// ─── MOBILE MONEY ─────────────────────────────────────────────────────────────
+// NAVIGATION 
+function goToDeal() {
+ closeMenu();
+ window.location.href = '/tdoli-deals.html';
+}
 
+// MENU `...` 
+function openMenu() {
+ document.getElementById('menuOverlay').classList.add('open');
+}
+function closeMenu(e) {
+ if (!e || e.target === document.getElementById('menuOverlay')) {
+ document.getElementById('menuOverlay').classList.remove('open');
+ }
+}
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+// SHEET LITIGE 
+function openDisputeSheet() {
+ closeMenu();
+ setTimeout(() => document.getElementById('disputeOverlay').classList.add('open'), 200);
+}
+function closeDispute(e) {
+ if (!e || e.target === document.getElementById('disputeOverlay')) {
+ document.getElementById('disputeOverlay').classList.remove('open');
+ selectedDisputeReason = null;
+ document.querySelectorAll('.dispute-option').forEach(o => o.classList.remove('selected'));
+ document.getElementById('btnDispute').disabled = true;
+ }
+}
+function selectDispute(el, reason) {
+ document.querySelectorAll('.dispute-option').forEach(o => o.classList.remove('selected'));
+ el.classList.add('selected');
+ selectedDisputeReason = reason;
+ document.getElementById('btnDispute').disabled = false;
+}
+async function submitDispute() {
+ if (!selectedDisputeReason || !currentDeal) return;
+ const btn = document.getElementById('btnDispute');
+ btn.disabled = true;
+ btn.innerHTML = '<span class="spinner"></span>En cours...';
+ try {
+ const res = await fetch(API + '/deals/' + dealId + '/dispute', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+ body: JSON.stringify({ reason: selectedDisputeReason })
+ });
+ if (res.ok) {
+ closeDispute();
+ showToast('Litige signale — equipe notifiee', 'var(--red)');
+ setTimeout(() => window.location.href = '/tdoli-deals.html', 2000);
+ } else {
+ const d = await res.json();
+ showToast(d.message || 'Erreur', 'var(--red)');
+ btn.disabled = false;
+ btn.innerHTML = 'Confirmer le litige';
+ }
+ } catch(e) {
+ showToast('Serveur inaccessible', 'var(--red)');
+ btn.disabled = false;
+ btn.innerHTML = 'Confirmer le litige';
+ }
+}
 
+// SHEET PARTENAIRE 
+function openPartnerSheet() {
+ closeMenu();
+ if (otherEmail) window.location.href = '/tdoli-profile.html?user=' + encodeURIComponent(otherEmail);
+}
+
+// INIT 
 window.addEventListener('resize', () => {
- setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 100);
+ setTimeout(() => {
+ const area = document.getElementById('messagesArea');
+ area.scrollTop = area.scrollHeight;
+ }, 100);
 });
 document.getElementById('msgInput').addEventListener('focus', () => {
- setTimeout(() => { const area = document.getElementById('messagesArea'); area.scrollTop = area.scrollHeight; }, 300);
+ setTimeout(() => {
+ const area = document.getElementById('messagesArea');
+ area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
+ }, 300);
 });
-
 window.addEventListener('beforeunload', () => {
  if (socket) { socket.emit('leave_deal', dealId); socket.disconnect(); }
 });
@@ -434,103 +831,6 @@ window.addEventListener('beforeunload', () => {
 loadDealInfo();
 loadInitialMessages();
 connectSocket();
-
-function initAvatar(){
- const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
- let initials='?';
- if(username){
-  const parts=username.trim().split(' ').filter(function(p){return p.length>0;});
-  if(parts.length>=2) initials=(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
-  else initials=username.substring(0,2).toUpperCase();
- }
- const btn=document.getElementById('avatarBtn');
- if(btn)btn.textContent=initials;
-}
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAvatar);}
-else{initAvatar();}
-window.addEventListener('storage',initAvatar);
-function shareApp(){
- const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
- const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
- if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
- else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
-}
-
-// ── UX Fluidité ───────────────────────────────────────────────
-
-// 1. Animation entrée de page
-document.body.classList.add('page-enter');
-
-// 2. Pull-to-refresh sur les pages avec feed/liste
-(function initPullToRefresh() {
-  let startY = 0, pulling = false;
-  const MIN_PULL = 80;
-  const indicator = document.createElement('div');
-  indicator.className = 'ptr-indicator';
-  indicator.textContent = 'Relâcher pour actualiser';
-  const firstChild = document.querySelector('.content, .deals-list, .conv-list, .main-content');
-  if (!firstChild) return;
-  firstChild.parentNode.insertBefore(indicator, firstChild);
-
-  document.addEventListener('touchstart', e => {
-    if (window.scrollY === 0) { startY = e.touches[0].pageY; pulling = true; }
-  }, { passive: true });
-  document.addEventListener('touchmove', e => {
-    if (!pulling) return;
-    const dist = e.touches[0].pageY - startY;
-    if (dist > 40) { indicator.classList.add('active'); indicator.textContent = dist > MIN_PULL ? 'Relâcher pour actualiser' : 'Tirer pour actualiser'; }
-  }, { passive: true });
-  document.addEventListener('touchend', e => {
-    if (!pulling) return;
-    pulling = false;
-    const dist = e.changedTouches[0].pageY - startY;
-    indicator.classList.remove('active');
-    if (dist > MIN_PULL) {
-      indicator.classList.add('active');
-      indicator.textContent = 'Actualisation...';
-      setTimeout(() => { window.location.reload(); }, 500);
-    }
-  });
-})();
-
-// 3. Swipe bas pour fermer les sheets
-(function initSwipeSheet() {
-  document.querySelectorAll('.sheet').forEach(sheet => {
-    let startY = 0;
-    sheet.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
-    sheet.addEventListener('touchend', e => {
-      const dist = e.changedTouches[0].pageY - startY;
-      if (dist > 80) {
-        const overlay = sheet.closest('.overlay');
-        if (overlay) overlay.classList.remove('open');
-      }
-    }, { passive: true });
-  });
-})();
-
-// 4. Feedback copier avec vibration
-function copyWithFeedback(text, label) {
-  navigator.clipboard.writeText(text).then(() => {
-    if (navigator.vibrate) navigator.vibrate(50);
-    let el = document.querySelector('.copy-feedback');
-    if (!el) { el = document.createElement('div'); el.className = 'copy-feedback'; document.body.appendChild(el); }
-    el.textContent = label || 'Copié';
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 1800);
-  });
-}
-
-// 5. Auto-focus sur le premier input des sheets à l'ouverture
-document.querySelectorAll('.overlay').forEach(overlay => {
-  const observer = new MutationObserver(() => {
-    if (overlay.classList.contains('open')) {
-      const input = overlay.querySelector('input:not([type=hidden]), textarea');
-      if (input) setTimeout(() => input.focus(), 300);
-    }
-  });
-  observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
-});
-
 </script>
 </body>
 </html>
