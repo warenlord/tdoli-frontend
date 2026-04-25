@@ -338,7 +338,7 @@ firebase.initializeApp({
  <a class="nav-item" href="/tdoli-deals.html">
  <div class="nav-icon-wrap">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
- <div class="nav-badge yellow" id="dealsBadge"></div>
+ <div class="nav-dot-active" id="dealsBadge" style="display:none;"></div>
  </div>
  <span>Deals</span>
  </a>
@@ -1376,8 +1376,8 @@ async function checkActiveDeals() {
  if (Array.isArray(deals)) {
  const active = deals.filter(d => d.status === 'matched').length;
  const badge = document.getElementById('dealsBadge');
- if (active > 0) { badge.textContent = active; badge.classList.add('show'); }
- else badge.classList.remove('show');
+ if (active > 0) { badge.style.display = 'block'; }
+ else { badge.style.display = 'none'; }
  }
  } catch (e) {}
 }
@@ -1646,7 +1646,7 @@ async function checkUnreadMessages() {
  const badge = document.getElementById('msgBadge');
  if (badge) {
  if (data.count > 0) { badge.textContent = data.count > 9 ? '9+' : data.count; badge.classList.add('show'); }
- else badge.classList.remove('show');
+ else { badge.style.display = 'none'; }
  }
  } catch(e) {}
 }
