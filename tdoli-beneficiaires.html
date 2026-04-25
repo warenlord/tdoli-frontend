@@ -3,13 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TDOLI — Mes Bénéficiaires</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>TDOLI  Mes Bénéficiaires</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;--purple:#8250ff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);--r:16px;}
+:root{
+  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
+}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px;overflow-x:hidden;}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px;overflow-x:hidden;}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 1px 12px rgba(0,0,0,0.4);}
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;}
 .topbar-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;flex:1;}
 .btn-add{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:20px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
@@ -63,10 +70,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* Form */
 .form-group{margin-bottom:14px;}
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:7px;letter-spacing:1px;text-transform:uppercase;}
-.form-input,.form-select{width:100%;padding:13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;-webkit-appearance:none;transition:all 0.2s;}
+.form-input,.form-select{width:100%;padding:13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;-webkit-appearance:none;transition:all 0.2s;}
 .form-input:focus,.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
 .form-input::placeholder{color:var(--text-3);opacity:0.6;}
-.btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;}
+.btn-primary{width:100%;padding:15px;background:var(--green-dim);box-shadow:0 4px 16px rgba(0,200,83,0.25);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
 .btn-cancel{width:100%;padding:13px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
@@ -80,132 +87,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <link rel="manifest" href="/manifest.json">
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/service-worker.js').catch(()=>{});});}</script>
 </head>
-<body>
-
-<div class="topbar">
-  <a href="/tdoli-profile.html" class="back-btn">←</a>
-  <div class="topbar-title">Mes Bénéficiaires</div>
-  <button class="btn-add" onclick="openSheet()">+ Ajouter</button>
-</div>
-
-<div class="content">
-  <!-- MOI -->
-  <div class="section-header">
-    <div class="section-title">🙋 Moi — Mes coordonnées</div>
-  </div>
-  <div id="listMoi"><div class="loading-wrap"><div class="loader"></div></div></div>
-
-  <!-- BENEFICIAIRES -->
-  <div class="section-header">
-    <div class="section-title">👥 Mes bénéficiaires</div>
-  </div>
-  <div id="listBenef"><div class="loading-wrap"><div class="loader"></div></div></div>
-</div>
-
-<!-- Sheet formulaire -->
-<div class="overlay" id="formOverlay" onclick="closeOnOverlay(event,'formOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title" id="formTitle">Nouveau bénéficiaire</div>
-
-    <!-- Type -->
-    <div class="type-toggle">
-      <div class="type-btn active-benef" id="typeBtn-benef" onclick="setType('beneficiaire')">👥 Bénéficiaire</div>
-      <div class="type-btn" id="typeBtn-moi" onclick="setType('moi')">🙋 Moi</div>
-    </div>
-
-    <!-- Nom -->
-    <div class="form-group">
-      <label class="form-label" id="nomLabel">Nom du bénéficiaire</label>
-      <input class="form-input" type="text" id="f-nom" placeholder="Ex: Maman, Jean Dupont…">
-    </div>
-
-    <!-- Pays -->
-    <div class="form-group">
-      <label class="form-label">Pays</label>
-      <select class="form-select" id="f-pays">
-        <option value="">Sélectionner…</option>
-        <option value="Gabon">🇬🇦 Gabon</option>
-        <option value="France">🇫🇷 France</option>
-        <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-        <option value="Belgique">🇧🇪 Belgique</option>
-        <option value="Suisse">🇨🇭 Suisse</option>
-        <option value="Canada">🇨🇦 Canada</option>
-        <option value="Etats-Unis">🇺🇸 États-Unis</option>
-      </select>
-    </div>
-
-    <!-- Méthode -->
-    <div class="form-group">
-      <label class="form-label">Méthode de paiement</label>
-      <div class="method-tabs">
-        <div class="method-tab active" data-method="mobilemoney" onclick="setMethod('mobilemoney',this)">📱 Mobile Money</div>
-        <div class="method-tab" data-method="virement" onclick="setMethod('virement',this)">🏦 Virement</div>
-        <div class="method-tab" data-method="paypal" onclick="setMethod('paypal',this)">💳 PayPal</div>
-        <div class="method-tab" data-method="wero" onclick="setMethod('wero',this)">🟣 Wero</div>
-      </div>
-    </div>
-
-    <!-- Mobile Money -->
-    <div class="method-fields show" id="ff-mobilemoney">
-      <div class="form-group">
-        <label class="form-label">Numéro Mobile Money</label>
-        <input class="form-input" type="tel" id="f-mm-phone" placeholder="+241 06 00 00 00" inputmode="tel">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Opérateur</label>
-        <select class="form-select" id="f-mm-operateur">
-          <option value="">Sélectionner…</option>
-          <option value="Airtel Money">Airtel Money</option>
-          <option value="Moov Money">Moov Money</option>
-          <option value="Orange Money">Orange Money</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Virement -->
-    <div class="method-fields" id="ff-virement">
-      <div class="form-group">
-        <label class="form-label">IBAN</label>
-        <input class="form-input" type="text" id="f-iban" placeholder="FR76 3000 6000 0112 3456 7890 189">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Banque</label>
-        <input class="form-input" type="text" id="f-banque" placeholder="BNP, Société Générale…">
-      </div>
-    </div>
-
-    <!-- PayPal -->
-    <div class="method-fields" id="ff-paypal">
-      <div class="form-group">
-        <label class="form-label">Email PayPal</label>
-        <input class="form-input" type="email" id="f-paypal" placeholder="ton@email.com">
-      </div>
-    </div>
-
-    <!-- Wero -->
-    <div class="method-fields" id="ff-wero">
-      <div class="form-group">
-        <label class="form-label">Numéro de téléphone Wero</label>
-        <input class="form-input" type="tel" id="f-wero" placeholder="+33 6 12 34 56 78" inputmode="tel">
-      </div>
-    </div>
-
-    <!-- Note -->
-    <div class="form-group">
-      <label class="form-label">Note (optionnel)</label>
-      <input class="form-input" type="text" id="f-note" placeholder="Ex: Envoyer en semaine">
-    </div>
-
-    <button class="btn-primary" id="btn-save" onclick="saveBenef()">Enregistrer</button>
-    <button class="btn-cancel" onclick="closeSheet('formOverlay')">Annuler</button>
-    <div class="msg error" id="msg-form"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
+<body> <div class="topbar"> <a href="/tdoli-profile.html" class="back-btn"></a> <div class="topbar-title">Mes Bénéficiaires</div> <button class="btn-add" onclick="openSheet()">+ Ajouter</button>
+</div> <div class="content"> <!-- MOI --> <div class="section-header"> <div class="section-title"> Moi  Mes coordonnées</div> </div> <div id="listMoi"><div class="loading-wrap"><div class="loader"></div></div></div> <!-- BENEFICIAIRES --> <div class="section-header"> <div class="section-title"> Mes bénéficiaires</div> </div> <div id="listBenef"><div class="loading-wrap"><div class="loader"></div></div></div>
+</div> <!-- Sheet formulaire -->
+<div class="overlay" id="formOverlay" onclick="closeOnOverlay(event,'formOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title" id="formTitle">Nouveau bénéficiaire</div> <!-- Type --> <div class="type-toggle"> <div class="type-btn active-benef" id="typeBtn-benef" onclick="setType('beneficiaire')"> Bénéficiaire</div> <div class="type-btn" id="typeBtn-moi" onclick="setType('moi')"> Moi</div> </div> <!-- Nom --> <div class="form-group"> <label class="form-label" id="nomLabel">Nom du bénéficiaire</label> <input class="form-input" type="text" id="f-nom" placeholder="Ex: Maman, Jean Dupont"> </div> <!-- Pays --> <div class="form-group"> <label class="form-label">Pays</label> <select class="form-select" id="f-pays"> <option value="">Sélectionner</option> <option value="Gabon">🇬🇦 Gabon</option> <option value="France">🇫🇷 France</option> <option value="Burkina Faso">🇧🇫 Burkina Faso</option> <option value="Belgique">🇧🇪 Belgique</option> <option value="Suisse">🇨🇭 Suisse</option> <option value="Canada">🇨🇦 Canada</option> <option value="Etats-Unis">🇺🇸 États-Unis</option> </select> </div> <!-- Méthode --> <div class="form-group"> <label class="form-label">Méthode de paiement</label> <div class="method-tabs"> <div class="method-tab active" data-method="mobilemoney" onclick="setMethod('mobilemoney',this)"> Mobile Money</div> <div class="method-tab" data-method="virement" onclick="setMethod('virement',this)"> Virement</div> <div class="method-tab" data-method="paypal" onclick="setMethod('paypal',this)"> PayPal</div> <div class="method-tab" data-method="wero" onclick="setMethod('wero',this)"> Wero</div> </div> </div> <!-- Mobile Money --> <div class="method-fields show" id="ff-mobilemoney"> <div class="form-group"> <label class="form-label">Numéro Mobile Money</label> <input class="form-input" type="tel" id="f-mm-phone" placeholder="+241 06 00 00 00" inputmode="tel"> </div> <div class="form-group"> <label class="form-label">Opérateur</label> <select class="form-select" id="f-mm-operateur"> <option value="">Sélectionner</option> <option value="Airtel Money">Airtel Money</option> <option value="Moov Money">Moov Money</option> <option value="Orange Money">Orange Money</option> </select> </div> </div> <!-- Virement --> <div class="method-fields" id="ff-virement"> <div class="form-group"> <label class="form-label">IBAN</label> <input class="form-input" type="text" id="f-iban" placeholder="FR76 3000 6000 0112 3456 7890 189"> </div> <div class="form-group"> <label class="form-label">Banque</label> <input class="form-input" type="text" id="f-banque" placeholder="BNP, Société Générale"> </div> </div> <!-- PayPal --> <div class="method-fields" id="ff-paypal"> <div class="form-group"> <label class="form-label">Email PayPal</label> <input class="form-input" type="email" id="f-paypal" placeholder="ton@email.com"> </div> </div> <!-- Wero --> <div class="method-fields" id="ff-wero"> <div class="form-group"> <label class="form-label">Numéro de téléphone Wero</label> <input class="form-input" type="tel" id="f-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"> </div> </div> <!-- Note --> <div class="form-group"> <label class="form-label">Note (optionnel)</label> <input class="form-input" type="text" id="f-note" placeholder="Ex: Envoyer en semaine"> </div> <button class="btn-primary" id="btn-save" onclick="saveBenef()">Enregistrer</button> <button class="btn-cancel" onclick="closeSheet('formOverlay')">Annuler</button> <div class="msg error" id="msg-form"></div> </div>
+</div> <div class="toast" id="toast"></div> <script>
 const API = 'https://tdoli-backend.onrender.com';
 const token = localStorage.getItem('tdoli_token');
 if (!token) window.location.replace('/tdoli-auth.html');
@@ -260,18 +146,7 @@ function renderCard(b) {
   const detail = getBenefDetail(b);
   const pays = b.pays ? ' · ' + b.pays : '';
   return `
-    <div class="benef-card type-${b.type}">
-      <div class="benef-avatar type-${b.type}">${ini}</div>
-      <div class="benef-body">
-        <div class="benef-name">${b.nom}</div>
-        <div class="benef-detail">${detail}${pays}</div>
-        <span class="benef-method m-${b.methode}">${getMethodLabel(b.methode)}</span>
-      </div>
-      <div class="benef-actions">
-        <div class="btn-icon" onclick="editBenef('${b._id}')">✏️</div>
-        <div class="btn-icon del" onclick="deleteBenef('${b._id}', '${b.nom.replace(/'/g, "\\'")}')">🗑</div>
-      </div>
-    </div>`;
+    <div class="benef-card type-${b.type}"> <div class="benef-avatar type-${b.type}">${ini}</div> <div class="benef-body"> <div class="benef-name">${b.nom}</div> <div class="benef-detail">${detail}${pays}</div> <span class="benef-method m-${b.methode}">${getMethodLabel(b.methode)}</span> </div> <div class="benef-actions"> <div class="btn-icon" onclick="editBenef('${b._id}')">✏️</div> <div class="btn-icon del" onclick="deleteBenef('${b._id}', '${b.nom.replace(/'/g, "\\'")}')">🗑</div> </div> </div>`;
 }
 
 function renderLists() {

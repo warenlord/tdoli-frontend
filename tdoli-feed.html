@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TDOLI — Feed</title>
+<title>TDOLI  Feed</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -12,19 +12,18 @@
   --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
   --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
   --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
-  --r:14px;
-  --shadow:0 2px 20px rgba(0,0,0,0.5);
+  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
-.bg-mesh{display:none;background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,180,90,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 20% 90%,rgba(26,79,255,0.07) 0%,transparent 60%);}
+.bg-mesh{display:none;}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 1px 12px rgba(0,0,0,0.4);}
 .topbar-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 
-/* AVATAR BTN — FIX Phase 1 */
+/* AVATAR BTN  FIX Phase 1 */
 .user-avatar-btn{
   width:38px;height:38px;border-radius:50%;
   background:var(--green-dim);
@@ -38,7 +37,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .user-avatar-btn:active{transform:scale(0.93);}
 .user-avatar-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 
-/* PARRAINER BTN — FIX Phase 1 (jaune) */
+/* PARRAINER BTN  FIX Phase 1 (jaune) */
 .share-btn{
   background:rgba(252,209,22,0.1);
   border:1px solid rgba(252,209,22,0.3);
@@ -75,7 +74,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .item-meta{display:flex;align-items:center;gap:6px;}
 .item-rating{font-size:11px;color:var(--yellow);font-weight:700;}
 .item-time{font-size:10px;color:var(--text-3);}
-.item-currency{font-size:12px;color:var(--yellow);font-weight:700;font-family:'Syne',sans-serif;margin-left:3px;}
+.item-currency{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);margin-left:3px;}
 .mine-tag{font-size:9px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:4px;padding:1px 6px;font-family:'Syne',sans-serif;font-weight:700;}
 .status-dot-sm{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
 .trust-line{font-size:10px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:4px;}
@@ -95,7 +94,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 @keyframes spin{to{transform:rotate(360deg);}}
 .fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,83,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .fab:active{transform:scale(0.9);}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;box-shadow:0 -2px 20px rgba(0,0,0,0.4);}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
@@ -118,7 +117,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .detail-flow{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
 .detail-country{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:500;text-align:center;}
 .detail-arrow{width:24px;height:24px;border-radius:50%;background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--yellow);flex-shrink:0;}
-.detail-amount{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--green);}
+.detail-amount{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--green);}
 .detail-currency{font-size:14px;color:var(--yellow);font-weight:700;margin-left:6px;}
 .detail-eur{font-size:12px;color:var(--green);background:var(--green-glow);border-radius:6px;padding:3px 8px;margin-left:auto;}
 .match-info{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
@@ -158,7 +157,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .benef-selected-name{font-weight:600;color:var(--green);}
 .benef-selected-detail{font-size:11px;color:var(--text-3);}
 
-/* Phase 2 — Airtel Money */
+/* Phase 2  Airtel Money */
 .airtel-box{background:rgba(252,209,22,0.05);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-top:10px;margin-bottom:4px;}
 .airtel-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:3px 0;}
 .airtel-divider{border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:7px;}
@@ -171,7 +170,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .airtel-scenario-title{font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:var(--text-2);margin-bottom:4px;margin-top:2px;}
 .airtel-highlight{background:rgba(0,0,0,0.15);border-radius:6px;padding:4px 6px;margin:2px -6px;}
 
-/* Phase 5 — Réputation communautaire */
+/* Phase 5  Réputation communautaire */
 .activity-feed{margin-bottom:16px;}
 .activity-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;}
 .activity-emoji{font-size:16px;flex-shrink:0;}
@@ -262,7 +261,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
-<!-- Phase 9 — Firebase SDK -->
+<!-- Phase 9  Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 <script>
@@ -278,304 +277,34 @@ firebase.initializeApp({
 <script src="/fcm-init.js"></script>
 </head>
 <body>
-<div class="bg-mesh"></div>
-
-<div class="topbar">
-  <div class="topbar-left">
-    <!-- FIX Phase 1: avatar initialisé avec initiales, photo si dispo -->
-    <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a>
-  </div>
-  <div style="flex:1;"></div>
-  <div class="topbar-right">
-    <!-- FIX Phase 1: bouton Parrainer jaune stylisé -->
-    <button class="share-btn" onclick="shareApp()">🎁 Parrainer</button>
-  </div>
-</div>
-
-<div class="content">
-  <!-- Fil d'actualité communautaire -->
-  <div class="activity-feed" id="activityFeed" style="display:none;"></div>
-
-  <div class="section-header">
-    <div class="section-title">Annonces</div>
-    <div class="badge" id="countBadge">—</div>
-  </div>
-
-  <!-- Phase 5 — Compteur hebdomadaire -->
-  <div class="weekly-banner" id="weeklyBanner" style="display:none;">
-    <div class="weekly-pulse"></div>
-    <div class="weekly-icon">🌍</div>
-    <div class="weekly-text">
-      <strong id="weeklyMembers">—</strong> membres de la communauté ont échangé
-      <span class="vol" id="weeklyVolume">—</span> cette semaine
-    </div>
-  </div>
-
-  <div class="filter-bar">
-    <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div>
-    <div class="filter-chip" onclick="setFilter('mine',this)">Mes annonces</div>
-    <div class="filter-advanced-btn" id="filterAdvancedBtn" onclick="openAdvancedFilters()">⚙ Filtres avancés</div>
-  </div>
-
-  <!-- Tags filtres actifs -->
-  <div class="active-filters-bar" id="activeFiltersBar" style="display:none;"></div>
-  <div id="feedList"><div class="loading-wrap"><div class="loader"></div></div></div>
-</div>
-
-<button class="fab" onclick="openCreateSheet()">+</button>
-
-<nav class="bottom-nav">
-  <a class="nav-item active" href="/tdoli-feed.html">
-    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
+<div class="bg-mesh"></div> <div class="topbar"> <div class="topbar-left"> <!-- FIX Phase 1: avatar initialisé avec initiales, photo si dispo --> <a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">WN</a> </div> <div style="flex:1;"></div> <div class="topbar-right"> <!-- FIX Phase 1: bouton Parrainer jaune stylisé --> <button class="share-btn" onclick="shareApp()"> Parrainer</button> </div>
+</div> <div class="content"> <!-- Fil d'actualité communautaire --> <div class="activity-feed" id="activityFeed" style="display:none;"></div> <div class="section-header"> <div class="section-title">Annonces</div> <div class="badge" id="countBadge"></div> </div> <!-- Phase 5  Compteur hebdomadaire --> <div class="weekly-banner" id="weeklyBanner" style="display:none;"> <div class="weekly-pulse"></div> <div class="weekly-icon"></div> <div class="weekly-text"> <strong id="weeklyMembers"></strong> membres de la communauté ont échangé
+      <span class="vol" id="weeklyVolume"></span> cette semaine
+    </div> </div> <div class="filter-bar"> <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div> <div class="filter-chip" onclick="setFilter('mine',this)">Mes annonces</div> <div class="filter-advanced-btn" id="filterAdvancedBtn" onclick="openAdvancedFilters()"> Filtres avancés</div> </div> <!-- Tags filtres actifs --> <div class="active-filters-bar" id="activeFiltersBar" style="display:none;"></div> <div id="feedList"><div class="loading-wrap"><div class="loader"></div></div></div>
+</div> <button class="fab" onclick="openCreateSheet()">+</button> <nav class="bottom-nav"> <a class="nav-item active" href="/tdoli-feed.html"> <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
+  </a> <a class="nav-item" href="/tdoli-deals.html"> <div class="nav-icon-wrap"> <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div> <div class="deals-badge" id="dealsBadge">!</div> </div>Deals
+  </a> <a class="nav-item" href="/tdoli-messages.html"> <div class="nav-icon-wrap"> <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div> <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div> </div>Messages
+  </a> <a class="nav-item" href="/tdoli-profile.html"> <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
   </a>
-  <a class="nav-item" href="/tdoli-deals.html">
-    <div class="nav-icon-wrap">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
-      <div class="deals-badge" id="dealsBadge">!</div>
-    </div>Deals
-  </a>
-  <a class="nav-item" href="/tdoli-messages.html">
-    <div class="nav-icon-wrap">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-      <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div>
-    </div>Messages
-  </a>
-  <a class="nav-item" href="/tdoli-profile.html">
-    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
-  </a>
-</nav>
-
-<!-- Sheet détail annonce -->
-<div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')">
-  <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
-</div>
-
-<!-- Sheet créer annonce -->
-<div class="overlay" id="createOverlay" onclick="closeOnOverlay(event,'createOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Nouvelle annonce</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="ann-amount" placeholder="500" inputmode="numeric" oninput="updatePreview('create')"></div>
-      <div class="form-group"><label class="form-label">Devise</label>
-        <select class="form-select" id="ann-currency" onchange="updatePreview('create')">
-          <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">De</label>
-        <select class="form-select" id="ann-from" onchange="syncCountries();updatePreview('create')">
-          <option value="France">🇫🇷 France</option>
-          <option value="Gabon">🇬🇦 Gabon</option>
-          <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
-          <option value="Canada">🇨🇦 Canada</option>
-          <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-          <option value="Belgique">🇧🇪 Belgique</option>
-          <option value="Suisse">🇨🇭 Suisse</option>
-        </select>
-      </div>
-      <div class="form-group"><label class="form-label">Vers</label>
-        <select class="form-select" id="ann-to" onchange="updatePreview('create')">
-          <option value="Gabon">🇬🇦 Gabon</option>
-          <option value="France">🇫🇷 France</option>
-          <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
-          <option value="Canada">🇨🇦 Canada</option>
-          <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-          <option value="Belgique">🇧🇪 Belgique</option>
-          <option value="Suisse">🇨🇭 Suisse</option>
-        </select>
-      </div>
-    </div>
-    <div class="conv-preview" id="convPreview-create"><span class="conv-hint">Saisis un montant</span></div>
-    <div id="airtel-preview-create"></div>
-    <!-- Sélection bénéficiaire -->
-    <div id="benef-selected-create"></div>
-    <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('create')">👤 Choisir le bénéficiaire</button>
-    <div id="airtel-preview-create"></div>
-    <button class="btn-primary" id="btn-submit" onclick="submitAnnonce()">Publier</button>
-    <button class="btn-cancel" onclick="closeSheet('createOverlay')">Annuler</button>
-    <div class="msg" id="msg-create"></div>
-  </div>
-</div>
-
-<!-- Sheet modifier annonce -->
-<div class="overlay" id="editOverlay" onclick="closeOnOverlay(event,'editOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Modifier l'annonce</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="edit-amount" inputmode="numeric" oninput="updatePreview('edit')"></div>
-      <div class="form-group"><label class="form-label">Devise</label>
-        <select class="form-select" id="edit-currency" onchange="updatePreview('edit')">
-          <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
-        </select>
-      </div>
-    </div>
-    <div class="conv-preview" id="convPreview-edit"><span class="conv-hint">Saisis un montant</span></div>
-    <!-- Bénéficiaire -->
-    <div id="benef-selected-edit" style="margin-bottom:8px;"></div>
-    <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('edit')">👤 Changer le bénéficiaire</button>
-    <button class="btn-primary" id="btn-edit-submit" onclick="submitEdit()">Enregistrer</button>
-    <button class="btn-cancel" onclick="closeSheet('editOverlay')">Annuler</button>
-    <div class="msg" id="msg-edit"></div>
-  </div>
-</div>
-
-
-<!-- Sheet sélection bénéficiaire -->
-<div class="overlay" id="benefOverlay" onclick="closeOnOverlay(event,'benefOverlay')" style="z-index:500;">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Qui reçoit ?</div>
-    <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Sélectionne le bénéficiaire pour cette annonce.</div>
-    <div id="benefSelectList"><div class="loading-wrap"><div class="loader"></div></div></div>
-    <button class="btn-cancel" style="margin-top:8px;" onclick="closeBenefSheet()">Fermer</button>
-  </div>
-</div>
-
-<!-- Sheet confirmer match -->
-<div class="overlay" id="confirmOverlay" onclick="closeOnOverlay(event,'confirmOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Confirmer le match</div>
-    <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Vérifie les détails avant de confirmer.</div>
-    <div id="confirmDetail" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;"></div>
-    <!-- Sélection bénéficiaire obligatoire pour le match -->
-    <div id="confirm-benef-badge" style="margin-bottom:8px;"></div>
-    <button class="btn-primary" id="btn-choose-benef-match" style="margin-bottom:12px;background:var(--surface);border:1px solid rgba(252,209,22,0.4);color:var(--yellow);" onclick="openBenefSheetForMatch()">👤 Choisir mon bénéficiaire <span style="font-size:10px;color:var(--red);">*obligatoire</span></button>
-    <button class="btn-primary" id="btn-confirm-match" onclick="executeMatch()">Confirmer le match</button>
-    <button class="btn-cancel" onclick="closeSheet('confirmOverlay')">Annuler</button>
-  </div>
-</div>
-
-<!-- Sheet nouveau bénéficiaire inline (depuis feed) -->
-<div class="overlay" id="inlineBenefOverlay" onclick="closeOnOverlay(event,'inlineBenefOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Nouveau bénéficiaire</div>
-
-    <div class="form-group">
-      <label class="form-label">Nom</label>
-      <input class="form-input" type="text" id="ib-nom" placeholder="Ex: Maman, Jean Dupont…">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Pays</label>
-      <select class="form-select" id="ib-pays">
-        <option value="">Sélectionner…</option>
-        <option value="Gabon">🇬🇦 Gabon</option>
-        <option value="France">🇫🇷 France</option>
-        <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-        <option value="Belgique">🇧🇪 Belgique</option>
-        <option value="Suisse">🇨🇭 Suisse</option>
-        <option value="Canada">🇨🇦 Canada</option>
-        <option value="Etats-Unis">🇺🇸 États-Unis</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Méthode</label>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-        <div class="filter-chip active" id="ibm-mm" onclick="setIBMethod('mobilemoney',this)">📱 Mobile Money</div>
-        <div class="filter-chip" id="ibm-vir" onclick="setIBMethod('virement',this)">🏦 Virement</div>
-        <div class="filter-chip" id="ibm-pp" onclick="setIBMethod('paypal',this)">💳 PayPal</div>
-        <div class="filter-chip" id="ibm-wero" onclick="setIBMethod('wero',this)">🟣 Wero</div>
-      </div>
-    </div>
-    <div id="ib-fields-mobilemoney">
-      <div class="form-group"><label class="form-label">Numéro Mobile Money</label><input class="form-input" type="tel" id="ib-phone" placeholder="+241 06 00 00 00" inputmode="tel"></div>
-      <div class="form-group"><label class="form-label">Opérateur</label>
-        <select class="form-select" id="ib-operateur">
-          <option value="">Sélectionner…</option>
-          <option value="Airtel Money">Airtel Money</option>
-          <option value="Moov Money">Moov Money</option>
-          <option value="Orange Money">Orange Money</option>
-        </select>
-      </div>
-    </div>
-    <div id="ib-fields-virement" style="display:none;">
-      <div class="form-group"><label class="form-label">IBAN</label><input class="form-input" type="text" id="ib-iban" placeholder="FR76…"></div>
-      <div class="form-group"><label class="form-label">Banque</label><input class="form-input" type="text" id="ib-banque" placeholder="BNP, Société Générale…"></div>
-    </div>
-    <div id="ib-fields-paypal" style="display:none;">
-      <div class="form-group"><label class="form-label">Email PayPal</label><input class="form-input" type="email" id="ib-paypal" placeholder="ton@email.com"></div>
-    </div>
-    <div id="ib-fields-wero" style="display:none;">
-      <div class="form-group"><label class="form-label">Numéro Wero</label><input class="form-input" type="tel" id="ib-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"></div>
-    </div>
-
-    <button class="btn-primary" id="btn-ib-save" onclick="saveInlineBenef()">Enregistrer et sélectionner</button>
-    <button class="btn-cancel" onclick="closeSheet('inlineBenefOverlay');openBenefSheet('create')">Annuler</button>
-    <div class="msg" id="msg-ib"></div>
-  </div>
-</div>
-
-<!-- Sheet filtres avancés -->
-<div class="overlay" id="advancedFilterOverlay" onclick="closeOnOverlay(event,'advancedFilterOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div class="sheet-title">Filtres avancés</div>
-
-    <div class="filter-section-label">Devise</div>
-    <div class="filter-chips-wrap">
-      <div class="filter-chip" id="af-eur" onclick="toggleAdvFilter('currency','EUR',this)">EUR</div>
-      <div class="filter-chip" id="af-xaf" onclick="toggleAdvFilter('currency','XAF',this)">XAF</div>
-      <div class="filter-chip" id="af-usd" onclick="toggleAdvFilter('currency','USD',this)">USD</div>
-      <div class="filter-chip" id="af-cad" onclick="toggleAdvFilter('currency','CAD',this)">CAD</div>
-    </div>
-
-    <div class="filter-section-label">Direction</div>
-    <div class="filter-chips-wrap">
-      <div class="filter-chip" id="af-fr-ga" onclick="toggleAdvFilter('direction','France→Gabon',this)">🇫🇷 France → 🇬🇦 Gabon</div>
-      <div class="filter-chip" id="af-ga-fr" onclick="toggleAdvFilter('direction','Gabon→France',this)">🇬🇦 Gabon → 🇫🇷 France</div>
-      <div class="filter-chip" id="af-fr-bf" onclick="toggleAdvFilter('direction','France→Burkina Faso',this)">🇫🇷 France → 🇧🇫 Burkina</div>
-      <div class="filter-chip" id="af-bf-fr" onclick="toggleAdvFilter('direction','Burkina Faso→France',this)">🇧🇫 Burkina → 🇫🇷 France</div>
-    </div>
-
-    <div class="filter-section-label">Montant (EUR)</div>
-    <div class="range-row">
-      <input class="range-input" type="number" id="af-min" placeholder="Min" inputmode="numeric">
-      <input class="range-input" type="number" id="af-max" placeholder="Max" inputmode="numeric">
-    </div>
-
-    <div class="filter-section-label">Rang communautaire</div>
-    <div class="filter-chips-wrap">
-      <div class="filter-chip" id="af-nouveau" onclick="toggleAdvFilter('rank','nouveau',this)">Nouveau</div>
-      <div class="filter-chip" id="af-actif" onclick="toggleAdvFilter('rank','actif',this)">Membre actif</div>
-      <div class="filter-chip" id="af-fiable" onclick="toggleAdvFilter('rank','fiable',this)">Membre fiable</div>
-      <div class="filter-chip" id="af-pilier" onclick="toggleAdvFilter('rank','pilier',this)">Pilier 🏆</div>
-    </div>
-
-    <button class="btn-filter-apply" onclick="applyAdvancedFilters()">Appliquer</button>
-    <button class="btn-filter-reset" onclick="resetAdvancedFilters()">Réinitialiser</button>
-  </div>
-</div>
-
-<!-- Sheet profil public -->
-<div class="overlay" id="pubProfileOverlay" onclick="closeOnOverlay(event,'pubProfileOverlay')">
-  <div class="sheet">
-    <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
-    <div id="pubProfileContent"><div class="loading-wrap"><div class="loader"></div></div></div>
-    <button class="btn-cancel" onclick="closeSheet('pubProfileOverlay')" style="margin-top:8px;">Fermer</button>
-  </div>
-</div>
-
-<!-- Gate biométrique à l'ouverture -->
-<div class="bio-gate" id="bioGate">
-  <div class="bio-gate-sheet">
-    <div class="bio-gate-icon">🔐</div>
-    <div class="bio-gate-title">Connexion sécurisée</div>
-    <div class="bio-gate-sub">Utilise ton Face ID ou empreinte digitale pour accéder à TDOLI.</div>
-    <button class="btn-bio-confirm" id="btn-bio-confirm" onclick="bioGateAuth()">
-      <span id="bio-confirm-label">Se connecter avec Face ID</span>
-    </button>
-    <button class="btn-bio-fallback" onclick="bioGateFallback()">Utiliser mon mot de passe</button>
-    <div class="bio-gate-msg" id="bio-gate-msg"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
+</nav> <!-- Sheet détail annonce -->
+<div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')"> <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
+</div> <!-- Sheet créer annonce -->
+<div class="overlay" id="createOverlay" onclick="closeOnOverlay(event,'createOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Nouvelle annonce</div> <div class="form-row"> <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="ann-amount" placeholder="500" inputmode="numeric" oninput="updatePreview('create')"></div> <div class="form-group"><label class="form-label">Devise</label> <select class="form-select" id="ann-currency" onchange="updatePreview('create')"> <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option> </select> </div> </div> <div class="form-row"> <div class="form-group"><label class="form-label">De</label> <select class="form-select" id="ann-from" onchange="syncCountries();updatePreview('create')"> <option value="France">🇫🇷 France</option> <option value="Gabon">🇬🇦 Gabon</option> <option value="Etats-Unis">🇺🇸 Etats-Unis</option> <option value="Canada">🇨🇦 Canada</option> <option value="Burkina Faso">🇧🇫 Burkina Faso</option> <option value="Belgique">🇧🇪 Belgique</option> <option value="Suisse">🇨🇭 Suisse</option> </select> </div> <div class="form-group"><label class="form-label">Vers</label> <select class="form-select" id="ann-to" onchange="updatePreview('create')"> <option value="Gabon">🇬🇦 Gabon</option> <option value="France">🇫🇷 France</option> <option value="Etats-Unis">🇺🇸 Etats-Unis</option> <option value="Canada">🇨🇦 Canada</option> <option value="Burkina Faso">🇧🇫 Burkina Faso</option> <option value="Belgique">🇧🇪 Belgique</option> <option value="Suisse">🇨🇭 Suisse</option> </select> </div> </div> <div class="conv-preview" id="convPreview-create"><span class="conv-hint">Saisis un montant</span></div> <div id="airtel-preview-create"></div> <!-- Sélection bénéficiaire --> <div id="benef-selected-create"></div> <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('create')"> Choisir le bénéficiaire</button> <div id="airtel-preview-create"></div> <button class="btn-primary" id="btn-submit" onclick="submitAnnonce()">Publier</button> <button class="btn-cancel" onclick="closeSheet('createOverlay')">Annuler</button> <div class="msg" id="msg-create"></div> </div>
+</div> <!-- Sheet modifier annonce -->
+<div class="overlay" id="editOverlay" onclick="closeOnOverlay(event,'editOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Modifier l'annonce</div> <div class="form-row"> <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="edit-amount" inputmode="numeric" oninput="updatePreview('edit')"></div> <div class="form-group"><label class="form-label">Devise</label> <select class="form-select" id="edit-currency" onchange="updatePreview('edit')"> <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option> </select> </div> </div> <div class="conv-preview" id="convPreview-edit"><span class="conv-hint">Saisis un montant</span></div> <!-- Bénéficiaire --> <div id="benef-selected-edit" style="margin-bottom:8px;"></div> <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('edit')"> Changer le bénéficiaire</button> <button class="btn-primary" id="btn-edit-submit" onclick="submitEdit()">Enregistrer</button> <button class="btn-cancel" onclick="closeSheet('editOverlay')">Annuler</button> <div class="msg" id="msg-edit"></div> </div>
+</div> <!-- Sheet sélection bénéficiaire -->
+<div class="overlay" id="benefOverlay" onclick="closeOnOverlay(event,'benefOverlay')" style="z-index:500;"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Qui reçoit ?</div> <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Sélectionne le bénéficiaire pour cette annonce.</div> <div id="benefSelectList"><div class="loading-wrap"><div class="loader"></div></div></div> <button class="btn-cancel" style="margin-top:8px;" onclick="closeBenefSheet()">Fermer</button> </div>
+</div> <!-- Sheet confirmer match -->
+<div class="overlay" id="confirmOverlay" onclick="closeOnOverlay(event,'confirmOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Confirmer le match</div> <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Vérifie les détails avant de confirmer.</div> <div id="confirmDetail" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;"></div> <!-- Sélection bénéficiaire obligatoire pour le match --> <div id="confirm-benef-badge" style="margin-bottom:8px;"></div> <button class="btn-primary" id="btn-choose-benef-match" style="margin-bottom:12px;background:var(--surface);border:1px solid rgba(252,209,22,0.4);color:var(--yellow);" onclick="openBenefSheetForMatch()"> Choisir mon bénéficiaire <span style="font-size:10px;color:var(--red);">*obligatoire</span></button> <button class="btn-primary" id="btn-confirm-match" onclick="executeMatch()">Confirmer le match</button> <button class="btn-cancel" onclick="closeSheet('confirmOverlay')">Annuler</button> </div>
+</div> <!-- Sheet nouveau bénéficiaire inline (depuis feed) -->
+<div class="overlay" id="inlineBenefOverlay" onclick="closeOnOverlay(event,'inlineBenefOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Nouveau bénéficiaire</div> <div class="form-group"> <label class="form-label">Nom</label> <input class="form-input" type="text" id="ib-nom" placeholder="Ex: Maman, Jean Dupont"> </div> <div class="form-group"> <label class="form-label">Pays</label> <select class="form-select" id="ib-pays"> <option value="">Sélectionner</option> <option value="Gabon">🇬🇦 Gabon</option> <option value="France">🇫🇷 France</option> <option value="Burkina Faso">🇧🇫 Burkina Faso</option> <option value="Belgique">🇧🇪 Belgique</option> <option value="Suisse">🇨🇭 Suisse</option> <option value="Canada">🇨🇦 Canada</option> <option value="Etats-Unis">🇺🇸 États-Unis</option> </select> </div> <div class="form-group"> <label class="form-label">Méthode</label> <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;"> <div class="filter-chip active" id="ibm-mm" onclick="setIBMethod('mobilemoney',this)"> Mobile Money</div> <div class="filter-chip" id="ibm-vir" onclick="setIBMethod('virement',this)"> Virement</div> <div class="filter-chip" id="ibm-pp" onclick="setIBMethod('paypal',this)"> PayPal</div> <div class="filter-chip" id="ibm-wero" onclick="setIBMethod('wero',this)"> Wero</div> </div> </div> <div id="ib-fields-mobilemoney"> <div class="form-group"><label class="form-label">Numéro Mobile Money</label><input class="form-input" type="tel" id="ib-phone" placeholder="+241 06 00 00 00" inputmode="tel"></div> <div class="form-group"><label class="form-label">Opérateur</label> <select class="form-select" id="ib-operateur"> <option value="">Sélectionner</option> <option value="Airtel Money">Airtel Money</option> <option value="Moov Money">Moov Money</option> <option value="Orange Money">Orange Money</option> </select> </div> </div> <div id="ib-fields-virement" style="display:none;"> <div class="form-group"><label class="form-label">IBAN</label><input class="form-input" type="text" id="ib-iban" placeholder="FR76"></div> <div class="form-group"><label class="form-label">Banque</label><input class="form-input" type="text" id="ib-banque" placeholder="BNP, Société Générale"></div> </div> <div id="ib-fields-paypal" style="display:none;"> <div class="form-group"><label class="form-label">Email PayPal</label><input class="form-input" type="email" id="ib-paypal" placeholder="ton@email.com"></div> </div> <div id="ib-fields-wero" style="display:none;"> <div class="form-group"><label class="form-label">Numéro Wero</label><input class="form-input" type="tel" id="ib-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"></div> </div> <button class="btn-primary" id="btn-ib-save" onclick="saveInlineBenef()">Enregistrer et sélectionner</button> <button class="btn-cancel" onclick="closeSheet('inlineBenefOverlay');openBenefSheet('create')">Annuler</button> <div class="msg" id="msg-ib"></div> </div>
+</div> <!-- Sheet filtres avancés -->
+<div class="overlay" id="advancedFilterOverlay" onclick="closeOnOverlay(event,'advancedFilterOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div class="sheet-title">Filtres avancés</div> <div class="filter-section-label">Devise</div> <div class="filter-chips-wrap"> <div class="filter-chip" id="af-eur" onclick="toggleAdvFilter('currency','EUR',this)">EUR</div> <div class="filter-chip" id="af-xaf" onclick="toggleAdvFilter('currency','XAF',this)">XAF</div> <div class="filter-chip" id="af-usd" onclick="toggleAdvFilter('currency','USD',this)">USD</div> <div class="filter-chip" id="af-cad" onclick="toggleAdvFilter('currency','CAD',this)">CAD</div> </div> <div class="filter-section-label">Direction</div> <div class="filter-chips-wrap"> <div class="filter-chip" id="af-fr-ga" onclick="toggleAdvFilter('direction','FranceGabon',this)">🇫🇷 France  🇬🇦 Gabon</div> <div class="filter-chip" id="af-ga-fr" onclick="toggleAdvFilter('direction','GabonFrance',this)">🇬🇦 Gabon  🇫🇷 France</div> <div class="filter-chip" id="af-fr-bf" onclick="toggleAdvFilter('direction','FranceBurkina Faso',this)">🇫🇷 France  🇧🇫 Burkina</div> <div class="filter-chip" id="af-bf-fr" onclick="toggleAdvFilter('direction','Burkina FasoFrance',this)">🇧🇫 Burkina  🇫🇷 France</div> </div> <div class="filter-section-label">Montant (EUR)</div> <div class="range-row"> <input class="range-input" type="number" id="af-min" placeholder="Min" inputmode="numeric"> <input class="range-input" type="number" id="af-max" placeholder="Max" inputmode="numeric"> </div> <div class="filter-section-label">Rang communautaire</div> <div class="filter-chips-wrap"> <div class="filter-chip" id="af-nouveau" onclick="toggleAdvFilter('rank','nouveau',this)">Nouveau</div> <div class="filter-chip" id="af-actif" onclick="toggleAdvFilter('rank','actif',this)">Membre actif</div> <div class="filter-chip" id="af-fiable" onclick="toggleAdvFilter('rank','fiable',this)">Membre fiable</div> <div class="filter-chip" id="af-pilier" onclick="toggleAdvFilter('rank','pilier',this)">Pilier </div> </div> <button class="btn-filter-apply" onclick="applyAdvancedFilters()">Appliquer</button> <button class="btn-filter-reset" onclick="resetAdvancedFilters()">Réinitialiser</button> </div>
+</div> <!-- Sheet profil public -->
+<div class="overlay" id="pubProfileOverlay" onclick="closeOnOverlay(event,'pubProfileOverlay')"> <div class="sheet"> <div class="sheet-handle-row"><div class="sheet-handle"></div></div> <div id="pubProfileContent"><div class="loading-wrap"><div class="loader"></div></div></div> <button class="btn-cancel" onclick="closeSheet('pubProfileOverlay')" style="margin-top:8px;">Fermer</button> </div>
+</div> <!-- Gate biométrique à l'ouverture -->
+<div class="bio-gate" id="bioGate"> <div class="bio-gate-sheet"> <div class="bio-gate-icon"></div> <div class="bio-gate-title">Connexion sécurisée</div> <div class="bio-gate-sub">Utilise ton Face ID ou empreinte digitale pour accéder à TDOLI.</div> <button class="btn-bio-confirm" id="btn-bio-confirm" onclick="bioGateAuth()"> <span id="bio-confirm-label">Se connecter avec Face ID</span> </button> <button class="btn-bio-fallback" onclick="bioGateFallback()">Utiliser mon mot de passe</button> <div class="bio-gate-msg" id="bio-gate-msg"></div> </div>
+</div> <div class="toast" id="toast"></div> <script>
 const API = 'https://tdoli-backend.onrender.com';
 const token = localStorage.getItem('tdoli_token');
 const email = localStorage.getItem('tdoli_email');
@@ -786,8 +515,7 @@ function renderActiveFilterTags() {
 
   if (tags.length === 0) { bar.style.display = 'none'; return; }
   bar.style.display = 'flex';
-  bar.innerHTML = tags.map(t =>
-    '<div class="active-filter-tag">' + t.label +
+  bar.innerHTML = tags.map(t => '<div class="active-filter-tag">' + t.label +
     ' <button onclick="removeAdvFilter(\'' + t.key + '\')">×</button></div>'
   ).join('');
 }
@@ -893,8 +621,7 @@ async function openPublicProfile(senderEmail) {
 
     // Annonces actives
     const annoncesHtml = userTransfers.length > 0
-      ? userTransfers.map(t =>
-          '<div class="pub-annonce-item">' +
+      ? userTransfers.map(t => '<div class="pub-annonce-item">' +
           '<span class="pub-annonce-dir">' + t.fromCountry + ' → ' + t.toCountry + '</span>' +
           '<span class="pub-annonce-amt">' + Number(t.amount).toLocaleString('fr-FR') + ' ' + t.currency + '</span>' +
           '</div>'
@@ -903,8 +630,7 @@ async function openPublicProfile(senderEmail) {
 
     // Témoignages
     const testimonialsHtml = testimonials.length > 0
-      ? testimonials.slice(0, 5).map(t =>
-          '<div class="pub-testimonial">' +
+      ? testimonials.slice(0, 5).map(t => '<div class="pub-testimonial">' +
           '<div class="pub-test-header">' +
           '<span class="pub-test-from">👤 ' + (t.fromUsername || 'Membre') + '</span>' +
           '<span class="pub-test-stars">' + '★'.repeat(t.rating || 0) + '☆'.repeat(5 - (t.rating || 0)) + '</span>' +
@@ -1477,13 +1203,7 @@ function renderBenefSelectList(onSelect) {
     const ini = (b.nom||'?').substring(0,2).toUpperCase();
     const detail = getBenefDetail(b);
     const type = b.type === 'moi' ? '🙋 ' : '';
-    return `<div class="benef-select-item ${selectedBenefId === b._id ? 'selected' : ''}" onclick="selectBenef('${b._id}','${onSelect}')">
-      <div class="benef-select-avatar">${ini}</div>
-      <div>
-        <div class="benef-select-name">${type}${b.nom}</div>
-        <div class="benef-select-detail">${detail}${b.pays ? ' · '+b.pays : ''}</div>
-      </div>
-      ${selectedBenefId === b._id ? '<span style="margin-left:auto;color:var(--green);">✓</span>' : ''}
+    return `<div class="benef-select-item ${selectedBenefId === b._id ? 'selected' : ''}" onclick="selectBenef('${b._id}','${onSelect}')"> <div class="benef-select-avatar">${ini}</div> <div> <div class="benef-select-name">${type}${b.nom}</div> <div class="benef-select-detail">${detail}${b.pays ? ' · '+b.pays : ''}</div> </div> ${selectedBenefId === b._id ? '<span style="margin-left:auto;color:var(--green);">✓</span>' : ''}
     </div>`;
   }).join('') +
   '<button onclick="openInlineBenefForm()" style="background:none;border:none;color:var(--text-3);font-size:12px;cursor:pointer;width:100%;margin-top:12px;">+ Nouveau bénéficiaire</button>';
