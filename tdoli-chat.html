@@ -614,9 +614,8 @@ async function loadDealInfo() {
 
     const isSender = deal.sender === email;
     otherEmail = isSender ? deal.receiverEmail : deal.sender;
-    const otherName = deal.senderUsername
-      ? (isSender ? (deal.receiverUsername || otherEmail.split('@')[0]) : deal.senderUsername)
-      : otherEmail.split('@')[0];
+    // Utiliser otherUsername enrichi par le backend (firstName + lastName)
+    const otherName = deal.otherUsername || otherEmail.split('@')[0];
 
     // Initiales avatar partenaire
     const parts = otherName.trim().split(' ').filter(p => p.length > 0);
