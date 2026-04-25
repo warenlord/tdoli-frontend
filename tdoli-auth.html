@@ -9,13 +9,13 @@
 :root{
  --bg:#05090a;
  --surface:#0a1018;
- --card:#0d1520;
+ --card:#0e1a1e;
  --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.1);
  --yellow:#ffd740;
- --blue:#2979ff;--blue-dim:#1a56d4;--blue-glow:rgba(41,121,255,0.12);
+ --blue:#2979ff;--blue-dim:#1a56d4;--blue-glow:rgba(41,121,255,0.1);
  --red:#ff1744;
- --text:#ecf4f0;--text-2:#7a9db5;--text-3:#3d6070;
- --border:rgba(41,121,255,0.12);--border-active:rgba(0,230,118,0.25);
+ --text:#ecf4f0;--text-2:#8aabb5;--text-3:#3d5a65;
+ --border:rgba(41,121,255,0.1);--border-active:rgba(0,230,118,0.22);
  --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -71,7 +71,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .req-item.ok .req-dot{background:var(--green);}
 /* Mot de passe oublié */
 .forgot-link{display:block;text-align:right;font-size:12px;color:var(--green);cursor:pointer;margin-top:6px;margin-bottom:2px;background:none;border:none;width:100%;font-family:'Inter',sans-serif;}
-.btn-primary{width:100%;padding:15px;background:var(--blue-dim);box-shadow:0 4px 20px rgba(0,200,83,0.25);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:8px;transition:transform 0.15s,opacity 0.15s;box-shadow:0 4px 20px rgba(0,158,96,0.2);}
+.btn-primary{width:100%;padding:15px;background:var(--green-dim);box-shadow:0 4px 16px rgba(0,200,83,0.2);box-shadow:0 4px 20px rgba(0,200,83,0.25);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:8px;transition:transform 0.15s,opacity 0.15s;box-shadow:0 4px 20px rgba(0,158,96,0.2);}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .btn-primary:active{transform:scale(0.97);}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
@@ -112,7 +112,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .faceid-icon{font-size:40px;text-align:center;margin-bottom:14px;}
 .faceid-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:8px;}
 .faceid-sub{font-size:13px;color:var(--text-3);text-align:center;line-height:1.6;margin-bottom:22px;}
-.btn-faceid-activate{width:100%;padding:15px;background:var(--blue-dim);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;}
+.btn-faceid-activate{width:100%;padding:15px;background:var(--green-dim);box-shadow:0 4px 16px rgba(0,200,83,0.2);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;}
 .btn-faceid-later{width:100%;padding:13px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
 </style>
 
