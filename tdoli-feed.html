@@ -334,6 +334,12 @@ firebase.initializeApp({
       <div class="deals-badge" id="dealsBadge">!</div>
     </div>Deals
   </a>
+  <a class="nav-item" href="/tdoli-messages.html">
+    <div class="nav-icon-wrap">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div>
+    </div>Messages
+  </a>
   <a class="nav-item" href="/tdoli-profile.html">
     <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
   </a>
@@ -1622,8 +1628,22 @@ function openBenefSheetForMatch() {
   });
 }
 
+async function checkUnreadMessages() {
+  try {
+    const res = await fetch(API + '/messages/unread', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (!res.ok) return;
+    const data = await res.json();
+    const badge = document.getElementById('msgBadge');
+    if (badge) {
+      if (data.count > 0) { badge.textContent = data.count > 9 ? '9+' : data.count; badge.classList.add('show'); }
+      else badge.classList.remove('show');
+    }
+  } catch(e) {}
+}
+
 // Démarrage
 loadFeed();
+checkUnreadMessages();
 
 
 </script>
