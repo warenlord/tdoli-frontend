@@ -129,7 +129,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .testimonial-text{font-size:13px;color:var(--text);line-height:1.6;font-style:italic;}
 .testimonial-date{font-size:10px;color:var(--text-3);margin-top:6px;}
 .no-testimonial{text-align:center;padding:30px 20px;color:var(--text-3);font-size:13px;background:var(--card);border:1px solid var(--border);border-radius:12px;}
-.nav-icon-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
 .nav-badge{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}
 </style>
 <link rel="manifest" href="/manifest.json">
@@ -152,13 +151,13 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 <nav class="bottom-nav">
  <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
  <a class="nav-item" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
-  <a class="nav-item" href="/tdoli-messages.html">
-  <div class="nav-icon-wrap">
-    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-    <div class="nav-badge red" id="msgBadge"></div>
-  </div>
-  Messages
- </a>
+   <a class="nav-item" href="/tdoli-messages.html">
+    <div class="nav-icon-wrap">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <div class="nav-badge red" id="msgBadge"></div>
+    </div>
+    <span>Messages</span>
+  </a>
   <a class="nav-item active" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
 </nav>
 
@@ -242,7 +241,7 @@ async function fetchProfile() {
  console.log('[TDOLI] Route profil OK:', route);
  return r.data;
  }
- if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return null; }
+ if (r.status === 401) { const _fa=localStorage.getItem('tdoli_faceid_active');const _fd=localStorage.getItem('tdoli_faceid_dismissed');const _em=localStorage.getItem('tdoli_email');localStorage.clear();if(_fa)localStorage.setItem('tdoli_faceid_active',_fa);if(_fd)localStorage.setItem('tdoli_faceid_dismissed',_fd);if(_em)localStorage.setItem('tdoli_email',_em); window.location.replace('/tdoli-auth.html'); return null; }
  } catch(e) { /* timeout ou réseau, continuer */ }
  }
  return null;
@@ -539,7 +538,13 @@ async function loadProfile() {
 }
 
 function logout(){
+ const _fa = localStorage.getItem('tdoli_faceid_active');
+ const _fd = localStorage.getItem('tdoli_faceid_dismissed');
+ const _em = localStorage.getItem('tdoli_email');
  localStorage.clear();
+ if (_fa) localStorage.setItem('tdoli_faceid_active', _fa);
+ if (_fd) localStorage.setItem('tdoli_faceid_dismissed', _fd);
+ if (_em) localStorage.setItem('tdoli_email', _em);
  if ('caches' in window) {
  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
  }
