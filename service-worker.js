@@ -2,7 +2,7 @@
 // Stratégie : Network First pour les HTML, Cache Only pour les assets statiques
 // Les API ne sont JAMAIS cachées
 
-const CACHE_NAME = 'tdoli-v4.0';
+const CACHE_NAME = 'tdoli-v4.1';
 const STATIC_ASSETS = [
   '/TDOLI_APP.png',
   '/TD_LI.png',
