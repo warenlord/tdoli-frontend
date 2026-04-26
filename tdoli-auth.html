@@ -322,10 +322,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="faceid-overlay" id="bioAuthOverlay">
  <div class="biometric-sheet">
  <div class="biometric-icon"></div>
- <div class="biometric-title">Connexion sécurisée</div>
- <div class="biometric-sub">Utilise ton Face ID ou empreinte digitale pour te connecter.</div>
+ <div class="biometric-title">Connexion rapide</div>
+ <div class="biometric-sub">Utilise la méthode de déverrouillage de ton téléphone — Face ID, empreinte, code ou schéma.</div>
  <button class="btn-faceid-activate" id="btn-bio-auth" onclick="triggerBiometricAuth()">
- <span id="bio-auth-label">Se connecter avec Face ID</span>
+ <span id="bio-auth-label">Se connecter</span>
  </button>
  <button class="btn-faceid-later" onclick="dismissBioAuth()">Utiliser mon mot de passe</button>
  <div class="msg" id="msg-bio-auth" style="margin-top:12px;"></div>
@@ -336,8 +336,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="faceid-overlay" id="faceidOverlay">
  <div class="faceid-sheet">
  <div class="faceid-icon"></div>
- <div class="faceid-title">Activer Face ID ?</div>
- <div class="faceid-sub">Connecte-toi en un instant avec ton empreinte digitale ou Face ID. Plus rapide, plus sécurisé.</div>
+ <div class="faceid-title">Connexion rapide ?</div>
+ <div class="faceid-sub">Déverrouille TDOLI en un instant avec la sécurité de ton téléphone — Face ID, empreinte digitale, code PIN ou schéma.</div>
  <button class="btn-faceid-activate" id="btn-faceid-activate" onclick="activateBiometric()">Activer maintenant</button>
  <button class="btn-faceid-later" onclick="dismissBiometric()">Plus tard</button>
  </div>
@@ -369,6 +369,24 @@ let loginEmail='',resendInterval=null;
  if (emailInput) emailInput.value = savedEmail;
  }
 })();
+
+// Fix : re-déclencher la biométrie quand l'app revient au premier plan
+function _tryBioOnResume() {
+  var faceidActive = localStorage.getItem('tdoli_faceid_active') === '1';
+  var savedEmail = localStorage.getItem('tdoli_email');
+  var token = localStorage.getItem('tdoli_token');
+  var overlayOpen = document.getElementById('bioAuthOverlay').classList.contains('open');
+  if (faceidActive && savedEmail && !token && !overlayOpen && window.PublicKeyCredential) {
+    document.getElementById('bioAuthOverlay').classList.add('open');
+    setTimeout(function(){ triggerBiometricAuth(); }, 400);
+  }
+}
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') _tryBioOnResume();
+});
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) _tryBioOnResume();
+});
 
 async function triggerBiometricAuth() {
  const savedEmail = localStorage.getItem('tdoli_email');
@@ -434,7 +452,7 @@ async function triggerBiometricAuth() {
  // Échec → fallback mot de passe
  const msgEl = document.getElementById('msg-bio-auth');
  msgEl.className = 'msg error show';
- msgEl.textContent = 'Face ID échoué — utilise ton mot de passe';
+ msgEl.textContent = 'Authentification échouée — utilise ton mot de passe';
  btn.disabled = false;
  lbl.textContent = 'Réessayer';
  }
