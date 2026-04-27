@@ -1,5 +1,6 @@
-// TDOLI — FCM Init v1.0
+// TDOLI — FCM Init v2.0
 // À inclure après les scripts Firebase sur toutes les pages
+// Utilise le service-worker.js principal (Firebase y est intégré)
 
 (async function initFCM() {
   try {
@@ -9,9 +10,8 @@
 
     // Notifications au premier plan
     messaging.onMessage((payload) => {
-      console.log('[FCM] Message reçu:', payload);
       const { title, body } = payload.notification || {};
-      const url = payload.data?.url || '/tdoli-deals.html';
+      const url = (payload.data && payload.data.url) || '/tdoli-deals.html';
       if (Notification.permission === 'granted') {
         const notif = new Notification(title || 'TDOLI', {
           body: body || '',
@@ -22,12 +22,23 @@
       }
     });
 
-    // Enregistrement du token
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') return;
 
-    const swReg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-    await navigator.serviceWorker.ready;
+    // Dés-inscrire l'ancien firebase-messaging-sw.js s'il existe encore
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for (const reg of regs) {
+        const scriptURL = (reg.active || reg.installing || reg.waiting || {}).scriptURL || '';
+        if (scriptURL.includes('firebase-messaging-sw')) {
+          await reg.unregister();
+          console.log('[FCM] Ancien SW FCM désinscrit');
+        }
+      }
+    }
+
+    // Utiliser le service worker principal (service-worker.js)
+    const swReg = await navigator.serviceWorker.ready;
 
     const fcmToken = await messaging.getToken({
       vapidKey: 'BIXwPIf199mTWr5vo5CxZiDyJylmed5978sXEP2RSZzb0h2qiFLSW8GFp8WjwHro9EjK5DEVnxYtvuBUsqoPoRE',

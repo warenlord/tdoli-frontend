@@ -38,19 +38,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .deal-item.matched::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--yellow),var(--green));}
 .deal-item.completed::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--green);}
 .deal-item.dispute::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--red);}
-.deal-avatar{width:40px;height:40px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
+.deal-thumb{width:52px;height:52px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,rgba(0,200,83,0.12),rgba(41,121,255,0.12));border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:22px;}
 .deal-body{flex:1;min-width:0;}
-.deal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
-.deal-ref{font-size:10px;color:var(--text-3);font-family:'Syne',sans-serif;}
-.deal-badge-sm{font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
-.deal-badge-sm.matched{background:rgba(252,209,22,0.1);color:var(--yellow);}
-.deal-badge-sm.completed{background:rgba(0,201,122,0.1);color:var(--green);}
-.deal-badge-sm.dispute{background:rgba(255,68,68,0.1);color:var(--red);}
-.deal-mid{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
-.deal-amount-sm{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;}
-.deal-other{font-size:11px;color:var(--text-3);}
-.deal-bottom{display:flex;align-items:center;justify-content:space-between;}
-.deal-dir{font-size:11px;color:var(--text-3);}
+.deal-code-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.deal-amount-lg{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:2px;}
+.deal-dir-sm{font-size:12px;color:var(--text-3);}
+.deal-badge-right{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0;align-self:center;}
+.deal-badge-right.matched{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
+.deal-badge-right.completed{background:rgba(41,121,255,0.08);color:var(--blue);border:1px solid rgba(41,121,255,0.25);}
+.deal-badge-right.dispute{background:rgba(255,23,68,0.08);color:var(--red);border:1px solid rgba(255,23,68,0.25);}
 .deal-action-hint{font-size:10px;color:var(--yellow);font-weight:600;}
 .empty-state{text-align:center;padding:60px 20px;}
 .empty-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
@@ -62,7 +58,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;color:var(--text-3);font-size:8px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
@@ -215,17 +211,8 @@ firebase.initializeApp({
 <div class="content"><div id="dealsList"><div class="loading-wrap"><div class="loader"></div></div></div></div>
 
 <nav class="bottom-nav">
- <a class="nav-item" href="/tdoli-feed.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
- <span>Feed</span>
- </a>
- <a class="nav-item active" href="/tdoli-deals.html">
- <div class="nav-icon-wrap">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
- <div class="nav-dot-active" id="dealsBadge" style="display:none;"></div>
- </div>
- <span>Deals</span>
- </a>
+ <a class="nav-item" href="/tdoli-feed.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed</a>
+ <a class="nav-item active" href="/tdoli-deals.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Deals</a>
  <a class="nav-item" href="/tdoli-messages.html">
  <div class="nav-icon-wrap">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
@@ -233,10 +220,7 @@ firebase.initializeApp({
  </div>
  <span>Messages</span>
  </a>
- <a class="nav-item" href="/tdoli-profile.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
- <span>Profil</span>
- </a>
+ <a class="nav-item" href="/tdoli-profile.html"><div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil</a>
 </nav>
 
 <!-- Sheet détail deal -->
@@ -445,21 +429,13 @@ function renderDeals(data) {
  div.dataset.id = d._id;
  div.addEventListener('click', () => openDeal(d._id));
  div.innerHTML =
- '<div class="deal-avatar">'+ini+'</div>'+
+ '<div class="deal-thumb">💱</div>'+
  '<div class="deal-body">'+
- '<div class="deal-top">'+
- '<span class="deal-ref">'+ref+'</span>'+
- '<span class="deal-badge-sm '+st.cls+'">'+st.label+'</span>'+
+ '<div class="deal-code-label">Deal '+ref+'</div>'+
+ '<div class="deal-amount-lg">'+Number(myAmt).toLocaleString('fr-FR')+' '+myCur+'</div>'+
+ '<div class="deal-dir-sm">'+((d.fromCountry||'?')+' → '+(d.toCountry||'?'))+'</div>'+
  '</div>'+
- '<div class="deal-mid">'+
- '<span class="deal-amount-sm">'+Number(myAmt).toLocaleString('fr-FR')+' '+myCur+'</span>'+
- '<span class="deal-other">'+other+'</span>'+
- '</div>'+
- '<div class="deal-bottom">'+
- '<span class="deal-dir">'+((d.fromCountry||'?')+' ⇄ '+(d.toCountry||'?'))+'</span>'+
- actionHtml+
- '</div>'+
- '</div>';
+ '<div class="deal-badge-right '+st.cls+'">'+st.label+'</div>';
  list.appendChild(div);
  });
  document.getElementById('dealsList').innerHTML = '';

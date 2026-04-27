@@ -9,45 +9,207 @@
 :root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--yellow:#fcd116;--blue:#1a4fff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:48px;}
+svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* Topbar */
 .topbar{background:rgba(6,13,9,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;}
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;transition:all 0.2s;}
-.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;}
-.topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
-.content{max-width:680px;margin:0 auto;padding:32px 20px;}
-.page-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:8px;}
-.page-date{font-size:12px;color:var(--text-3);margin-bottom:32px;}
-.section{margin-bottom:32px;}
-.section-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--green);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
-.section p{font-size:14px;color:var(--text-2);line-height:1.8;margin-bottom:12px;}
-.section ul{padding-left:20px;margin-bottom:12px;}
-.section ul li{font-size:14px;color:var(--text-2);line-height:1.8;margin-bottom:6px;}
-.warning-box{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:12px;padding:16px;margin-bottom:16px;}
-.warning-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--yellow);margin-bottom:8px;}
+.topbar-logo img{height:32px;width:auto;display:block;}
+
+/* Content */
+.content{max-width:680px;margin:0 auto;padding:28px 16px;}
+.page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;}
+.page-date{font-size:12px;color:var(--text-3);margin-bottom:24px;}
+
+/* Accordéon */
+.acc-list{display:flex;flex-direction:column;gap:8px;}
+.acc-item{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color 0.2s;}
+.acc-item.open{border-color:var(--border-active);}
+.acc-header{
+ display:flex;align-items:center;justify-content:space-between;
+ padding:16px 18px;cursor:pointer;transition:background 0.15s;
+}
+.acc-header:active{background:var(--surface);}
+.acc-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);flex:1;}
+.acc-chevron{
+ font-size:20px;color:var(--green);
+ transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
+ line-height:1;margin-left:10px;flex-shrink:0;
+ font-family:'Syne',sans-serif;font-weight:700;
+}
+.acc-item.open .acc-chevron{transform:rotate(90deg);}
+.acc-body{
+ max-height:0;overflow:hidden;
+ transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.acc-item.open .acc-body{max-height:2000px;}
+.acc-body-inner{padding:0 18px 20px;border-top:1px solid var(--border);}
+
+/* Contenu sections */
+.acc-body-inner p{font-size:14px;color:var(--text-2);line-height:1.8;margin-top:14px;margin-bottom:0;}
+.acc-body-inner ul{padding-left:18px;margin-top:12px;}
+.acc-body-inner ul li{font-size:14px;color:var(--text-2);line-height:1.8;margin-bottom:4px;}
+.warning-box{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:14px;margin-top:14px;}
+.warning-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:6px;}
 .warning-text{font-size:13px;color:var(--text-2);line-height:1.6;}
-.info-box{background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:12px;padding:16px;margin-bottom:16px;}
-.info-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px;}
+.info-box{background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:14px;margin-top:14px;}
+.info-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px;}
 .info-text{font-size:13px;color:var(--text-2);line-height:1.6;}
-.level-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
-.level-table th{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);}
-.level-table td{font-size:13px;color:var(--text-2);padding:10px 12px;border-bottom:1px solid var(--border);}
+.level-table{width:100%;border-collapse:collapse;margin-top:14px;}
+.level-table th{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;padding:10px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.level-table td{font-size:13px;color:var(--text-2);padding:10px 10px;border-bottom:1px solid var(--border);}
 .level-table tr:last-child td{border-bottom:none;}
 .badge-verified{display:inline-block;background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
 .badge-level1{display:inline-block;background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
-
-.topbar-logo img { height: 32px; width: auto; display: block; }
-</style><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#060d09"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="TDOLI"><link rel="apple-touch-icon" href="/icons/icon-192x192.png"><script>if('serviceWorker' in navigator){
- window.addEventListener('load', () => {
- navigator.serviceWorker.register('/service-worker.js')
- .then(r => console.log('[SW] Enregistre'))
- .catch(e => console.error('[SW] Erreur:', e));
- });
- }
- </script>
+</style>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#060d09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TDOLI">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/service-worker.js').catch(()=>{});});}</script>
 </head>
 <body>
-<div class="topbar"><a class="back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Retour"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></a><div class="topbar-logo"><img src="/TDOLI_APP.png" alt="TDOLI" style="height:32px;width:auto;display:block;"></div>
+
+<div class="topbar">
+ <a class="back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Retour">
+  <svg viewBox="0 0 24 24" width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+ </a>
+ <div class="topbar-logo"><img src="/TDOLI_APP.png" alt="TDOLI"></div>
 </div>
-<div class="content"><div class="page-title">Conditions Générales d'Utilisation</div><div class="page-date">Version 1.0 — Avril 2025</div><div class="section"><div class="section-title">1. Présentation de TDOLI</div><p>TDOLI est une plateforme de mise en relation entre membres de la diaspora africaine souhaitant échanger des devises entre elles (EUR, XAF, USD, CAD) sans transfert transfrontalier d'argent.</p><div class="info-box"><div class="info-title">Comment ça marche ?</div><div class="info-text">Deux utilisateurs en diaspora matchent leurs besoins opposés. Chacun envoie des fonds localement à l'autre. Aucun argent ne traverse de frontière. TDOLI facilite uniquement la mise en relation.</div></div><p>TDOLI n'est <strong>pas un établissement de paiement</strong>. TDOLI ne détient, ne reçoit, ni ne transfère aucun fonds. TDOLI est une plateforme de mise en relation entre particuliers.</p></div><div class="section"><div class="section-title">2. Responsabilité et risques</div><div class="warning-box"><div class="warning-title"> Information importante</div><div class="warning-text">TDOLI ne garantit pas l'exécution des transactions entre utilisateurs. En utilisant TDOLI, vous acceptez que les échanges se font entre particuliers sous votre propre responsabilité.</div></div><p>TDOLI met en place des outils pour réduire les risques :</p><ul><li>Système de vérification de compte par SMS</li><li>Obligation de fournir une preuve de paiement avant confirmation</li><li>Système de notation des utilisateurs</li><li>Procédure de gestion des litiges</li><li>Suspension des comptes frauduleux</li></ul><p>Cependant, TDOLI ne peut être tenu responsable en cas de non-exécution d'un échange entre utilisateurs.</p></div><div class="section"><div class="section-title">3. Niveaux de vérification</div><p>Pour réduire les risques, TDOLI utilise un système de niveaux de confiance :</p><table class="level-table"><tr><th>Niveau</th><th>Vérification</th><th>Limite par deal</th></tr><tr><td><span class="badge-level1">Niveau 1</span></td><td>Email uniquement</td><td>300€</td></tr><tr><td><span class="badge-verified">Niveau 2 </span></td><td>Email + Téléphone SMS</td><td>1 000€</td></tr><tr><td><span class="badge-verified">Niveau 3 KYC</span></td><td>Email + Téléphone + Pièce d'identité</td><td>Illimité</td></tr></table><p>Nous recommandons fortement de vérifier votre téléphone et de ne traiter qu'avec des utilisateurs vérifiés.</p></div><div class="section"><div class="section-title">4. Obligations des utilisateurs</div><p>En utilisant TDOLI, vous vous engagez à :</p><ul><li>Fournir des informations exactes lors de l'inscription</li><li>Ne créer qu'un seul compte par personne</li><li>Exécuter les échanges pour lesquels vous vous êtes engagé</li><li>Fournir des preuves de paiement authentiques</li><li>Ne pas utiliser TDOLI à des fins frauduleuses ou illicites</li><li>Signaler tout comportement suspect via le système de litige</li></ul></div><div class="section"><div class="section-title">5. Sanctions en cas de fraude</div><p>Tout utilisateur reconnu coupable de fraude fera l'objet de :</p><ul><li>Suspension immédiate et définitive du compte</li><li>Signalement aux autorités compétentes si nécessaire</li><li>Communication de toutes informations aux parties lésées</li></ul><p>Deux litiges perdus en 30 jours entraînent la suspension automatique du compte.</p></div><div class="section"><div class="section-title">6. Données personnelles</div><p>TDOLI collecte uniquement les données nécessaires au fonctionnement du service : email, numéro de téléphone, pays de résidence. Ces données ne sont jamais vendues à des tiers.</p><p>Conformément au RGPD, vous pouvez demander la suppression de vos données en contactant support@tdoli.com.</p></div><div class="section"><div class="section-title">7. Contact</div><p>Pour toute question : <strong style="color:var(--green)">support@tdoli.com</strong></p><p>Site web : <strong style="color:var(--green)">tdoli.com</strong></p></div>
+
+<div class="content">
+ <div class="page-title">Conditions Générales d'Utilisation</div>
+ <div class="page-date">Version 1.0 — Avril 2025</div>
+
+ <div class="acc-list">
+
+  <!-- 1 -->
+  <div class="acc-item">
+   <div class="acc-header" onclick="toggleAcc(this)">
+    <span class="acc-title">1. Présentation de TDOLI</span>
+    <span class="acc-chevron">›</span>
+   </div>
+   <div class="acc-body"><div class="acc-body-inner">
+    <p>TDOLI est une plateforme de mise en relation entre membres de la diaspora africaine souhaitant échanger des devises entre elles (EUR, XAF, USD, CAD) sans transfert transfrontalier d'argent.</p>
+    <div class="info-box">
+     <div class="info-title">Comment ça marche ?</div>
+     <div class="info-text">Deux utilisateurs en diaspora matchent leurs besoins opposés. Chacun envoie des fonds localement à l'autre. Aucun argent ne traverse de frontière. TDOLI facilite uniquement la mise en relation.</div>
+    </div>
+    <p>TDOLI n'est <strong>pas un établissement de paiement</strong>. TDOLI ne détient, ne reçoit, ni ne transfère aucun fonds. TDOLI est une plateforme de mise en relation entre particuliers.</p>
+   </div></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="acc-item">
+   <div class="acc-header" onclick="toggleAcc(this)">
+    <span class="acc-title">2. Responsabilité et risques</span>
+    <span class="acc-chevron">›</span>
+   </div>
+   <div class="acc-body"><div class="acc-body-inner">
+    <div class="warning-box">
+     <div class="warning-title"> Information importante</div>
+     <div class="warning-text">TDOLI ne garantit pas l'exécution des transactions entre utilisateurs. En utilisant TDOLI, vous acceptez que les échanges se font entre particuliers sous votre propre responsabilité.</div>
+    </div>
+    <p>TDOLI met en place des outils pour réduire les risques :</p>
+    <ul>
+     <li>Système de vérification de compte par SMS</li>
+     <li>Obligation de fournir une preuve de paiement avant confirmation</li>
+     <li>Système de notation des utilisateurs</li>
+     <li>Procédure de gestion des litiges</li>
+     <li>Suspension des comptes frauduleux</li>
+    </ul>
+    <p>Cependant, TDOLI ne peut être tenu responsable en cas de non-exécution d'un échange entre utilisateurs.</p>
+   </div></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="acc-item">
+   <div class="acc-header" onclick="toggleAcc(this)">
+    <span class="acc-title">3. Niveaux de vérification</span>
+    <span class="acc-chevron">›</span>
+   </div>
+   <div class="acc-body"><div class="acc-body-inner">
+    <p>Pour réduire les risques, TDOLI utilise un système de niveaux de confiance :</p>
+    <table class="level-table">
+     <tr><th>Niveau</th><th>Vérification</th><th>Limite par deal</th></tr>
+     <tr><td><span class="badge-level1">Niveau 1</span></td><td>Email uniquement</td><td>300€</td></tr>
+     <tr><td><span class="badge-verified">Niveau 2 </span></td><td>Email + Téléphone SMS</td><td>1 000€</td></tr>
+     <tr><td><span class="badge-verified">Niveau 3 KYC</span></td><td>Email + Téléphone + Pièce d'identité</td><td>Illimité</td></tr>
+    </table>
+    <p>Nous recommandons fortement de vérifier votre téléphone et de ne traiter qu'avec des utilisateurs vérifiés.</p>
+   </div></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="acc-item">
+   <div class="acc-header" onclick="toggleAcc(this)">
+    <span class="acc-title">4. Obligations des utilisateurs</span>
+    <span class="acc-chevron">›</span>
+   </div>
+   <div class="acc-body"><div class="acc-body-inner">
+    <p>En utilisant TDOLI, vous vous engagez à :</p>
+    <ul>
+     <li>Fournir des informations exactes lors de l'inscription</li>
+     <li>Ne créer qu'un seul compte par personne</li>
+     <li>Exécuter les échanges pour lesquels vous vous êtes engagé</li>
+     <li>Fournir des preuves de paiement authentiques</li>
+     <li>Ne pas utiliser TDOLI à des fins frauduleuses ou illicites</li>
+     <li>Signaler tout comportement suspect via le système de litige</li>
+    </ul>
+   </div></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="acc-item">
+   <div class="acc-header" onclick="toggleAcc(this)">
+    <span class="acc-title">5. Sanctions en cas de fraude</span>
+    <span class="acc-chevron">›</span>
+   </div>
+   <div class="acc-body"><div class="acc-body-inner">
+    <p>Tout utilisateur reconnu coupable de fraude fera l'objet de :</p>
+    <ul>
+     <li>Suspension immédiate et définitive du compte</li>
+     <li>Signalement aux autorités compétentes si nécessaire</li>
+     <li>Communication de toutes informations aux parties lésées</li>
+    </ul>
+    <p>Deux litiges perdus en 30 jours entraînent la suspension automatique du compte.</p>
+   </div></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="acc-item">
+   <div class="acc-header" onclick="toggleAcc(this)">
+    <span class="acc-title">6. Données personnelles</span>
+    <span class="acc-chevron">›</span>
+   </div>
+   <div class="acc-body"><div class="acc-body-inner">
+    <p>TDOLI collecte uniquement les données nécessaires au fonctionnement du service : email, numéro de téléphone, pays de résidence. Ces données ne sont jamais vendues à des tiers.</p>
+    <p>Conformément au RGPD, vous pouvez demander la suppression de vos données en contactant support@tdoli.com.</p>
+   </div></div>
+  </div>
+
+  <!-- 7 -->
+  <div class="acc-item">
+   <div class="acc-header" onclick="toggleAcc(this)">
+    <span class="acc-title">7. Contact</span>
+    <span class="acc-chevron">›</span>
+   </div>
+   <div class="acc-body"><div class="acc-body-inner">
+    <p>Pour toute question : <strong style="color:var(--green)">support@tdoli.com</strong></p>
+    <p>Site web : <strong style="color:var(--green)">tdoli.com</strong></p>
+   </div></div>
+  </div>
+
+ </div>
 </div>
+
+<script>
+function toggleAcc(header) {
+ const item = header.parentElement;
+ item.classList.toggle('open');
+}
+</script>
 </body>
 </html>
