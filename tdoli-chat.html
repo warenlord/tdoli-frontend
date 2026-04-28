@@ -88,7 +88,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 }
 .deal-banner-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
 .deal-banner-title{
- font-size:11px;font-weight:700;color:var(--blue);letter-spacing:1px;
+ font-size:11px;font-weight:700;color:var(--text-3);letter-spacing:0.5px;
  font-family:'Syne',sans-serif;
  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
@@ -413,7 +413,7 @@ firebase.initializeApp({
 
 <!-- CARTE DEAL style annonce Leboncoin -->
 <div class="deal-banner" id="dealBanner" style="display:none" onclick="goToDeal()">
- <div class="deal-banner-thumb"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+ <div class="deal-banner-thumb" style="font-size:24px;">💱</div>
  <div class="deal-banner-body">
  <div class="deal-banner-title" id="bannerCode">—</div>
  <div class="deal-banner-amount" id="bannerAmount">—</div>
@@ -475,6 +475,7 @@ firebase.initializeApp({
 <div class="overlay" id="menuOverlay" onclick="closeMenu(event)">
  <div class="sheet" style="padding-bottom:32px;">
  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title" id="menuTitle">Options</div>
  <div class="lbc-action" onclick="openPersonalData()">
   <div class="lbc-action-icon-wrap">
    <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -662,6 +663,7 @@ async function loadDealInfo() {
  statusEl.className = 'deal-banner-status matched';
  }
  document.getElementById('dealBanner').style.display = 'flex';
+ loadPartnerInfo(otherEmail);
  } catch (e) {}
 }
 
