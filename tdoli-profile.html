@@ -618,10 +618,6 @@ loadProfile();
 async function toggleFaceID() {
  const isActive = localStorage.getItem('tdoli_faceid_active') === '1';
  if (isActive) {
- await fetch(API + '/webauthn/credentials', {
-   method: 'DELETE',
-   headers: { 'Authorization': 'Bearer ' + token }
- }).catch(() => {});
  localStorage.removeItem('tdoli_faceid_active');
  localStorage.removeItem('tdoli_faceid_dismissed');
  const el = document.getElementById('faceid-status');
@@ -630,19 +626,11 @@ async function toggleFaceID() {
  return;
  }
  if (!window.PublicKeyCredential) { showToast('Face ID non supporté sur cet appareil'); return; }
- await doRegisterFaceID(false);
-}
-
-async function doRegisterFaceID(retrying) {
  try {
  const optRes = await fetch(API + '/webauthn/register/options', {
  method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
  });
- if (!optRes.ok) {
-   const errBody = await optRes.json().catch(() => ({}));
-   showToast('Erreur serveur (' + optRes.status + ') — ' + (errBody.error || 'réessaie'));
-   return;
- }
+ if (!optRes.ok) throw new Error('options_failed');
  const options = await optRes.json();
  options.challenge = base64urlToBuffer(options.challenge);
  options.user.id = base64urlToBuffer(options.user.id);
@@ -664,20 +652,11 @@ async function doRegisterFaceID(retrying) {
  localStorage.setItem('tdoli_faceid_active', '1');
  const el = document.getElementById('faceid-status');
  if (el) el.textContent = 'Activé ';
- showToast('Face ID activé !');
+ showToast('Face ID activé ! ');
  } else {
- const vErr = await verRes.json().catch(() => ({}));
- showToast('Vérification échouée — ' + (vErr.error || verRes.status));
+ showToast('Activation échouée');
  }
- } catch(err) {
- if (err.name === 'InvalidStateError' && !retrying) {
-   // Credential déjà en base → on le supprime et on réessaie automatiquement
-   await fetch(API + '/webauthn/credentials', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } }).catch(() => {});
-   await doRegisterFaceID(true);
- } else if (err.name !== 'NotAllowedError') {
-   showToast('Erreur — réessaie');
- }
- }
+ } catch(err) { if(err.name !== 'NotAllowedError') showToast('Erreur — réessaie'); }
 }
 
 function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);return buf.buffer;}
