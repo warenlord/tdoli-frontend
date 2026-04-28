@@ -618,6 +618,10 @@ loadProfile();
 async function toggleFaceID() {
  const isActive = localStorage.getItem('tdoli_faceid_active') === '1';
  if (isActive) {
+ await fetch(API + '/webauthn/credentials', {
+   method: 'DELETE',
+   headers: { 'Authorization': 'Bearer ' + token }
+ }).catch(() => {});
  localStorage.removeItem('tdoli_faceid_active');
  localStorage.removeItem('tdoli_faceid_dismissed');
  const el = document.getElementById('faceid-status');
