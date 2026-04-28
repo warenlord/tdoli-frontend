@@ -630,8 +630,14 @@ async function toggleFaceID() {
  const optRes = await fetch(API + '/webauthn/register/options', {
  method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
  });
- if (!optRes.ok) throw new Error('options_failed');
+ if (!optRes.ok) {
+   const errBody = await optRes.json().catch(() => ({}));
+   console.error('[WebAuthn] register/options failed:', optRes.status, errBody);
+   showToast('Erreur serveur (' + optRes.status + ') — ' + (errBody.detail || errBody.error || 'options_failed'));
+   return;
+ }
  const options = await optRes.json();
+ console.log('[WebAuthn] options reçues, rpId:', options.rp?.id);
  options.challenge = base64urlToBuffer(options.challenge);
  options.user.id = base64urlToBuffer(options.user.id);
  options.excludeCredentials = (options.excludeCredentials || []).map(c => ({ ...c, id: base64urlToBuffer(c.id) }));
@@ -654,9 +660,14 @@ async function toggleFaceID() {
  if (el) el.textContent = 'Activé ';
  showToast('Face ID activé ! ');
  } else {
- showToast('Activation échouée');
+ const vErr = await verRes.json().catch(() => ({}));
+ console.error('[WebAuthn] register/verify failed:', verRes.status, vErr);
+ showToast('Vérification échouée — ' + (vErr.detail || vErr.error || verRes.status));
  }
- } catch(err) { if(err.name !== 'NotAllowedError') showToast('Erreur — réessaie'); }
+ } catch(err) {
+ console.error('[WebAuthn] erreur:', err.name, err.message);
+ if(err.name !== 'NotAllowedError') showToast(err.name + ': ' + err.message);
+ }
 }
 
 function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);return buf.buffer;}
