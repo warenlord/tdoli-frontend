@@ -446,6 +446,7 @@ async function triggerBiometricAuth() {
  localStorage.setItem('tdoli_token', verData.token);
  localStorage.setItem('tdoli_email', verData.email);
  localStorage.setItem('tdoli_username', verData.username || verData.email.split('@')[0]);
+ sessionStorage.setItem('tdoli_faceid_ts', Date.now().toString());
  document.getElementById('bioAuthOverlay').classList.remove('open');
  redirectAfterLogin();
  } else {
@@ -674,7 +675,8 @@ async function loginStep2(){
  localStorage.setItem('tdoli_token',data.token);
  localStorage.setItem('tdoli_email',loginEmail);
  localStorage.setItem('tdoli_username',data.username||loginEmail.split('@')[0]);
- // Phase 8 : proposer Face ID 
+ sessionStorage.setItem('tdoli_faceid_ts', Date.now().toString());
+ // Phase 8 : proposer Face ID
  await maybeShowBiometricPrompt(data.token, loginEmail);
  }else{showMsg('msg-login-step2',data.message||'Code invalide');btn.disabled=false;btn.innerHTML='Connexion';}
  }catch(e){showMsg('msg-login-step2','Serveur inaccessible');btn.disabled=false;btn.innerHTML='Connexion';}

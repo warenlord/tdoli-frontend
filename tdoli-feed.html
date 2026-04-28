@@ -96,17 +96,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,83,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .fab:active{transform:scale(0.9);}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;color:var(--text-3);font-size:8px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
-.nav-item span{white-space:nowrap;}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
 .nav-icon-wrap{position:relative;}
-.nav-badge{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}
-.nav-badge.show{display:flex;}
-.nav-badge.yellow{background:var(--yellow);color:#000;}
-.nav-badge.red{background:var(--red);color:#fff;}
-/* Compat ancien deals-badge */
-.deals-badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:8px;background:var(--yellow);color:#000;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}
+.deals-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--yellow);color:#000;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
 .deals-badge.show{display:flex;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
@@ -332,26 +326,22 @@ firebase.initializeApp({
 
 <nav class="bottom-nav">
  <a class="nav-item active" href="/tdoli-feed.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
- <span>Feed</span>
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
  </a>
  <a class="nav-item" href="/tdoli-deals.html">
  <div class="nav-icon-wrap">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
- <div class="nav-dot-active" id="dealsBadge" style="display:none;"></div>
- </div>
- <span>Deals</span>
+ <div class="deals-badge" id="dealsBadge">!</div>
+ </div>Deals
  </a>
  <a class="nav-item" href="/tdoli-messages.html">
  <div class="nav-icon-wrap">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
- <div class="nav-badge red" id="msgBadge"></div>
- </div>
- <span>Messages</span>
+ <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div>
+ </div>Messages
  </a>
  <a class="nav-item" href="/tdoli-profile.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
- <span>Profil</span>
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
  </a>
 </nav>
 
@@ -602,6 +592,17 @@ const RATE = 655.957;
  window.location.replace('/tdoli-auth.html');
  return;
  }
+
+ // Navigation depuis une autre page de l'app → pas de gate
+ try {
+   if (document.referrer) {
+     const ref = new URL(document.referrer);
+     if (ref.origin === window.location.origin) {
+       sessionStorage.setItem('tdoli_faceid_ts', Date.now().toString());
+       return;
+     }
+   }
+ } catch {}
 
  // Vérifier si la session Face ID est encore valide (max 5 min)
  // Utilise un timestamp car sessionStorage persiste sur iOS PWA entre les ouvertures
@@ -1376,8 +1377,8 @@ async function checkActiveDeals() {
  if (Array.isArray(deals)) {
  const active = deals.filter(d => d.status === 'matched').length;
  const badge = document.getElementById('dealsBadge');
- if (active > 0) { badge.style.display = 'block'; }
- else { badge.style.display = 'none'; }
+ if (active > 0) { badge.textContent = active; badge.classList.add('show'); }
+ else badge.classList.remove('show');
  }
  } catch (e) {}
 }
@@ -1646,7 +1647,7 @@ async function checkUnreadMessages() {
  const badge = document.getElementById('msgBadge');
  if (badge) {
  if (data.count > 0) { badge.textContent = data.count > 9 ? '9+' : data.count; badge.classList.add('show'); }
- else { badge.style.display = 'none'; }
+ else badge.classList.remove('show');
  }
  } catch(e) {}
 }
