@@ -532,9 +532,9 @@ function openDeal(id) {
  // Charger les données communautaires du partenaire (async)
  (async function() {
  let partnerData = { communityScore: null, reactivityBadge: null, rating: null, lastTestimonial: null };
- if (d.otherUsername) {
+ if (d.otherEmail) {
  try {
- const partnerRes = await safeJson(await fetch(API+'/profile/'+d.otherUsername, {headers:{'Authorization':'Bearer '+token}}));
+ const partnerRes = await safeJson(await fetch(API+'/profile/'+encodeURIComponent(d.otherEmail), {headers:{'Authorization':'Bearer '+token}}));
  if (partnerRes && partnerRes.data) {
  partnerData = {
  communityScore: partnerRes.data.communityScore || partnerRes.data.trustLine || null,

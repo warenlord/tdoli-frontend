@@ -345,7 +345,8 @@ function renderFromCache() {
  </div>
  <div class="section-title">Paramètres</div>
  <div class="settings-card">
- <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label"> Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>\n \ndiv class="settings-item" onclick="openPhoneVerif()"><span class="settings-label"> Téléphone</span><span class="settings-val">Non vérifié →</span></div>
+ <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label"> Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>
+ <div class="settings-item" onclick="openPhoneVerif()"><span class="settings-label"> Téléphone</span><span class="settings-val">Non vérifié →</span></div>
  <div class="settings-item" id="faceid-setting-cache" onclick="toggleFaceID()">
  <span class="settings-label"> Face ID / Empreinte</span>
  <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ':'Désactivé →'}</span>
