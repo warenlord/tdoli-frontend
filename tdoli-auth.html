@@ -8,7 +8,7 @@
 <style>
 :root{
  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
- --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.10);
  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
@@ -21,7 +21,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;padding:0 22px;max-width:440px;margin:0 auto;}
 .header{padding:52px 0 32px;text-align:center;animation:fadeDown 0.6s cubic-bezier(0.19,1,0.22,1) both;}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
-.logo-ring{width:68px;height:68px;border-radius:50%;margin:0 auto 16px;background:linear-gradient(135deg,rgba(0,230,118,0.12),rgba(26,79,255,0.12));border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;position:relative;}
+.logo-ring{width:68px;height:68px;border-radius:50%;margin:0 auto 16px;background:linear-gradient(135deg,rgba(0,230,118,0.10),rgba(26,79,255,0.12));border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;position:relative;}
 .logo-ring::before{content:'';position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 0deg,var(--green),var(--yellow),var(--blue),var(--green));opacity:0.25;animation:rotateSlow 5s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),white calc(100% - 1.5px));mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),white calc(100% - 1.5px));}
 @keyframes rotateSlow{to{transform:rotate(360deg);}}
 .logo-ring-text{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--green);}
@@ -98,7 +98,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .biometric-icon{font-size:48px;text-align:center;margin-bottom:14px;animation:breathe 1.5s ease infinite;}
 .biometric-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:8px;}
 .biometric-sub{font-size:13px;color:var(--text-3);text-align:center;line-height:1.6;margin-bottom:22px;}
-.btn-biometric{width:100%;padding:14px;background:linear-gradient(135deg,rgba(26,79,255,0.12),rgba(0,230,118,0.12));color:var(--text);border:1px solid rgba(26,79,255,0.25);border-radius:13px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px;transition:border-color 0.2s;}
+.btn-biometric{width:100%;padding:14px;background:linear-gradient(135deg,rgba(26,79,255,0.12),rgba(0,230,118,0.10));color:var(--text);border:1px solid rgba(26,79,255,0.25);border-radius:13px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px;transition:border-color 0.2s;}
 .btn-biometric:active{opacity:0.85;}
 .btn-biometric span.bio-icon{font-size:18px;}
 
