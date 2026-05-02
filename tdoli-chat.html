@@ -1038,6 +1038,7 @@ connectSocket();
   <button class="dco-btn-later" id="dcoBtnLater" onclick="dcDismiss()">Continuer →</button>
 </div>
 
+
 <script>
 // ── Deal Complété Checker Global ──────────────────────────────
 const API_GLOBAL = 'https://tdoli-backend.onrender.com';
@@ -1073,7 +1074,7 @@ function showDealCompleteOverlay(dealId, dealCode, partnerName, amount, currency
   const rating = document.getElementById('dcoRating');
   const btnLater = document.getElementById('dcoBtnLater');
   const nameEl = document.getElementById('dcoPartnerName');
-  if (sub && amount) sub.textContent = 'Echange de ' + Number(amount).toLocaleString('fr-FR') + ' ' + currency + ' validé !';
+  if (sub && amount) sub.textContent = 'Echange de ' + Number(amount).toLocaleString('fr-FR') + ' ' + currency + ' valide !';
   if (code && dealCode) { code.textContent = dealCode; code.style.display = 'block'; }
   if (nameEl && partnerName) nameEl.textContent = partnerName;
   if (partnerName && rating) { rating.style.display = 'block'; if (btnLater) btnLater.style.display = 'none'; }
@@ -1082,7 +1083,7 @@ function showDealCompleteOverlay(dealId, dealCode, partnerName, amount, currency
 }
 
 async function dcSubmitRating() {
-  if (!dcSelectedStar) { alert('Sélectionne une note'); return; }
+  if (!dcSelectedStar) { alert('Selectionne une note'); return; }
   if (!dcDealId) { dcDismiss(); return; }
   const comment = document.getElementById('dcoComment')?.value || '';
   const btn = document.querySelector('.dco-btn-rate');
@@ -1100,19 +1101,49 @@ async function dcSubmitRating() {
 function dcDismiss() {
   const overlay = document.getElementById('dealCompleteOverlay');
   if (overlay) overlay.classList.remove('show');
-  localStorage.removeItem('tdoli_deal_completed');
+  // Marquer ce deal comme vu
+  try {
+    const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
+    if (dcDealId && !seen.includes(dcDealId)) {
+      seen.push(dcDealId);
+      // Garder seulement les 20 derniers
+      if (seen.length > 20) seen.splice(0, seen.length - 20);
+      localStorage.setItem('tdoli_seen_completed', JSON.stringify(seen));
+    }
+  } catch(e) {}
 }
 
-// Checker au chargement
-(function checkDealCompletedFlag() {
+// Checker au chargement — appelle l'API pour trouver deals completed non vus
+async function checkDealCompletedFlag() {
+  if (!TOKEN_GLOBAL) return;
   try {
-    const raw = localStorage.getItem('tdoli_deal_completed');
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    if (!data || !data.dealId) return;
-    setTimeout(() => showDealCompleteOverlay(data.dealId, data.dealCode, data.partnerName, data.amount, data.currency), 500);
+    const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
+    const res = await fetch(API_GLOBAL + '/deals/mine', {
+      headers: { 'Authorization': 'Bearer ' + TOKEN_GLOBAL }
+    });
+    if (!res.ok) return;
+    const deals = await res.json();
+    if (!Array.isArray(deals)) return;
+
+    // Trouver le premier deal completed non encore vu
+    const newlyCompleted = deals.find(d => d.status === 'completed' && !seen.includes(d._id));
+    if (!newlyCompleted) return;
+
+    const amount = newlyCompleted.myAmount || newlyCompleted.amount || null;
+    const currency = newlyCompleted.myCurrency || newlyCompleted.currency || null;
+
+    setTimeout(() => showDealCompleteOverlay(
+      newlyCompleted._id,
+      newlyCompleted.dealCode || null,
+      newlyCompleted.otherUsername || null,
+      amount,
+      currency
+    ), 600);
   } catch(e) {}
-})();
+}
+
+checkDealCompletedFlag();
 </script>
+
 </body>
 </html>

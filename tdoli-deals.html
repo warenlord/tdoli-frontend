@@ -738,7 +738,6 @@ async function confirmReceived(dealId, btn) {
           amount: deal?.myAmount || deal?.amount || null,
           currency: deal?.myCurrency || deal?.currency || null
         };
-        localStorage.setItem('tdoli_deal_completed', JSON.stringify(flagData));
         showDealCompleteOverlay(flagData.dealId, flagData.dealCode, flagData.partnerName, flagData.amount, flagData.currency);
         loadDeals(true);
       } else {
@@ -1015,20 +1014,41 @@ async function dcSubmitRating() {
 
 function dcDismiss() {
   document.getElementById('dealCompleteOverlay').classList.remove('show');
-  // Effacer le flag localStorage
-  localStorage.removeItem('tdoli_deal_completed');
+  // Marquer ce deal comme vu
+  try {
+    const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
+    if (dcDealId && !seen.includes(dcDealId)) {
+      seen.push(dcDealId);
+      if (seen.length > 20) seen.splice(0, seen.length - 20);
+      localStorage.setItem('tdoli_seen_completed', JSON.stringify(seen));
+    }
+  } catch(e) {}
   loadDeals(true);
 }
 
-// ── Checker au chargement de la page ─────────────────────────
-function checkDealCompletedFlag() {
+// ── Checker au chargement — via API ──────────────────────────
+async function checkDealCompletedFlag() {
+  if (!token) return;
   try {
-    const raw = localStorage.getItem('tdoli_deal_completed');
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    if (!data || !data.dealId) return;
-    // Afficher immédiatement
-    showDealCompleteOverlay(data.dealId, data.dealCode, data.partnerName, data.amount, data.currency);
+    const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
+    // Utiliser les deals déjà chargés ou recharger
+    const deals = allDeals.length > 0 ? allDeals : await (async () => {
+      const r = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+      if (!r.ok) return [];
+      return await r.json();
+    })();
+    if (!Array.isArray(deals)) return;
+    const newlyCompleted = deals.find(d => d.status === 'completed' && !seen.includes(d._id));
+    if (!newlyCompleted) return;
+    const amount = newlyCompleted.myAmount || newlyCompleted.amount || null;
+    const currency = newlyCompleted.myCurrency || newlyCompleted.currency || null;
+    setTimeout(() => showDealCompleteOverlay(
+      newlyCompleted._id,
+      newlyCompleted.dealCode || null,
+      newlyCompleted.otherUsername || null,
+      amount,
+      currency
+    ), 600);
   } catch(e) {}
 }
 </script>
