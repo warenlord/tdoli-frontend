@@ -221,6 +221,12 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9998;}
 .confetti-piece{position:absolute;border-radius:2px;animation:confettiFall linear forwards;}
 @keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+
+/* ── Fluidité navigation ─────────────────────────────────────── */
+@keyframes tdoliFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+body{animation:tdoliFadeIn 0.2s ease-out both;}
+.nav-item{transition:color 0.2s,opacity 0.15s;}
+a{-webkit-tap-highlight-color:transparent;}
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#05090a">
@@ -1076,5 +1082,110 @@ async function checkDealCompletedFlag() {
   </div>
   <button class="dco-btn-later" id="dcoBtnLater" onclick="dcDismiss()">Continuer →</button>
 </div>
+
+<script>
+// ── Polling TDOLI — Rafraîchissement automatique ──────────────
+(function() {
+  const API_P = 'https://tdoli-backend.onrender.com';
+  const token_p = localStorage.getItem('tdoli_token');
+  if (!token_p) return;
+
+  const page = window.location.pathname;
+  let lastDealCount = -1;
+  let lastMatchStatus = null;
+  let pollInterval = null;
+
+  async function pollUpdates() {
+    try {
+      // 1. Vérifier nouveaux deals/matchs
+      const res = await fetch(API_P + '/deals/mine', {
+        headers: { 'Authorization': 'Bearer ' + token_p }
+      });
+      if (!res.ok) return;
+      const deals = await res.json();
+      if (!Array.isArray(deals)) return;
+
+      const activeCount = deals.filter(d => d.status === 'matched').length;
+      const completedCount = deals.filter(d => d.status === 'completed').length;
+
+      // Nouveau match détecté → rafraîchir la page si on est sur feed
+      if (lastDealCount !== -1 && activeCount > lastDealCount) {
+        if (page.includes('tdoli-feed') && typeof loadFeed === 'function') {
+          loadFeed(true);
+        }
+        // Mettre à jour badge deals
+        const dealsBadge = document.getElementById('dealsBadge');
+        if (dealsBadge) { dealsBadge.textContent = activeCount; dealsBadge.classList.toggle('show', activeCount > 0); }
+      }
+
+      // Deal completed non vu → déclencher animation perroquet
+      try {
+        const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
+        const newlyCompleted = deals.find(d => d.status === 'completed' && !seen.includes(d._id));
+        if (newlyCompleted && typeof showDealCompleteOverlay === 'function') {
+          const overlay = document.getElementById('dealCompleteOverlay');
+          if (overlay && !overlay.classList.contains('show')) {
+            const amount = newlyCompleted.myAmount || newlyCompleted.amount || null;
+            const currency = newlyCompleted.myCurrency || newlyCompleted.currency || null;
+            showDealCompleteOverlay(newlyCompleted._id, newlyCompleted.dealCode, newlyCompleted.otherUsername, amount, currency);
+          }
+        }
+      } catch(e) {}
+
+      // Rafraîchir la liste deals si on est sur deals
+      if (page.includes('tdoli-deals') && typeof loadDeals === 'function') {
+        if (lastDealCount !== -1 && (activeCount !== lastDealCount || completedCount !== lastMatchStatus)) {
+          loadDeals(true);
+        }
+      }
+
+      lastDealCount = activeCount;
+      lastMatchStatus = completedCount;
+
+      // 2. Vérifier messages non lus
+      try {
+        const mRes = await fetch(API_P + '/messages/unread-count', {
+          headers: { 'Authorization': 'Bearer ' + token_p }
+        });
+        if (mRes.ok) {
+          const mData = await mRes.json();
+          const count = mData.count || 0;
+          const badge = document.getElementById('msgBadge');
+          if (badge) {
+            if (count > 0) { badge.textContent = count > 9 ? '9+' : count; badge.classList.add('show'); }
+            else { badge.classList.remove('show'); }
+          }
+          // Rafraîchir conversations si on est sur messages
+          if (page.includes('tdoli-messages') && count > 0 && typeof loadConversations === 'function') {
+            loadConversations();
+          }
+          // Rafraîchir chat si on est sur chat
+          if (page.includes('tdoli-chat') && typeof loadNewMessages === 'function') {
+            loadNewMessages();
+          }
+        }
+      } catch(e) {}
+
+    } catch(e) {}
+  }
+
+  // Démarrer le polling après 2s (laisser la page charger)
+  setTimeout(() => {
+    pollUpdates(); // Premier appel immédiat
+    pollInterval = setInterval(pollUpdates, 15000); // Puis toutes les 15s
+  }, 2000);
+
+  // Arrêter quand la page perd le focus, reprendre au retour
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearInterval(pollInterval);
+    } else {
+      pollUpdates();
+      pollInterval = setInterval(pollUpdates, 15000);
+    }
+  });
+})();
+</script>
+
 </body>
 </html>

@@ -358,43 +358,11 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ── Montants forcés blanc ───────────────────────────────────── */
-.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
-.conv-amount,.deal-banner-amount,.amount,.limit-val {
-  font-family:'Syne',sans-serif !important;
-  font-weight:800 !important;
-  color:#ecf4f0 !important;
-  letter-spacing:-0.3px;
-}
-.item-currency,.detail-currency,.detail-cur,.currency {
-  font-family:'Syne',sans-serif !important;
-  font-weight:700 !important;
-  color:#ecf4f0 !important;
-}
-
-/* ── Deal Complété Overlay (global) ─────────────────────────── */
-.deal-complete-overlay{position:fixed;inset:0;z-index:9999;background:rgba(5,9,10,0.97);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;}
-.deal-complete-overlay.show{display:flex;animation:fadeInFull 0.4s ease;}
-@keyframes fadeInFull{from{opacity:0;}to{opacity:1;}}
-.dco-parrot{width:110px;height:110px;animation:parrotBounce 0.7s cubic-bezier(0.36,0.07,0.19,0.97) infinite alternate;}
-.dco-parrot img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 24px rgba(0,230,118,0.5));}
-@keyframes parrotBounce{from{transform:translateY(0) rotate(-6deg);}to{transform:translateY(-18px) rotate(6deg);}}
-.dco-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#00e676;text-align:center;}
-.dco-sub{font-size:13px;color:#90a8a0;text-align:center;max-width:260px;line-height:1.6;}
-.dco-code{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#ffd740;background:rgba(255,215,64,0.1);border:1px solid rgba(255,215,64,0.3);border-radius:10px;padding:8px 20px;letter-spacing:2px;}
-.dco-rating{background:#0f1a1e;border:1px solid rgba(0,230,118,0.22);border-radius:16px;padding:20px;width:100%;max-width:340px;text-align:center;}
-.dco-rating-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#90a8a0;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.8px;}
-.dco-rating-name{font-size:15px;font-weight:700;color:#ecf4f0;margin-bottom:14px;}
-.dco-stars{display:flex;gap:8px;justify-content:center;margin-bottom:14px;}
-.dco-star{font-size:32px;cursor:pointer;opacity:0.25;transition:opacity 0.15s,transform 0.15s;user-select:none;}
-.dco-star.active{opacity:1;transform:scale(1.15);}
-.dco-comment{width:100%;padding:10px 13px;background:#0b1215;border:1px solid rgba(255,255,255,0.06);border-radius:10px;color:#ecf4f0;font-family:'Inter',sans-serif;font-size:13px;margin-bottom:12px;resize:none;height:60px;box-sizing:border-box;}
-.dco-comment:focus{outline:none;border-color:#00e676;}
-.dco-btn-rate{width:100%;padding:13px;background:linear-gradient(135deg,#00c853,#2979ff);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;}
-.dco-btn-later{width:100%;padding:11px;background:transparent;color:#4a6860;border:1px solid rgba(255,255,255,0.06);border-radius:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
-.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9998;}
-.confetti-piece{position:absolute;border-radius:2px;animation:confettiFall linear forwards;}
-@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+/* ── Fluidité navigation ─────────────────────────────────────── */
+@keyframes tdoliFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+body{animation:tdoliFadeIn 0.2s ease-out both;}
+.nav-item{transition:color 0.2s,opacity 0.15s;}
+a{-webkit-tap-highlight-color:transparent;}
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#05090a">
@@ -1014,135 +982,108 @@ loadInitialMessages();
 connectSocket();
 </script>
 
-<!-- Overlay Deal Complété Global -->
-<div class="deal-complete-overlay" id="dealCompleteOverlay">
-  <div class="confetti-wrap" id="dcoConfetti"></div>
-  <div class="dco-parrot"><img src="/TDOLI_APP.png" alt="TDOLI"></div>
-  <div class="dco-title">Deal complété ! 🎉</div>
-  <div class="dco-sub" id="dcoSub">Lechange a été validé avec succès.</div>
-  <div class="dco-code" id="dcoCode" style="display:none;"></div>
-  <div class="dco-rating" id="dcoRating" style="display:none;">
-    <div class="dco-rating-title">Note ton partenaire</div>
-    <div class="dco-rating-name" id="dcoPartnerName"></div>
-    <div class="dco-stars" id="dcoStars">
-      <span class="dco-star" data-n="1" onclick="dcSetStar(1)">⭐</span>
-      <span class="dco-star" data-n="2" onclick="dcSetStar(2)">⭐</span>
-      <span class="dco-star" data-n="3" onclick="dcSetStar(3)">⭐</span>
-      <span class="dco-star" data-n="4" onclick="dcSetStar(4)">⭐</span>
-      <span class="dco-star" data-n="5" onclick="dcSetStar(5)">⭐</span>
-    </div>
-    <textarea class="dco-comment" id="dcoComment" placeholder="Commentaire (optionnel)..."></textarea>
-    <button class="dco-btn-rate" onclick="dcSubmitRating()">Envoyer ma note</button>
-    <button class="dco-btn-later" onclick="dcDismiss()">Plus tard</button>
-  </div>
-  <button class="dco-btn-later" id="dcoBtnLater" onclick="dcDismiss()">Continuer →</button>
-</div>
-
-
 <script>
-// ── Deal Complété Checker Global ──────────────────────────────
-const API_GLOBAL = 'https://tdoli-backend.onrender.com';
-const TOKEN_GLOBAL = localStorage.getItem('tdoli_token');
-let dcSelectedStar = 0;
-let dcDealId = null;
+// ── Polling TDOLI — Rafraîchissement automatique ──────────────
+(function() {
+  const API_P = 'https://tdoli-backend.onrender.com';
+  const token_p = localStorage.getItem('tdoli_token');
+  if (!token_p) return;
 
-function dcSetStar(n) {
-  dcSelectedStar = n;
-  document.querySelectorAll('.dco-star').forEach((s, i) => s.classList.toggle('active', i < n));
-}
+  const page = window.location.pathname;
+  let lastDealCount = -1;
+  let lastMatchStatus = null;
+  let pollInterval = null;
 
-function spawnConfettiGlobal() {
-  const wrap = document.getElementById('dcoConfetti');
-  if (!wrap) return;
-  wrap.innerHTML = '';
-  const colors = ['#00e676','#ffd740','#2979ff','#ff1744','#ffffff'];
-  for (let i = 0; i < 60; i++) {
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    const size = 6 + Math.random() * 8;
-    el.style.cssText = 'left:'+Math.random()*100+'vw;top:-10px;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+(Math.random()*1.5)+'s;width:'+size+'px;height:'+size+'px;';
-    wrap.appendChild(el);
+  async function pollUpdates() {
+    try {
+      // 1. Vérifier nouveaux deals/matchs
+      const res = await fetch(API_P + '/deals/mine', {
+        headers: { 'Authorization': 'Bearer ' + token_p }
+      });
+      if (!res.ok) return;
+      const deals = await res.json();
+      if (!Array.isArray(deals)) return;
+
+      const activeCount = deals.filter(d => d.status === 'matched').length;
+      const completedCount = deals.filter(d => d.status === 'completed').length;
+
+      // Nouveau match détecté → rafraîchir la page si on est sur feed
+      if (lastDealCount !== -1 && activeCount > lastDealCount) {
+        if (page.includes('tdoli-feed') && typeof loadFeed === 'function') {
+          loadFeed(true);
+        }
+        // Mettre à jour badge deals
+        const dealsBadge = document.getElementById('dealsBadge');
+        if (dealsBadge) { dealsBadge.textContent = activeCount; dealsBadge.classList.toggle('show', activeCount > 0); }
+      }
+
+      // Deal completed non vu → déclencher animation perroquet
+      try {
+        const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
+        const newlyCompleted = deals.find(d => d.status === 'completed' && !seen.includes(d._id));
+        if (newlyCompleted && typeof showDealCompleteOverlay === 'function') {
+          const overlay = document.getElementById('dealCompleteOverlay');
+          if (overlay && !overlay.classList.contains('show')) {
+            const amount = newlyCompleted.myAmount || newlyCompleted.amount || null;
+            const currency = newlyCompleted.myCurrency || newlyCompleted.currency || null;
+            showDealCompleteOverlay(newlyCompleted._id, newlyCompleted.dealCode, newlyCompleted.otherUsername, amount, currency);
+          }
+        }
+      } catch(e) {}
+
+      // Rafraîchir la liste deals si on est sur deals
+      if (page.includes('tdoli-deals') && typeof loadDeals === 'function') {
+        if (lastDealCount !== -1 && (activeCount !== lastDealCount || completedCount !== lastMatchStatus)) {
+          loadDeals(true);
+        }
+      }
+
+      lastDealCount = activeCount;
+      lastMatchStatus = completedCount;
+
+      // 2. Vérifier messages non lus
+      try {
+        const mRes = await fetch(API_P + '/messages/unread-count', {
+          headers: { 'Authorization': 'Bearer ' + token_p }
+        });
+        if (mRes.ok) {
+          const mData = await mRes.json();
+          const count = mData.count || 0;
+          const badge = document.getElementById('msgBadge');
+          if (badge) {
+            if (count > 0) { badge.textContent = count > 9 ? '9+' : count; badge.classList.add('show'); }
+            else { badge.classList.remove('show'); }
+          }
+          // Rafraîchir conversations si on est sur messages
+          if (page.includes('tdoli-messages') && count > 0 && typeof loadConversations === 'function') {
+            loadConversations();
+          }
+          // Rafraîchir chat si on est sur chat
+          if (page.includes('tdoli-chat') && typeof loadNewMessages === 'function') {
+            loadNewMessages();
+          }
+        }
+      } catch(e) {}
+
+    } catch(e) {}
   }
-}
 
-function showDealCompleteOverlay(dealId, dealCode, partnerName, amount, currency) {
-  dcDealId = dealId;
-  const overlay = document.getElementById('dealCompleteOverlay');
-  if (!overlay) return;
-  const sub = document.getElementById('dcoSub');
-  const code = document.getElementById('dcoCode');
-  const rating = document.getElementById('dcoRating');
-  const btnLater = document.getElementById('dcoBtnLater');
-  const nameEl = document.getElementById('dcoPartnerName');
-  if (sub && amount) sub.textContent = 'Echange de ' + Number(amount).toLocaleString('fr-FR') + ' ' + currency + ' valide !';
-  if (code && dealCode) { code.textContent = dealCode; code.style.display = 'block'; }
-  if (nameEl && partnerName) nameEl.textContent = partnerName;
-  if (partnerName && rating) { rating.style.display = 'block'; if (btnLater) btnLater.style.display = 'none'; }
-  overlay.classList.add('show');
-  spawnConfettiGlobal();
-}
+  // Démarrer le polling après 2s (laisser la page charger)
+  setTimeout(() => {
+    pollUpdates(); // Premier appel immédiat
+    pollInterval = setInterval(pollUpdates, 15000); // Puis toutes les 15s
+  }, 2000);
 
-async function dcSubmitRating() {
-  if (!dcSelectedStar) { alert('Selectionne une note'); return; }
-  if (!dcDealId) { dcDismiss(); return; }
-  const comment = document.getElementById('dcoComment')?.value || '';
-  const btn = document.querySelector('.dco-btn-rate');
-  if (btn) { btn.disabled = true; btn.textContent = 'Envoi...'; }
-  try {
-    await fetch(API_GLOBAL + '/deals/' + dcDealId + '/rate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN_GLOBAL },
-      body: JSON.stringify({ rating: dcSelectedStar, comment })
-    });
-  } catch(e) {}
-  dcDismiss();
-}
-
-function dcDismiss() {
-  const overlay = document.getElementById('dealCompleteOverlay');
-  if (overlay) overlay.classList.remove('show');
-  // Marquer ce deal comme vu
-  try {
-    const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
-    if (dcDealId && !seen.includes(dcDealId)) {
-      seen.push(dcDealId);
-      // Garder seulement les 20 derniers
-      if (seen.length > 20) seen.splice(0, seen.length - 20);
-      localStorage.setItem('tdoli_seen_completed', JSON.stringify(seen));
+  // Arrêter quand la page perd le focus, reprendre au retour
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearInterval(pollInterval);
+    } else {
+      pollUpdates();
+      pollInterval = setInterval(pollUpdates, 15000);
     }
-  } catch(e) {}
-}
-
-// Checker au chargement — appelle l'API pour trouver deals completed non vus
-async function checkDealCompletedFlag() {
-  if (!TOKEN_GLOBAL) return;
-  try {
-    const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
-    const res = await fetch(API_GLOBAL + '/deals/mine', {
-      headers: { 'Authorization': 'Bearer ' + TOKEN_GLOBAL }
-    });
-    if (!res.ok) return;
-    const deals = await res.json();
-    if (!Array.isArray(deals)) return;
-
-    // Trouver le premier deal completed non encore vu
-    const newlyCompleted = deals.find(d => d.status === 'completed' && !seen.includes(d._id));
-    if (!newlyCompleted) return;
-
-    const amount = newlyCompleted.myAmount || newlyCompleted.amount || null;
-    const currency = newlyCompleted.myCurrency || newlyCompleted.currency || null;
-
-    setTimeout(() => showDealCompleteOverlay(
-      newlyCompleted._id,
-      newlyCompleted.dealCode || null,
-      newlyCompleted.otherUsername || null,
-      amount,
-      currency
-    ), 600);
-  } catch(e) {}
-}
-
-checkDealCompletedFlag();
+  });
+})();
 </script>
 
 </body>

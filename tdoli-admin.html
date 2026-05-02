@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TDOLI — Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#05090a;--surface:#0b1215;--card:#0f1a1e;--green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);--yellow:#ffd740;--blue:#2979ff;--red:#ff1744;--text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;--border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);--r:16px;}
+:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);--r:16px;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 .topbar{background:rgba(6,13,9,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
 .topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;}
 .topbar-logo .l1{color:var(--green);}.topbar-logo .l2{color:var(--yellow);}.topbar-logo .l3{color:var(--green);}.topbar-logo .l4{color:var(--blue);}.topbar-logo .l5{color:var(--yellow);}
@@ -18,7 +18,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .login-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;max-width:360px;width:100%;text-align:center;}
 .login-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:8px;}
 .login-sub{font-size:13px;color:var(--text-3);margin-bottom:24px;}
-.form-input{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;margin-bottom:12px;}
+.form-input{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;margin-bottom:12px;}
 .form-input:focus{outline:none;border-color:var(--green);}
 .btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
@@ -46,7 +46,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .status-badge{font-size:11px;font-weight:700;font-family:'Syne',sans-serif;padding:4px 12px;border-radius:20px;}
 .status-badge.pending{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
 .status-badge.reviewing{background:rgba(26,79,255,0.1);color:var(--blue);border:1px solid rgba(26,79,255,0.2);}
-.status-badge.resolved_sender,.status-badge.resolved_receiver{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.2);}
+.status-badge.resolved_sender,.status-badge.resolved_receiver{background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
 .status-badge.cancelled{background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);}
 .dispute-parties{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
 .party-box{flex:1;min-width:140px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
@@ -64,7 +64,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .justif-pdf{width:80px;height:80px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;gap:4px;}
 .justif-pdf-icon{font-size:24px;}
 .justif-pdf-label{font-size:10px;color:var(--text-3);}
-.admin-note-area{width:100%;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;resize:none;height:70px;margin-bottom:12px;box-sizing:border-box;}
+.admin-note-area{width:100%;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;height:70px;margin-bottom:12px;box-sizing:border-box;}
 .admin-note-area:focus{outline:none;border-color:var(--green);}
 .actions-row{display:flex;gap:8px;flex-wrap:wrap;}
 .btn-action{padding:10px 16px;border-radius:10px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
@@ -73,7 +73,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .btn-resolve-r{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
 .btn-cancel-d{background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);}
 .btn-action:active{opacity:0.7;}
-.resolved-note{background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:12px 14px;margin-top:12px;}
+.resolved-note{background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:12px 14px;margin-top:12px;}
 .resolved-label{font-size:11px;color:var(--green);font-family:'Syne',sans-serif;font-weight:700;margin-bottom:4px;}
 .resolved-text{font-size:13px;color:var(--text-2);}
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-3);}
@@ -94,27 +94,19 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 }
 
 .user-avatar-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1px solid var(--border-active);}
-.share-btn{background:transparent;border:none;color:#ffd740;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;white-space:nowrap;}
+.share-btn{background:transparent;border:none;color:#fcd116;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;white-space:nowrap;}
 .share-btn:active{opacity:0.7;}
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;transition:all 0.2s;}
 
-/* ── Montants forcés blanc ───────────────────────────────────── */
-.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
-.conv-amount,.deal-banner-amount,.amount,.limit-val {
-  font-family:'Syne',sans-serif !important;
-  font-weight:800 !important;
-  color:#ecf4f0 !important;
-  letter-spacing:-0.3px;
-}
-.item-currency,.detail-currency,.detail-cur,.currency {
-  font-family:'Syne',sans-serif !important;
-  font-weight:700 !important;
-  color:#ecf4f0 !important;
-}
+/* ── Fluidité navigation ─────────────────────────────────────── */
+@keyframes tdoliFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+body{animation:tdoliFadeIn 0.2s ease-out both;}
+.nav-item{transition:color 0.2s,opacity 0.15s;}
+a{-webkit-tap-highlight-color:transparent;}
 </style>
 
  <link rel="manifest" href="/manifest.json">
- <meta name="theme-color" content="#05090a">
+ <meta name="theme-color" content="#060d09">
  <meta name="apple-mobile-web-app-capable" content="yes">
  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
  <meta name="apple-mobile-web-app-title" content="TDOLI">
@@ -212,12 +204,12 @@ function renderDisputes(){
  '<textarea class="admin-note-area" id="note-'+d._id+'" placeholder="Note admin visible par les parties..."></textarea>'+
  '<textarea class="admin-note-area" id="doc-msg-'+d._id+'" placeholder="Message demande de documents (optionnel)..." style="border-color:rgba(252,209,22,0.2);"></textarea>'+
  '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">'+
- '<select id="doc-target-'+d._id+'" style="padding:8px 12px;background:#0b1215;border:1px solid rgba(252,209,22,0.2);border-radius:8px;color:#ffd740;font-family:Syne,sans-serif;font-size:11px;font-weight:700;cursor:pointer;">'+
+ '<select id="doc-target-'+d._id+'" style="padding:8px 12px;background:#0c1710;border:1px solid rgba(252,209,22,0.2);border-radius:8px;color:#fcd116;font-family:Syne,sans-serif;font-size:11px;font-weight:700;cursor:pointer;">'+
  '<option value="both">Les deux parties</option>'+
  '<option value="reporter">Déclarant seulement</option>'+
  '<option value="against">Mis en cause seulement</option>'+
  '</select>'+
- '<button class="btn-action" style="background:rgba(252,209,22,0.08);color:#ffd740;border:1px solid rgba(252,209,22,0.2);" onclick="requestDocs(\''+d._id+'\')"> Demander des documents</button>'+
+ '<button class="btn-action" style="background:rgba(252,209,22,0.08);color:#fcd116;border:1px solid rgba(252,209,22,0.2);" onclick="requestDocs(\''+d._id+'\')"> Demander des documents</button>'+
  '</div>'+
  '<div class="actions-row">'+(d.status==='pending'?'<button class="btn-action btn-review" onclick="takeReview(\''+d._id+'\')">Prendre en charge</button>':'')+
  '<button class="btn-action btn-resolve-s" onclick="resolve(\''+d._id+'\',\'resolved_sender\')"> Faveur Envoyeur</button>'+
