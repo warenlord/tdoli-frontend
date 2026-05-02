@@ -155,29 +155,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .messages-area{scroll-behavior:smooth;}
 
 /* Indicateur de chargement inline */
-.inline-loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
-
-
-/* ── Fluidité navigation ─────────────────────────────────────── */
-@keyframes tdoliFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-body{animation:tdoliFadeIn 0.2s ease-out both;}
-.nav-item{transition:color 0.2s,opacity 0.15s;}
-a{-webkit-tap-highlight-color:transparent;}
-
-/* ── Montants forcés blanc ───────────────────────────────────── */
-.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
-.conv-amount,.deal-banner-amount,.amount,.limit-val,.weekly-stat-val {
-  font-family:'Syne',sans-serif !important;
-  font-weight:800 !important;
-  color:#ecf4f0 !important;
-  letter-spacing:-0.3px;
-}
-.item-currency,.detail-currency,.detail-cur,.currency {
-  font-family:'Syne',sans-serif !important;
-  font-weight:700 !important;
-  color:#ecf4f0 !important;
-}
-</style>
+.inline-loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}</style>
 
  <link rel="manifest" href="/manifest.json">
  <meta name="theme-color" content="#05090a">
@@ -198,6 +176,7 @@ a{-webkit-tap-highlight-color:transparent;}
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
  <meta http-equiv="Expires" content="0">
+<link rel="stylesheet" href="/tdoli-theme.css">
 </head>
 <body>
 <div class="bg-mesh"></div>

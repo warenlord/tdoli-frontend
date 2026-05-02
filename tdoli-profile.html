@@ -129,33 +129,13 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .testimonial-text{font-size:13px;color:var(--text);line-height:1.6;font-style:italic;}
 .testimonial-date{font-size:10px;color:var(--text-3);margin-top:6px;}
 .no-testimonial{text-align:center;padding:30px 20px;color:var(--text-3);font-size:13px;background:var(--card);border:1px solid var(--border);border-radius:12px;}
-.nav-badge{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}
-
-/* ── Fluidité navigation ─────────────────────────────────────── */
-@keyframes tdoliFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-body{animation:tdoliFadeIn 0.2s ease-out both;}
-.nav-item{transition:color 0.2s,opacity 0.15s;}
-a{-webkit-tap-highlight-color:transparent;}
-
-/* ── Montants forcés blanc ───────────────────────────────────── */
-.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
-.conv-amount,.deal-banner-amount,.amount,.limit-val,.weekly-stat-val {
-  font-family:'Syne',sans-serif !important;
-  font-weight:800 !important;
-  color:#ecf4f0 !important;
-  letter-spacing:-0.3px;
-}
-.item-currency,.detail-currency,.detail-cur,.currency {
-  font-family:'Syne',sans-serif !important;
-  font-weight:700 !important;
-  color:#ecf4f0 !important;
-}
-</style>
+.nav-badge{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}</style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#05090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/service-worker.js').catch(()=>{});});}</script>
+<link rel="stylesheet" href="/tdoli-theme.css">
 </head>
 <body>
 <div class="topbar">
@@ -698,109 +678,6 @@ function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');cons
 function bufferToBase64url(b){const bytes=new Uint8Array(b);let bin='';for(const x of bytes)bin+=String.fromCharCode(x);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
 </script>
 
-<script>
-// ── Polling TDOLI — Rafraîchissement automatique ──────────────
-(function() {
-  const API_P = 'https://tdoli-backend.onrender.com';
-  const token_p = localStorage.getItem('tdoli_token');
-  if (!token_p) return;
-
-  const page = window.location.pathname;
-  let lastDealCount = -1;
-  let lastMatchStatus = null;
-  let pollInterval = null;
-
-  async function pollUpdates() {
-    try {
-      // 1. Vérifier nouveaux deals/matchs
-      const res = await fetch(API_P + '/deals/mine', {
-        headers: { 'Authorization': 'Bearer ' + token_p }
-      });
-      if (!res.ok) return;
-      const deals = await res.json();
-      if (!Array.isArray(deals)) return;
-
-      const activeCount = deals.filter(d => d.status === 'matched').length;
-      const completedCount = deals.filter(d => d.status === 'completed').length;
-
-      // Nouveau match détecté → rafraîchir la page si on est sur feed
-      if (lastDealCount !== -1 && activeCount > lastDealCount) {
-        if (page.includes('tdoli-feed') && typeof loadFeed === 'function') {
-          loadFeed(true);
-        }
-        // Mettre à jour badge deals
-        const dealsBadge = document.getElementById('dealsBadge');
-        if (dealsBadge) { dealsBadge.textContent = activeCount; dealsBadge.classList.toggle('show', activeCount > 0); }
-      }
-
-      // Deal completed non vu → déclencher animation perroquet
-      try {
-        const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
-        const newlyCompleted = deals.find(d => d.status === 'completed' && !seen.includes(d._id));
-        if (newlyCompleted && typeof showDealCompleteOverlay === 'function') {
-          const overlay = document.getElementById('dealCompleteOverlay');
-          if (overlay && !overlay.classList.contains('show')) {
-            const amount = newlyCompleted.myAmount || newlyCompleted.amount || null;
-            const currency = newlyCompleted.myCurrency || newlyCompleted.currency || null;
-            showDealCompleteOverlay(newlyCompleted._id, newlyCompleted.dealCode, newlyCompleted.otherUsername, amount, currency);
-          }
-        }
-      } catch(e) {}
-
-      // Rafraîchir la liste deals si on est sur deals
-      if (page.includes('tdoli-deals') && typeof loadDeals === 'function') {
-        if (lastDealCount !== -1 && (activeCount !== lastDealCount || completedCount !== lastMatchStatus)) {
-          loadDeals(true);
-        }
-      }
-
-      lastDealCount = activeCount;
-      lastMatchStatus = completedCount;
-
-      // 2. Vérifier messages non lus
-      try {
-        const mRes = await fetch(API_P + '/messages/unread-count', {
-          headers: { 'Authorization': 'Bearer ' + token_p }
-        });
-        if (mRes.ok) {
-          const mData = await mRes.json();
-          const count = mData.count || 0;
-          const badge = document.getElementById('msgBadge');
-          if (badge) {
-            if (count > 0) { badge.textContent = count > 9 ? '9+' : count; badge.classList.add('show'); }
-            else { badge.classList.remove('show'); }
-          }
-          // Rafraîchir conversations si on est sur messages
-          if (page.includes('tdoli-messages') && count > 0 && typeof loadConversations === 'function') {
-            loadConversations();
-          }
-          // Rafraîchir chat si on est sur chat
-          if (page.includes('tdoli-chat') && typeof loadNewMessages === 'function') {
-            loadNewMessages();
-          }
-        }
-      } catch(e) {}
-
-    } catch(e) {}
-  }
-
-  // Démarrer le polling après 2s (laisser la page charger)
-  setTimeout(() => {
-    pollUpdates(); // Premier appel immédiat
-    pollInterval = setInterval(pollUpdates, 15000); // Puis toutes les 15s
-  }, 2000);
-
-  // Arrêter quand la page perd le focus, reprendre au retour
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      clearInterval(pollInterval);
-    } else {
-      pollUpdates();
-      pollInterval = setInterval(pollUpdates, 15000);
-    }
-  });
-})();
-</script>
 
 
 <script src="/tdoli-deals-complete.js"></script>
