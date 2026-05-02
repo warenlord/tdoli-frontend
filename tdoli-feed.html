@@ -173,12 +173,15 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .airtel-highlight{background:rgba(0,0,0,0.15);border-radius:6px;padding:4px 6px;margin:2px -6px;}
 
 /* Phase 5 — Réputation communautaire */
-.activity-feed{margin-bottom:16px;}
-.activity-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;}
-.activity-emoji{font-size:16px;flex-shrink:0;}
-.activity-text{font-size:12px;color:var(--text-2);line-height:1.4;flex:1;}
-.activity-text strong{color:var(--green);font-weight:600;}
-.activity-time{font-size:10px;color:var(--text-3);flex-shrink:0;}
+/* ── Ticker défilant communautaire ───────────────────────────── */
+.ticker-wrap{overflow:hidden;background:rgba(0,230,118,0.04);border:1px solid rgba(0,230,118,0.12);border-radius:10px;padding:0;margin-bottom:14px;height:36px;display:none;position:relative;}
+.ticker-wrap.show{display:block;}
+.ticker-wrap::before{content:'🎉';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;z-index:2;}
+.ticker-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:40px;background:linear-gradient(to right,transparent,#05090a);z-index:2;pointer-events:none;}
+.ticker-track{display:flex;align-items:center;height:36px;animation:tickerScroll linear infinite;}
+@keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{white-space:nowrap;padding:0 32px 0 10px;font-size:12px;color:var(--text-2);flex-shrink:0;}
+.ticker-item strong{color:var(--green);font-weight:600;}
 .weekly-banner{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,201,122,0.08),rgba(26,79,255,0.08));border:1px solid var(--border-active);border-radius:14px;padding:14px 16px;margin-bottom:16px;}
 .weekly-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
 .weekly-icon{font-size:22px;flex-shrink:0;}
@@ -301,7 +304,9 @@ firebase.initializeApp({
 
 <div class="content">
  <!-- Fil d'actualité communautaire -->
- <div class="activity-feed" id="activityFeed" style="display:none;"></div>
+ <div class="ticker-wrap" id="tickerWrap">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
 
  <div class="section-header">
  <div class="section-title">Annonces</div>
@@ -1348,23 +1353,39 @@ async function loadFeed(silent) {
 
 // Phase 5 — Stats hebdomadaires
 async function loadActivityFeed() {
- try {
- const res = await fetch(API + '/feed/activity', { headers: { 'Authorization': 'Bearer ' + token } });
- if (!res.ok) return;
- const events = await res.json();
- if (!Array.isArray(events) || events.length === 0) return;
+  try {
+    const res = await fetch(API + '/feed/activity', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (!res.ok) return;
+    const events = await res.json();
+    if (!Array.isArray(events) || events.length === 0) return;
 
- const container = document.getElementById('activityFeed');
- container.innerHTML = events.slice(0, 5).map(e => {
- const emoji = e.type === 'completed' ? '' : e.type === 'match' ? '' : '';
- return '<div class="activity-item">' +
- '<span class="activity-emoji">' + emoji + '</span>' +
- '<span class="activity-text">' + e.message + '</span>' +
- '<span class="activity-time">' + timeAgo(e.createdAt) + '</span>' +
- '</div>';
- }).join('');
- container.style.display = 'block';
- } catch(e) {}
+    const wrap = document.getElementById('tickerWrap');
+    const track = document.getElementById('tickerTrack');
+    if (!wrap || !track) return;
+
+    // Garder seulement les 5 derniers deals complétés
+    const completed = events.filter(e => e.type === 'completed').slice(0, 5);
+    if (completed.length === 0) return;
+
+    // Construire les items — afficher prénom/username pas email
+    const items = completed.map(e => {
+      // Nettoyer le message pour éviter les emails tronqués
+      let msg = e.message || '';
+      // Remplacer les emails par le username si présent
+      if (e.senderUsername) msg = msg.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, e.senderUsername);
+      if (e.receiverUsername) msg = msg.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, e.receiverUsername);
+      return '<span class="ticker-item">' + msg + ' · <span style="color:var(--text-3)">' + timeAgo(e.createdAt) + '</span></span>';
+    }).join('');
+
+    // Dupliquer pour le défilement continu
+    track.innerHTML = items + items;
+
+    // Calculer la durée selon le nombre de caractères (vitesse constante)
+    const totalWidth = completed.length * 280;
+    track.style.animationDuration = (totalWidth / 60) + 's';
+
+    wrap.classList.add('show');
+  } catch(e) {}
 }
 
 async function loadWeeklyStats() {
