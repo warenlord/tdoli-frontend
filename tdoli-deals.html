@@ -623,14 +623,14 @@ function openDeal(id) {
   } else if(d.status==='matched' && iConfirmed && !iReceived) {
     actionsHtml = tdlHtml + ocrHtml +
       '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée</div>' +
-      (!otherProofOk ? '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">En attente de la preuve de l autre partie...</div>' : '<div style="background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--green);">✓ l autre partie a aussi envoyé sa preuve</div>') +
+      (!otherProofOk ? '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">En attente de la preuve de lautre partie...</div>' : '<div style="background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--green);">✓ lautre partie a aussi envoyé sa preuve</div>') +
       '<div style="background:rgba(41,121,255,0.06);border:1px solid rgba(41,121,255,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-2);">Etape 2/2 — Confirme que tu as bien reçu les fonds</div>' +
       '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\'' + d._id + '\', this)">✅ J&#39;ai reçu les fonds</button>' +
       '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')"> Litige</button>';
   } else if(d.status==='matched' && iConfirmed && iReceived) {
     actionsHtml = tdlHtml +
       '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée · ✓ Réception confirmée</div>' +
-      '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--yellow);">En attente de la confirmation de l autre partie...</div>';
+      '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--yellow);">En attente de la confirmation de lautre partie...</div>';
   }
 
  const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;"></div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
