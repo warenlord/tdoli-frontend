@@ -74,6 +74,7 @@ const HTML_PAGES = [
   '/tdoli-admin.html',
   '/service-worker.js',
   '/fcm-init.js',
+  '/tdoli-deals-complete.js',
 ];
 
 self.addEventListener('install', (e) => {
