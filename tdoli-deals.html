@@ -57,7 +57,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
 .loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.nav-badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
@@ -116,8 +115,9 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .rating-section{padding-top:14px;border-top:1px solid var(--border);}
 .rating-title{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px;}
 .stars{display:flex;gap:6px;margin-bottom:12px;}
-.star{font-size:24px;cursor:pointer;filter:grayscale(1) opacity(0.3);transition:transform 0.15s,filter 0.15s;}
-.star.active{filter:none;transform:scale(1.1);}
+.star{font-size:28px;cursor:pointer;opacity:0.25;transition:transform 0.15s,opacity 0.15s;user-select:none;}
+.star.active{opacity:1;transform:scale(1.15);}
+.star:hover{opacity:0.7;transform:scale(1.1);}
 .rating-comment{width:100%;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;margin-bottom:10px;resize:none;height:65px;}
 .rating-comment:focus{outline:none;border-color:var(--green);}
 .btn-rate{width:100%;padding:12px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
@@ -607,14 +607,31 @@ function openDeal(id) {
  instructionHtml = '<div style="background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);"> Litige en cours de traitement.</div>';
  }
 
- let actionsHtml = '';
- if(d.status==='matched' && !iConfirmed) {
- actionsHtml = tdlHtml + ocrHtml + '<div class="deal-actions">' +
- '<button class="btn-confirm" onclick="openProof(\'' + d._id + '\')" > J&#39;ai envoyé</button>' +
- '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')" > Litige</button>' +
- '</div>';
- } else if(d.status==='matched' && iConfirmed) {
- actionsHtml = tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);"> Tu as confirmé — en attente de l&#39;autre partie</div>'; }
+
+  const iReceived = isSender ? d.receivedBySender : d.receivedByReceiver;
+  const otherReceived = isSender ? d.receivedByReceiver : d.receivedBySender;
+  const otherProofOk = isSender ? d.confirmedByReceiver : d.confirmedBySender;
+
+  let actionsHtml = '';
+  if(d.status==='matched' && !iConfirmed) {
+    actionsHtml = tdlHtml + ocrHtml +
+      '<div style="background:rgba(41,121,255,0.06);border:1px solid rgba(41,121,255,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-2);">Etape 1/2 — Envoie les fonds et uploade ta preuve</div>' +
+      '<div class="deal-actions">' +
+      '<button class="btn-confirm" onclick="openProof(\'' + d._id + '\')"> J&#39;ai envoyé</button>' +
+      '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')"> Litige</button>' +
+      '</div>';
+  } else if(d.status==='matched' && iConfirmed && !iReceived) {
+    actionsHtml = tdlHtml + ocrHtml +
+      '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée</div>' +
+      (!otherProofOk ? '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">En attente de la preuve de lautre partie...</div>' : '<div style="background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--green);">✓ Lautre partie a aussi envoyé sa preuve</div>') +
+      '<div style="background:rgba(41,121,255,0.06);border:1px solid rgba(41,121,255,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-2);">Etape 2/2 — Confirme que tu as bien reçu les fonds</div>' +
+      '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\'' + d._id + '\')">✅ J&#39;ai reçu les fonds</button>' +
+      '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')"> Litige</button>';
+  } else if(d.status==='matched' && iConfirmed && iReceived) {
+    actionsHtml = tdlHtml +
+      '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée · ✓ Réception confirmée</div>' +
+      '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--yellow);">En attente de la confirmation de lautre partie...</div>';
+  }
 
  const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;"></div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
 
@@ -626,7 +643,7 @@ function openDeal(id) {
  } else {
  const r = selectedRatings[d._id] || 0;
  ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+d._id+'">'
- +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+d._id+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)"></span>').join('')
+ +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+d._id+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)">⭐</span>').join('')
  +'</div><textarea class="rating-comment" id="comment-'+d._id+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" data-deal="'+d._id+'" onclick="submitRating(this.dataset.deal)">Envoyer la note</button></div>';
  }
  }
@@ -660,6 +677,36 @@ function setRating(dealId, stars) {
  const container = document.getElementById('stars-'+dealId);
  if(!container) return;
  container.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<stars));
+}
+
+async function confirmReceived(dealId) {
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Confirmation...';
+  try {
+    const r = await safeJson(await fetch(API + '/deal/' + dealId + '/received', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+    }));
+    if (r.ok) {
+      closeSheet('detailOverlay');
+      if (r.data && r.data.completed) {
+        showToast('🎉 Deal complété avec succès !', 'var(--green-dim)');
+        setTimeout(() => loadDeals(true), 1000);
+      } else {
+        showToast('✓ Réception confirmée — en attente de l'autre partie', 'var(--yellow)');
+        loadDeals(true);
+      }
+    } else {
+      showToast((r.data && r.data.message) || 'Erreur', '#ff4444');
+      btn.disabled = false;
+      btn.innerHTML = '✅ J'ai reçu les fonds';
+    }
+  } catch(e) {
+    showToast('Erreur réseau', '#ff4444');
+    btn.disabled = false;
+    btn.innerHTML = '✅ J'ai reçu les fonds';
+  }
 }
 
 async function submitRating(dealId) {
@@ -844,21 +891,7 @@ function copyCode(code) {
  .catch(() => showToast(code, 'var(--blue)'));
 }
 
-async function checkUnreadMessages() {
-  try {
-    const res = await fetch(API + "/messages/unread-count", { headers: { "Authorization": "Bearer " + token } });
-    if (!res.ok) return;
-    const data = await res.json();
-    const badge = document.getElementById("msgBadge");
-    if (badge) {
-      if (data.count > 0) { badge.textContent = data.count > 9 ? "9+" : data.count; badge.classList.add("show"); }
-      else badge.classList.remove("show");
-    }
-  } catch(e) {}
-}
-
 loadDeals();
-checkUnreadMessages();
 </script>
 </body>
 </html>
