@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>TDOLI — Nouveau mot de passe</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.3);--red:#ff4444;--r:16px;}
+:root{--bg:#05090a;--surface:#0b1215;--card:#0f1a1e;--green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);--yellow:#ffd740;--blue:#2979ff;--text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;--border:rgba(255,255,255,0.07);--border-active:rgba(0,230,118,0.3);--red:#ff1744;--r:16px;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
 .bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(0,180,90,0.08) 0%,transparent 60%);}
 .wrap{position:relative;z-index:1;width:100%;max-width:420px;}
 .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--green);text-align:center;margin-bottom:8px;}
@@ -19,9 +19,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .form-group{margin-bottom:14px;}
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:7px;letter-spacing:1.2px;text-transform:uppercase;}
 .input-wrap{position:relative;}
-.form-input{width:100%;padding:13px 44px 13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;transition:all 0.2s;-webkit-appearance:none;}
+.form-input{width:100%;padding:13px 44px 13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;transition:all 0.2s;-webkit-appearance:none;}
 .form-input.no-icon{padding-right:14px;}
-.form-input:focus{outline:none;border-color:var(--green);background:rgba(0,201,122,0.04);box-shadow:0 0 0 3px var(--green-glow);}
+.form-input:focus{outline:none;border-color:var(--green);background:rgba(0,230,118,0.04);box-shadow:0 0 0 3px var(--green-glow);}
 .form-input::placeholder{color:var(--text-3);opacity:0.5;}
 .input-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;background:none;border:none;padding:4px;}
 .strength-bar{display:flex;gap:4px;margin-top:8px;}
@@ -41,7 +41,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @keyframes spin{to{transform:rotate(360deg);}}
 .msg{display:none;padding:12px 14px;border-radius:10px;font-size:13px;margin-top:12px;}
 .msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6b6b;}
-.msg.success{background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);color:var(--green);}
+.msg.success{background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);color:var(--green);}
 .msg.show{display:block;}
 .back-link{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--text-3);text-decoration:none;}
 .back-link:hover{color:var(--green);}
@@ -105,10 +105,24 @@ body { animation: pageFadeIn 0.2s ease; }
 body{animation:tdoliFadeIn 0.2s ease-out both;}
 .nav-item{transition:color 0.2s,opacity 0.15s;}
 a{-webkit-tap-highlight-color:transparent;}
+
+/* ── Montants forcés blanc ───────────────────────────────────── */
+.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
+.conv-amount,.deal-banner-amount,.amount,.limit-val,.weekly-stat-val {
+  font-family:'Syne',sans-serif !important;
+  font-weight:800 !important;
+  color:#ecf4f0 !important;
+  letter-spacing:-0.3px;
+}
+.item-currency,.detail-currency,.detail-cur,.currency {
+  font-family:'Syne',sans-serif !important;
+  font-weight:700 !important;
+  color:#ecf4f0 !important;
+}
 </style>
 
  <link rel="manifest" href="/manifest.json">
- <meta name="theme-color" content="#060d09">
+ <meta name="theme-color" content="#05090a">
  <meta name="apple-mobile-web-app-capable" content="yes">
  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
  <meta name="apple-mobile-web-app-title" content="TDOLI">
@@ -164,7 +178,7 @@ const token=params.get('token');
 const email=params.get('email');
 
 if(!token||!email){
- document.getElementById('resetCard').innerHTML='<div style="text-align:center;padding:20px"><div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;margin-bottom:8px;color:#ff6b6b">Lien invalide</div><div style="font-size:13px;color:#5a7560">Ce lien est invalide ou a expiré.</div><a href="/tdoli-auth.html" style="display:block;margin-top:16px;color:#00c97a;font-size:13px;text-decoration:none">← Retour à la connexion</a></div>';
+ document.getElementById('resetCard').innerHTML='<div style="text-align:center;padding:20px"><div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;margin-bottom:8px;color:#ff6b6b">Lien invalide</div><div style="font-size:13px;color:#4a6860">Ce lien est invalide ou a expiré.</div><a href="/tdoli-auth.html" style="display:block;margin-top:16px;color:#00e676;font-size:13px;text-decoration:none">← Retour à la connexion</a></div>';
 }
 
 function togglePw(inputId,btn){const inp=document.getElementById(inputId);if(inp.type==='password'){inp.type='text';btn.textContent='Cacher';}else{inp.type='password';btn.textContent='Voir';}}

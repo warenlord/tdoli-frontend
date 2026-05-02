@@ -27,7 +27,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 /* AVATAR BTN — FIX Phase 1 */
 .user-avatar-btn{
  width:38px;height:38px;border-radius:50%;
- background:var(--green-dim);
+ background:linear-gradient(135deg,var(--green-dim),var(--blue));
  display:flex;align-items:center;justify-content:center;
  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
  color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;
@@ -65,11 +65,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .annonce-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--green),var(--blue));}
 .annonce-item.mine::before{background:var(--green);}
 .annonce-item:active{background:var(--surface);}
-.item-avatar{width:38px;height:38px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
+.item-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
 .item-body{flex:1;min-width:0;}
 .item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
 .item-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
-.item-amount{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--green);letter-spacing:-0.3px;}
+.item-amount{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
 .item-bottom{display:flex;align-items:center;justify-content:space-between;}
 .item-dir{font-size:12px;color:var(--text-2);font-weight:500;}
 .item-meta{display:flex;align-items:center;gap:6px;}
@@ -81,7 +81,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .trust-line{font-size:10px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:4px;}
 .trust-line .trust-members{color:var(--green);font-weight:600;}
 .reactivity-inline{font-size:9px;padding:1px 6px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;}
-.reactivity-inline.fast{background:rgba(0,201,122,0.1);color:var(--green);}
+.reactivity-inline.fast{background:rgba(0,230,118,0.1);color:var(--green);}
 .reactivity-inline.normal{background:rgba(252,209,22,0.1);color:var(--yellow);}
 .reactivity-inline.slow{background:rgba(255,100,50,0.1);color:#ff6432;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
@@ -200,12 +200,12 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .weekly-stat-lbl{font-size:10px;color:var(--text-3);margin-top:1px;}
 .weekly-sep{width:1px;height:28px;background:var(--border);}
 .reactivity-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;border-radius:4px;padding:1px 6px;}
-.reactivity-badge.fast{background:rgba(0,201,122,0.12);color:var(--green);border:1px solid rgba(0,201,122,0.25);}
+.reactivity-badge.fast{background:rgba(0,230,118,0.12);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
 .reactivity-badge.normal{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
 .reactivity-badge.slow{background:rgba(255,100,60,0.08);color:#ff7a55;border:1px solid rgba(255,100,60,0.18);}
 .rank-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;border-radius:4px;padding:1px 6px;}
 .rank-badge.nouveau{background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);}
-.rank-badge.actif{background:rgba(0,201,122,0.08);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.rank-badge.actif{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.2);}
 .rank-badge.fiable{background:rgba(26,79,255,0.1);color:#6b8fff;border:1px solid rgba(26,79,255,0.2);}
 .rank-badge.pilier{background:linear-gradient(135deg,rgba(252,209,22,0.12),rgba(26,79,255,0.12));color:var(--yellow);border:1px solid rgba(252,209,22,0.25);}
 .trust-line{font-size:10px;color:var(--text-3);margin-top:2px;}
@@ -266,9 +266,23 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 body{animation:tdoliFadeIn 0.2s ease-out both;}
 .nav-item{transition:color 0.2s,opacity 0.15s;}
 a{-webkit-tap-highlight-color:transparent;}
+
+/* ── Montants forcés blanc ───────────────────────────────────── */
+.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
+.conv-amount,.deal-banner-amount,.amount,.limit-val,.weekly-stat-val {
+  font-family:'Syne',sans-serif !important;
+  font-weight:800 !important;
+  color:#ecf4f0 !important;
+  letter-spacing:-0.3px;
+}
+.item-currency,.detail-currency,.detail-cur,.currency {
+  font-family:'Syne',sans-serif !important;
+  font-weight:700 !important;
+  color:#ecf4f0 !important;
+}
 </style>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#060d09">
+<meta name="theme-color" content="#05090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TDOLI">
@@ -983,8 +997,8 @@ function shareApp() {
  .catch(() => {});
  } else {
  navigator.clipboard.writeText(msg)
- .then(() => showToast('Lien copié ! ', '#fcd116'))
- .catch(() => showToast('Partage: ' + msg.substring(0, 30) + '...', '#fcd116'));
+ .then(() => showToast('Lien copié ! ', '#ffd740'))
+ .catch(() => showToast('Partage: ' + msg.substring(0, 30) + '...', '#ffd740'));
  }
 }
 
@@ -1252,8 +1266,8 @@ async function deleteAnnonce(id) {
  const res = await fetch(API + '/transfer/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
  const data = await res.json();
  if (res.ok) { closeSheet('detailOverlay'); showToast('Annonce supprimée'); loadFeed(true); }
- else showToast(data.message || 'Erreur', '#ff4444');
- } catch (e) { showToast('Erreur', '#ff4444'); }
+ else showToast(data.message || 'Erreur', '#ff1744');
+ } catch (e) { showToast('Erreur', '#ff1744'); }
 }
 
 async function submitEdit() {
@@ -1292,7 +1306,7 @@ function showConfirm(id, fromCountry, toCountry, currency, amount, matchAmount) 
 async function executeMatch() {
  if (!pendingMatch) return;
  if (!pendingMatch.beneficiaireId) {
- showToast('Choisis ton bénéficiaire avant de matcher', '#ff4444');
+ showToast('Choisis ton bénéficiaire avant de matcher', '#ff1744');
  return;
  }
  const btn = document.getElementById('btn-confirm-match');
@@ -1307,19 +1321,19 @@ async function executeMatch() {
  const data = await res.json();
  closeSheet('confirmOverlay');
  if (res.ok && data.dealCode) {
- showToast(' Match ! Code: ' + data.dealCode, '#fcd116');
+ showToast(' Match ! Code: ' + data.dealCode, '#ffd740');
  setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
  } else if (res.ok && data.message && data.message.includes('Match')) {
- showToast('Match confirmé !', '#fcd116');
+ showToast('Match confirmé !', '#ffd740');
  setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
  } else if (res.ok) {
  showToast('Annonce publiée');
  loadFeed(true);
  } else {
- showToast(data.message || 'Erreur', '#ff4444');
+ showToast(data.message || 'Erreur', '#ff1744');
  }
  } catch (e) {
- showToast('Serveur inaccessible', '#ff4444');
+ showToast('Serveur inaccessible', '#ff1744');
  closeSheet('confirmOverlay');
  }
  btn.disabled = false; btn.innerHTML = 'Confirmer le match';
@@ -1600,7 +1614,7 @@ function selectBenef(id, context) {
  if(pendingMatch) pendingMatch.beneficiaireId = id;
  // Changer le bouton en vert une fois sélectionné
  const btn = document.getElementById('btn-choose-benef-match');
- if(btn) { btn.style.borderColor = 'rgba(0,201,122,0.4)'; btn.style.color = 'var(--green)'; btn.innerHTML = ' Bénéficiaire sélectionné'; }
+ if(btn) { btn.style.borderColor = 'rgba(0,230,118,0.4)'; btn.style.color = 'var(--green)'; btn.innerHTML = ' Bénéficiaire sélectionné'; }
  // confirmOverlay reste visible — pas de fermeture
  }
 }
