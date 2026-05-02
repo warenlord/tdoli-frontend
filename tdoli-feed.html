@@ -1487,7 +1487,7 @@ async function submitAnnonce() {
  selectedBenefId = null;
  const bc = document.getElementById('benef-selected-create'); if(bc) bc.innerHTML = '';
         showDealSuccess(null, null, null);
- else { showToast('Annonce publiée '); loadFeed(true); }
+      } else { showToast('Annonce publiée ✓'); loadFeed(true); }
  } else showMsg('msg-create', data.message || 'Erreur');
  } catch (e) { showMsg('msg-create', 'Serveur inaccessible'); }
  btn.disabled = false; btn.innerHTML = 'Publier';
