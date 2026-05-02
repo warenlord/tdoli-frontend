@@ -173,15 +173,20 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .airtel-highlight{background:rgba(0,0,0,0.15);border-radius:6px;padding:4px 6px;margin:2px -6px;}
 
 /* Phase 5 — Réputation communautaire */
-/* ── Ticker défilant communautaire ───────────────────────────── */
-.ticker-wrap{overflow:hidden;background:rgba(0,230,118,0.04);border:1px solid rgba(0,230,118,0.12);border-radius:10px;padding:0;margin-bottom:14px;height:36px;display:none;position:relative;}
-.ticker-wrap.show{display:block;}
-.ticker-wrap::before{content:'🎉';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;z-index:2;}
-.ticker-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:40px;background:linear-gradient(to right,transparent,#05090a);z-index:2;pointer-events:none;}
-.ticker-track{display:flex;align-items:center;height:36px;animation:tickerScroll linear infinite;}
-@keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
-.ticker-item{white-space:nowrap;padding:0 32px 0 10px;font-size:12px;color:var(--text-2);flex-shrink:0;}
-.ticker-item strong{color:var(--green);font-weight:600;}
+/* ── Carrousel deals communautaires ──────────────────────────── */
+.deal-carousel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:none;position:relative;min-height:72px;}
+.deal-carousel.show{display:block;}
+.dc-label{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.dc-slide{display:none;}
+.dc-slide.active{display:block;animation:dcFadeIn 0.3s ease;}
+@keyframes dcFadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.dc-names{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.dc-names span{color:var(--green);}
+.dc-detail{font-size:12px;color:var(--text-3);}
+.dc-detail strong{color:var(--text-2);font-weight:500;}
+.dc-dots{display:flex;gap:5px;justify-content:center;margin-top:12px;}
+.dc-dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.2s;}
+.dc-dot.active{background:var(--green);width:14px;border-radius:3px;}
 .weekly-banner{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,201,122,0.08),rgba(26,79,255,0.08));border:1px solid var(--border-active);border-radius:14px;padding:14px 16px;margin-bottom:16px;}
 .weekly-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
 .weekly-icon{font-size:22px;flex-shrink:0;}
@@ -304,8 +309,10 @@ firebase.initializeApp({
 
 <div class="content">
  <!-- Fil d'actualité communautaire -->
- <div class="ticker-wrap" id="tickerWrap">
-  <div class="ticker-track" id="tickerTrack"></div>
+ <div class="deal-carousel" id="dealCarousel">
+  <div class="dc-label">Derniers échanges</div>
+  <div id="dcSlides"></div>
+  <div class="dc-dots" id="dcDots"></div>
 </div>
 
  <div class="section-header">
@@ -1359,34 +1366,58 @@ async function loadActivityFeed() {
     const events = await res.json();
     if (!Array.isArray(events) || events.length === 0) return;
 
-    const wrap = document.getElementById('tickerWrap');
-    const track = document.getElementById('tickerTrack');
-    if (!wrap || !track) return;
-
-    // Garder seulement les 5 derniers deals complétés
     const completed = events.filter(e => e.type === 'completed').slice(0, 5);
     if (completed.length === 0) return;
 
-    // Construire les items — afficher prénom/username pas email
-    const items = completed.map(e => {
-      // Nettoyer le message pour éviter les emails tronqués
-      let msg = e.message || '';
-      // Remplacer les emails par le username si présent
-      if (e.senderUsername) msg = msg.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, e.senderUsername);
-      if (e.receiverUsername) msg = msg.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, e.receiverUsername);
-      return '<span class="ticker-item">' + msg + ' · <span style="color:var(--text-3)">' + timeAgo(e.createdAt) + '</span></span>';
-    }).join('');
+    const carousel = document.getElementById('dealCarousel');
+    const slidesEl = document.getElementById('dcSlides');
+    const dotsEl = document.getElementById('dcDots');
+    if (!carousel || !slidesEl || !dotsEl) return;
 
-    // Dupliquer pour le défilement continu
-    track.innerHTML = items + items;
+    let currentSlide = 0;
 
-    // Calculer la durée selon le nombre de caractères (vitesse constante)
-    const totalWidth = completed.length * 280;
-    track.style.animationDuration = (totalWidth / 60) + 's';
+    function renderCarousel() {
+      slidesEl.innerHTML = completed.map((e, i) => {
+        // Nettoyer les noms — utiliser username sinon partie avant @
+        const cleanName = (str) => {
+          if (!str) return '?';
+          if (str.includes('@')) return str.split('@')[0];
+          return str;
+        };
+        const sender = cleanName(e.senderUsername || e.sender);
+        const receiver = cleanName(e.receiverUsername || e.receiver);
+        const amount = e.amount ? Number(e.amount).toLocaleString('fr-FR') + ' ' + (e.currency || 'EUR') : '';
+        const ago = timeAgo(e.createdAt);
 
-    wrap.classList.add('show');
+        return '<div class="dc-slide' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '">' +
+          '<div class="dc-names"><span>' + sender + '</span> et <span>' + receiver + '</span></div>' +
+          '<div class="dc-detail"><strong>' + amount + '</strong> · ' + (e.fromCountry || '') + ' → ' + (e.toCountry || '') + ' · ' + ago + '</div>' +
+          '</div>';
+      }).join('');
+
+      dotsEl.innerHTML = completed.map((_, i) =>
+        '<div class="dc-dot' + (i === 0 ? ' active' : '') + '" onclick="dcGoTo(' + i + ')"></div>'
+      ).join('');
+
+      carousel.classList.add('show');
+    }
+
+    window.dcGoTo = function(idx) {
+      currentSlide = idx;
+      document.querySelectorAll('.dc-slide').forEach((s, i) => s.classList.toggle('active', i === idx));
+      document.querySelectorAll('.dc-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    };
+
+    // Auto-avance toutes les 4 secondes
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % completed.length;
+      window.dcGoTo(currentSlide);
+    }, 4000);
+
+    renderCarousel();
   } catch(e) {}
 }
+
 
 async function loadWeeklyStats() {
  try {
