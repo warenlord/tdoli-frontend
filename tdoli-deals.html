@@ -699,12 +699,12 @@ async function confirmReceived(dealId, btn) {
     } else {
       showToast((r.data && r.data.message) || 'Erreur', '#ff4444');
       btn.disabled = false;
-      btn.innerHTML = '✅ J'ai reçu les fonds';
+      btn.innerHTML = '✅ Jai recu les fonds';
     }
   } catch(e) {
     showToast('Erreur réseau', '#ff4444');
     btn.disabled = false;
-    btn.innerHTML = '✅ J'ai reçu les fonds';
+    btn.innerHTML = '✅ Jai recu les fonds';
   }
 }
 
