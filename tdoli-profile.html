@@ -351,6 +351,10 @@ function renderFromCache() {
  <span class="settings-label"> Face ID / Empreinte</span>
  <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ':'Désactivé →'}</span>
  </div>
+ <div class="settings-item" id="notif-setting" onclick="toggleNotifications()">
+   <span class="settings-label"> Notifications</span>
+   <span class="settings-val" id="notif-status">Chargement...</span>
+  </div>
  <div class="settings-item" onclick="window.location.href='/tdoli-bonnes-pratiques.html'"><span class="settings-label">Bonnes pratiques</span><span class="settings-val">→</span></div>
  <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label"> CGU</span><span class="settings-val">→</span></div>
  </div>
@@ -673,6 +677,71 @@ async function checkUnreadMessages() {
   } catch(e) {}
 }
 checkUnreadMessages();
+
+// ── Notifications iOS ─────────────────────────────────────────
+async function toggleNotifications() {
+  const status = document.getElementById('notif-status');
+
+  // Vérifier support
+  if (!('Notification' in window)) {
+    showToast('Notifications non supportées sur cet appareil', '#ff1744');
+    return;
+  }
+
+  const current = Notification.permission;
+
+  if (current === 'granted') {
+    // Déjà activé — proposer de désactiver dans les réglages
+    showToast('Désactive dans Réglages > Notifications > TDOLI', 'var(--yellow)');
+    return;
+  }
+
+  if (current === 'denied') {
+    showToast('Active les notifications dans Réglages > Notifications > TDOLI', 'var(--yellow)');
+    return;
+  }
+
+  // Demander la permission (seulement si 'default')
+  if (status) { status.textContent = 'Activation...'; }
+
+  try {
+    // Charger FCM si pas encore fait
+    if (typeof requestFCMPermission === 'function') {
+      const granted = await requestFCMPermission();
+      if (granted) {
+        if (status) status.textContent = 'Activées ✓';
+        showToast('Notifications activées !', 'var(--green-dim)');
+      } else {
+        if (status) status.textContent = 'Refusées';
+        showToast('Permission refusée', '#ff1744');
+      }
+    } else {
+      // Fallback si FCM pas dispo
+      const perm = await Notification.requestPermission();
+      if (status) status.textContent = perm === 'granted' ? 'Activées ✓' : 'Refusées';
+      if (perm === 'granted') showToast('Notifications activées !', 'var(--green-dim)');
+    }
+  } catch(e) {
+    if (status) status.textContent = 'Erreur';
+    showToast('Erreur activation notifications', '#ff1744');
+  }
+}
+
+// Initialiser le statut des notifications au chargement
+function initNotifStatus() {
+  const status = document.getElementById('notif-status');
+  if (!status) return;
+  if (!('Notification' in window)) {
+    status.textContent = 'Non supportées';
+    const item = document.getElementById('notif-setting');
+    if (item) item.style.opacity = '0.4';
+    return;
+  }
+  const perm = Notification.permission;
+  if (perm === 'granted') status.textContent = 'Activées ✓';
+  else if (perm === 'denied') status.textContent = 'Bloquées →';
+  else status.textContent = 'Activer →';
+}
 
 function base64urlToBuffer(b){const s=b.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);return buf.buffer;}
 function bufferToBase64url(b){const bytes=new Uint8Array(b);let bin='';for(const x of bytes)bin+=String.fromCharCode(x);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
