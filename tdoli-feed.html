@@ -187,12 +187,18 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .dc-dots{display:flex;gap:5px;justify-content:center;margin-top:12px;}
 .dc-dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.2s;}
 .dc-dot.active{background:var(--green);width:14px;border-radius:3px;}
-.weekly-banner{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,201,122,0.08),rgba(26,79,255,0.08));border:1px solid var(--border-active);border-radius:14px;padding:14px 16px;margin-bottom:16px;}
-.weekly-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
-.weekly-icon{font-size:22px;flex-shrink:0;}
-.weekly-text{font-size:12px;color:var(--text-2);line-height:1.6;}
-.weekly-text strong{font-family:'Syne',sans-serif;font-weight:700;color:var(--green);}
-.weekly-text .vol{font-family:'Syne',sans-serif;font-weight:700;color:var(--yellow);}
+.weekly-banner{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;position:relative;overflow:hidden;}
+.weekly-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--blue));}
+.weekly-left{display:flex;align-items:center;gap:10px;}
+.weekly-pulse{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
+.weekly-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
+.weekly-right{display:flex;align-items:center;gap:16px;}
+.weekly-stat{text-align:right;}
+.weekly-stat-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);}
+.weekly-stat-val.green{color:var(--green);}
+.weekly-stat-val.yellow{color:var(--yellow);}
+.weekly-stat-lbl{font-size:10px;color:var(--text-3);margin-top:1px;}
+.weekly-sep{width:1px;height:28px;background:var(--border);}
 .reactivity-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;border-radius:4px;padding:1px 6px;}
 .reactivity-badge.fast{background:rgba(0,201,122,0.12);color:var(--green);border:1px solid rgba(0,201,122,0.25);}
 .reactivity-badge.normal{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
@@ -309,11 +315,7 @@ firebase.initializeApp({
 
 <div class="content">
  <!-- Fil d'actualité communautaire -->
- <div class="deal-carousel" id="dealCarousel">
-  <div class="dc-label">Derniers échanges</div>
-  <div id="dcSlides"></div>
-  <div class="dc-dots" id="dcDots"></div>
-</div>
+ 
 
  <div class="section-header">
  <div class="section-title">Annonces</div>
@@ -322,12 +324,21 @@ firebase.initializeApp({
 
  <!-- Phase 5 — Compteur hebdomadaire -->
  <div class="weekly-banner" id="weeklyBanner" style="display:none;">
- <div class="weekly-pulse"></div>
- <div class="weekly-icon"></div>
- <div class="weekly-text">
- <strong id="weeklyMembers">—</strong> membres de la communauté ont échangé
- <span class="vol" id="weeklyVolume">—</span> cette semaine
- </div>
+  <div class="weekly-left">
+    <div class="weekly-pulse"></div>
+    <div class="weekly-label">Cette semaine</div>
+  </div>
+  <div class="weekly-right">
+    <div class="weekly-stat">
+      <div class="weekly-stat-val green" id="weeklyMembers">—</div>
+      <div class="weekly-stat-lbl">membres actifs</div>
+    </div>
+    <div class="weekly-sep"></div>
+    <div class="weekly-stat">
+      <div class="weekly-stat-val yellow" id="weeklyVolume">—</div>
+      <div class="weekly-stat-lbl">échangés</div>
+    </div>
+  </div>
  </div>
 
  <div class="filter-bar">
