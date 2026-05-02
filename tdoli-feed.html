@@ -102,6 +102,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .nav-icon-wrap{position:relative;}
 .deals-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--yellow);color:#000;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
 .deals-badge.show{display:flex;}
+.nav-badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
 .overlay.open{display:flex;}
@@ -337,7 +338,7 @@ firebase.initializeApp({
  <a class="nav-item" href="/tdoli-messages.html">
  <div class="nav-icon-wrap">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
- <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div>
+ <div class="nav-badge red" id="msgBadge"></div>
  </div>Messages
  </a>
  <a class="nav-item" href="/tdoli-profile.html">

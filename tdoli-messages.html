@@ -240,7 +240,7 @@ async function loadConversations() {
 
  // Badge nav
  const totalUnread = allConvs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
- const badge = document.getElementById('msgBadgeNav');
+ const badge = document.getElementById('msgBadge');
  if (badge) {
  if (totalUnread > 0) { badge.textContent = totalUnread > 9 ? '9+' : totalUnread; badge.classList.add('show'); }
  else { badge.style.display = 'none'; }
