@@ -275,7 +275,7 @@ firebase.initializeApp({
  <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;">Décris le problème et joins des justificatifs.</div>
  <div class="form-group">
  <label class="form-label">Description</label>
- <textarea class="form-textarea" id="dispute-description" placeholder="Ex: J'ai envoyé les fonds mais l'autre partie ne confirme pas..."></textarea>
+ <textarea class="form-textarea" id="dispute-description" placeholder="Ex: J'ai envoyé les fonds mais lautre partie ne confirme pas..."></textarea>
  </div>
  <label class="form-label">Justificatifs (optionnel)</label>
  <div class="upload-area" onclick="document.getElementById('dispute-files').click()">
@@ -296,7 +296,7 @@ firebase.initializeApp({
  <div class="sheet">
  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
  <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Infos de paiement</div>
- <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Renseigne tes coordonnées pour que l'autre partie sache où envoyer les fonds.</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Renseigne tes coordonnées pour que lautre partie sache où envoyer les fonds.</div>
 
  <div class="method-tabs">
  <div class="method-tab active" onclick="setMethod('mobilemoney',this)"> Mobile Money</div>
@@ -693,7 +693,7 @@ async function confirmReceived(dealId, btn) {
         showToast('🎉 Deal complété avec succès !', 'var(--green-dim)');
         setTimeout(() => loadDeals(true), 1000);
       } else {
-        showToast('✓ Réception confirmée — en attente de l'autre partie', 'var(--yellow)');
+        showToast('✓ Réception confirmée — en attente de lautre partie', 'var(--yellow)');
         loadDeals(true);
       }
     } else {
