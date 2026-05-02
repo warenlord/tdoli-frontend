@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TDOLI — Conditions d'utilisation</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--yellow:#fcd116;--blue:#1a4fff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);}
+:root{--bg:#05090a;--surface:#0b1215;--card:#0f1a1e;--green:#00e676;--yellow:#ffd740;--blue:#2979ff;--text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;--border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:48px;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:48px;}
 svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 
 /* Topbar */
@@ -52,18 +52,32 @@ svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-lin
 .warning-box{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:14px;margin-top:14px;}
 .warning-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:6px;}
 .warning-text{font-size:13px;color:var(--text-2);line-height:1.6;}
-.info-box{background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:14px;margin-top:14px;}
+.info-box{background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:14px;margin-top:14px;}
 .info-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px;}
 .info-text{font-size:13px;color:var(--text-2);line-height:1.6;}
 .level-table{width:100%;border-collapse:collapse;margin-top:14px;}
 .level-table th{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;padding:10px 10px;text-align:left;border-bottom:1px solid var(--border);}
 .level-table td{font-size:13px;color:var(--text-2);padding:10px 10px;border-bottom:1px solid var(--border);}
 .level-table tr:last-child td{border-bottom:none;}
-.badge-verified{display:inline-block;background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
+.badge-verified{display:inline-block;background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.2);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
 .badge-level1{display:inline-block;background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 8px;border-radius:10px;}
+
+/* ── Montants forcés blanc ───────────────────────────────────── */
+.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
+.conv-amount,.deal-banner-amount,.amount,.limit-val {
+  font-family:'Syne',sans-serif !important;
+  font-weight:800 !important;
+  color:#ecf4f0 !important;
+  letter-spacing:-0.3px;
+}
+.item-currency,.detail-currency,.detail-cur,.currency {
+  font-family:'Syne',sans-serif !important;
+  font-weight:700 !important;
+  color:#ecf4f0 !important;
+}
 </style>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#060d09">
+<meta name="theme-color" content="#05090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TDOLI">

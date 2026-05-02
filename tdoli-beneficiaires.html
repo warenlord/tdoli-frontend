@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TDOLI — Mes Bénéficiaires</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060d09;--surface:#0c1710;--card:#111e15;--green:#00c97a;--green-dim:#009e60;--green-glow:rgba(0,201,122,0.12);--yellow:#fcd116;--blue:#1a4fff;--red:#ff4444;--purple:#8250ff;--text:#e8f2eb;--text-2:#a8bfad;--text-3:#5a7560;--border:rgba(255,255,255,0.07);--border-active:rgba(0,201,122,0.2);--r:16px;}
+:root{--bg:#05090a;--surface:#0b1215;--card:#0f1a1e;--green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);--yellow:#ffd740;--blue:#2979ff;--red:#ff1744;--purple:#8250ff;--text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;--border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);--r:16px;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px;overflow-x:hidden;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px;overflow-x:hidden;}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;}
 .topbar-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;flex:1;}
@@ -27,7 +27,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .benef-name{font-size:14px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .benef-detail{font-size:12px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .benef-method{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:4px;}
-.m-mobilemoney{background:rgba(0,201,122,0.1);color:var(--green);}
+.m-mobilemoney{background:rgba(0,230,118,0.1);color:var(--green);}
 .m-virement{background:rgba(26,79,255,0.1);color:var(--blue);}
 .m-paypal{background:rgba(252,209,22,0.1);color:var(--yellow);}
 .m-wero{background:rgba(130,80,255,0.1);color:var(--purple);}
@@ -63,7 +63,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* Form */
 .form-group{margin-bottom:14px;}
 .form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:7px;letter-spacing:1px;text-transform:uppercase;}
-.form-input,.form-select{width:100%;padding:13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;-webkit-appearance:none;transition:all 0.2s;}
+.form-input,.form-select{width:100%;padding:13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;-webkit-appearance:none;transition:all 0.2s;}
 .form-input:focus,.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
 .form-input::placeholder{color:var(--text-3);opacity:0.6;}
 .btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--green-dim) 0%,#004d2a 50%,#001a6e 100%);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;}
@@ -122,6 +122,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* Indicateur de chargement inline */
 .inline-loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
 
+
+/* ── Montants forcés blanc ───────────────────────────────────── */
+.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
+.conv-amount,.deal-banner-amount,.amount,.limit-val {
+  font-family:'Syne',sans-serif !important;
+  font-weight:800 !important;
+  color:#ecf4f0 !important;
+  letter-spacing:-0.3px;
+}
+.item-currency,.detail-currency,.detail-cur,.currency {
+  font-family:'Syne',sans-serif !important;
+  font-weight:700 !important;
+  color:#ecf4f0 !important;
+}
 </style>
 <link rel="manifest" href="/manifest.json">
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/service-worker.js').catch(()=>{});});}</script>
@@ -495,8 +509,8 @@ async function deleteBenef(id, nom) {
  headers: { 'Authorization': 'Bearer ' + token }
  }));
  if (r.ok) { showToast('Supprimé'); loadBenef(); }
- else showToast('Erreur suppression', '#ff4444');
- } catch(e) { showToast('Erreur réseau', '#ff4444'); }
+ else showToast('Erreur suppression', '#ff1744');
+ } catch(e) { showToast('Erreur réseau', '#ff1744'); }
 }
 
 // Démarrage

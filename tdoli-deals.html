@@ -17,7 +17,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
-.bg-mesh{display:none;background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,180,90,0.07) 0%,transparent 60%);}
+.bg-mesh{display:none;background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,200,83,0.07) 0%,transparent 60%);}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:10px;}
 .topbar-left{flex-shrink:0;}
 .topbar-center{flex:1;text-align:center;}
@@ -72,7 +72,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .detail-ref{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;}
 .detail-badge{font-size:12px;font-weight:700;font-family:'Syne',sans-serif;padding:5px 14px;border-radius:20px;}
 .detail-badge.matched{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
-.detail-badge.completed{background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.detail-badge.completed{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.2);}
 .detail-badge.dispute{background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);}
 .rank-badge{font-size:9px;font-weight:700;font-family:'Syne',sans-serif;padding:3px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px;}
 .rank-badge.pilier{background:var(--green-dim);color:var(--badge-pilier);border:1px solid var(--badge-pilier);}
@@ -148,13 +148,13 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .tdl-code-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--blue);letter-spacing:2px;}
 .tdl-copy-btn{background:rgba(26,79,255,0.15);border:none;color:var(--blue);font-size:11px;font-family:'Syne',sans-serif;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;}
 .ocr-result{border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;}
-.ocr-result.validated{background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);color:var(--green);}
+.ocr-result.validated{background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);color:var(--green);}
 .ocr-result.pending{background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.2);color:var(--yellow);}
 .ocr-result.failed{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:var(--red);}
 .ocr-score{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-left:8px;}
 .ocr-checks{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
 .ocr-check{font-size:10px;padding:2px 8px;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;}
-.ocr-check.ok{background:rgba(0,201,122,0.1);color:var(--green);}
+.ocr-check.ok{background:rgba(0,230,118,0.1);color:var(--green);}
 .ocr-check.ko{background:rgba(255,68,68,0.1);color:var(--red);}
 .proof-upload-area{border:2px dashed var(--border-active);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px;transition:all 0.2s;}
 .proof-upload-area:active{background:var(--green-glow);}
@@ -182,9 +182,23 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .partner-mini-test{font-size:11px;color:var(--text-3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-style:italic;}
 .partner-mini-test strong{color:var(--green);font-style:normal;}
 
+
+/* ── Montants forcés blanc ───────────────────────────────────── */
+.item-amount,.detail-amount,.deal-amount-lg,.detail-amt,.stat-val,
+.conv-amount,.deal-banner-amount,.amount,.limit-val {
+  font-family:'Syne',sans-serif !important;
+  font-weight:800 !important;
+  color:#ecf4f0 !important;
+  letter-spacing:-0.3px;
+}
+.item-currency,.detail-currency,.detail-cur,.currency {
+  font-family:'Syne',sans-serif !important;
+  font-weight:700 !important;
+  color:#ecf4f0 !important;
+}
 </style>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#060d09">
+<meta name="theme-color" content="#05090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TDOLI">
@@ -384,7 +398,7 @@ function getInitials(name) {
 function shareApp() {
  const msg = ' TDOLI\nhttps://tdoli-frontend.pages.dev';
  if(navigator.share) navigator.share({title:'TDOLI',url:'https://tdoli-frontend.pages.dev'}).catch(()=>{});
- else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#fcd116')).catch(()=>{});
+ else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#ffd740')).catch(()=>{});
 }
 
 // ── Helpers ─────────────────────────────────────────────────────
@@ -602,7 +616,7 @@ function openDeal(id) {
  instructionHtml = '<div class="instruction-box"><div class="instruction-title">⏳ ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>'
  + otherInfoHtml + myInfoHtml;
  } else if(d.status==='completed') {
- instructionHtml = '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);"> Deal complété avec succès !</div>';
+ instructionHtml = '<div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);"> Deal complété avec succès !</div>';
  } else if(d.status==='dispute') {
  instructionHtml = '<div style="background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);"> Litige en cours de traitement.</div>';
  }
@@ -622,14 +636,14 @@ function openDeal(id) {
       '</div>';
   } else if(d.status==='matched' && iConfirmed && !iReceived) {
     actionsHtml = tdlHtml + ocrHtml +
-      '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée</div>' +
-      (!otherProofOk ? '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">En attente de la preuve de lautre partie...</div>' : '<div style="background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--green);">✓ lautre partie a aussi envoyé sa preuve</div>') +
+      '<div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée</div>' +
+      (!otherProofOk ? '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">En attente de la preuve de lautre partie...</div>' : '<div style="background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--green);">✓ lautre partie a aussi envoyé sa preuve</div>') +
       '<div style="background:rgba(41,121,255,0.06);border:1px solid rgba(41,121,255,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-2);">Etape 2/2 — Confirme que tu as bien reçu les fonds</div>' +
       '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\'' + d._id + '\', this)">✅ J&#39;ai reçu les fonds</button>' +
       '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')"> Litige</button>';
   } else if(d.status==='matched' && iConfirmed && iReceived) {
     actionsHtml = tdlHtml +
-      '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée · ✓ Réception confirmée</div>' +
+      '<div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée · ✓ Réception confirmée</div>' +
       '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--yellow);">En attente de la confirmation de lautre partie...</div>';
   }
 
@@ -697,12 +711,12 @@ async function confirmReceived(dealId, btn) {
         loadDeals(true);
       }
     } else {
-      showToast((r.data && r.data.message) || 'Erreur', '#ff4444');
+      showToast((r.data && r.data.message) || 'Erreur', '#ff1744');
       btn.disabled = false;
       btn.innerHTML = '✅ Jai recu les fonds';
     }
   } catch(e) {
-    showToast('Erreur réseau', '#ff4444');
+    showToast('Erreur réseau', '#ff1744');
     btn.disabled = false;
     btn.innerHTML = '✅ Jai recu les fonds';
   }
@@ -710,13 +724,13 @@ async function confirmReceived(dealId, btn) {
 
 async function submitRating(dealId) {
  const stars = selectedRatings[dealId];
- if(!stars) { showToast('Sélectionne une note','#ff4444'); return; }
+ if(!stars) { showToast('Sélectionne une note','#ff1744'); return; }
  const comment = document.getElementById('comment-'+dealId)?.value||'';
  try {
  const r = await safeJson(await fetch(API+'/deals/'+dealId+'/rate',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({rating:stars,comment})}));
  if(r.ok) { ratedDeals.add(dealId); openDeal(dealId); showToast('Note envoyée ','var(--yellow)'); }
- else showToast((r.data&&r.data.message)||'Erreur','#ff4444');
- } catch(e) { showToast('Erreur réseau','#ff4444'); }
+ else showToast((r.data&&r.data.message)||'Erreur','#ff1744');
+ } catch(e) { showToast('Erreur réseau','#ff1744'); }
 }
 
 function openProof(dealId) { currentProofDealId=dealId; proofFile=null; proofUrl=null; document.getElementById('proof-preview-container').innerHTML=''; document.getElementById('btn-submit-proof').disabled=true; document.getElementById('proofOverlay').classList.add('open'); closeSheet('detailOverlay'); }
