@@ -625,7 +625,7 @@ function openDeal(id) {
       '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green);">✓ Preuve envoyée</div>' +
       (!otherProofOk ? '<div style="background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--yellow);">En attente de la preuve de lautre partie...</div>' : '<div style="background:rgba(0,201,122,0.06);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--green);">✓ Lautre partie a aussi envoyé sa preuve</div>') +
       '<div style="background:rgba(41,121,255,0.06);border:1px solid rgba(41,121,255,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text-2);">Etape 2/2 — Confirme que tu as bien reçu les fonds</div>' +
-      '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\'' + d._id + '\')">✅ J&#39;ai reçu les fonds</button>' +
+      '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\'' + d._id + '\', this)">✅ J&#39;ai reçu les fonds</button>' +
       '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')"> Litige</button>';
   } else if(d.status==='matched' && iConfirmed && iReceived) {
     actionsHtml = tdlHtml +
@@ -679,8 +679,7 @@ function setRating(dealId, stars) {
  container.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<stars));
 }
 
-async function confirmReceived(dealId) {
-  const btn = event.target;
+async function confirmReceived(dealId, btn) {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Confirmation...';
   try {
