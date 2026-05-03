@@ -1044,5 +1044,20 @@ async function checkDealCompletedFlag() {
 </script>
 
 
+
+<script>
+// ── Retour haptique sur tous les boutons ─────────────────────
+(function() {
+  function triggerHaptic() {
+    if (navigator.vibrate) navigator.vibrate(8);
+    // iOS (via AudioContext trick si vibrate absent)
+  }
+  document.addEventListener('pointerdown', function(e) {
+    const el = e.target.closest('button, .btn-primary, .btn-cancel, .nav-item, .annonce-item, .conv-item, .deal-card, .settings-item, .filter-chip, .back-btn');
+    if (el) triggerHaptic();
+  }, { passive: true });
+})();
+</script>
+
 </body>
 </html>
