@@ -1036,45 +1036,6 @@ function renderRankBadge(score) {
  return '<span class="rank-badge ' + rank.cls + '">' + rank.label + '</span>';
 }
 
-function renderList(data) {
- return data.map((t, i) => {
- const isOwn = t.sender === email;
- const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
- const initials = getInitials(displayName);
- const eurVal = convertToEur(t.amount, t.currency);
- const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
- // Trust line — "A aidé X membres"
- const dealsCount = t.senderDeals || t.senderCompletedDeals || 0;
- const trustLine = dealsCount > 0
- ? '<div class="trust-line">A aidé <span class="trust-members">' + dealsCount + ' membre' + (dealsCount > 1 ? 's' : '') + '</span></div>'
- : '';
- // Badge réactivité inline
- const reactBadgeMap = { fast: '⚡ Répond vite', normal: '⚡ Répond en moins d\'1h', slow: '🐢 Lent' };
- const reactClass = { fast: 'fast', normal: 'normal', slow: 'slow' };
- const reactInline = t.senderReactivityBadge && reactBadgeMap[t.senderReactivityBadge]
- ? '<span class="reactivity-inline ' + reactClass[t.senderReactivityBadge] + '">' + reactBadgeMap[t.senderReactivityBadge] + '</span>'
- : '';
- const starsFull = Math.round(t.senderRating || 0);
- const starsHtml = t.senderRating > 0
- ? '<span class="item-rating">' + '★'.repeat(starsFull) + '☆'.repeat(5 - starsFull) + '</span>'
- : '';
- return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
- '<div class="item-avatar">' + initials + '</div>' +
- '<div class="item-body">' +
- '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
- '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
- '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
- '<span class="item-meta">' +
- starsHtml +
- reactInline +
- renderRankBadge(t.senderCommunityScore) +
- '<span class="item-time">' + timeAgo(t.createdAt) + '</span>' +
- '<div class="status-dot-sm"></div>' +
- '</span></div>' +
- trustLine +
- '</div></div>';
- }).join('');
-}
 function calcAirtelFees(xafAmount) {
  if (xafAmount <= 0) return 0;
  // Grille officielle Airtel Money Gabon
@@ -1170,21 +1131,81 @@ function getInitials(name) {
 }
 
 function renderList(data) {
- return data.map((t, i) => {
- const isOwn = t.sender === email;
- const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
- const initials = getInitials(displayName);
- const eurVal = convertToEur(t.amount, t.currency);
- const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
- return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
- '<div class="item-avatar">' + initials + '</div>' +
- '<div class="item-body">' +
- '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
- '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
- '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
- '<span class="item-meta">' + (t.senderRating > 0 ? '<span class="item-rating">' + t.senderRating.toFixed(1) + '</span>' : '') + '<span class="item-time">' + timeAgo(t.createdAt) + '</span><div class="status-dot-sm"></div></span></div>' +
- '</div></div>';
- }).join('');
+
+  // 🔥 TRI INTELLIGENT
+  data.sort((a, b) => {
+    const scoreA = (a.userScore || 0) + (a.isAgent ? 100 : 0);
+    const scoreB = (b.userScore || 0) + (b.isAgent ? 100 : 0);
+    return scoreB - scoreA;
+  });
+
+  return data.map((t) => {
+
+    const isOwn = t.sender === email;
+    const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
+    const initials = getInitials(displayName);
+
+    const eurVal = convertToEur(t.amount, t.currency);
+    const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
+    const scoreBadge = t.userScore != null ? `<span class="trust-line">Score ${Number(t.userScore).toFixed(0)}</span>` : '';
+
+    // Badge niveau
+    function renderLevelBadge(level) {
+      if (!level) return '';
+      let color = "#888";
+      if (level >= 4) color = "#FFD700";
+      else if (level === 3) color = "#4CAF50";
+      else if (level === 2) color = "#2196F3";
+
+      return `<span style="background:${color};color:#000;padding:2px 6px;border-radius:6px;font-size:10px;margin-left:6px;">Lv.${level}</span>`;
+    }
+
+    // Badge agent
+    function renderAgentBadge(isAgent) {
+      if (!isAgent) return '';
+      return `<span style="background:#FF5722;color:white;padding:2px 6px;border-radius:6px;font-size:10px;margin-left:4px;">AGENT</span>`;
+    }
+
+    return `
+      <div class="annonce-item ${isOwn ? 'mine' : ''}" onclick="openDetail('${t._id}')">
+
+        <div class="item-avatar">${initials}</div>
+
+        <div class="item-body">
+
+          <div class="item-top">
+            <span class="item-name">
+              ${isOwn ? '<span class="mine-tag">Moi</span>' : ''}
+              ${displayName}
+              ${renderLevelBadge(t.userLevel)}
+              ${renderAgentBadge(t.isAgent)}
+            </span>
+
+            <span class="item-amount">
+              ${Number(t.amount).toLocaleString('fr-FR')}
+              <span class="item-currency">${t.currency}</span>
+            </span>
+          </div>
+
+          <div class="item-bottom">
+            <span class="item-dir">
+              ${t.fromCountry} → ${t.toCountry}
+              ${euroLabel ? ` · <span style="color:var(--green)">${euroLabel}</span>` : ''}
+            </span>
+
+            <span class="item-meta">
+              ${t.rating ? `<span class="item-rating">★ ${t.rating.toFixed(1)}</span>` : ''}
+              <span class="item-time">${timeAgo(t.createdAt)}</span>
+              <div class="status-dot-sm"></div>
+            </span>
+          </div>
+
+          ${scoreBadge}
+
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 function openDetail(id) {
