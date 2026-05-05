@@ -669,21 +669,36 @@ async function loadProfile() {
  // 1. Affichage immédiat depuis cache (pas de loading spinner)
  renderFromCache();
 
- const wakeTimer = null;
-
- // 3. Charger depuis API avec retry
+ // 2. Charger depuis API avec retry rapide
  let user = null;
  let attempts = 0;
- while (!user && attempts < 3) {
+ const maxAttempts = 2; // Réduire à 2 tentatives
+ const retryDelay = 2000; // 2 secondes
+
+ while (!user && attempts < maxAttempts) {
  attempts++;
+ try {
  user = await fetchProfile();
- if (!user && attempts < 3) await new Promise(r => setTimeout(r, 5000));
+ } catch(e) {
+ console.log('[TDOLI] Tentative', attempts, 'échouée:', e.message);
+ }
+ if (!user && attempts < maxAttempts) {
+ await new Promise(r => setTimeout(r, retryDelay));
+ }
  }
 
-
  if (!user) {
- // Afficher quand même le profil depuis cache avec message discret
- document.getElementById('profileContent').innerHTML += '<div style="text-align:center;font-size:11px;color:var(--text-3);padding:8px;">Données hors ligne — reconnecte-toi pour actualiser</div>';
+ // Remplacer le contenu par un message d'erreur au lieu d'ajouter
+ document.getElementById('profileContent').innerHTML = `
+ <div class="profile-hero">
+ <div class="avatar-large">${getInitials(username)}</div>
+ <div class="profile-username">${username}</div>
+ <div class="profile-email">${email||''}</div>
+ <div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;">
+ Impossible de charger les données.<br>Vérifie ta connexion et reconnecte-toi.
+ <br><br><button onclick="loadProfile()" style="padding:10px 20px;background:var(--green);color:#fff;border:none;border-radius:8px;font-family:'Syne',sans-serif;">Réessayer</button>
+ </div>
+ </div>`;
  return;
  }
 
