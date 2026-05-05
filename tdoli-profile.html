@@ -130,7 +130,34 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .testimonial-date{font-size:10px;color:var(--text-3);margin-top:6px;}
 .no-testimonial{text-align:center;padding:30px 20px;color:var(--text-3);font-size:13px;background:var(--card);border:1px solid var(--border);border-radius:12px;}
 .btn-load-more{width:100%;padding:12px;background:var(--green-dim);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;}
-.nav-badge{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}</style>
+.nav-badge{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}
+
+/* ── AMÉLIORATIONS PROFIL ──────────────────────────────────── */
+.status-section{background:linear-gradient(135deg,rgba(0,230,118,0.08),rgba(26,79,255,0.08));border:1px solid var(--border-active);border-radius:16px;padding:20px;margin-bottom:16px;}
+.status-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.xp-bar-container{margin-bottom:14px;}
+.xp-bar{width:100%;height:8px;background:var(--surface);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow));transition:width 0.4s ease;}
+.xp-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-top:6px;font-family:'Syne',sans-serif;font-weight:600;}
+.level-display{display:flex;align-items:center;gap:12px;margin-bottom:12px;background:var(--card);padding:12px 14px;border-radius:12px;border:1px solid var(--border);}
+.level-badge{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;flex-shrink:0;}
+.level-info{flex:1;}
+.level-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;}
+.level-value{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--green);margin-top:2px;}
+.community-rank-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center;}
+.rank-badge-large{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;padding:10px 16px;border-radius:12px;display:inline-block;margin-bottom:8px;}
+.rank-badge-large.nouveau{background:rgba(255,255,255,0.05);color:var(--text-3);}
+.rank-badge-large.actif{background:rgba(0,230,118,0.12);color:var(--green);}
+.rank-badge-large.fiable{background:rgba(26,79,255,0.12);color:#6b8fff;}
+.rank-badge-large.pilier{background:linear-gradient(135deg,rgba(252,209,22,0.15),rgba(26,79,255,0.15));color:var(--yellow);}
+.rank-subtitle{font-size:12px;color:var(--text-2);margin-top:8px;line-height:1.5;}
+.stats-detailed{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat-detail{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
+.stat-detail-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);margin-bottom:4px;}
+.stat-detail-label{font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.achievement-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;}
+.achievement-badge{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,rgba(252,209,22,0.2),rgba(0,230,118,0.2));border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+</style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#05090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -458,15 +485,58 @@ function renderFull(user, txs) {
  ? '<div class="profile-rating"><span class="stars-display">'+''.repeat(Math.round(rating))+''.repeat(5-Math.round(rating))+'</span><span class="rating-val">'+rating.toFixed(1)+'</span><span class="rating-count">('+ratingCount+')</span></div>'
  : '<div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">Aucun avis</div>';
 
- // ── Phase 5 — Rang + réactivité ──────────────────────────────
  const rank = communityRank(user.communityScore);
- const rankHtml = rank
- ? `<span class="rank-hero ${rank.cls}">${rank.label}</span>`
- : '';
  const reactivityHtml = renderReactivityHero(user.reactivityBadge);
  const trustHtml = user.completedDeals > 0
  ? `<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Fait confiance par <strong style="color:var(--text-2);">${user.completedDeals} membre${user.completedDeals>1?'s':''}</strong></div>`
  : '';
+
+ // ── Barre XP et Niveau ──────────────────────────────────────
+ const userXp = user.xp || 0;
+ const userNextXp = user.nextLevelXp || 100;
+ const xpPercent = Math.min(100, (userXp / userNextXp) * 100);
+ const userLevel = user.level || 1;
+
+ const statusHtml = `<div class="status-section">
+ <div class="status-title">Mon Statut</div>
+ <div class="level-display">
+ <div class="level-badge">${userLevel}</div>
+ <div class="level-info">
+ <div class="level-label">Niveau Actuel</div>
+ <div class="level-value">Niveau ${userLevel}</div>
+ </div>
+ </div>
+ <div class="xp-bar-container">
+ <div class="xp-bar"><div class="xp-bar-fill" style="width:${xpPercent}%"></div></div>
+ <div class="xp-label"><span>${userXp.toLocaleString('fr-FR')} XP</span><span>${userNextXp.toLocaleString('fr-FR')} XP</span></div>
+ </div>
+ </div>`;
+
+ // ── Rang Communautaire ────────────────────────────────────────
+ const rankHtml = rank ? `<div class="community-rank-card">
+ <div class="rank-badge-large ${rank.cls}">${rank.label}</div>
+ <div class="rank-subtitle">Score communautaire: <strong>${user.communityScore || 0}</strong>/100</div>
+ </div>` : '';
+
+ // ── Statistiques Détaillées ───────────────────────────────────
+ const completionRate = user.completedDeals && user.abandonCount ? Math.round((user.completedDeals / (user.completedDeals + user.abandonCount)) * 100) : 0;
+ const statsHtml = `<div class="stats-detailed">
+ <div class="stat-detail"><div class="stat-detail-val">${user.completedDeals || 0}</div><div class="stat-detail-label">Deals Complétés</div></div>
+ <div class="stat-detail"><div class="stat-detail-val">${rating.toFixed(1)} ⭐</div><div class="stat-detail-label">Évaluation</div></div>
+ <div class="stat-detail"><div class="stat-detail-val">${completionRate}%</div><div class="stat-detail-label">Taux de Réussite</div></div>
+ <div class="stat-detail"><div class="stat-detail-val">${lvl.limit}</div><div class="stat-detail-label">Limite Actuelle</div></div>
+ </div>`;
+
+ // ── Achievements ──────────────────────────────────────────────
+ const achievements = [];
+ if (user.completedDeals >= 5) achievements.push('🏆');
+ if (user.completedDeals >= 10) achievements.push('👑');
+ if (rating >= 4) achievements.push('⭐');
+ if (user.isAgent) achievements.push('🤝');
+ if (user.reactivityBadge === 'fast') achievements.push('⚡');
+ const achievementsHtml = achievements.length > 0 ? `<div class="achievement-list">
+ ${achievements.map(a => `<div class="achievement-badge">${a}</div>`).join('')}
+ </div>` : '';
 
  const verifyHtml = level < 2 ? `<div class="verify-card">
  <div class="verify-title"> Augmente ta limite</div>
@@ -498,23 +568,23 @@ function renderFull(user, txs) {
  <span class="badge-item ${lvl.cls}">${lvl.label}</span>
  ${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);"> Suspendu</span>':''}
  </div>
- ${rankHtml}
- ${reliabilityBadge(user)}
  ${starsHtml}
  </div>
+
+ ${statusHtml}
+ ${rankHtml}
+ ${achievementsHtml}
+ ${statsHtml}
  ${communityPhrase(user)}
  ${communityIndicators(user)}
  ${verifyHtml}
- <div class="stats-row">
- <div class="stat-card"><div class="stat-val">${user.totalDeals||user.completedDeals||0}</div><div class="stat-label">Deals</div></div>
- <div class="stat-card"><div class="stat-val">${lvl.limit}</div><div class="stat-label">Limite</div></div>
- </div>
- ${txHtml}
 
  <!-- Section témoignages -->
  <div class="testimonials-section" id="testimonialsSection">
  <div class="no-testimonial">Chargement des témoignages…</div>
  </div>
+
+ ${txHtml}
 
  <div class="section-title" style="margin-top:${txHtml?'16':'0'}px;">Paramètres</div>
  <div class="settings-card">
@@ -533,17 +603,63 @@ function renderFull(user, txs) {
  <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
  `;
 
- // Mettre à jour l'avatar topbar
  const btn = document.getElementById('avatarBtn');
  if (btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
 
- // Masquer Face ID si non supporté
  if (!window.PublicKeyCredential) {
  const el = document.getElementById('faceid-setting');
  if (el) el.style.display = 'none';
  }
 
- // Charger les témoignages en async
+ if (user._id) {
+ fetchTestimonials(user._id).then(renderTestimonials);
+ }
+}
+ ${rankHtml}
+ ${reliabilityBadge(user)}
+ ${starsHtml}
+ </div>
+
+ ${statusHtml}
+ ${rankHtml}
+ ${achievementsHtml}
+ ${statsHtml}
+ ${communityPhrase(user)}
+ ${communityIndicators(user)}
+ ${verifyHtml}
+
+ <!-- Section témoignages -->
+ <div class="testimonials-section" id="testimonialsSection">
+ <div class="no-testimonial">Chargement des témoignages…</div>
+ </div>
+
+ ${txHtml}
+
+ <div class="section-title" style="margin-top:${txHtml?'16':'0'}px;">Paramètres</div>
+ <div class="settings-card">
+ <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label"> Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>
+ <div class="settings-item" onclick="openPhoneVerif()">
+ <span class="settings-label"> Téléphone</span>
+ <span class="settings-val">${user.phone?user.phone.replace(/(\+?\d{3})\d+(\d{2})$/,'$1•••$2'):'Non vérifié'} →</span>
+ </div>
+ <div class="settings-item" id="faceid-setting" onclick="toggleFaceID()">
+ <span class="settings-label"> Face ID / Empreinte</span>
+ <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ':'Désactivé →'}</span>
+ </div>
+ <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label"> CGU</span><span class="settings-val">→</span></div>
+ </div>
+ <button class="btn-logout" onclick="logout()"> Déconnexion</button>
+ <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
+ `;
+
+ const btn = document.getElementById('avatarBtn');
+ if (btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
+
+ if (!window.PublicKeyCredential) {
+ const el = document.getElementById('faceid-setting');
+ if (el) el.style.display = 'none';
+ }
+
  if (user._id) {
  fetchTestimonials(user._id).then(renderTestimonials);
  }
