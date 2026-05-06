@@ -96,6 +96,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,83,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .fab:active{transform:scale(0.9);}
 
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);padding:8px 0;display:flex;max-width:480px;margin:0 auto;}
+
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
@@ -706,6 +708,7 @@ async function bioGateAuth() {
  sessionStorage.setItem('tdoli_faceid_ts', Date.now().toString());
  // Fermer la gate et afficher le feed
  document.getElementById('bioGate').classList.remove('open');
+ await loadUser();
  loadFeed();
  } else {
  const msg = document.getElementById('bio-gate-msg');
@@ -755,7 +758,7 @@ function initAvatar() {
 }
 initAvatar();
 
-let allTransfers = [], liquidityData = [], currentFilter = 'all', pendingMatch = null, editingId = null;
+let allTransfers = [], liquidityData = [], currentFilter = 'all', pendingMatch = null, editingId = null, currentUser = null;
 
 // ── Filtres avancés ───────────────────────────────────────────
 let advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
@@ -1421,6 +1424,16 @@ async function loadLiquidity() {
  }
 }
 
+async function loadUser() {
+ try {
+   const r = await safeJson(await fetch(API + '/auth', { headers: { 'Authorization': 'Bearer ' + token } }));
+   if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+   currentUser = r.data || {};
+ } catch (e) {
+   console.error('Failed to load user:', e);
+ }
+}
+
 async function loadFeed(silent) {
  if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
  try {
@@ -1594,6 +1607,7 @@ async function submitAnnonce() {
  if (!amount || Number(amount) <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
  if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
  if (!selectedBenefId) { showMsg('msg-create', 'Choisis un bénéficiaire avant de publier'); return; }
+ if (currentUser && Number(amount) > currentUser.maxDealAmount) { showMsg('msg-create', `Montant maximum : ${currentUser.maxDealAmount}€`); return; }
  const btn = document.getElementById('btn-submit');
  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
  try {
@@ -1812,8 +1826,11 @@ async function checkUnreadMessages() {
 }
 
 // Démarrage
-loadFeed();
-checkUnreadMessages();
+(async () => {
+ await loadUser();
+ loadFeed();
+ checkUnreadMessages();
+})();
 
 
 </script>
