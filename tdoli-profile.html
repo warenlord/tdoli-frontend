@@ -475,7 +475,7 @@ function renderFull(user, txs) {
  const uname = user.username || email?.split('@')[0] || '?';
  const av = user.avatarUrl || localStorage.getItem('tdoli_avatar');
  const ini = getInitials(uname);
- const level = user.verificationLevel || 1;
+ const level = user.level || user.verificationLevel || 1;
  const lvl = getLevelInfo(level);
  const rating = user.averageRating || user.rating || 0;
  const ratingCount = (user.ratings && user.ratings.length) || user.ratingCount || 0;
@@ -565,6 +565,7 @@ function renderFull(user, txs) {
  <span class="badge-item ${lvl.cls}">${lvl.label}</span>
  ${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);"> Suspendu</span>':''}
  </div>
+ <div style="font-size:12px;color:var(--text-3);margin-top:6px;">Limite par deal : <strong>${lvl.limit}</strong></div>
  ${starsHtml}
  </div>
 
