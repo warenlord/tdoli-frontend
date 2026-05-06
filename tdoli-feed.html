@@ -334,6 +334,14 @@ firebase.initializeApp({
   </div>
  </div>
 
+ <div class="liquidity-panel" id="liquidityPanel" style="display:none;">
+  <div class="liquidity-header">
+    <div class="liquidity-title">Liquidités disponibles</div>
+    <div class="badge" id="liquidityBadge">—</div>
+  </div>
+  <div class="liquidity-list" id="liquidityList"><div class="loading-wrap"><div class="loader"></div></div></div>
+ </div>
+
  <div class="filter-bar">
  <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div>
  <div class="filter-chip" onclick="setFilter('mine',this)">Mes annonces</div>
@@ -747,7 +755,7 @@ function initAvatar() {
 }
 initAvatar();
 
-let allTransfers = [], currentFilter = 'all', pendingMatch = null, editingId = null;
+let allTransfers = [], liquidityData = [], currentFilter = 'all', pendingMatch = null, editingId = null;
 
 // ── Filtres avancés ───────────────────────────────────────────
 let advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
@@ -1368,6 +1376,51 @@ async function safeJson(res) {
  catch(e) { return { ok: false, status: res.status, data: null }; }
 }
 
+function formatCurrencyLabel(currency) {
+  if (!currency) return '';
+  if (currency === 'EUR') return '€';
+  if (currency === 'XAF') return 'XAF';
+  if (currency === 'USD') return '$';
+  if (currency === 'CAD') return 'CAD';
+  return currency;
+}
+
+function renderLiquidity() {
+ const panel = document.getElementById('liquidityPanel');
+ const list = document.getElementById('liquidityList');
+ if (!panel || !list) return;
+ if (!liquidityData || liquidityData.length === 0) {
+   panel.style.display = 'none';
+   return;
+ }
+ list.innerHTML = liquidityData.map(item => {
+   const route = item._id || {};
+   const from = route.from || '?';
+   const to = route.to || '?';
+   const amount = Number(item.total || 0).toLocaleString('fr-FR');
+   const currency = formatCurrencyLabel(route.currency);
+   const suffix = currency ? ' ' + currency : '';
+   return `<div class="liquidity-item"><div class="liquidity-route">${from} → ${to}</div><div class="liquidity-total">${amount}${suffix}</div></div>`;
+ }).join('');
+ panel.style.display = 'block';
+ document.getElementById('liquidityBadge').textContent = liquidityData.length;
+}
+
+async function loadLiquidity() {
+ const panel = document.getElementById('liquidityPanel');
+ const list = document.getElementById('liquidityList');
+ if (!panel || !list) return;
+ list.innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+ try {
+   const r = await safeJson(await fetch(API + '/liquidity', { headers: { 'Authorization': 'Bearer ' + token } }));
+   if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+   liquidityData = Array.isArray(r.data) ? r.data : [];
+   renderLiquidity();
+ } catch (e) {
+   panel.style.display = 'none';
+ }
+}
+
 async function loadFeed(silent) {
  if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
  try {
@@ -1375,6 +1428,7 @@ async function loadFeed(silent) {
  if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
  allTransfers = Array.isArray(r.data) ? r.data : [];
  renderFeed();
+ loadLiquidity();
  checkActiveDeals();
  loadWeeklyStats();
  loadActivityFeed();
