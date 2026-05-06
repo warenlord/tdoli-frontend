@@ -265,15 +265,19 @@ async function fetchProfile() {
  const routes = ['/profile/'+email, '/user/me', '/users/me'];
  for (const route of routes) {
  try {
- const r = await safeJson(await fetch(API+route, {
- headers:{'Authorization':'Bearer '+token},
- signal: AbortSignal.timeout(8000)
- }));
- if (r.ok && r.data && (r.data.email || r.data.username || r.data._id || r.data.totalDeals !== undefined)) {
- console.log('[TDOLI] Route profil OK:', route);
- return r.data;
- }
- if (r.status === 401) { const _fa=localStorage.getItem('tdoli_faceid_active');const _fd=localStorage.getItem('tdoli_faceid_dismissed');const _em=localStorage.getItem('tdoli_email');localStorage.clear();if(_fa)localStorage.setItem('tdoli_faceid_active',_fa);if(_fd)localStorage.setItem('tdoli_faceid_dismissed',_fd);if(_em)localStorage.setItem('tdoli_email',_em); window.location.replace('/tdoli-auth.html'); return null; }
+  // Timeout manuel avec Promise.race
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 secondes
+  const r = await safeJson(await fetch(API+route, {
+   headers:{'Authorization':'Bearer '+token},
+   signal: controller.signal
+  }));
+  clearTimeout(timeoutId);
+  if (r.ok && r.data && (r.data.email || r.data.username || r.data._id || r.data.totalDeals !== undefined)) {
+   console.log('[TDOLI] Route profil OK:', route);
+   return r.data;
+  }
+  if (r.status === 401) { const _fa=localStorage.getItem('tdoli_faceid_active');const _fd=localStorage.getItem('tdoli_faceid_dismissed');const _em=localStorage.getItem('tdoli_email');localStorage.clear();if(_fa)localStorage.setItem('tdoli_faceid_active',_fa);if(_fd)localStorage.setItem('tdoli_faceid_dismissed',_fd);if(_em)localStorage.setItem('tdoli_email',_em); window.location.replace('/tdoli-auth.html'); return null; }
  } catch(e) { /* timeout ou réseau, continuer */ }
  }
  return null;
@@ -568,55 +572,6 @@ function renderFull(user, txs) {
  <span class="badge-item ${lvl.cls}">${lvl.label}</span>
  ${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);"> Suspendu</span>':''}
  </div>
- ${starsHtml}
- </div>
-
- ${statusHtml}
- ${rankHtml}
- ${achievementsHtml}
- ${statsHtml}
- ${communityPhrase(user)}
- ${communityIndicators(user)}
- ${verifyHtml}
-
- <!-- Section témoignages -->
- <div class="testimonials-section" id="testimonialsSection">
- <div class="no-testimonial">Chargement des témoignages…</div>
- </div>
-
- ${txHtml}
-
- <div class="section-title" style="margin-top:${txHtml?'16':'0'}px;">Paramètres</div>
- <div class="settings-card">
- <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label"> Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>
- <div class="settings-item" onclick="openPhoneVerif()">
- <span class="settings-label"> Téléphone</span>
- <span class="settings-val">${user.phone?user.phone.replace(/(\+?\d{3})\d+(\d{2})$/,'$1•••$2'):'Non vérifié'} →</span>
- </div>
- <div class="settings-item" id="faceid-setting" onclick="toggleFaceID()">
- <span class="settings-label"> Face ID / Empreinte</span>
- <span class="settings-val" id="faceid-status">${localStorage.getItem('tdoli_faceid_active')==='1'?'Activé ':'Désactivé →'}</span>
- </div>
- <div class="settings-item" onclick="window.location.href='/tdoli-cgu.html'"><span class="settings-label"> CGU</span><span class="settings-val">→</span></div>
- </div>
- <button class="btn-logout" onclick="logout()"> Déconnexion</button>
- <a href="/tdoli-cgu.html" class="cgu-link">Conditions générales d'utilisation</a>
- `;
-
- const btn = document.getElementById('avatarBtn');
- if (btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
-
- if (!window.PublicKeyCredential) {
- const el = document.getElementById('faceid-setting');
- if (el) el.style.display = 'none';
- }
-
- if (user._id) {
- fetchTestimonials(user._id).then(renderTestimonials);
- }
-}
- ${rankHtml}
- ${reliabilityBadge(user)}
  ${starsHtml}
  </div>
 
