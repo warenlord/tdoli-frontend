@@ -300,7 +300,7 @@ async function fetchMyTransfers() {
 }
 
 function getLevelInfo(level){
- const info={1:{label:' Niveau 1',limit:'300 €',cls:'badge-level1'},2:{label:' Niveau 2',limit:'500 €',cls:'badge-level2'},3:{label:'🪪 Niveau 3',limit:'1 000 €',cls:'badge-level2'},4:{label:' Niveau 4',limit:'Illimité',cls:'badge-level2'}};
+ const info={1:{label:' Niveau 1 — nouveau',limit:'300 €',cls:'badge-level1'},2:{label:' Niveau 2 — 5 deals',limit:'1 000 €',cls:'badge-level2'},3:{label:' Niveau 3 — 50 deals',limit:'3 000 €',cls:'badge-level2'},4:{label:' Niveau 4 — 100 deals',limit:'Illimité',cls:'badge-level2'},5:{label:' Niveau 5 — agent',limit:'20 000 €',cls:'badge-level2'}};
  return info[level]||info[1];
 }
 
