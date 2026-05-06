@@ -121,6 +121,8 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .reliability-badge.orange{background:rgba(255,100,50,0.1);color:#ff6432;border:1px solid rgba(255,100,50,0.2);}
 .testimonials-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .testimonials-title span{font-size:11px;color:var(--text-3);font-family:'Inter',sans-serif;font-weight:400;}
+.testimonial-count{cursor:pointer;color:var(--green);transition:color 0.2s;}
+.testimonial-count:hover{color:var(--yellow);}
 .testimonial-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;}
 .testimonial-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green),var(--blue));border-radius:2px 0 0 2px;}
 .testimonial-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
@@ -349,14 +351,9 @@ function renderTestimonials(testimonials) {
  return;
  }
 
- // Pagination: afficher 5 par 5
  let displayedCount = 5;
  const total = testimonials.length;
- const initialTestimonials = testimonials.slice(0, displayedCount);
-
- section.innerHTML = `
- <div class="testimonials-title"> Ce que disent les membres <span>(${total})</span></div>
- ${initialTestimonials.map(t => `
+ const renderList = (items) => items.map(t => `
  <div class="testimonial-card">
  <div class="testimonial-header">
  <span class="testimonial-from"> ${t.fromUsername || 'Membre'}</span>
@@ -364,28 +361,30 @@ function renderTestimonials(testimonials) {
  </div>
  <div class="testimonial-text">"${t.comment}"</div>
  <div class="testimonial-date">${timeAgoShort(t.createdAt)}</div>
- </div>`).join('')}
- ${total > displayedCount ? `<button class="btn-load-more" onclick="loadMoreTestimonials(${JSON.stringify(testimonials).replace(/"/g, '&quot;')})">Voir plus d'avis</button>` : ''}
- `;
+ </div>`).join('');
 
- // Fonction pour charger plus
+ const renderSection = (items, showButton) => {
+   section.innerHTML = `
+   <div class="testimonials-title"> Ce que disent les membres <span class="testimonial-count" onclick="expandTestimonials(${JSON.stringify(testimonials).replace(/"/g, '&quot;')})">(${total})</span></div>
+   ${renderList(items)}
+   ${showButton ? `<button class="btn-load-more" onclick="loadMoreTestimonials(${JSON.stringify(testimonials).replace(/"/g, '&quot;')})">Voir plus d'avis</button>` : ''}
+   `;
+ };
+
+ renderSection(testimonials.slice(0, displayedCount), total > displayedCount);
+
+ window.expandTestimonials = function(allTestimonials) {
+   section.innerHTML = `
+   <div class="testimonials-title"> Ce que disent les membres <span class="testimonial-count">(${allTestimonials.length})</span></div>
+   ${renderList(allTestimonials)}
+   `;
+ };
+
  window.loadMoreTestimonials = function(allTestimonials) {
   displayedCount += 5;
   const moreTestimonials = allTestimonials.slice(0, displayedCount);
   const hasMore = displayedCount < allTestimonials.length;
-  section.innerHTML = `
-  <div class="testimonials-title"> Ce que disent les membres <span>(${allTestimonials.length})</span></div>
-  ${moreTestimonials.map(t => `
-  <div class="testimonial-card">
-  <div class="testimonial-header">
-  <span class="testimonial-from"> ${t.fromUsername || 'Membre'}</span>
-  <span class="testimonial-stars">${''.repeat(t.rating || 0)}${''.repeat(5 - (t.rating || 0))}</span>
-  </div>
-  <div class="testimonial-text">"${t.comment}"</div>
-  <div class="testimonial-date">${timeAgoShort(t.createdAt)}</div>
-  </div>`).join('')}
-  ${hasMore ? `<button class="btn-load-more" onclick="loadMoreTestimonials(${JSON.stringify(allTestimonials).replace(/"/g, '&quot;')})">Voir plus d'avis</button>` : ''}
-  `;
+  renderSection(moreTestimonials, hasMore);
  };
 }
 
@@ -405,7 +404,7 @@ function renderFromCache() {
  </div>
  <div class="stats-row">
  <div class="stat-card"><div class="stat-val">—</div><div class="stat-label">Deals</div></div>
- <div class="stat-card"><div class="stat-val">300 €</div><div class="stat-label">Limite</div></div>
+ <div class="stat-card"><div class="stat-val">—</div><div class="stat-label">Annonces</div></div>
  </div>
  <div class="section-title">Paramètres</div>
  <div class="settings-card">
@@ -528,7 +527,6 @@ function renderFull(user, txs) {
  <div class="stat-detail"><div class="stat-detail-val">${user.completedDeals || 0}</div><div class="stat-detail-label">Deals Complétés</div></div>
  <div class="stat-detail"><div class="stat-detail-val">${rating.toFixed(1)} ⭐</div><div class="stat-detail-label">Évaluation</div></div>
  <div class="stat-detail"><div class="stat-detail-val">${completionRate}%</div><div class="stat-detail-label">Taux de Réussite</div></div>
- <div class="stat-detail"><div class="stat-detail-val">${lvl.limit}</div><div class="stat-detail-label">Limite Actuelle</div></div>
  </div>`;
 
  // ── Achievements ──────────────────────────────────────────────
@@ -542,12 +540,7 @@ function renderFull(user, txs) {
  ${achievements.map(a => `<div class="achievement-badge">${a}</div>`).join('')}
  </div>` : '';
 
- const verifyHtml = level < 2 ? `<div class="verify-card">
- <div class="verify-title"> Augmente ta limite</div>
- <div class="verify-sub">Vérifie ton numéro pour passer au Niveau 2 — limite à 1 000 €.</div>
- <div class="limit-bar"><span class="limit-label">Limite actuelle</span><span class="limit-val" style="color:var(--green);font-family:'Syne',sans-serif;font-weight:800;font-size:20px;">300 €</span></div>
- <button class="btn-primary" onclick="openPhoneVerif()">Vérifier mon numéro →</button>
- </div>` : '';
+ const verifyHtml = '';
 
  let txHtml = '';
  if (txs.length > 0) {
