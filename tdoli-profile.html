@@ -121,10 +121,13 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .reliability-badge.green{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.2);}
 .reliability-badge.yellow{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
 .reliability-badge.orange{background:rgba(255,100,50,0.1);color:#ff6432;border:1px solid rgba(255,100,50,0.2);}
-.testimonials-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.testimonials-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:0;display:flex;align-items:center;gap:8px;cursor:pointer;padding:12px 0;user-select:none;}
 .testimonials-title span{font-size:11px;color:var(--text-3);font-family:'Inter',sans-serif;font-weight:400;}
-.testimonial-count{cursor:pointer;color:var(--green);transition:color 0.2s;}
-.testimonial-count:hover{color:var(--yellow);}
+.testimonial-count{color:var(--green);}
+.toggle-arrow{margin-left:auto;font-size:11px;color:var(--text-3);transition:transform 0.3s ease;display:inline-block;flex-shrink:0;}
+.testimonials-title.open .toggle-arrow{transform:rotate(180deg);}
+.testimonials-list{overflow:hidden;max-height:0;transition:max-height 0.4s ease;padding-bottom:0;}
+.testimonials-list.open{max-height:4000px;padding-bottom:4px;}
 .testimonial-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;}
 .testimonial-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green),var(--blue));border-radius:2px 0 0 2px;}
 .testimonial-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
@@ -346,48 +349,42 @@ async function fetchTestimonials(userId) {
 function renderTestimonials(testimonials) {
  const section = document.getElementById('testimonialsSection');
  if (!section) return;
+
  if (!testimonials || testimonials.length === 0) {
- section.innerHTML = `
- <div class="testimonials-title"> Ce que disent les membres</div>
- <div class="no-testimonial">Aucun témoignage pour l'instant.<br>Complete des deals pour recevoir tes premiers avis.</div>`;
- return;
+   section.innerHTML =
+     '<div class="testimonials-title"> Ce que disent les membres</div>' +
+     '<div class="no-testimonial">Aucun témoignage pour l\'instant.<br>Complete des deals pour recevoir tes premiers avis.</div>';
+   return;
  }
 
- let displayedCount = 5;
  const total = testimonials.length;
- const renderList = (items) => items.map(t => `
- <div class="testimonial-card">
- <div class="testimonial-header">
- <span class="testimonial-from"> ${t.fromUsername || 'Membre'}</span>
- <span class="testimonial-stars">${''.repeat(t.rating || 0)}${''.repeat(5 - (t.rating || 0))}</span>
- </div>
- <div class="testimonial-text">"${t.comment}"</div>
- <div class="testimonial-date">${timeAgoShort(t.createdAt)}</div>
- </div>`).join('');
+ const renderCards = (items) => items.map(t =>
+   '<div class="testimonial-card">' +
+   '<div class="testimonial-header">' +
+   '<span class="testimonial-from"> ' + (t.fromUsername || 'Membre') + '</span>' +
+   '<span class="testimonial-stars">' + '⭐'.repeat(t.rating || 0) + '☆'.repeat(5 - (t.rating || 0)) + '</span>' +
+   '</div>' +
+   '<div class="testimonial-text">"' + (t.comment || '') + '"</div>' +
+   '<div class="testimonial-date">' + timeAgoShort(t.createdAt) + '</div>' +
+   '</div>'
+ ).join('');
 
- const renderSection = (items, showButton) => {
-   section.innerHTML = `
-   <div class="testimonials-title"> Ce que disent les membres <span class="testimonial-count" onclick="expandTestimonials(${JSON.stringify(testimonials).replace(/"/g, '&quot;')})">(${total})</span></div>
-   ${renderList(items)}
-   ${showButton ? `<button class="btn-load-more" onclick="loadMoreTestimonials(${JSON.stringify(testimonials).replace(/"/g, '&quot;')})">Voir plus d'avis</button>` : ''}
-   `;
- };
+ section.innerHTML =
+   '<div class="testimonials-title" id="testimonialsToggle">' +
+   ' Ce que disent les membres ' +
+   '<span class="testimonial-count">(' + total + ' avis)</span>' +
+   '<span class="toggle-arrow">▼</span>' +
+   '</div>' +
+   '<div class="testimonials-list" id="testimonialsListBody">' +
+   renderCards(testimonials) +
+   '</div>';
 
- renderSection(testimonials.slice(0, displayedCount), total > displayedCount);
-
- window.expandTestimonials = function(allTestimonials) {
-   section.innerHTML = `
-   <div class="testimonials-title"> Ce que disent les membres <span class="testimonial-count">(${allTestimonials.length})</span></div>
-   ${renderList(allTestimonials)}
-   `;
- };
-
- window.loadMoreTestimonials = function(allTestimonials) {
-  displayedCount += 5;
-  const moreTestimonials = allTestimonials.slice(0, displayedCount);
-  const hasMore = displayedCount < allTestimonials.length;
-  renderSection(moreTestimonials, hasMore);
- };
+ document.getElementById('testimonialsToggle').addEventListener('click', function() {
+   const list = document.getElementById('testimonialsListBody');
+   const isOpen = list.classList.contains('open');
+   list.classList.toggle('open', !isOpen);
+   this.classList.toggle('open', !isOpen);
+ });
 }
 
 // ── Affichage immédiat depuis localStorage (pas d'attente réseau) ──
