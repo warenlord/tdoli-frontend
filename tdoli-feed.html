@@ -8,7 +8,7 @@
 <style>
 :root{
  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
- --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.10);
  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
@@ -27,7 +27,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 /* AVATAR BTN — FIX Phase 1 */
 .user-avatar-btn{
  width:38px;height:38px;border-radius:50%;
- background:var(--green-dim);
+ background:linear-gradient(135deg,var(--green-dim),var(--blue));
  display:flex;align-items:center;justify-content:center;
  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
  color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;
@@ -65,11 +65,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .annonce-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--green),var(--blue));}
 .annonce-item.mine::before{background:var(--green);}
 .annonce-item:active{background:var(--surface);}
-.item-avatar{width:38px;height:38px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
+.item-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
 .item-body{flex:1;min-width:0;}
 .item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
 .item-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
-.item-amount{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--green);letter-spacing:-0.3px;}
+.item-amount{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
 .item-bottom{display:flex;align-items:center;justify-content:space-between;}
 .item-dir{font-size:12px;color:var(--text-2);font-weight:500;}
 .item-meta{display:flex;align-items:center;gap:6px;}
@@ -81,7 +81,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .trust-line{font-size:10px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:4px;}
 .trust-line .trust-members{color:var(--green);font-weight:600;}
 .reactivity-inline{font-size:9px;padding:1px 6px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;}
-.reactivity-inline.fast{background:rgba(0,201,122,0.1);color:var(--green);}
+.reactivity-inline.fast{background:rgba(0,230,118,0.1);color:var(--green);}
 .reactivity-inline.normal{background:rgba(252,209,22,0.1);color:var(--yellow);}
 .reactivity-inline.slow{background:rgba(255,100,50,0.1);color:#ff6432;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
@@ -95,13 +95,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 @keyframes spin{to{transform:rotate(360deg);}}
 .fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,83,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .fab:active{transform:scale(0.9);}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);padding:8px 0;display:flex;max-width:480px;margin:0 auto;}
+
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
 .nav-icon-wrap{position:relative;}
 .deals-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--yellow);color:#000;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
 .deals-badge.show{display:flex;}
+.nav-badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
 .overlay.open{display:flex;}
@@ -172,25 +175,39 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .airtel-highlight{background:rgba(0,0,0,0.15);border-radius:6px;padding:4px 6px;margin:2px -6px;}
 
 /* Phase 5 — Réputation communautaire */
-.activity-feed{margin-bottom:16px;}
-.activity-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;}
-.activity-emoji{font-size:16px;flex-shrink:0;}
-.activity-text{font-size:12px;color:var(--text-2);line-height:1.4;flex:1;}
-.activity-text strong{color:var(--green);font-weight:600;}
-.activity-time{font-size:10px;color:var(--text-3);flex-shrink:0;}
-.weekly-banner{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,201,122,0.08),rgba(26,79,255,0.08));border:1px solid var(--border-active);border-radius:14px;padding:14px 16px;margin-bottom:16px;}
-.weekly-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
-.weekly-icon{font-size:22px;flex-shrink:0;}
-.weekly-text{font-size:12px;color:var(--text-2);line-height:1.6;}
-.weekly-text strong{font-family:'Syne',sans-serif;font-weight:700;color:var(--green);}
-.weekly-text .vol{font-family:'Syne',sans-serif;font-weight:700;color:var(--yellow);}
+/* ── Carrousel deals communautaires ──────────────────────────── */
+.deal-carousel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:none;position:relative;min-height:72px;}
+.deal-carousel.show{display:block;}
+.dc-label{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.dc-slide{display:none;}
+.dc-slide.active{display:block;animation:dcFadeIn 0.3s ease;}
+@keyframes dcFadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.dc-names{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.dc-names span{color:var(--green);}
+.dc-detail{font-size:12px;color:var(--text-3);}
+.dc-detail strong{color:var(--text-2);font-weight:500;}
+.dc-dots{display:flex;gap:5px;justify-content:center;margin-top:12px;}
+.dc-dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.2s;}
+.dc-dot.active{background:var(--green);width:14px;border-radius:3px;}
+.weekly-banner{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;position:relative;overflow:hidden;}
+.weekly-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--blue));}
+.weekly-left{display:flex;align-items:center;gap:10px;}
+.weekly-pulse{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
+.weekly-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
+.weekly-right{display:flex;align-items:center;gap:16px;}
+.weekly-stat{text-align:right;}
+.weekly-stat-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);}
+.weekly-stat-val.green{color:var(--green);}
+.weekly-stat-val.yellow{color:var(--yellow);}
+.weekly-stat-lbl{font-size:10px;color:var(--text-3);margin-top:1px;}
+.weekly-sep{width:1px;height:28px;background:var(--border);}
 .reactivity-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;border-radius:4px;padding:1px 6px;}
-.reactivity-badge.fast{background:rgba(0,201,122,0.12);color:var(--green);border:1px solid rgba(0,201,122,0.25);}
+.reactivity-badge.fast{background:rgba(0,230,118,0.10);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
 .reactivity-badge.normal{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
 .reactivity-badge.slow{background:rgba(255,100,60,0.08);color:#ff7a55;border:1px solid rgba(255,100,60,0.18);}
 .rank-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;border-radius:4px;padding:1px 6px;}
 .rank-badge.nouveau{background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border);}
-.rank-badge.actif{background:rgba(0,201,122,0.08);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.rank-badge.actif{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.2);}
 .rank-badge.fiable{background:rgba(26,79,255,0.1);color:#6b8fff;border:1px solid rgba(26,79,255,0.2);}
 .rank-badge.pilier{background:linear-gradient(135deg,rgba(252,209,22,0.12),rgba(26,79,255,0.12));color:var(--yellow);border:1px solid rgba(252,209,22,0.25);}
 .trust-line{font-size:10px;color:var(--text-3);margin-top:2px;}
@@ -244,10 +261,17 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .pub-test-stars{font-size:11px;color:var(--yellow);}
 .pub-test-text{font-size:12px;color:var(--text);line-height:1.5;font-style:italic;}
 .pub-empty{text-align:center;padding:20px;color:var(--text-3);font-size:13px;}
-
-</style>
+/* Liquidités par corridor */
+.liquidity-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+.liquidity-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
+.liquidity-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;}
+.liquidity-list{padding:0;}
+.liquidity-item{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);gap:8px;}
+.liquidity-item:last-child{border-bottom:none;}
+.liquidity-route{font-size:13px;color:var(--text-2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.liquidity-total{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--green);flex-shrink:0;}</style>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#060d09">
+<meta name="theme-color" content="#05090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TDOLI">
@@ -276,6 +300,7 @@ firebase.initializeApp({
 });
 </script>
 <script src="/fcm-init.js"></script>
+<link rel="stylesheet" href="/tdoli-theme.css">
 </head>
 <body>
 <div class="bg-mesh"></div>
@@ -294,7 +319,7 @@ firebase.initializeApp({
 
 <div class="content">
  <!-- Fil d'actualité communautaire -->
- <div class="activity-feed" id="activityFeed" style="display:none;"></div>
+ 
 
  <div class="section-header">
  <div class="section-title">Annonces</div>
@@ -303,12 +328,29 @@ firebase.initializeApp({
 
  <!-- Phase 5 — Compteur hebdomadaire -->
  <div class="weekly-banner" id="weeklyBanner" style="display:none;">
- <div class="weekly-pulse"></div>
- <div class="weekly-icon"></div>
- <div class="weekly-text">
- <strong id="weeklyMembers">—</strong> membres de la communauté ont échangé
- <span class="vol" id="weeklyVolume">—</span> cette semaine
+  <div class="weekly-left">
+    <div class="weekly-pulse"></div>
+    <div class="weekly-label">Cette semaine</div>
+  </div>
+  <div class="weekly-right">
+    <div class="weekly-stat">
+      <div class="weekly-stat-val green" id="weeklyMembers">—</div>
+      <div class="weekly-stat-lbl">membres actifs</div>
+    </div>
+    <div class="weekly-sep"></div>
+    <div class="weekly-stat">
+      <div class="weekly-stat-val yellow" id="weeklyVolume">—</div>
+      <div class="weekly-stat-lbl">échangés</div>
+    </div>
+  </div>
  </div>
+
+ <div class="liquidity-panel" id="liquidityPanel" style="display:none;">
+  <div class="liquidity-header">
+    <div class="liquidity-title">Liquidités disponibles</div>
+    <div class="badge" id="liquidityBadge">—</div>
+  </div>
+  <div class="liquidity-list" id="liquidityList"><div class="loading-wrap"><div class="loader"></div></div></div>
  </div>
 
  <div class="filter-bar">
@@ -337,7 +379,7 @@ firebase.initializeApp({
  <a class="nav-item" href="/tdoli-messages.html">
  <div class="nav-icon-wrap">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
- <div class="deals-badge" id="msgBadge" style="background:var(--red);"></div>
+ <div class="nav-badge red" id="msgBadge"></div>
  </div>Messages
  </a>
  <a class="nav-item" href="/tdoli-profile.html">
@@ -356,7 +398,7 @@ firebase.initializeApp({
  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
  <div class="sheet-title">Nouvelle annonce</div>
  <div class="form-row">
- <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="ann-amount" placeholder="500" inputmode="numeric" oninput="updatePreview('create')"></div>
+ <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="text" id="ann-amount" placeholder="ex: 47,50" inputmode="decimal" oninput="sanitizeAmount(this);updatePreview('create')"></div>
  <div class="form-group"><label class="form-label">Devise</label>
  <select class="form-select" id="ann-currency" onchange="updatePreview('create')">
  <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
@@ -405,7 +447,7 @@ firebase.initializeApp({
  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
  <div class="sheet-title">Modifier l'annonce</div>
  <div class="form-row">
- <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="number" id="edit-amount" inputmode="numeric" oninput="updatePreview('edit')"></div>
+ <div class="form-group"><label class="form-label">Montant</label><input class="form-input" type="text" id="edit-amount" placeholder="ex: 47,50" inputmode="decimal" oninput="sanitizeAmount(this);updatePreview('edit')"></div>
  <div class="form-group"><label class="form-label">Devise</label>
  <select class="form-select" id="edit-currency" onchange="updatePreview('edit')">
  <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="USD">USD</option><option value="CAD">CAD</option>
@@ -675,6 +717,7 @@ async function bioGateAuth() {
  sessionStorage.setItem('tdoli_faceid_ts', Date.now().toString());
  // Fermer la gate et afficher le feed
  document.getElementById('bioGate').classList.remove('open');
+ await loadUser();
  loadFeed();
  } else {
  const msg = document.getElementById('bio-gate-msg');
@@ -724,7 +767,7 @@ function initAvatar() {
 }
 initAvatar();
 
-let allTransfers = [], currentFilter = 'all', pendingMatch = null, editingId = null;
+let allTransfers = [], liquidityData = [], currentFilter = 'all', pendingMatch = null, editingId = null, currentUser = null;
 
 // ── Filtres avancés ───────────────────────────────────────────
 let advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
@@ -953,8 +996,8 @@ function shareApp() {
  .catch(() => {});
  } else {
  navigator.clipboard.writeText(msg)
- .then(() => showToast('Lien copié ! ', '#fcd116'))
- .catch(() => showToast('Partage: ' + msg.substring(0, 30) + '...', '#fcd116'));
+ .then(() => showToast('Lien copié ! ', '#ffd740'))
+ .catch(() => showToast('Partage: ' + msg.substring(0, 30) + '...', '#ffd740'));
  }
 }
 
@@ -1013,45 +1056,6 @@ function renderRankBadge(score) {
  return '<span class="rank-badge ' + rank.cls + '">' + rank.label + '</span>';
 }
 
-function renderList(data) {
- return data.map((t, i) => {
- const isOwn = t.sender === email;
- const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
- const initials = getInitials(displayName);
- const eurVal = convertToEur(t.amount, t.currency);
- const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
- // Trust line — "A aidé X membres"
- const dealsCount = t.senderDeals || t.senderCompletedDeals || 0;
- const trustLine = dealsCount > 0
- ? '<div class="trust-line">A aidé <span class="trust-members">' + dealsCount + ' membre' + (dealsCount > 1 ? 's' : '') + '</span></div>'
- : '';
- // Badge réactivité inline
- const reactBadgeMap = { fast: '⚡ Répond vite', normal: '⚡ Répond en moins d\'1h', slow: '🐢 Lent' };
- const reactClass = { fast: 'fast', normal: 'normal', slow: 'slow' };
- const reactInline = t.senderReactivityBadge && reactBadgeMap[t.senderReactivityBadge]
- ? '<span class="reactivity-inline ' + reactClass[t.senderReactivityBadge] + '">' + reactBadgeMap[t.senderReactivityBadge] + '</span>'
- : '';
- const starsFull = Math.round(t.senderRating || 0);
- const starsHtml = t.senderRating > 0
- ? '<span class="item-rating">' + '★'.repeat(starsFull) + '☆'.repeat(5 - starsFull) + '</span>'
- : '';
- return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
- '<div class="item-avatar">' + initials + '</div>' +
- '<div class="item-body">' +
- '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
- '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
- '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
- '<span class="item-meta">' +
- starsHtml +
- reactInline +
- renderRankBadge(t.senderCommunityScore) +
- '<span class="item-time">' + timeAgo(t.createdAt) + '</span>' +
- '<div class="status-dot-sm"></div>' +
- '</span></div>' +
- trustLine +
- '</div></div>';
- }).join('');
-}
 function calcAirtelFees(xafAmount) {
  if (xafAmount <= 0) return 0;
  // Grille officielle Airtel Money Gabon
@@ -1147,21 +1151,81 @@ function getInitials(name) {
 }
 
 function renderList(data) {
- return data.map((t, i) => {
- const isOwn = t.sender === email;
- const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
- const initials = getInitials(displayName);
- const eurVal = convertToEur(t.amount, t.currency);
- const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
- return '<div class="annonce-item' + (isOwn ? ' mine' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="openDetail(\'' + t._id + '\')">' +
- '<div class="item-avatar">' + initials + '</div>' +
- '<div class="item-body">' +
- '<div class="item-top"><span class="item-name">' + (isOwn ? '<span class="mine-tag">Moi</span> ' : '') + displayName + '</span>' +
- '<span class="item-amount">' + Number(t.amount).toLocaleString('fr-FR') + '<span class="item-currency"> ' + t.currency + '</span></span></div>' +
- '<div class="item-bottom"><span class="item-dir">' + t.fromCountry + ' → ' + t.toCountry + (euroLabel ? ' · <span style="color:var(--green)">' + euroLabel + '</span>' : '') + '</span>' +
- '<span class="item-meta">' + (t.senderRating > 0 ? '<span class="item-rating">' + t.senderRating.toFixed(1) + '</span>' : '') + '<span class="item-time">' + timeAgo(t.createdAt) + '</span><div class="status-dot-sm"></div></span></div>' +
- '</div></div>';
- }).join('');
+
+  // 🔥 TRI INTELLIGENT
+  data.sort((a, b) => {
+    const scoreA = (a.userScore || 0) + (a.isAgent ? 100 : 0);
+    const scoreB = (b.userScore || 0) + (b.isAgent ? 100 : 0);
+    return scoreB - scoreA;
+  });
+
+  return data.map((t) => {
+
+    const isOwn = t.sender === email;
+    const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
+    const initials = getInitials(displayName);
+
+    const eurVal = convertToEur(t.amount, t.currency);
+    const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
+    const scoreBadge = t.userScore != null ? `<span class="trust-line">Score ${Number(t.userScore).toFixed(0)}</span>` : '';
+
+    // Badge niveau
+    function renderLevelBadge(level) {
+      if (!level) return '';
+      let color = "#888";
+      if (level >= 4) color = "#FFD700";
+      else if (level === 3) color = "#4CAF50";
+      else if (level === 2) color = "#2196F3";
+
+      return `<span style="background:${color};color:#000;padding:2px 6px;border-radius:6px;font-size:10px;margin-left:6px;">Lv.${level}</span>`;
+    }
+
+    // Badge agent
+    function renderAgentBadge(isAgent) {
+      if (!isAgent) return '';
+      return `<span style="background:#FF5722;color:white;padding:2px 6px;border-radius:6px;font-size:10px;margin-left:4px;">AGENT</span>`;
+    }
+
+    return `
+      <div class="annonce-item ${isOwn ? 'mine' : ''}" onclick="openDetail('${t._id}')">
+
+        <div class="item-avatar">${initials}</div>
+
+        <div class="item-body">
+
+          <div class="item-top">
+            <span class="item-name">
+              ${isOwn ? '<span class="mine-tag">Moi</span>' : ''}
+              ${displayName}
+              ${renderLevelBadge(t.userLevel)}
+              ${renderAgentBadge(t.isAgent)}
+            </span>
+
+            <span class="item-amount">
+              ${Number(t.amount).toLocaleString('fr-FR')}
+              <span class="item-currency">${t.currency}</span>
+            </span>
+          </div>
+
+          <div class="item-bottom">
+            <span class="item-dir">
+              ${t.fromCountry} → ${t.toCountry}
+              ${euroLabel ? ` · <span style="color:var(--green)">${euroLabel}</span>` : ''}
+            </span>
+
+            <span class="item-meta">
+              ${t.rating ? `<span class="item-rating">★ ${t.rating.toFixed(1)}</span>` : ''}
+              <span class="item-time">${timeAgo(t.createdAt)}</span>
+              <div class="status-dot-sm"></div>
+            </span>
+          </div>
+
+          ${scoreBadge}
+
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 function openDetail(id) {
@@ -1222,8 +1286,8 @@ async function deleteAnnonce(id) {
  const res = await fetch(API + '/transfer/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
  const data = await res.json();
  if (res.ok) { closeSheet('detailOverlay'); showToast('Annonce supprimée'); loadFeed(true); }
- else showToast(data.message || 'Erreur', '#ff4444');
- } catch (e) { showToast('Erreur', '#ff4444'); }
+ else showToast(data.message || 'Erreur', '#ff1744');
+ } catch (e) { showToast('Erreur', '#ff1744'); }
 }
 
 async function submitEdit() {
@@ -1262,7 +1326,7 @@ function showConfirm(id, fromCountry, toCountry, currency, amount, matchAmount) 
 async function executeMatch() {
  if (!pendingMatch) return;
  if (!pendingMatch.beneficiaireId) {
- showToast('Choisis ton bénéficiaire avant de matcher', '#ff4444');
+ showToast('Choisis ton bénéficiaire avant de matcher', '#ff1744');
  return;
  }
  const btn = document.getElementById('btn-confirm-match');
@@ -1277,19 +1341,19 @@ async function executeMatch() {
  const data = await res.json();
  closeSheet('confirmOverlay');
  if (res.ok && data.dealCode) {
- showToast(' Match ! Code: ' + data.dealCode, '#fcd116');
+ showToast(' Match ! Code: ' + data.dealCode, '#ffd740');
  setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
  } else if (res.ok && data.message && data.message.includes('Match')) {
- showToast('Match confirmé !', '#fcd116');
+ showToast('Match confirmé !', '#ffd740');
  setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
  } else if (res.ok) {
  showToast('Annonce publiée');
  loadFeed(true);
  } else {
- showToast(data.message || 'Erreur', '#ff4444');
+ showToast(data.message || 'Erreur', '#ff1744');
  }
  } catch (e) {
- showToast('Serveur inaccessible', '#ff4444');
+ showToast('Serveur inaccessible', '#ff1744');
  closeSheet('confirmOverlay');
  }
  btn.disabled = false; btn.innerHTML = 'Confirmer le match';
@@ -1324,6 +1388,68 @@ async function safeJson(res) {
  catch(e) { return { ok: false, status: res.status, data: null }; }
 }
 
+function formatCurrencyLabel(currency) {
+  if (!currency) return '';
+  if (currency === 'EUR') return '€';
+  if (currency === 'XAF') return 'XAF';
+  if (currency === 'USD') return '$';
+  if (currency === 'CAD') return 'CAD';
+  return currency;
+}
+
+function renderLiquidity() {
+ const panel = document.getElementById('liquidityPanel');
+ const list = document.getElementById('liquidityList');
+ if (!panel || !list) return;
+ if (!liquidityData || liquidityData.length === 0) {
+   panel.style.display = 'none';
+   return;
+ }
+ const FLAGS = {
+   'France':'🇫🇷','Gabon':'🇬🇦','Cameroun':'🇨🇲','Burkina Faso':'🇧🇫',
+   'Belgique':'🇧🇪','Suisse':'🇨🇭','Etats-Unis':'🇺🇸','Canada':'🇨🇦',
+   'Congo':'🇨🇬','Sénégal':'🇸🇳','Côte d\'Ivoire':'🇨🇮','Maroc':'🇲🇦'
+ };
+ const fl = c => (FLAGS[c] || '') + ' ' + (c || '?');
+ list.innerHTML = liquidityData.map(item => {
+   const route = item._id || {};
+   const amount = Number(item.total || 0).toLocaleString('fr-FR');
+   const cur = formatCurrencyLabel(route.currency);
+   return '<div class="liquidity-item">' +
+     '<div class="liquidity-route">' + fl(route.from) + ' → ' + fl(route.to) + '</div>' +
+     '<div class="liquidity-total">' + amount + ' ' + cur + '</div>' +
+     '</div>';
+ }).join('');
+ panel.style.display = 'block';
+ const n = liquidityData.length;
+ document.getElementById('liquidityBadge').textContent = n + ' corridor' + (n > 1 ? 's' : '');
+}
+
+async function loadLiquidity() {
+ const panel = document.getElementById('liquidityPanel');
+ const list = document.getElementById('liquidityList');
+ if (!panel || !list) return;
+ list.innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+ try {
+   const r = await safeJson(await fetch(API + '/liquidity', { headers: { 'Authorization': 'Bearer ' + token } }));
+   if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+   liquidityData = Array.isArray(r.data) ? r.data : [];
+   renderLiquidity();
+ } catch (e) {
+   panel.style.display = 'none';
+ }
+}
+
+async function loadUser() {
+ try {
+   const r = await safeJson(await fetch(API + '/auth', { headers: { 'Authorization': 'Bearer ' + token } }));
+   if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+   currentUser = r.data || {};
+ } catch (e) {
+   console.error('Failed to load user:', e);
+ }
+}
+
 async function loadFeed(silent) {
  if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
  try {
@@ -1331,6 +1457,7 @@ async function loadFeed(silent) {
  if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
  allTransfers = Array.isArray(r.data) ? r.data : [];
  renderFeed();
+ loadLiquidity();
  checkActiveDeals();
  loadWeeklyStats();
  loadActivityFeed();
@@ -1341,24 +1468,64 @@ async function loadFeed(silent) {
 
 // Phase 5 — Stats hebdomadaires
 async function loadActivityFeed() {
- try {
- const res = await fetch(API + '/feed/activity', { headers: { 'Authorization': 'Bearer ' + token } });
- if (!res.ok) return;
- const events = await res.json();
- if (!Array.isArray(events) || events.length === 0) return;
+  try {
+    const res = await fetch(API + '/feed/activity', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (!res.ok) return;
+    const events = await res.json();
+    if (!Array.isArray(events) || events.length === 0) return;
 
- const container = document.getElementById('activityFeed');
- container.innerHTML = events.slice(0, 5).map(e => {
- const emoji = e.type === 'completed' ? '' : e.type === 'match' ? '' : '';
- return '<div class="activity-item">' +
- '<span class="activity-emoji">' + emoji + '</span>' +
- '<span class="activity-text">' + e.message + '</span>' +
- '<span class="activity-time">' + timeAgo(e.createdAt) + '</span>' +
- '</div>';
- }).join('');
- container.style.display = 'block';
- } catch(e) {}
+    const completed = events.filter(e => e.type === 'completed').slice(0, 5);
+    if (completed.length === 0) return;
+
+    const carousel = document.getElementById('dealCarousel');
+    const slidesEl = document.getElementById('dcSlides');
+    const dotsEl = document.getElementById('dcDots');
+    if (!carousel || !slidesEl || !dotsEl) return;
+
+    let currentSlide = 0;
+
+    function renderCarousel() {
+      slidesEl.innerHTML = completed.map((e, i) => {
+        // Nettoyer les noms — utiliser username sinon partie avant @
+        const cleanName = (str) => {
+          if (!str) return '?';
+          if (str.includes('@')) return str.split('@')[0];
+          return str;
+        };
+        const sender = cleanName(e.senderUsername || e.sender);
+        const receiver = cleanName(e.receiverUsername || e.receiver);
+        const amount = e.amount ? Number(e.amount).toLocaleString('fr-FR') + ' ' + (e.currency || 'EUR') : '';
+        const ago = timeAgo(e.createdAt);
+
+        return '<div class="dc-slide' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '">' +
+          '<div class="dc-names"><span>' + sender + '</span> et <span>' + receiver + '</span></div>' +
+          '<div class="dc-detail"><strong>' + amount + '</strong> · ' + (e.fromCountry || '') + ' → ' + (e.toCountry || '') + ' · ' + ago + '</div>' +
+          '</div>';
+      }).join('');
+
+      dotsEl.innerHTML = completed.map((_, i) =>
+        '<div class="dc-dot' + (i === 0 ? ' active' : '') + '" onclick="dcGoTo(' + i + ')"></div>'
+      ).join('');
+
+      carousel.classList.add('show');
+    }
+
+    window.dcGoTo = function(idx) {
+      currentSlide = idx;
+      document.querySelectorAll('.dc-slide').forEach((s, i) => s.classList.toggle('active', i === idx));
+      document.querySelectorAll('.dc-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    };
+
+    // Auto-avance toutes les 4 secondes
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % completed.length;
+      window.dcGoTo(currentSlide);
+    }, 4000);
+
+    renderCarousel();
+  } catch(e) {}
 }
+
 
 async function loadWeeklyStats() {
  try {
@@ -1405,6 +1572,23 @@ function syncCountries() {
 }
 
 
+function sanitizeAmount(input) {
+  // Garder la virgule visible mais convertir en point pour les calculs
+  // Ne pas remplacer la virgule pendant la saisie — seulement à la lecture
+  let val = input.value;
+  // Bloquer tout sauf chiffres, virgule et point
+  val = val.replace(/[^0-9.,]/g, '');
+  // Un seul séparateur décimal
+  const parts = val.replace(',', '.').split('.');
+  if (parts.length > 2) val = parts[0] + ',' + parts.slice(1).join('');
+  input.value = val;
+}
+
+function parseAmount(val) {
+  // Convertir virgule en point pour parseFloat
+  return parseFloat(String(val).replace(',', '.')) || 0;
+}
+
 function updatePreview(mode) {
  const amountEl = document.getElementById(mode === 'create' ? 'ann-amount' : 'edit-amount');
  const currencyEl = document.getElementById(mode === 'create' ? 'ann-currency' : 'edit-currency');
@@ -1412,7 +1596,7 @@ function updatePreview(mode) {
  const preview = document.getElementById('convPreview-' + mode);
  const airtelContainer = document.getElementById('airtel-preview-' + mode);
  if (!amountEl || !currencyEl || !preview) return;
- const amount = parseFloat(amountEl.value);
+ const amount = parseFloat(String(amountEl.value).replace(',','.'));
  const currency = currencyEl.value;
  const toCountry = toEl ? toEl.value : '';
  const isGabon = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
@@ -1439,6 +1623,7 @@ async function submitAnnonce() {
  if (!amount || Number(amount) <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
  if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
  if (!selectedBenefId) { showMsg('msg-create', 'Choisis un bénéficiaire avant de publier'); return; }
+ if (currentUser && Number(amount) > currentUser.maxDealAmount) { showMsg('msg-create', `Montant maximum : ${currentUser.maxDealAmount}€`); return; }
  const btn = document.getElementById('btn-submit');
  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
  try {
@@ -1530,7 +1715,7 @@ function selectBenef(id, context) {
  if(pendingMatch) pendingMatch.beneficiaireId = id;
  // Changer le bouton en vert une fois sélectionné
  const btn = document.getElementById('btn-choose-benef-match');
- if(btn) { btn.style.borderColor = 'rgba(0,201,122,0.4)'; btn.style.color = 'var(--green)'; btn.innerHTML = ' Bénéficiaire sélectionné'; }
+ if(btn) { btn.style.borderColor = 'rgba(0,230,118,0.4)'; btn.style.color = 'var(--green)'; btn.innerHTML = ' Bénéficiaire sélectionné'; }
  // confirmOverlay reste visible — pas de fermeture
  }
 }
@@ -1657,10 +1842,32 @@ async function checkUnreadMessages() {
 }
 
 // Démarrage
-loadFeed();
-checkUnreadMessages();
+(async () => {
+ await loadUser();
+ loadFeed();
+ checkUnreadMessages();
+})();
 
 
 </script>
+
+
+
+<script src="/tdoli-deals-complete.js"></script>
+
+<script>
+// ── Retour haptique sur tous les boutons ─────────────────────
+(function() {
+  function triggerHaptic() {
+    if (navigator.vibrate) navigator.vibrate(8);
+    // iOS (via AudioContext trick si vibrate absent)
+  }
+  document.addEventListener('pointerdown', function(e) {
+    const el = e.target.closest('button, .btn-primary, .btn-cancel, .nav-item, .annonce-item, .conv-item, .deal-card, .settings-item, .filter-chip, .back-btn');
+    if (el) triggerHaptic();
+  }, { passive: true });
+})();
+</script>
+
 </body>
 </html>

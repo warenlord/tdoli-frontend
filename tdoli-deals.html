@@ -8,22 +8,21 @@
 <style>
 :root{
  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
- --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.10);
  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
- --r:14px;
- --shadow:0 2px 20px rgba(0,0,0,0.5);
+ --r:14px;--shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
-.bg-mesh{display:none;background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,180,90,0.07) 0%,transparent 60%);}
+.bg-mesh{display:none;background:radial-gradient(ellipse 60% 40% at 80% 0%,rgba(0,200,83,0.07) 0%,transparent 60%);}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:10px;}
 .topbar-left{flex-shrink:0;}
 .topbar-center{flex:1;text-align:center;}
 .topbar-right{flex-shrink:0;}
 .topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
-.user-avatar-btn{width:38px;height:38px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1.5px solid var(--border-active);overflow:hidden;}
+.user-avatar-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1.5px solid var(--border-active);overflow:hidden;}
 .user-avatar-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .share-btn{background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.3);color:var(--yellow);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;padding:7px 12px;white-space:nowrap;border-radius:20px;}
 .filter-tabs{display:flex;gap:8px;padding:14px 20px 0;overflow-x:auto;scrollbar-width:none;position:relative;z-index:1;}
@@ -57,7 +56,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
 .loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 24px;}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);padding:8px 0;display:flex;max-width:480px;margin:0 auto;}
+
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
@@ -72,7 +73,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .detail-ref{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;}
 .detail-badge{font-size:12px;font-weight:700;font-family:'Syne',sans-serif;padding:5px 14px;border-radius:20px;}
 .detail-badge.matched{background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.2);}
-.detail-badge.completed{background:rgba(0,201,122,0.1);color:var(--green);border:1px solid rgba(0,201,122,0.2);}
+.detail-badge.completed{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.2);}
 .detail-badge.dispute{background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);}
 .rank-badge{font-size:9px;font-weight:700;font-family:'Syne',sans-serif;padding:3px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px;}
 .rank-badge.pilier{background:var(--green-dim);color:var(--badge-pilier);border:1px solid var(--badge-pilier);}
@@ -88,7 +89,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .vs-sep{font-size:14px;color:var(--text-3);flex-shrink:0;}
 .detail-amount-row{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .detail-amt{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
-.detail-cur{font-size:13px;color:var(--text-3);margin-left:4px;}
+.detail-cur{font-size:13px;color:var(--text);font-family:'Syne',sans-serif;font-weight:700;margin-left:4px;}
 .detail-eur{font-size:12px;color:var(--green);background:var(--green-glow);border-radius:6px;padding:3px 8px;}
 .stepper{display:flex;align-items:flex-start;margin-bottom:16px;}
 .step{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;}
@@ -115,8 +116,9 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .rating-section{padding-top:14px;border-top:1px solid var(--border);}
 .rating-title{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px;}
 .stars{display:flex;gap:6px;margin-bottom:12px;}
-.star{font-size:24px;cursor:pointer;filter:grayscale(1) opacity(0.3);transition:transform 0.15s,filter 0.15s;}
-.star.active{filter:none;transform:scale(1.1);}
+.star{font-size:28px;cursor:pointer;opacity:0.25;transition:transform 0.15s,opacity 0.15s;user-select:none;}
+.star.active{opacity:1;transform:scale(1.15);}
+.star:hover{opacity:0.7;transform:scale(1.1);}
 .rating-comment{width:100%;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;margin-bottom:10px;resize:none;height:65px;}
 .rating-comment:focus{outline:none;border-color:var(--green);}
 .btn-rate{width:100%;padding:12px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
@@ -147,13 +149,13 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .tdl-code-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--blue);letter-spacing:2px;}
 .tdl-copy-btn{background:rgba(26,79,255,0.15);border:none;color:var(--blue);font-size:11px;font-family:'Syne',sans-serif;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;}
 .ocr-result{border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;}
-.ocr-result.validated{background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);color:var(--green);}
+.ocr-result.validated{background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);color:var(--green);}
 .ocr-result.pending{background:rgba(252,209,22,0.08);border:1px solid rgba(252,209,22,0.2);color:var(--yellow);}
 .ocr-result.failed{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:var(--red);}
 .ocr-score{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-left:8px;}
 .ocr-checks{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
 .ocr-check{font-size:10px;padding:2px 8px;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;}
-.ocr-check.ok{background:rgba(0,201,122,0.1);color:var(--green);}
+.ocr-check.ok{background:rgba(0,230,118,0.1);color:var(--green);}
 .ocr-check.ko{background:rgba(255,68,68,0.1);color:var(--red);}
 .proof-upload-area{border:2px dashed var(--border-active);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px;transition:all 0.2s;}
 .proof-upload-area:active{background:var(--green-glow);}
@@ -181,9 +183,34 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .partner-mini-test{font-size:11px;color:var(--text-3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-style:italic;}
 .partner-mini-test strong{color:var(--green);font-style:normal;}
 
-</style>
+
+
+/* ── Animation Deal Complété ─────────────────────────────────── */
+.deal-complete-overlay{position:fixed;inset:0;z-index:9999;background:rgba(5,9,10,0.97);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;}
+.deal-complete-overlay.show{display:flex;animation:fadeInFull 0.4s ease;}
+@keyframes fadeInFull{from{opacity:0;}to{opacity:1;}}
+.dco-parrot{width:110px;height:110px;animation:parrotBounce 0.7s cubic-bezier(0.36,0.07,0.19,0.97) infinite alternate;}
+.dco-parrot img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 24px rgba(0,230,118,0.5));}
+@keyframes parrotBounce{from{transform:translateY(0) rotate(-6deg);}to{transform:translateY(-18px) rotate(6deg);}}
+.dco-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--green);text-align:center;}
+.dco-sub{font-size:13px;color:var(--text-2);text-align:center;max-width:260px;line-height:1.6;}
+.dco-code{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--yellow);background:rgba(255,215,64,0.1);border:1px solid rgba(255,215,64,0.3);border-radius:10px;padding:8px 20px;letter-spacing:2px;}
+.dco-rating{background:var(--card);border:1px solid var(--border-active);border-radius:16px;padding:20px;width:100%;max-width:340px;text-align:center;}
+.dco-rating-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text-2);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.8px;}
+.dco-rating-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;}
+.dco-stars{display:flex;gap:8px;justify-content:center;margin-bottom:14px;}
+.dco-star{font-size:32px;cursor:pointer;opacity:0.25;transition:opacity 0.15s,transform 0.15s;user-select:none;}
+.dco-star.active{opacity:1;transform:scale(1.15);}
+.dco-star:hover{opacity:0.7;}
+.dco-comment{width:100%;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;margin-bottom:12px;resize:none;height:60px;box-sizing:border-box;}
+.dco-comment:focus{outline:none;border-color:var(--green);}
+.dco-btn-rate{width:100%;padding:13px;background:linear-gradient(135deg,var(--green-dim),#2979ff);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;}
+.dco-btn-later{width:100%;padding:11px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9998;}
+.confetti-piece{position:absolute;border-radius:2px;animation:confettiFall linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}</style>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#060d09">
+<meta name="theme-color" content="#05090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TDOLI">
@@ -204,6 +231,7 @@ firebase.initializeApp({
 });
 </script>
 <script src="/fcm-init.js"></script>
+<link rel="stylesheet" href="/tdoli-theme.css">
 </head>
 <body>
 <div class="bg-mesh"></div>
@@ -274,7 +302,7 @@ firebase.initializeApp({
  <div style="font-size:13px;color:var(--text-3);margin-bottom:20px;">Décris le problème et joins des justificatifs.</div>
  <div class="form-group">
  <label class="form-label">Description</label>
- <textarea class="form-textarea" id="dispute-description" placeholder="Ex: J'ai envoyé les fonds mais l'autre partie ne confirme pas..."></textarea>
+ <textarea class="form-textarea" id="dispute-description" placeholder="Ex: J'ai envoyé les fonds mais lautre partie ne confirme pas..."></textarea>
  </div>
  <label class="form-label">Justificatifs (optionnel)</label>
  <div class="upload-area" onclick="document.getElementById('dispute-files').click()">
@@ -295,7 +323,7 @@ firebase.initializeApp({
  <div class="sheet">
  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
  <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Infos de paiement</div>
- <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Renseigne tes coordonnées pour que l'autre partie sache où envoyer les fonds.</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Renseigne tes coordonnées pour que lautre partie sache où envoyer les fonds.</div>
 
  <div class="method-tabs">
  <div class="method-tab active" onclick="setMethod('mobilemoney',this)"> Mobile Money</div>
@@ -383,7 +411,7 @@ function getInitials(name) {
 function shareApp() {
  const msg = ' TDOLI\nhttps://tdoli-frontend.pages.dev';
  if(navigator.share) navigator.share({title:'TDOLI',url:'https://tdoli-frontend.pages.dev'}).catch(()=>{});
- else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#fcd116')).catch(()=>{});
+ else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#ffd740')).catch(()=>{});
 }
 
 // ── Helpers ─────────────────────────────────────────────────────
@@ -601,31 +629,104 @@ function openDeal(id) {
  instructionHtml = '<div class="instruction-box"><div class="instruction-title">⏳ ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>'
  + otherInfoHtml + myInfoHtml;
  } else if(d.status==='completed') {
- instructionHtml = '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);"> Deal complété avec succès !</div>';
+ instructionHtml = '<div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);"> Deal complété avec succès !</div>';
  } else if(d.status==='dispute') {
  instructionHtml = '<div style="background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);"> Litige en cours de traitement.</div>';
  }
 
- let actionsHtml = '';
- if(d.status==='matched' && !iConfirmed) {
- actionsHtml = tdlHtml + ocrHtml + '<div class="deal-actions">' +
- '<button class="btn-confirm" onclick="openProof(\'' + d._id + '\')" > J&#39;ai envoyé</button>' +
- '<button class="btn-dispute" onclick="openDispute(\'' + d._id + '\')" > Litige</button>' +
- '</div>';
- } else if(d.status==='matched' && iConfirmed) {
- actionsHtml = tdlHtml + '<div style="background:rgba(0,201,122,0.08);border:1px solid rgba(0,201,122,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green);"> Tu as confirmé — en attente de l&#39;autre partie</div>'; }
+
+  const iReceived = isSender ? d.receivedBySender : d.receivedByReceiver;
+  const otherReceived = isSender ? d.receivedByReceiver : d.receivedBySender;
+  const otherProofOk = isSender ? d.confirmedByReceiver : d.confirmedBySender;
+
+  // ── Frise asymétrique des étapes ─────────────────────────────
+  const isXafParty = isSender;
+
+  const _si = (state, n) => {
+    if(state==='done') return '<div style="width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#000;font-size:14px;font-weight:800;flex-shrink:0;">✓</div>';
+    if(state==='active') return '<div style="width:32px;height:32px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;color:#000;font-size:12px;font-weight:800;flex-shrink:0;animation:stepGlow 1.5s ease infinite;">'+n+'</div>';
+    return '<div style="width:32px;height:32px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-3);font-size:11px;font-weight:700;flex-shrink:0;">'+n+'</div>';
+  };
+
+  const _sr = (state, n, title, sub, action, isLast) =>
+    '<div style="display:flex;gap:12px;">' +
+    '<div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">' +
+    _si(state, n) +
+    (isLast ? '' : '<div style="width:1px;min-height:24px;background:'+(state==='done'?'rgba(0,230,118,0.35)':'var(--border)')+'"></div>') +
+    '</div>' +
+    '<div style="flex:1;padding-bottom:'+(isLast?'0':'18')+'px;">' +
+    '<div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;margin-bottom:2px;color:'+(state==='done'?'var(--green)':state==='active'?'var(--text)':'var(--text-3)')+';">'+title+'</div>' +
+    (sub ? '<div style="font-size:12px;color:var(--text-2);line-height:1.5;margin-top:2px;">'+sub+'</div>' : '') +
+    (action ? '<div style="margin-top:10px;">'+action+'</div>' : '') +
+    '</div>' +
+    '</div>';
+
+  const _btnDispute = '<button style="width:100%;padding:11px;background:transparent;color:var(--red);border:1px solid rgba(255,68,68,0.25);border-radius:12px;font-family:Syne,sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;" onclick="openDispute(\''+d._id+'\')">⚠ Signaler un litige</button>';
+
+  let actionsHtml = '';
+  if(d.status==='matched' || d.status==='completed') {
+    const xafSent = !!d.confirmedBySender;
+    const eurSent = !!d.confirmedByReceiver;
+    const xafGotFunds = !!d.receivedBySender || d.status==='completed';
+    const eurGotFunds = !!d.receivedByReceiver || d.status==='completed';
+    const isDone = d.status==='completed';
+
+    let friseHtml;
+    if(isXafParty) {
+      const s2 = xafSent ? 'done' : 'active';
+      const s3 = !xafSent ? 'pending' : eurSent ? 'done' : 'active';
+      const s4 = (!xafSent||!eurSent) ? 'pending' : xafGotFunds ? 'done' : 'active';
+      const s5 = isDone ? 'done' : 'pending';
+      const s2sub = s2==='done' ? 'Paiement envoyé — preuve soumise ✓' : 'Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessus.';
+      const s2act = s2==='active' ? ocrHtml+'<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="openProof(\''+d._id+'\')">📤 J\'ai envoyé — Uploader ma preuve</button>'+_btnDispute : (s2==='done' ? ocrHtml : '');
+      const s3sub = s3==='done' ? otherName+' a envoyé sa part ✓' : s3==='active' ? otherName+' doit maintenant envoyer sa part.' : '';
+      const s3act = s3==='active' ? '<div style="padding:9px 12px;background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;font-size:12px;color:var(--yellow);">⏳ En attente de '+otherName+'…</div>' : '';
+      const s4sub = s4==='done' ? 'Réception confirmée ✓' : s4==='active' ? 'As-tu bien reçu les fonds de '+otherName+' ?' : '';
+      const s4act = s4==='active' ? '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\''+d._id+'\',this)">✅ J\'ai reçu les fonds</button>'+_btnDispute : '';
+      friseHtml = [
+        _sr('done',1,'Match confirmé','Deal '+tdlCode+' · 24h pour clôturer','',false),
+        _sr(s2,2,'Envoie les fonds',s2sub,s2act,false),
+        _sr(s3,3,'En attente de l\'autre partie',s3sub,s3act,false),
+        _sr(s4,4,'Confirme la réception',s4sub,s4act,false),
+        _sr(s5,5,'Deal clôturé',isDone?'Échange réussi !':'En attente de clôture.','',true)
+      ].join('');
+    } else {
+      const s2 = xafSent ? 'done' : 'pending';
+      const s3 = !xafSent ? 'pending' : eurSent ? 'done' : 'active';
+      const s4 = (!xafSent||!eurSent) ? 'pending' : eurGotFunds ? 'done' : 'active';
+      const s5 = isDone ? 'done' : 'pending';
+      const s2sub = s2==='done' ? otherName+' a envoyé sa part ✓' : otherName+' doit envoyer en premier (partie XAF).';
+      const s2act = s2==='pending' ? '<div style="padding:9px 12px;background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;font-size:12px;color:var(--yellow);">⏳ En attente de '+otherName+'…</div>' : '';
+      const s3sub = s3==='done' ? 'Paiement envoyé — preuve soumise ✓' : s3==='active' ? 'Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessus.' : '';
+      const s3act = s3==='active' ? ocrHtml+'<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="openProof(\''+d._id+'\')">📤 J\'ai envoyé — Uploader ma preuve</button>'+_btnDispute : (s3==='done' ? ocrHtml : '');
+      const s4sub = s4==='done' ? 'Réception confirmée ✓' : s4==='active' ? 'As-tu bien reçu les fonds de '+otherName+' ?' : '';
+      const s4act = s4==='active' ? '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\''+d._id+'\',this)">✅ J\'ai reçu les fonds</button>'+_btnDispute : '';
+      friseHtml = [
+        _sr('done',1,'Match confirmé','Deal '+tdlCode+' · 24h pour clôturer','',false),
+        _sr(s2,2,'En attente de l\'autre partie',s2sub,s2act,false),
+        _sr(s3,3,'Envoie les fonds',s3sub,s3act,false),
+        _sr(s4,4,'Confirme la réception',s4sub,s4act,false),
+        _sr(s5,5,'Deal clôturé',isDone?'Échange réussi !':'En attente de clôture.','',true)
+      ].join('');
+    }
+
+    actionsHtml = tdlHtml +
+      '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 14px;margin-bottom:14px;">' +
+      friseHtml +
+      '</div>';
+  }
 
  const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;"></div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
 
  // Notation
  let ratingHtml = '';
  if(d.status==='completed') {
- if(ratedDeals.has(d._id)) {
+ if(ratedDeals.has(d._id) || localStorage.getItem('tdoli_rated_' + d._id) === '1') {
  ratingHtml = '<div class="rating-section"><div class="rated-done"> Tu as déjà noté ce deal</div></div>';
  } else {
  const r = selectedRatings[d._id] || 0;
  ratingHtml = '<div class="rating-section"><div class="rating-title">Noter '+otherName+'</div><div class="stars" id="stars-'+d._id+'">'
- +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+d._id+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)"></span>').join('')
+ +[1,2,3,4,5].map(n=>'<span class="star '+(r>=n?'active':'')+'" data-deal="'+d._id+'" data-n="'+n+'" onclick="setRating(this.dataset.deal,+this.dataset.n)">⭐</span>').join('')
  +'</div><textarea class="rating-comment" id="comment-'+d._id+'" placeholder="Ajoute un commentaire (optionnel)..."></textarea><button class="btn-rate" data-deal="'+d._id+'" onclick="submitRating(this.dataset.deal)">Envoyer la note</button></div>';
  }
  }
@@ -661,15 +762,53 @@ function setRating(dealId, stars) {
  container.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<stars));
 }
 
+async function confirmReceived(dealId, btn) {
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Confirmation...';
+  try {
+    const r = await safeJson(await fetch(API + '/deal/' + dealId + '/received', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+    }));
+    if (r.ok) {
+      closeSheet('detailOverlay');
+      if (r.data && r.data.completed) {
+        // Sauvegarder le flag pour affichage sur toutes les pages
+        const deal = allDeals.find(x => x._id === dealId);
+        const flagData = {
+          dealId: dealId,
+          dealCode: deal?.dealCode || null,
+          partnerName: deal?.otherUsername || null,
+          amount: deal?.myAmount || deal?.amount || null,
+          currency: deal?.myCurrency || deal?.currency || null
+        };
+        showDealCompleteOverlay(flagData.dealId, flagData.dealCode, flagData.partnerName, flagData.amount, flagData.currency);
+        loadDeals(true);
+      } else {
+        showToast('Réception confirmée — en attente de lautre partie', 'var(--yellow)');
+        loadDeals(true);
+      }
+    } else {
+      showToast((r.data && r.data.message) || 'Erreur', '#ff1744');
+      btn.disabled = false;
+      btn.innerHTML = '✅ Jai recu les fonds';
+    }
+  } catch(e) {
+    showToast('Erreur réseau', '#ff1744');
+    btn.disabled = false;
+    btn.innerHTML = '✅ Jai recu les fonds';
+  }
+}
+
 async function submitRating(dealId) {
  const stars = selectedRatings[dealId];
- if(!stars) { showToast('Sélectionne une note','#ff4444'); return; }
+ if(!stars) { showToast('Sélectionne une note','#ff1744'); return; }
  const comment = document.getElementById('comment-'+dealId)?.value||'';
  try {
  const r = await safeJson(await fetch(API+'/deals/'+dealId+'/rate',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({rating:stars,comment})}));
  if(r.ok) { ratedDeals.add(dealId); openDeal(dealId); showToast('Note envoyée ','var(--yellow)'); }
- else showToast((r.data&&r.data.message)||'Erreur','#ff4444');
- } catch(e) { showToast('Erreur réseau','#ff4444'); }
+ else showToast((r.data&&r.data.message)||'Erreur','#ff1744');
+ } catch(e) { showToast('Erreur réseau','#ff1744'); }
 }
 
 function openProof(dealId) { currentProofDealId=dealId; proofFile=null; proofUrl=null; document.getElementById('proof-preview-container').innerHTML=''; document.getElementById('btn-submit-proof').disabled=true; document.getElementById('proofOverlay').classList.add('open'); closeSheet('detailOverlay'); }
@@ -844,6 +983,139 @@ function copyCode(code) {
 }
 
 loadDeals();
+checkDealCompletedFlag();
 </script>
+<script>
+// ── Deal Complété Overlay ─────────────────────────────────────
+let dcSelectedStar = 0;
+let dcDealId = null;
+
+function dcSetStar(n) {
+  dcSelectedStar = n;
+  document.querySelectorAll('.dco-star').forEach((s, i) => {
+    s.classList.toggle('active', i < n);
+  });
+}
+
+function spawnConfetti() {
+  const wrap = document.getElementById('dcoConfetti');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const colors = ['#00e676','#ffd740','#2979ff','#ff1744','#ffffff'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = 6 + Math.random() * 8;
+    el.style.cssText = 'left:'+Math.random()*100+'vw;top:-10px;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+(Math.random()*1.5)+'s;width:'+size+'px;height:'+size+'px;';
+    wrap.appendChild(el);
+  }
+}
+
+function showDealCompleteOverlay(dealId, dealCode, partnerName, amount, currency) {
+  dcDealId = dealId;
+  const overlay = document.getElementById('dealCompleteOverlay');
+  const sub = document.getElementById('dcoSub');
+  const code = document.getElementById('dcoCode');
+  const rating = document.getElementById('dcoRating');
+  const btnLater = document.getElementById('dcoBtnLater');
+  const nameEl = document.getElementById('dcoPartnerName');
+
+  if (sub && amount) sub.textContent = 'Echange de ' + Number(amount).toLocaleString('fr-FR') + ' ' + currency + ' validé !';
+  if (code && dealCode) { code.textContent = dealCode; code.style.display = 'block'; }
+  if (nameEl && partnerName) nameEl.textContent = partnerName;
+
+  // Afficher notation si partenaire connu
+  if (partnerName && rating) {
+    rating.style.display = 'block';
+    if (btnLater) btnLater.style.display = 'none';
+  }
+
+  overlay.classList.add('show');
+  spawnConfetti();
+}
+
+async function dcSubmitRating() {
+  if (!dcSelectedStar) { showToast('Sélectionne une note', '#ff1744'); return; }
+  if (!dcDealId) { dcDismiss(); return; }
+  const comment = document.getElementById('dcoComment')?.value || '';
+  const btn = document.querySelector('.dco-btn-rate');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>'; }
+  try {
+    const r = await safeJson(await fetch(API + '/deals/' + dcDealId + '/rate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ rating: dcSelectedStar, comment })
+    }));
+    if (r.ok) {
+      showToast('Note envoyée ! ⭐', 'var(--green-dim)');
+      ratedDeals.add(dcDealId);
+      localStorage.setItem('tdoli_rated_' + dcDealId, '1');
+    } else {
+      showToast((r.data && r.data.message) || 'Erreur', '#ff1744');
+    }
+  } catch(e) { showToast('Erreur réseau', '#ff1744'); }
+  dcDismiss();
+}
+
+function dcDismiss() {
+  document.getElementById('dealCompleteOverlay').classList.remove('show');
+  // Marquer ce deal comme vu
+  try {
+    const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
+    if (dcDealId && !seen.includes(dcDealId)) {
+      seen.push(dcDealId);
+      if (seen.length > 20) seen.splice(0, seen.length - 20);
+      localStorage.setItem('tdoli_seen_completed', JSON.stringify(seen));
+    }
+  } catch(e) {}
+  loadDeals(true);
+}
+
+// ── Checker au chargement — via API ──────────────────────────
+async function checkDealCompletedFlag() {
+  if (!token) return;
+  try {
+    const seen = JSON.parse(localStorage.getItem('tdoli_seen_completed') || '[]');
+    // Utiliser les deals déjà chargés ou recharger
+    const deals = allDeals.length > 0 ? allDeals : await (async () => {
+      const r = await fetch(API + '/deals/mine', { headers: { 'Authorization': 'Bearer ' + token } });
+      if (!r.ok) return [];
+      return await r.json();
+    })();
+    if (!Array.isArray(deals)) return;
+    const newlyCompleted = deals.find(d => d.status === 'completed' && !seen.includes(d._id));
+    if (!newlyCompleted) return;
+    const amount = newlyCompleted.myAmount || newlyCompleted.amount || null;
+    const currency = newlyCompleted.myCurrency || newlyCompleted.currency || null;
+    setTimeout(() => showDealCompleteOverlay(
+      newlyCompleted._id,
+      newlyCompleted.dealCode || null,
+      newlyCompleted.otherUsername || null,
+      amount,
+      currency
+    ), 600);
+  } catch(e) {}
+}
+</script>
+
+<!-- Overlay Deal Complété — géré par tdoli-deals-complete.js -->
+</script>
+
+
+
+<script>
+// ── Retour haptique sur tous les boutons ─────────────────────
+(function() {
+  function triggerHaptic() {
+    if (navigator.vibrate) navigator.vibrate(8);
+    // iOS (via AudioContext trick si vibrate absent)
+  }
+  document.addEventListener('pointerdown', function(e) {
+    const el = e.target.closest('button, .btn-primary, .btn-cancel, .nav-item, .annonce-item, .conv-item, .deal-card, .settings-item, .filter-chip, .back-btn');
+    if (el) triggerHaptic();
+  }, { passive: true });
+})();
+</script>
+
 </body>
 </html>
