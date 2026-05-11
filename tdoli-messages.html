@@ -8,7 +8,7 @@
 <style>
 :root{
  --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
- --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.12);
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.10);
  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
@@ -43,7 +43,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .conv-deal-tag.completed{background:rgba(0,184,92,0.1);color:var(--green);}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(8,12,10,0.95);backdrop-filter:blur(20px);border-top:1px solid rgba(0,0,0,0.08);display:flex;padding:8px 0 24px;box-shadow:0 -2px 20px rgba(0,0,0,0.3);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);padding:8px 0;display:flex;max-width:480px;margin:0 auto;}
+
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;color:var(--text-3);font-size:8px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
 .nav-item.active{color:var(--green);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
@@ -77,11 +78,11 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .search-input{width:100%;padding:11px 16px 11px 40px;background:var(--card);border:1px solid var(--border);border-radius:24px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);position:relative;box-shadow:0 1px 6px rgba(0,0,0,0.04);}
 .search-input:focus{outline:none;border-color:var(--green);}
 .search-wrap{position:relative;}
-.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-3);pointer-events:none;}
-</style>
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-3);pointer-events:none;}</style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#f5f7f5">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="/tdoli-theme.css">
 </head>
 <body>
 
@@ -90,6 +91,20 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
  <div class="topbar-title"> Messages</div>
  <div class="topbar-sub" id="convCount">Chargement...</div>
  </div>
+</div>
+
+
+<!-- Bandeau notifications désactivées -->
+<div id="notifBanner" style="display:none;margin:12px 16px 0;max-width:480px;margin-left:auto;margin-right:auto;">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;">
+    <svg viewBox="0 0 24 24" width="20" height="20" style="flex-shrink:0;margin-top:2px;color:var(--text-3);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;"><path d="M13.73 21a2 2 0 01-3.46 0"/><path d="M18.63 13A17.89 17.89 0 0118 8"/><path d="M6.26 6.26A5.86 5.86 0 006 8c0 7-3 9-3 9h14"/><path d="M18 8a6 6 0 00-9.33-5"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+    <div style="flex:1;">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">Notifications désactivées</div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:10px;">Active-les pour ne manquer aucun message ou match.</div>
+      <button onclick="activerNotifications()" style="background:var(--green-dim);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Activer les notifications</button>
+    </div>
+    <button onclick="document.getElementById('notifBanner').style.display='none'" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:18px;line-height:1;padding:0;">×</button>
+  </div>
 </div>
 
 <div class="search-bar">
@@ -240,7 +255,7 @@ async function loadConversations() {
 
  // Badge nav
  const totalUnread = allConvs.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
- const badge = document.getElementById('msgBadgeNav');
+ const badge = document.getElementById('msgBadge');
  if (badge) {
  if (totalUnread > 0) { badge.textContent = totalUnread > 9 ? '9+' : totalUnread; badge.classList.add('show'); }
  else { badge.style.display = 'none'; }
@@ -269,5 +284,48 @@ async function checkDeals() {
 loadConversations();
 checkDeals();
 </script>
+
+
+
+<script src="/tdoli-deals-complete.js"></script>
+
+<script>
+// ── Retour haptique sur tous les boutons ─────────────────────
+(function() {
+  function triggerHaptic() {
+    if (navigator.vibrate) navigator.vibrate(8);
+    // iOS (via AudioContext trick si vibrate absent)
+  }
+  document.addEventListener('pointerdown', function(e) {
+    const el = e.target.closest('button, .btn-primary, .btn-cancel, .nav-item, .annonce-item, .conv-item, .deal-card, .settings-item, .filter-chip, .back-btn');
+    if (el) triggerHaptic();
+  }, { passive: true });
+})();
+</script>
+
+
+<script>
+// Afficher bandeau si notifications pas accordées
+(function() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'default') return;
+  // Afficher après 1s
+  setTimeout(() => {
+    const banner = document.getElementById('notifBanner');
+    if (banner) banner.style.display = 'block';
+  }, 1000);
+})();
+
+async function activerNotifications() {
+  if (typeof requestFCMPermission === 'function') {
+    const granted = await requestFCMPermission();
+    if (granted) document.getElementById('notifBanner').style.display = 'none';
+  } else {
+    const perm = await Notification.requestPermission();
+    if (perm === 'granted') document.getElementById('notifBanner').style.display = 'none';
+  }
+}
+</script>
+
 </body>
 </html>
