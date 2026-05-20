@@ -1651,7 +1651,6 @@ async function submitAnnonce() {
  if (!amount || Number(amount) <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
  if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
  if (!selectedBenefId) { showMsg('msg-create', 'Choisis un bénéficiaire avant de publier'); return; }
- if (currentUser && Number(amount) > currentUser.maxDealAmount) { showMsg('msg-create', `Montant maximum : ${currentUser.maxDealAmount}€`); return; }
  const btn = document.getElementById('btn-submit');
  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
  try {
