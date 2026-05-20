@@ -189,6 +189,12 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .dc-dots{display:flex;gap:5px;justify-content:center;margin-top:12px;}
 .dc-dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.2s;}
 .dc-dot.active{background:var(--green);width:14px;border-radius:3px;}
+.rate-strip{display:flex;align-items:center;gap:10px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:12px;}
+.rate-strip::-webkit-scrollbar{display:none;}
+.rate-item{flex-shrink:0;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);}
+.rate-item-label{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;}
+.rate-item-val{color:var(--green);font-weight:700;font-family:'Syne',sans-serif;}
+.rate-sep{width:1px;height:16px;background:var(--border);flex-shrink:0;}
 .weekly-banner{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;position:relative;overflow:hidden;}
 .weekly-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--blue));}
 .weekly-left{display:flex;align-items:center;gap:10px;}
@@ -324,6 +330,15 @@ firebase.initializeApp({
  <div class="section-header">
  <div class="section-title">Annonces</div>
  <div class="badge" id="countBadge">—</div>
+ </div>
+
+ <!-- Taux de change en temps réel -->
+ <div class="rate-strip" id="rateStrip" style="display:none;">
+   <div class="rate-item"><span class="rate-item-label">EUR/XAF</span><span class="rate-item-val" id="rate-eur-xaf">—</span></div>
+   <div class="rate-sep"></div>
+   <div class="rate-item"><span class="rate-item-label">EUR/USD</span><span class="rate-item-val" id="rate-eur-usd">—</span></div>
+   <div class="rate-sep"></div>
+   <div class="rate-item"><span class="rate-item-label">EUR/CAD</span><span class="rate-item-val" id="rate-eur-cad">—</span></div>
  </div>
 
  <!-- Phase 5 — Compteur hebdomadaire -->
@@ -1854,11 +1869,35 @@ async function checkUnreadMessages() {
  } catch(e) {}
 }
 
+// ── Taux de change ────────────────────────────────────────────
+async function loadRates() {
+  try {
+    const pairs = [
+      { from: 'EUR', to: 'XAF', id: 'rate-eur-xaf' },
+      { from: 'EUR', to: 'USD', id: 'rate-eur-usd' },
+      { from: 'EUR', to: 'CAD', id: 'rate-eur-cad' },
+    ];
+    const results = await Promise.allSettled(
+      pairs.map(p => fetch(API + '/exchange/rate?from=' + p.from + '&to=' + p.to).then(r => r.json()))
+    );
+    let anyOk = false;
+    results.forEach((res, i) => {
+      if (res.status === 'fulfilled' && res.value.rate) {
+        const el = document.getElementById(pairs[i].id);
+        if (el) el.textContent = Number(res.value.rate).toLocaleString('fr-FR', { maximumFractionDigits: 2 });
+        anyOk = true;
+      }
+    });
+    if (anyOk) document.getElementById('rateStrip').style.display = 'flex';
+  } catch(e) {}
+}
+
 // Démarrage
 (async () => {
  await loadUser();
  loadFeed();
  checkUnreadMessages();
+ loadRates();
 })();
 
 
