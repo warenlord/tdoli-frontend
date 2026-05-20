@@ -128,7 +128,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 /* Transitions de pages */
 .page-enter{animation:pageEnter 0.2s ease-out;}
-@keyframes pageEnter{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pageEnter{from{opacity:0;}to{opacity:1;}}
 
 /* Feedback copier */
 .copy-feedback{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--green-dim);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:8px 20px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:999;}
