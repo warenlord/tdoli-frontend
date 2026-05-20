@@ -108,10 +108,18 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round
   gap: 3px; padding: 6px 0; color: var(--text-3);
   font-size: 9px; font-family: 'Syne', sans-serif; font-weight: 700;
   letter-spacing: 0.8px; text-transform: uppercase;
-  text-decoration: none; transition: color 0.2s, opacity 0.15s;
+  text-decoration: none; transition: color 0.2s;
 }
 .nav-item.active { color: var(--green); }
-.nav-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+.nav-item:active { opacity: 0.55; transition: opacity 0.08s; }
+.nav-icon {
+  width: 44px; height: 28px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.22s;
+}
+.nav-item.active .nav-icon {
+  background: rgba(0, 230, 118, 0.14);
+}
 .nav-icon-wrap { position: relative; }
 .nav-badge {
   position: absolute; top: -4px; right: -4px;

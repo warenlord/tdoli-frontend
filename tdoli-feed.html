@@ -367,24 +367,28 @@ firebase.initializeApp({
 <button class="fab" onclick="openCreateSheet()">+</button>
 
 <nav class="bottom-nav">
- <a class="nav-item active" href="/tdoli-feed.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
- </a>
- <a class="nav-item" href="/tdoli-deals.html">
- <div class="nav-icon-wrap">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
- <div class="deals-badge" id="dealsBadge">!</div>
- </div>Deals
- </a>
- <a class="nav-item" href="/tdoli-messages.html">
- <div class="nav-icon-wrap">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
- <div class="nav-badge red" id="msgBadge"></div>
- </div>Messages
- </a>
- <a class="nav-item" href="/tdoli-profile.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Profil
- </a>
+  <a class="nav-item active" href="/tdoli-feed.html">
+    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <span>Feed</span>
+  </a>
+  <a class="nav-item" href="/tdoli-deals.html" onclick="navTo(event,this)">
+    <div class="nav-icon-wrap">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+      <div class="nav-badge yellow" id="dealsBadge"></div>
+    </div>
+    <span>Deals</span>
+  </a>
+  <a class="nav-item" href="/tdoli-messages.html" onclick="navTo(event,this)">
+    <div class="nav-icon-wrap">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <div class="nav-badge red" id="msgBadge"></div>
+    </div>
+    <span>Messages</span>
+  </a>
+  <a class="nav-item" href="/tdoli-profile.html" onclick="navTo(event,this)">
+    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <span>Profil</span>
+  </a>
 </nav>
 
 <!-- Sheet détail annonce -->
@@ -624,6 +628,15 @@ const email = localStorage.getItem('tdoli_email');
 const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] || '?';
 const avatarUrl = localStorage.getItem('tdoli_avatar') || null;
 const RATE = 655.957;
+
+function navTo(e, el) {
+ if (el.classList.contains('active')) return;
+ e.preventDefault();
+ if (navigator.vibrate) navigator.vibrate(30);
+ document.body.style.transition = 'opacity 0.13s ease';
+ document.body.style.opacity = '0';
+ setTimeout(() => { window.location.href = el.href; }, 130);
+}
 
 // ── Vérification Face ID à l'ouverture ────────────────────────
 (async function checkFaceIdOnOpen() {
