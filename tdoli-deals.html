@@ -670,7 +670,11 @@ function openDeal(id) {
   const otherProofOk = isSender ? d.confirmedByReceiver : d.confirmedBySender;
 
   // ── Frise asymétrique des étapes ─────────────────────────────
-  const isXafParty = isSender;
+  // La partie XAF/XOF envoie en premier (moins réversible)
+  const myCurrency = isSender ? (d.currency || '') : (d.receiverCurrency || '');
+  const otherCurrencyFrise = isSender ? (d.receiverCurrency || '') : (d.currency || '');
+  const XAF_SET = ['XAF', 'XOF'];
+  const isXafParty = XAF_SET.includes(myCurrency) || (!XAF_SET.includes(otherCurrencyFrise) && isSender);
 
   const _si = (state, n) => {
     if(state==='done') return '<div style="width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#000;font-size:14px;font-weight:800;flex-shrink:0;">✓</div>';
@@ -847,11 +851,12 @@ function openProof(dealId) {
  document.getElementById('proof-preview-container').innerHTML = '';
  document.getElementById('btn-submit-proof').disabled = true;
 
- // Détecter si la méthode de paiement de l'utilisateur est espèces
+ // Déterminer si le paiement à effectuer est en espèces
+ // (basé sur la méthode de réception de l'AUTRE partie, pas la mienne)
  const deal = allDeals.find(x => x._id === dealId);
  const isSender = deal && deal.sender === email;
- const myPayInfo = deal && (isSender ? deal.senderPaymentInfo : deal.receiverPaymentInfo);
- const isCash = myPayInfo && myPayInfo.method === 'especes';
+ const otherPayInfo = deal && (isSender ? deal.receiverPaymentInfo : deal.senderPaymentInfo);
+ const isCash = otherPayInfo && otherPayInfo.method === 'especes';
 
  const uploadArea = document.getElementById('proof-upload-area');
  const cashBtn = document.getElementById('btn-cash-confirm');
