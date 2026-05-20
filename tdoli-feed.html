@@ -1680,17 +1680,17 @@ function updatePreview(mode) {
 }
 
 async function submitAnnonce() {
- const amount = document.getElementById('ann-amount').value;
+ const amount = parseAmount(document.getElementById('ann-amount').value);
  const currency = document.getElementById('ann-currency').value;
  const fromCountry = document.getElementById('ann-from').value;
  const toCountry = document.getElementById('ann-to').value;
- if (!amount || Number(amount) <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
+ if (!amount || amount <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
  if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
  if (!selectedBenefId) { showMsg('msg-create', 'Choisis un bénéficiaire avant de publier'); return; }
  const btn = document.getElementById('btn-submit');
  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
  try {
- const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount: Number(amount), currency, fromCountry, toCountry, beneficiaireId: selectedBenefId || null }) });
+ const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount, currency, fromCountry, toCountry, beneficiaireId: selectedBenefId || null }) });
  const data = await res.json();
  if (res.ok) {
  closeSheet('createOverlay');
