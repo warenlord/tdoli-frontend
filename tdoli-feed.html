@@ -1376,10 +1376,11 @@ async function executeMatch() {
  });
  const data = await res.json();
  closeSheet('confirmOverlay');
- if (res.ok && data.dealCode) {
- showToast(' Match ! Code: ' + data.dealCode, '#ffd740');
+ const dealCode = data.dealCode || data.deal?.dealCode;
+ if (res.ok && dealCode) {
+ showToast(' Match ! Code: ' + dealCode, '#ffd740');
  setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
- } else if (res.ok && data.message && data.message.includes('Match')) {
+ } else if (res.ok && data.deal) {
  showToast('Match confirmé !', '#ffd740');
  setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
  } else if (res.ok) {
@@ -1700,7 +1701,7 @@ async function submitAnnonce() {
  document.getElementById('ann-amount').value = '';
  selectedBenefId = null;
  const bc = document.getElementById('benef-selected-create'); if(bc) bc.innerHTML = '';
- if (data.message && data.message.includes('Match')) { showToast('Match immédiat ! ', 'var(--yellow)'); setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000); }
+ if (data.deal) { showToast('Match immédiat ! Code: ' + (data.deal.dealCode || ''), 'var(--yellow)'); setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000); }
  else { showToast('Annonce publiée '); loadFeed(true); }
  } else showMsg('msg-create', data.message || 'Erreur');
  } catch (e) { showMsg('msg-create', 'Serveur inaccessible'); }
