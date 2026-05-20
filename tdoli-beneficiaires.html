@@ -188,6 +188,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
  <div class="method-tab" data-method="virement" onclick="setMethod('virement',this)"> Virement</div>
  <div class="method-tab" data-method="paypal" onclick="setMethod('paypal',this)"> PayPal</div>
  <div class="method-tab" data-method="wero" onclick="setMethod('wero',this)"> Wero</div>
+ <div class="method-tab" data-method="especes" onclick="setMethod('especes',this)"> Espèces</div>
  </div>
  </div>
 
@@ -236,10 +237,18 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
  </div>
  </div>
 
+ <!-- Espèces -->
+ <div class="method-fields" id="ff-especes">
+ <div class="form-group">
+ <label class="form-label">Ville de remise</label>
+ <input class="form-input" type="text" id="f-ville" placeholder="Ex: Paris 11e, Libreville centre…">
+ </div>
+ </div>
+
  <!-- Note -->
  <div class="form-group">
  <label class="form-label">Note (optionnel)</label>
- <input class="form-input" type="text" id="f-note" placeholder="Ex: Envoyer en semaine">
+ <input class="form-input" type="text" id="f-note" placeholder="Ex: Disponible en semaine, quartier Montparnasse">
  </div>
 
  <button class="btn-primary" id="btn-save" onclick="saveBenef()">Enregistrer</button>
@@ -282,7 +291,7 @@ function closeSheet(id) { document.getElementById(id).classList.remove('open'); 
 function closeOnOverlay(e, id) { if(e.target === document.getElementById(id)) closeSheet(id); }
 
 function getMethodLabel(m) {
- const labels = { mobilemoney: ' Mobile Money', virement: ' Virement', paypal: ' PayPal', wero: ' Wero' };
+ const labels = { mobilemoney: ' Mobile Money', virement: ' Virement', paypal: ' PayPal', wero: ' Wero', especes: ' Espèces' };
  return labels[m] || m;
 }
 
@@ -291,6 +300,7 @@ function getBenefDetail(b) {
  if (b.methode === 'virement') return (b.iban ? b.iban.substring(0,16) + '…' : '') + (b.banque ? ' · ' + b.banque : '');
  if (b.methode === 'paypal') return b.paypal || '';
  if (b.methode === 'wero') return b.wero || '';
+ if (b.methode === 'especes') return b.note || 'Remise en main propre';
  return '';
 }
 
@@ -374,7 +384,7 @@ function resetForm() {
  document.getElementById('formTitle').textContent = 'Nouveau bénéficiaire';
  setType('beneficiaire');
  // Reset fields
- ['f-nom','f-mm-phone','f-iban','f-banque','f-paypal','f-wero','f-note'].forEach(id => {
+ ['f-nom','f-mm-phone','f-iban','f-banque','f-paypal','f-wero','f-ville','f-note'].forEach(id => {
  const el = document.getElementById(id);
  if (el) el.value = '';
  });
@@ -420,6 +430,8 @@ function editBenef(id) {
  document.getElementById('f-paypal').value = b.paypal || '';
  } else if (b.methode === 'wero') {
  document.getElementById('f-wero').value = b.wero || '';
+ } else if (b.methode === 'especes') {
+ document.getElementById('f-ville').value = b.note || '';
  }
 
  document.getElementById('formOverlay').classList.add('open');
@@ -452,6 +464,8 @@ async function saveBenef() {
  } else if (currentMethod === 'wero') {
  payload.wero = document.getElementById('f-wero').value.trim();
  if (!payload.wero) { showError('Numéro Wero requis'); return; }
+ } else if (currentMethod === 'especes') {
+ payload.note = document.getElementById('f-ville').value.trim();
  }
 
  const btn = document.getElementById('btn-save');

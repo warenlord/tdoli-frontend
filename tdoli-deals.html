@@ -297,6 +297,7 @@ firebase.initializeApp({
  </div>
  <input type="file" id="proof-file-input" accept="image/*,.pdf" style="display:none" onchange="previewProof(this)">
  <div id="proof-preview-container"></div>
+ <button class="btn-primary" id="btn-cash-confirm" style="display:none;background:linear-gradient(135deg,#b8860b,#ffd740);color:#000;" onclick="confirmCash()"> Je confirme avoir remis les espèces en main propre</button>
  <button class="btn-primary" id="btn-submit-proof" onclick="submitProof()" disabled>Confirmer la réception</button>
  <button class="btn-cancel" onclick="closeSheet('proofOverlay')">Annuler</button>
  <div class="msg" id="msg-proof"></div>
@@ -338,6 +339,7 @@ firebase.initializeApp({
  <div class="method-tab active" onclick="setMethod('mobilemoney',this)"> Mobile Money</div>
  <div class="method-tab" onclick="setMethod('virement',this)"> Virement</div>
  <div class="method-tab" onclick="setMethod('paypal',this)"> PayPal</div>
+ <div class="method-tab" onclick="setMethod('especes',this)"> Espèces</div>
  </div>
 
  <!-- Mobile Money -->
@@ -384,9 +386,21 @@ firebase.initializeApp({
  </div>
  </div>
 
+ <!-- Espèces -->
+ <div class="method-fields" id="fields-especes">
+ <div class="form-group">
+ <label class="form-label">Nom complet</label>
+ <input class="form-input" type="text" id="pi-name-cash" placeholder="Jean Dupont">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Ville / lieu de remise</label>
+ <input class="form-input" type="text" id="pi-ville" placeholder="Ex: Paris 11e, Libreville centre…">
+ </div>
+ </div>
+
  <div class="form-group">
  <label class="form-label">Note (optionnel)</label>
- <input class="form-input" type="text" id="pi-note" placeholder="Ex: Envoyer entre 9h et 18h">
+ <input class="form-input" type="text" id="pi-note" placeholder="Ex: Disponible en semaine, avant 18h">
  </div>
 
  <button class="btn-primary" id="btn-save-payment" onclick="savePaymentInfo()">Enregistrer</button>
@@ -829,7 +843,36 @@ async function submitRating(dealId) {
  } catch(e) { showToast('Erreur réseau','#ff1744'); }
 }
 
-function openProof(dealId) { currentProofDealId=dealId; proofFile=null; proofUrl=null; document.getElementById('proof-preview-container').innerHTML=''; document.getElementById('btn-submit-proof').disabled=true; document.getElementById('proofOverlay').classList.add('open'); closeSheet('detailOverlay'); }
+function openProof(dealId) {
+ currentProofDealId = dealId;
+ proofFile = null; proofUrl = null;
+ document.getElementById('proof-preview-container').innerHTML = '';
+ document.getElementById('btn-submit-proof').disabled = true;
+
+ // Détecter si la méthode de paiement de l'utilisateur est espèces
+ const deal = allDeals.find(x => x._id === dealId);
+ const isSender = deal && deal.sender === email;
+ const myPayInfo = deal && (isSender ? deal.senderPaymentInfo : deal.receiverPaymentInfo);
+ const isCash = myPayInfo && myPayInfo.method === 'especes';
+
+ const uploadArea = document.getElementById('proof-upload-area');
+ const cashBtn = document.getElementById('btn-cash-confirm');
+ const submitBtn = document.getElementById('btn-submit-proof');
+
+ if (isCash) {
+   if (uploadArea) uploadArea.style.display = 'none';
+   if (cashBtn) { cashBtn.style.display = 'block'; }
+   submitBtn.style.display = 'none';
+ } else {
+   if (uploadArea) uploadArea.style.display = '';
+   if (cashBtn) cashBtn.style.display = 'none';
+   submitBtn.style.display = '';
+   submitBtn.disabled = true;
+ }
+
+ document.getElementById('proofOverlay').classList.add('open');
+ closeSheet('detailOverlay');
+}
 function openDispute(dealId) { currentDisputeId=dealId; selectedFiles=[]; document.getElementById('files-preview').innerHTML=''; document.getElementById('disputeOverlay').classList.add('open'); closeSheet('detailOverlay'); }
 
 function previewProof(input) {
@@ -842,6 +885,30 @@ function previewProof(input) {
  document.getElementById('btn-submit-proof').disabled=false;
  };
  reader.readAsDataURL(proofFile);
+}
+
+async function confirmCash() {
+ if (!currentProofDealId) return;
+ const btn = document.getElementById('btn-cash-confirm');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Confirmation…';
+ try {
+ const r = await safeJson(await fetch(API + '/deal/' + currentProofDealId + '/confirm', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+ body: JSON.stringify({ cashConfirmed: true })
+ }));
+ if (r.ok) {
+ closeSheet('proofOverlay');
+ showToast(' Remise confirmée — en attente de l\'autre partie', 'var(--yellow)');
+ loadDeals(true);
+ } else {
+ showMsg('msg-proof', (r.data && r.data.message) || 'Erreur');
+ btn.disabled = false; btn.innerHTML = ' Je confirme avoir remis les espèces en main propre';
+ }
+ } catch(e) {
+ showMsg('msg-proof', 'Erreur réseau');
+ btn.disabled = false; btn.innerHTML = ' Je confirme avoir remis les espèces en main propre';
+ }
 }
 
 async function submitProof() {
@@ -934,6 +1001,9 @@ async function savePaymentInfo() {
  paypal = document.getElementById('pi-paypal').value.trim();
  name = document.getElementById('pi-name-pp').value.trim();
  note = document.getElementById('pi-note').value.trim();
+ } else if (method === 'especes') {
+ name = document.getElementById('pi-name-cash').value.trim();
+ note = document.getElementById('pi-ville').value.trim() + (document.getElementById('pi-note').value.trim() ? ' — ' + document.getElementById('pi-note').value.trim() : '');
  }
 
  if (!name && !phone && !iban && !paypal) {
@@ -970,7 +1040,8 @@ function renderPaymentInfo(info, label) {
  mobilemoney: ' Mobile Money',
  virement: ' Virement bancaire',
  paypal: ' PayPal',
- wero: ' Wero'
+ wero: ' Wero',
+ especes: ' Espèces'
  };
  const methodLabel = info.method ? (methodIcons[info.method] || info.method) : null;
 
