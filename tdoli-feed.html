@@ -195,6 +195,10 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .rate-item-label{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;}
 .rate-item-val{color:var(--green);font-weight:700;font-family:'Syne',sans-serif;}
 .rate-sep{width:1px;height:16px;background:var(--border);flex-shrink:0;}
+.corridor-hint{display:none;align-items:center;gap:8px;padding:10px 14px;background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.18);border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--green);}
+.corridor-hint.show{display:flex;}
+.corridor-hint-count{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;flex-shrink:0;}
+.corridor-hint-text{color:var(--text-2);line-height:1.4;}
 .weekly-banner{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;position:relative;overflow:hidden;}
 .weekly-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--blue));}
 .weekly-left{display:flex;align-items:center;gap:10px;}
@@ -426,7 +430,7 @@ firebase.initializeApp({
  </div>
  <div class="form-row">
  <div class="form-group"><label class="form-label">De</label>
- <select class="form-select" id="ann-from" onchange="syncCountries();updatePreview('create')">
+ <select class="form-select" id="ann-from" onchange="syncCountries();updatePreview('create');updateCorridorHint()">
  <option value="France">🇫🇷 France</option>
  <option value="Gabon">🇬🇦 Gabon</option>
  <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
@@ -437,7 +441,7 @@ firebase.initializeApp({
  </select>
  </div>
  <div class="form-group"><label class="form-label">Vers</label>
- <select class="form-select" id="ann-to" onchange="updatePreview('create')">
+ <select class="form-select" id="ann-to" onchange="updatePreview('create');updateCorridorHint()">
  <option value="Gabon">🇬🇦 Gabon</option>
  <option value="France">🇫🇷 France</option>
  <option value="Etats-Unis">🇺🇸 Etats-Unis</option>
@@ -447,6 +451,10 @@ firebase.initializeApp({
  <option value="Suisse">🇨🇭 Suisse</option>
  </select>
  </div>
+ </div>
+ <div class="corridor-hint" id="corridorHint">
+   <span class="corridor-hint-count" id="corridorCount">0</span>
+   <span class="corridor-hint-text" id="corridorText"></span>
  </div>
  <div class="conv-preview" id="convPreview-create"><span class="conv-hint">Saisis un montant</span></div>
  <div id="airtel-preview-create"></div>
@@ -1582,8 +1590,39 @@ async function checkActiveDeals() {
  } catch (e) {}
 }
 
+function updateCorridorHint() {
+  const from = document.getElementById('ann-from')?.value;
+  const to = document.getElementById('ann-to')?.value;
+  const hint = document.getElementById('corridorHint');
+  if (!hint || !from || !to || from === to) { hint && hint.classList.remove('show'); return; }
+
+  // Chercher les annonces dans le sens inverse (ce que les gens attendent)
+  const matches = (allTransfers || []).filter(t =>
+    t.fromCountry === to && t.toCountry === from &&
+    (t.status === 'open' || t.status === 'partially_filled')
+  );
+
+  const countEl = document.getElementById('corridorCount');
+  const textEl = document.getElementById('corridorText');
+
+  if (matches.length === 0) {
+    hint.classList.remove('show');
+    return;
+  }
+
+  const amounts = matches.map(t => Number(t.amount || 0)).filter(a => a > 0);
+  const avg = amounts.length ? Math.round(amounts.reduce((s, a) => s + a, 0) / amounts.length) : null;
+  const currency = matches[0].currency || '';
+
+  countEl.textContent = matches.length;
+  textEl.innerHTML = `annonce${matches.length > 1 ? 's' : ''} <strong>${to} → ${from}</strong> disponible${matches.length > 1 ? 's' : ''}` +
+    (avg ? ` · montant moyen <strong>${avg.toLocaleString('fr-FR')} ${currency}</strong>` : '');
+  hint.classList.add('show');
+}
+
 function openCreateSheet() {
  document.getElementById('createOverlay').classList.add('open');
+ updateCorridorHint();
  // Charger bénéficiaires en arrière-plan sans bloquer
  loadBeneficiaires().catch(() => {});
 }
