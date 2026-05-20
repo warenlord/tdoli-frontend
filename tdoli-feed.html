@@ -336,9 +336,9 @@ firebase.initializeApp({
  <div class="rate-strip" id="rateStrip" style="display:none;">
    <div class="rate-item"><span class="rate-item-label">EUR/XAF</span><span class="rate-item-val" id="rate-eur-xaf">—</span></div>
    <div class="rate-sep"></div>
-   <div class="rate-item"><span class="rate-item-label">EUR/USD</span><span class="rate-item-val" id="rate-eur-usd">—</span></div>
+   <div class="rate-item"><span class="rate-item-label">USD/XAF</span><span class="rate-item-val" id="rate-usd-xaf">—</span></div>
    <div class="rate-sep"></div>
-   <div class="rate-item"><span class="rate-item-label">EUR/CAD</span><span class="rate-item-val" id="rate-eur-cad">—</span></div>
+   <div class="rate-item"><span class="rate-item-label">CAD/XAF</span><span class="rate-item-val" id="rate-cad-xaf">—</span></div>
  </div>
 
  <!-- Phase 5 — Compteur hebdomadaire -->
@@ -1873,8 +1873,8 @@ async function loadRates() {
   try {
     const pairs = [
       { from: 'EUR', to: 'XAF', id: 'rate-eur-xaf' },
-      { from: 'EUR', to: 'USD', id: 'rate-eur-usd' },
-      { from: 'EUR', to: 'CAD', id: 'rate-eur-cad' },
+      { from: 'USD', to: 'XAF', id: 'rate-usd-xaf' },
+      { from: 'CAD', to: 'XAF', id: 'rate-cad-xaf' },
     ];
     const results = await Promise.allSettled(
       pairs.map(p => fetch(API + '/exchange/rate?from=' + p.from + '&to=' + p.to).then(r => r.json()))
