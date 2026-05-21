@@ -630,7 +630,7 @@ async function loadDealInfo() {
  currentDeal = deal;
 
  const isSender = deal.sender === email;
- otherEmail = isSender ? deal.receiverEmail : deal.sender;
+ otherEmail = isSender ? deal.receiver : deal.sender;
  const otherName = deal.otherUsername || otherEmail.split('@')[0];
 
  // Initiales avatar partenaire
