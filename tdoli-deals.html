@@ -699,10 +699,12 @@ function openDeal(id) {
 
   let actionsHtml = '';
   if(d.status==='matched' || d.status==='completed') {
-    const xafSent = !!d.confirmedBySender;
-    const eurSent = !!d.confirmedByReceiver;
-    const xafGotFunds = !!d.receivedBySender || d.status==='completed';
-    const eurGotFunds = !!d.receivedByReceiver || d.status==='completed';
+    const iSent = isSender ? !!d.confirmedBySender : !!d.confirmedByReceiver;
+    const otherSent = isSender ? !!d.confirmedByReceiver : !!d.confirmedBySender;
+    const xafSent = isXafParty ? iSent : otherSent;
+    const eurSent = isXafParty ? otherSent : iSent;
+    const xafGotFunds = (isXafParty ? iReceived : otherReceived) || d.status==='completed';
+    const eurGotFunds = (isXafParty ? otherReceived : iReceived) || d.status==='completed';
     const isDone = d.status==='completed';
 
     let friseHtml;
