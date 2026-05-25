@@ -761,21 +761,14 @@ function openDeal(id) {
  '<div class="detail-header"><span class="detail-ref">DEAL '+(d.dealCode||'#'+d._id.slice(-6).toUpperCase())+'</span><span class="detail-badge '+st.cls+'">'+st.label+'</span></div>'+
  '<div class="detail-parties"><div class="party"><div class="party-label">Toi</div><div class="party-name">'+myName+'</div></div><div class="vs-sep">⇄</div><div class="party"><div class="party-label">Partenaire</div><div class="party-name">'+otherName+'</div></div></div>'+
  // Mini carte partenaire style LeBonCoin
- (function() {
- const pd = d.otherPartnerData || {};
- const topBadge = renderTopBadge(pd);
- const verifBadge = pd.phoneVerified ? '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;font-family:\'Syne\',sans-serif;padding:2px 8px;border-radius:20px;background:rgba(105,240,174,0.13);color:#69F0AE;border:1px solid rgba(105,240,174,0.35);">✓ Vérifié</span>' : '';
- const starsHtml = renderStarsInline(d.otherRating, pd.ratingCount);
- const badgesRow = [topBadge, (!pd.isAgent && pd.phoneVerified) ? '' : verifBadge].filter(x=>x && !x.includes('undefined')).join(' ');
- return '<div class="partner-mini-card">' +
+ '<div class="partner-mini-card">' +
  '<div class="partner-mini-avatar">'+(d.otherUsername ? d.otherUsername.substring(0,2).toUpperCase() : '?')+'</div>' +
  '<div class="partner-mini-info">' +
  '<div class="partner-mini-name">'+otherName+'</div>' +
- '<div style="margin:3px 0;">'+starsHtml+'</div>' +
- (topBadge ? '<div style="margin-bottom:4px;">'+topBadge+'</div>' : '') +
+ '<div style="margin:3px 0;">'+renderStarsInline(d.otherRating, (d.otherPartnerData||{}).ratingCount)+'</div>' +
+ (renderTopBadge(d.otherPartnerData||{}) ? '<div style="margin-bottom:4px;">'+renderTopBadge(d.otherPartnerData||{})+'</div>' : '') +
  (d.lastTestimonial ? '<div class="partner-mini-test"><strong>'+d.lastTestimonial.fromUsername+'</strong>: "'+(d.lastTestimonial.comment ? d.lastTestimonial.comment.substring(0,50)+(d.lastTestimonial.comment.length>50?'...':'') : '')+'"</div>' : '') +
- '</div></div>';
- })()+
+ '</div></div>' +
  '<div class="detail-amount-row"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">TU ENVOIES</div><span class="detail-amt">'+Number(amount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+currency+'</span></div>'+(euroLabel?'<span class="detail-eur">'+euroLabel+'</span>':'')+'</div>'+
  (otherAmount?'<div class="detail-amount-row" style="margin-top:8px;"><div><div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">'+otherName.toUpperCase()+' ENVOIE</div><span class="detail-amt">'+Number(otherAmount).toLocaleString('fr-FR')+'</span><span class="detail-cur"> '+otherCurrency+'</span></div></div>':'')+
  stepHtml + instructionHtml + actionsHtml + chatHtml + ratingHtml;
