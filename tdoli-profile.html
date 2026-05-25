@@ -326,6 +326,33 @@ function getLevelInfo(level){
  return info[level]||info[1];
 }
 
+// ── Badges LeBonCoin ─────────────────────────────────────────
+function computeBadges(user) {
+ const deals = user.completedDeals || 0;
+ const out = [];
+ if (user.isAgent) out.push({key:'agent',icon:'⭐',label:'Agent',color:'#FFD740',bg:'rgba(255,215,64,0.13)',border:'rgba(255,215,64,0.35)'});
+ if (deals >= 50) out.push({key:'pilier',icon:'💎',label:'Pilier',color:'#CE93D8',bg:'rgba(206,147,216,0.13)',border:'rgba(206,147,216,0.35)'});
+ if (deals >= 10) out.push({key:'confiance',icon:'🛡️',label:'Membre de confiance',color:'#82B1FF',bg:'rgba(130,177,255,0.13)',border:'rgba(130,177,255,0.35)'});
+ if (deals >= 5) out.push({key:'reactif',icon:'⚡',label:'Très réactif',color:'#FFCC80',bg:'rgba(255,204,128,0.13)',border:'rgba(255,204,128,0.35)'});
+ if (user.phoneVerified) out.push({key:'verifie',icon:'✓',label:'Vérifié',color:'#69F0AE',bg:'rgba(105,240,174,0.13)',border:'rgba(105,240,174,0.35)'});
+ return out;
+}
+function renderBadgesGrid(user) {
+ const badges = computeBadges(user);
+ if (!badges.length) return '<div style="font-size:12px;color:var(--text-3);padding:8px 0;text-align:center;">Aucun badge obtenu pour l\'instant</div>';
+ return '<div style="display:flex;gap:10px;flex-wrap:wrap;">' + badges.map(b =>
+  `<div style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 14px;border-radius:14px;background:${b.bg};border:1px solid ${b.border};min-width:76px;">
+    <span style="font-size:22px;line-height:1;">${b.icon}</span>
+    <span style="font-size:10px;font-weight:700;font-family:'Syne',sans-serif;color:${b.color};text-align:center;line-height:1.3;">${b.label}</span>
+   </div>`
+ ).join('') + '</div>';
+}
+function renderVolume(vol) {
+ if (!vol || vol <= 0) return '';
+ const xaf = Math.round(vol * 655.957);
+ return `A échangé <strong>${Number(vol).toLocaleString('fr-FR',{maximumFractionDigits:0})} €</strong> soit ${xaf.toLocaleString('fr-FR')} XAF`;
+}
+
 function communityRank(score) {
  if (score === null || score === undefined) return null;
  if (score >= 86) return { cls: 'pilier', label: 'Pilier ' };
@@ -500,8 +527,12 @@ function renderFull(user, txs) {
 
  const avatarHtml = av ? '<div class="avatar-large"><img src="'+av+'" alt="'+ini+'"></div>' : '<div class="avatar-large">'+ini+'</div>';
  const starsHtml = rating > 0
- ? '<div class="profile-rating"><span class="stars-display">'+''.repeat(Math.round(rating))+''.repeat(5-Math.round(rating))+'</span><span class="rating-val">'+rating.toFixed(1)+'</span><span class="rating-count">('+ratingCount+')</span></div>'
+ ? '<div class="profile-rating"><span class="stars-display">'+''.repeat(Math.round(rating))+''.repeat(5-Math.round(rating))+'</span><span class="rating-val">'+rating.toFixed(1)+'</span><span class="rating-count">('+ratingCount+' avis)</span></div>'
  : '<div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">Aucun avis</div>';
+ const volumeHtml = user.totalVolumeEur > 0
+ ? '<div style="font-size:12px;color:var(--text-2);margin-top:6px;margin-bottom:2px;">'+renderVolume(user.totalVolumeEur)+'</div>'
+ : '';
+ const badgesHtml = renderBadgesGrid(user);
 
  // ── Rang + Niveau fusionnés ───────────────────────────────────
  const rank = communityRank(user.communityScore);
@@ -552,12 +583,13 @@ function renderFull(user, txs) {
  <div class="profile-username">${uname}</div>
  ${user.fullName?'<div style="font-size:13px;color:var(--text-2);margin-bottom:2px;">'+user.fullName+'</div>':''}
  <div class="profile-email">${email||''}</div>
- <div class="profile-badges">
- <span class="badge-item ${lvl.cls}">${lvl.label}</span>
- ${user.suspended?'<span class="badge-item" style="background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2);"> Suspendu</span>':''}
- </div>
- <div style="font-size:12px;color:var(--text-3);margin-top:6px;">Limite par deal : <strong>${lvl.limit}</strong></div>
  ${starsHtml}
+ ${volumeHtml}
+ </div>
+
+ <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;">
+ <div style="font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Badges</div>
+ ${badgesHtml}
  </div>
 
  ${rankStatusHtml}

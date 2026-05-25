@@ -846,6 +846,30 @@ async function sendAttachment(input) {
 }
 
 
+// ── Badges LeBonCoin ─────────────────────────────────────────
+function computeBadges(user) {
+ const deals = user.completedDeals || 0;
+ const out = [];
+ if (user.isAgent) out.push({key:'agent',icon:'⭐',label:'Agent',color:'#FFD740',bg:'rgba(255,215,64,0.13)',border:'rgba(255,215,64,0.35)'});
+ if (deals >= 50) out.push({key:'pilier',icon:'💎',label:'Pilier',color:'#CE93D8',bg:'rgba(206,147,216,0.13)',border:'rgba(206,147,216,0.35)'});
+ if (deals >= 10) out.push({key:'confiance',icon:'🛡️',label:'Membre de confiance',color:'#82B1FF',bg:'rgba(130,177,255,0.13)',border:'rgba(130,177,255,0.35)'});
+ if (deals >= 5) out.push({key:'reactif',icon:'⚡',label:'Très réactif',color:'#FFCC80',bg:'rgba(255,204,128,0.13)',border:'rgba(255,204,128,0.35)'});
+ if (user.phoneVerified) out.push({key:'verifie',icon:'✓',label:'Vérifié',color:'#69F0AE',bg:'rgba(105,240,174,0.13)',border:'rgba(105,240,174,0.35)'});
+ return out;
+}
+function renderBadgesRow(user) {
+ const badges = computeBadges(user);
+ if (!badges.length) return '';
+ return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">' + badges.map(b =>
+  `<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:3px 8px;border-radius:20px;background:${b.bg};color:${b.color};border:1px solid ${b.border};">${b.icon} ${b.label}</span>`
+ ).join('') + '</div>';
+}
+function renderVolume(vol) {
+ if (!vol || vol <= 0) return '';
+ const xaf = Math.round(vol * 655.957);
+ return `A échangé <strong>${Number(vol).toLocaleString('fr-FR',{maximumFractionDigits:0})} €</strong> soit ${xaf.toLocaleString('fr-FR')} XAF`;
+}
+
 // ── INFOS PARTENAIRE ─────────────────────────────────────────
 async function loadPartnerInfo(partnerEmail) {
  try {
@@ -854,13 +878,12 @@ async function loadPartnerInfo(partnerEmail) {
  });
  if (!res.ok) return;
  const p = await res.json();
- const rating = p.averageRating > 0
- ? ''.repeat(Math.round(p.averageRating)) + ''.repeat(5 - Math.round(p.averageRating)) + ' ' + p.averageRating.toFixed(1)
- : 'Nouveau';
+
  const deals = p.completedDeals || p.totalDeals || 0;
  const since = p.createdAt
  ? new Date(p.createdAt).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
  : null;
+
  // Ligne "Membre depuis..."
  let sinceLine = since ? 'Membre depuis ' + since : 'Nouveau membre';
  if (deals > 0) sinceLine += ' · ' + deals + ' échange' + (deals > 1 ? 's' : '');
@@ -872,7 +895,44 @@ async function loadPartnerInfo(partnerEmail) {
   document.getElementById('memberCardCountry').textContent = country;
   document.getElementById('memberCardLocation').style.display = 'flex';
  }
- document.getElementById('memberCard').style.display = 'flex';
+
+ // Ajouter les éléments dynamiques (rating, volume, badges)
+ const card = document.getElementById('memberCard');
+ const ratingVal = p.averageRating || 0;
+ const ratingCount = (p.ratings && p.ratings.length) || 0;
+
+ // Supprimer les éléments déjà injectés si re-chargement
+ ['memberCardRating','memberCardVolume','memberCardBadges'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+ });
+
+ if (ratingVal > 0) {
+  const ratingEl = document.createElement('div');
+  ratingEl.id = 'memberCardRating';
+  ratingEl.className = 'member-card-row';
+  ratingEl.innerHTML = `<div class="member-card-icon">★</div><div class="member-card-meta" style="color:var(--yellow);font-weight:700;">★ ${ratingVal.toFixed(1)} <span style="color:var(--text-3);font-weight:400;font-size:12px;">(${ratingCount} avis)</span></div>`;
+  card.insertBefore(ratingEl, card.children[1]);
+ }
+
+ const volHtml = renderVolume(p.totalVolumeEur);
+ if (volHtml) {
+  const volEl = document.createElement('div');
+  volEl.id = 'memberCardVolume';
+  volEl.className = 'member-card-row';
+  volEl.innerHTML = `<div class="member-card-icon" style="font-size:11px;">💰</div><div class="member-card-meta" style="font-size:12px;">${volHtml}</div>`;
+  card.appendChild(volEl);
+ }
+
+ const badgesHtml = renderBadgesRow(p);
+ if (badgesHtml) {
+  const badgesEl = document.createElement('div');
+  badgesEl.id = 'memberCardBadges';
+  badgesEl.innerHTML = badgesHtml;
+  card.appendChild(badgesEl);
+ }
+
+ card.style.display = 'flex';
  } catch(e) {}
 }
 
@@ -973,21 +1033,29 @@ async function loadPartnerProfileSheet(partnerEmail) {
  const uname = p.username || partnerEmail.split('@')[0];
  const parts = uname.trim().split(' ').filter(x => x.length > 0);
  const initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase() : uname.substring(0,2).toUpperCase();
- const rating = p.averageRating > 0 ? ''.repeat(Math.round(p.averageRating)) + ''.repeat(5-Math.round(p.averageRating)) + ' ' + p.averageRating.toFixed(1) : 'Aucun avis';
+ const ratingVal = p.averageRating || 0;
+ const ratingCount = (p.ratings && p.ratings.length) || 0;
+ const ratingHtml = ratingVal > 0
+  ? `<span style="color:var(--yellow);font-weight:700;font-size:15px;">★ ${ratingVal.toFixed(1)}</span> <span style="color:var(--text-3);font-size:12px;">(${ratingCount} avis)</span>`
+  : '<span style="color:var(--text-3);font-size:12px;">Aucun avis</span>';
  const deals = p.completedDeals || p.totalDeals || 0;
  const since = p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-FR', { month:'long', year:'numeric' }) : null;
+ const volHtml = renderVolume(p.totalVolumeEur);
+ const badgesHtml = renderBadgesRow(p);
 
  container.innerHTML =
  '<div class="partner-profile-hero">' +
  '<div class="partner-profile-avatar">' + initials + '</div>' +
  '<div class="partner-profile-name">' + uname + '</div>' +
- '<div class="partner-profile-rating">' + rating + '</div>' +
+ '<div class="partner-profile-rating">' + ratingHtml + '</div>' +
  (since ? '<div class="partner-profile-since">Membre depuis ' + since + '</div>' : '') +
+ (volHtml ? '<div style="font-size:12px;color:var(--text-2);margin-top:6px;">' + volHtml + '</div>' : '') +
  '</div>' +
+ (badgesHtml ? '<div style="margin-bottom:14px;">' + badgesHtml + '</div>' : '') +
  '<div class="partner-stat-row">' +
- '<div class="partner-stat"><div class="partner-stat-val">' + deals + '</div><div class="partner-stat-lbl">Echanges</div></div>' +
- '<div class="partner-stat"><div class="partner-stat-val">' + (p.averageRating > 0 ? p.averageRating.toFixed(1) : '—') + '</div><div class="partner-stat-lbl">Note</div></div>' +
- '<div class="partner-stat"><div class="partner-stat-val">' + (p.verificationLevel || 1) + '</div><div class="partner-stat-lbl">Niveau</div></div>' +
+ '<div class="partner-stat"><div class="partner-stat-val">' + deals + '</div><div class="partner-stat-lbl">Échanges</div></div>' +
+ '<div class="partner-stat"><div class="partner-stat-val">' + (ratingVal > 0 ? ratingVal.toFixed(1) : '—') + '</div><div class="partner-stat-lbl">Note</div></div>' +
+ '<div class="partner-stat"><div class="partner-stat-val">' + (p.level || p.verificationLevel || 1) + '</div><div class="partner-stat-lbl">Niveau</div></div>' +
  '</div>';
  } catch(e) {
  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);">Erreur de chargement</div>';
