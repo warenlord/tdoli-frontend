@@ -667,14 +667,6 @@ function openDeal(id) {
 
   const iReceived = isSender ? d.receivedBySender : d.receivedByReceiver;
   const otherReceived = isSender ? d.receivedByReceiver : d.receivedBySender;
-  const otherProofOk = isSender ? d.confirmedByReceiver : d.confirmedBySender;
-
-  // ── Frise asymétrique des étapes ─────────────────────────────
-  // La partie XAF/XOF envoie en premier (moins réversible)
-  const myCurrency = isSender ? (d.currency || '') : (d.receiverCurrency || '');
-  const otherCurrencyFrise = isSender ? (d.receiverCurrency || '') : (d.currency || '');
-  const XAF_SET = ['XAF', 'XOF'];
-  const isXafParty = XAF_SET.includes(myCurrency) || (!XAF_SET.includes(otherCurrencyFrise) && isSender);
 
   const _si = (state, n) => {
     if(state==='done') return '<div style="width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#000;font-size:14px;font-weight:800;flex-shrink:0;">✓</div>';
@@ -699,52 +691,21 @@ function openDeal(id) {
 
   let actionsHtml = '';
   if(d.status==='matched' || d.status==='completed') {
-    const iSent = isSender ? !!d.confirmedBySender : !!d.confirmedByReceiver;
-    const otherSent = isSender ? !!d.confirmedByReceiver : !!d.confirmedBySender;
-    const xafSent = isXafParty ? iSent : otherSent;
-    const eurSent = isXafParty ? otherSent : iSent;
-    const xafGotFunds = (isXafParty ? iReceived : otherReceived) || d.status==='completed';
-    const eurGotFunds = (isXafParty ? otherReceived : iReceived) || d.status==='completed';
     const isDone = d.status==='completed';
 
-    let friseHtml;
-    if(isXafParty) {
-      const s2 = xafSent ? 'done' : 'active';
-      const s3 = !xafSent ? 'pending' : eurSent ? 'done' : 'active';
-      const s4 = (!xafSent||!eurSent) ? 'pending' : xafGotFunds ? 'done' : 'active';
-      const s5 = isDone ? 'done' : 'pending';
-      const s2sub = s2==='done' ? 'Paiement envoyé — preuve soumise ✓' : 'Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessus.';
-      const s2act = s2==='active' ? ocrHtml+'<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="openProof(\''+d._id+'\')">📤 J\'ai envoyé — Uploader ma preuve</button>'+_btnDispute : (s2==='done' ? ocrHtml : '');
-      const s3sub = s3==='done' ? otherName+' a envoyé sa part ✓' : s3==='active' ? otherName+' doit maintenant envoyer sa part.' : '';
-      const s3act = s3==='active' ? '<div style="padding:9px 12px;background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;font-size:12px;color:var(--yellow);">⏳ En attente de '+otherName+'…</div>' : '';
-      const s4sub = s4==='done' ? 'Réception confirmée ✓' : s4==='active' ? 'As-tu bien reçu les fonds de '+otherName+' ?' : '';
-      const s4act = s4==='active' ? '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\''+d._id+'\',this)">✅ J\'ai reçu les fonds</button>'+_btnDispute : '';
-      friseHtml = [
-        _sr('done',1,'Match confirmé','Deal '+tdlCode+' · 24h pour clôturer','',false),
-        _sr(s2,2,'Envoie les fonds',s2sub,s2act,false),
-        _sr(s3,3,'En attente de l\'autre partie',s3sub,s3act,false),
-        _sr(s4,4,'Confirme la réception',s4sub,s4act,false),
-        _sr(s5,5,'Deal clôturé',isDone?'Échange réussi !':'En attente de clôture.','',true)
-      ].join('');
-    } else {
-      const s2 = xafSent ? 'done' : 'pending';
-      const s3 = !xafSent ? 'pending' : eurSent ? 'done' : 'active';
-      const s4 = (!xafSent||!eurSent) ? 'pending' : eurGotFunds ? 'done' : 'active';
-      const s5 = isDone ? 'done' : 'pending';
-      const s2sub = s2==='done' ? otherName+' a envoyé sa part ✓' : otherName+' doit envoyer en premier (partie XAF).';
-      const s2act = s2==='pending' ? '<div style="padding:9px 12px;background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;font-size:12px;color:var(--yellow);">⏳ En attente de '+otherName+'…</div>' : '';
-      const s3sub = s3==='done' ? 'Paiement envoyé — preuve soumise ✓' : s3==='active' ? 'Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessus.' : '';
-      const s3act = s3==='active' ? ocrHtml+'<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="openProof(\''+d._id+'\')">📤 J\'ai envoyé — Uploader ma preuve</button>'+_btnDispute : (s3==='done' ? ocrHtml : '');
-      const s4sub = s4==='done' ? 'Réception confirmée ✓' : s4==='active' ? 'As-tu bien reçu les fonds de '+otherName+' ?' : '';
-      const s4act = s4==='active' ? '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\''+d._id+'\',this)">✅ J\'ai reçu les fonds</button>'+_btnDispute : '';
-      friseHtml = [
-        _sr('done',1,'Match confirmé','Deal '+tdlCode+' · 24h pour clôturer','',false),
-        _sr(s2,2,'En attente de l\'autre partie',s2sub,s2act,false),
-        _sr(s3,3,'Envoie les fonds',s3sub,s3act,false),
-        _sr(s4,4,'Confirme la réception',s4sub,s4act,false),
-        _sr(s5,5,'Deal clôturé',isDone?'Échange réussi !':'En attente de clôture.','',true)
-      ].join('');
-    }
+    const s2state = iReceived ? 'done' : 'active';
+    const s2sub = iReceived
+      ? 'Réception confirmée ✓' + (otherReceived ? '' : ' — en attente de '+otherName)
+      : 'As-tu reçu les fonds de '+otherName+' ?<br><span style="color:var(--text-3);font-size:11px;">Partage tes justificatifs dans le chat si besoin.</span>';
+    const s2act = iReceived ? '' : '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\''+d._id+'\',this)">✅ J\'ai reçu les fonds</button>' + _btnDispute;
+
+    const s3state = isDone ? 'done' : 'pending';
+
+    const friseHtml = [
+      _sr('done', 1, 'Match confirmé', 'Deal '+tdlCode+' · Échangez vos coordonnées via le chat', '', false),
+      _sr(s2state, 2, 'Confirmer la réception', s2sub, s2act, false),
+      _sr(s3state, 3, 'Deal clôturé', isDone ? 'Échange réussi ! 🎉' : 'En attente des deux confirmations.', '', true)
+    ].join('');
 
     actionsHtml = tdlHtml +
       '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 14px;margin-bottom:14px;">' +
