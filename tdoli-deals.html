@@ -37,6 +37,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .deal-item.matched::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--yellow),var(--green));}
 .deal-item.completed::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--green);}
 .deal-item.dispute::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--red);}
+.deal-item.cancelled{opacity:0.55;}
+.deal-item.cancelled::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--text-3);}
+.deal-badge-right.cancelled{background:rgba(255,255,255,0.04);color:var(--text-3);border:1px solid var(--border);}
+.cancel-request-box{background:rgba(255,215,64,0.05);border:1px solid rgba(255,215,64,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;}
+.btn-cancel-deal{width:100%;padding:11px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:6px;}
 .deal-thumb{width:52px;height:52px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,rgba(0,200,83,0.12),rgba(41,121,255,0.12));border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:22px;}
 .deal-body{flex:1;min-width:0;}
 .deal-code-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -250,6 +255,7 @@ firebase.initializeApp({
  <div class="filter-tab" onclick="setFilter('matched',this)">En cours</div>
  <div class="filter-tab" onclick="setFilter('completed',this)">Complétés</div>
  <div class="filter-tab" onclick="setFilter('dispute',this)">Litiges</div>
+ <div class="filter-tab" onclick="setFilter('cancelled',this)">Annulés</div>
 </div>
 
 <div class="content"><div id="dealsList"><div class="loading-wrap"><div class="loader"></div></div></div></div>
@@ -503,6 +509,7 @@ function getStatusLabel(s) {
  if(s==='matched') return {cls:'matched',label:'En cours ●'};
  if(s==='completed') return {cls:'completed',label:'Complété '};
  if(s==='dispute') return {cls:'dispute',label:'Litige '};
+ if(s==='cancelled') return {cls:'cancelled',label:'Annulé'};
  return {cls:'',label:s||'?'};
 }
 
@@ -691,6 +698,8 @@ function openDeal(id) {
  instructionHtml = '<div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green);"> Deal complété avec succès !</div>';
  } else if(d.status==='dispute') {
  instructionHtml = '<div style="background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);"> Litige en cours de traitement.</div>';
+ } else if(d.status==='cancelled') {
+ instructionHtml = '<div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text-3);">Deal annulé d\'un commun accord.</div>';
  }
 
 
@@ -736,10 +745,34 @@ function openDeal(id) {
       _sr(s3state, 3, 'Deal clôturé', isDone ? 'Échange réussi ! 🎉' : 'En attente des deux confirmations.', '', true)
     ].join('');
 
+    // ── Bloc annulation mutuelle ───────────────────────────────
+    let cancelHtml = '';
+    if(d.status === 'matched') {
+      if(d.cancelRequestedBy === email) {
+        // J'ai demandé, j'attends l'autre
+        cancelHtml = '<div class="cancel-request-box">' +
+          '<div style="font-family:Syne,sans-serif;font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:4px;"> Annulation demandée</div>' +
+          '<div style="font-size:12px;color:var(--text-3);">En attente de la confirmation de '+otherName+'.</div>' +
+          '</div>';
+      } else if(d.cancelRequestedBy && d.cancelRequestedBy !== email) {
+        // L'autre demande — je peux accepter ou refuser
+        cancelHtml = '<div class="cancel-request-box">' +
+          '<div style="font-family:Syne,sans-serif;font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:6px;"> '+otherName+' demande l\'annulation</div>' +
+          '<div style="font-size:12px;color:var(--text-3);margin-bottom:10px;">Acceptes-tu d\'annuler ce deal d\'un commun accord ?</div>' +
+          '<div style="display:flex;gap:8px;">' +
+          '<button onclick="cancelDeal(\''+d._id+'\')" style="flex:1;padding:10px;background:rgba(255,68,68,0.12);color:var(--red);border:1px solid rgba(255,68,68,0.3);border-radius:10px;font-family:Syne,sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Accepter</button>' +
+          '<button onclick="rejectCancel(\''+d._id+'\')" style="flex:1;padding:10px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:10px;font-family:Syne,sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Refuser</button>' +
+          '</div></div>';
+      } else {
+        // Aucune demande — bouton discret
+        cancelHtml = '<button class="btn-cancel-deal" onclick="cancelDeal(\''+d._id+'\')">Demander l\'annulation du deal</button>';
+      }
+    }
+
     actionsHtml = tdlHtml +
       '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 14px;margin-bottom:14px;">' +
       friseHtml +
-      '</div>';
+      '</div>' + cancelHtml;
   }
 
  const chatHtml = '<a href="/tdoli-chat.html?deal='+d._id+'" class="chat-link"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;"></div><div><div class="chat-text">Messagerie</div><div class="chat-sub">Contacter '+otherName+'</div></div></div><span style="color:var(--text-3);">→</span></a>';
@@ -821,6 +854,40 @@ async function confirmReceived(dealId, btn) {
     btn.disabled = false;
     btn.innerHTML = '✅ Jai recu les fonds';
   }
+}
+
+async function cancelDeal(dealId) {
+ try {
+  const r = await safeJson(await fetch(API+'/deal/'+dealId+'/cancel', {
+   method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}
+  }));
+  if(r.ok) {
+   closeSheet('detailOverlay');
+   if(r.data && r.data.status === 'cancelled') {
+    showToast('Deal annulé', 'var(--text-3)');
+   } else {
+    showToast('Demande d\'annulation envoyée — en attente de l\'autre partie', 'var(--yellow)');
+   }
+   loadDeals(true);
+  } else {
+   showToast((r.data && r.data.message) || 'Erreur', '#ff1744');
+  }
+ } catch(e) { showToast('Erreur réseau', '#ff1744'); }
+}
+
+async function rejectCancel(dealId) {
+ try {
+  const r = await safeJson(await fetch(API+'/deal/'+dealId+'/cancel/reject', {
+   method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}
+  }));
+  if(r.ok) {
+   showToast('Annulation refusée', 'var(--yellow)');
+   loadDeals(true);
+   closeSheet('detailOverlay');
+  } else {
+   showToast((r.data && r.data.message) || 'Erreur', '#ff1744');
+  }
+ } catch(e) { showToast('Erreur réseau', '#ff1744'); }
 }
 
 async function submitRating(dealId) {
