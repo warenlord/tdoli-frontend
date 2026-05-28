@@ -534,6 +534,19 @@ firebase.initializeApp({
  </div>
 </div>
 
+<!-- Sheet choix match / publier -->
+<div class="overlay" id="matchChoiceOverlay" onclick="closeOnOverlay(event,'matchChoiceOverlay')">
+ <div class="sheet">
+  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+  <div class="sheet-title">🎯 Match disponible !</div>
+  <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Une annonce compatible a été trouvée dans le feed.</div>
+  <div id="matchChoiceDetail" style="background:var(--surface);border:1px solid rgba(252,209,22,0.25);border-radius:12px;padding:14px 16px;margin-bottom:20px;"></div>
+  <button class="btn-primary" id="btn-do-match" onclick="doSubmitAnnonce(true)" style="margin-bottom:10px;">🎯 Matcher maintenant</button>
+  <button class="btn-primary" onclick="doSubmitAnnonce(false)" style="background:var(--surface);border:1px solid var(--border);color:var(--text-2);">Publier mon annonce sans matcher</button>
+  <button class="btn-cancel" onclick="closeSheet('matchChoiceOverlay')">Annuler</button>
+ </div>
+</div>
+
 <!-- Sheet nouveau bénéficiaire inline (depuis feed) -->
 <div class="overlay" id="inlineBenefOverlay" onclick="closeOnOverlay(event,'inlineBenefOverlay')">
  <div class="sheet">
@@ -1094,7 +1107,6 @@ function renderStars(r) {
 function computeBadges(user) {
  const deals = user.completedDeals || 0;
  const out = [];
- if (user.isAgent) out.push({key:'agent',icon:'⭐',label:'Agent',color:'#FFD740',bg:'rgba(255,215,64,0.13)',border:'rgba(255,215,64,0.35)'});
  if (deals >= 50) out.push({key:'pilier',icon:'💎',label:'Pilier',color:'#CE93D8',bg:'rgba(206,147,216,0.13)',border:'rgba(206,147,216,0.35)'});
  if (deals >= 10) out.push({key:'confiance',icon:'🛡️',label:'Membre de confiance',color:'#82B1FF',bg:'rgba(130,177,255,0.13)',border:'rgba(130,177,255,0.35)'});
  if (deals >= 5) out.push({key:'reactif',icon:'⚡',label:'Très réactif',color:'#FFCC80',bg:'rgba(255,204,128,0.13)',border:'rgba(255,204,128,0.35)'});
@@ -1410,12 +1422,12 @@ async function executeMatch() {
  });
  const data = await res.json();
  closeSheet('confirmOverlay');
+ if (res.ok && data.deal && data.deal.status === 'awaiting_approval') {
+ showToast('Demande envoyée — en attente de confirmation ⏳', '#ffd740');
+ setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2500);
+ } else if (res.ok && (data.deal || data.dealCode)) {
  const dealCode = data.dealCode || data.deal?.dealCode;
- if (res.ok && dealCode) {
- showToast(' Match ! Code: ' + dealCode, '#ffd740');
- setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
- } else if (res.ok && data.deal) {
- showToast('Match confirmé !', '#ffd740');
+ showToast('Match ! Code: ' + (dealCode || ''), '#ffd740');
  setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
  } else if (res.ok) {
  showToast('Annonce publiée');
@@ -1805,6 +1817,9 @@ function updatePreview(mode) {
  if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry, fromCountry);
 }
 
+// Données en attente pour le choix match / publier
+let _pendingAnnonce = null;
+
 async function submitAnnonce() {
  const amount = parseAmount(document.getElementById('ann-amount').value);
  const currency = document.getElementById('ann-currency').value;
@@ -1813,21 +1828,100 @@ async function submitAnnonce() {
  if (!amount || amount <= 0) { showMsg('msg-create', 'Montant invalide'); return; }
  if (fromCountry === toCountry) { showMsg('msg-create', 'Les pays doivent être différents'); return; }
  if (!selectedBenefId) { showMsg('msg-create', 'Choisis un bénéficiaire avant de publier'); return; }
+
  const btn = document.getElementById('btn-submit');
- btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...';
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Vérification...';
+
  try {
- const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ amount, currency, fromCountry, toCountry, beneficiaireId: selectedBenefId || null }) });
- const data = await res.json();
- if (res.ok) {
- closeSheet('createOverlay');
- document.getElementById('ann-amount').value = '';
- selectedBenefId = null;
- const bc = document.getElementById('benef-selected-create'); if(bc) bc.innerHTML = '';
- if (data.deal) { showToast('Match immédiat ! Code: ' + (data.deal.dealCode || ''), 'var(--yellow)'); setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000); }
- else { showToast('Annonce publiée '); loadFeed(true); }
- } else showMsg('msg-create', data.message || 'Erreur');
- } catch (e) { showMsg('msg-create', 'Serveur inaccessible'); }
+  // Vérifier s'il existe un match sans rien créer
+  const checkRes = await fetch(API + '/transfer/check-match?fromCountry=' + encodeURIComponent(fromCountry) +
+   '&toCountry=' + encodeURIComponent(toCountry) + '&amount=' + amount + '&currency=' + encodeURIComponent(currency),
+   { headers: { 'Authorization': 'Bearer ' + token } });
+
+  if (checkRes.ok) {
+   const { match } = await checkRes.json();
+   if (match && match.matchableEuro > 0) {
+    _pendingAnnonce = { amount, currency, fromCountry, toCountry };
+    // Afficher la fiche match
+    const stars = '⭐'.repeat(Math.round(match.rating || 0));
+    const partialNote = match.isPartial
+     ? `<div style="font-size:11px;color:var(--yellow);margin-top:6px;">⚡ Match partiel — ${match.matchableEuro} € matchés, le reste sera publié dans le feed</div>`
+     : '';
+    document.getElementById('matchChoiceDetail').innerHTML =
+     `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+       <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">${match.senderUsername}</div>
+       <div style="font-size:12px;color:var(--text-3);">${stars} · ${match.completedDeals} deals${match.phoneVerified ? ' · ✓ Vérifié' : ''}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+       <span style="color:var(--text-3);">Montant disponible</span>
+       <span style="font-weight:600;">${match.availableEuro.toLocaleString('fr-FR')} €</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;">
+       <span style="color:var(--text-3);">Corridor</span>
+       <span style="font-weight:600;">${toCountry} → ${fromCountry}</span>
+      </div>${partialNote}`;
+    closeSheet('createOverlay');
+    document.getElementById('matchChoiceOverlay').classList.add('open');
+    btn.disabled = false; btn.innerHTML = 'Publier';
+    return;
+   }
+  }
+ } catch(e) { /* si check-match échoue, on continue en mode normal */ }
+
+ // Pas de match ou erreur → publier directement
+ await doSubmitAnnonce(true);
  btn.disabled = false; btn.innerHTML = 'Publier';
+}
+
+async function doSubmitAnnonce(autoMatch) {
+ if (!_pendingAnnonce && autoMatch !== undefined) {
+  // appel direct depuis submitAnnonce (pas de sheet de choix)
+  _pendingAnnonce = {
+   amount: parseAmount(document.getElementById('ann-amount').value),
+   currency: document.getElementById('ann-currency').value,
+   fromCountry: document.getElementById('ann-from').value,
+   toCountry: document.getElementById('ann-to').value,
+  };
+ }
+ const { amount, currency, fromCountry, toCountry } = _pendingAnnonce || {};
+ closeSheet('matchChoiceOverlay');
+ closeSheet('createOverlay');
+
+ const btn = document.getElementById('btn-submit');
+ if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publication...'; }
+
+ try {
+  const body = { amount, currency, fromCountry, toCountry, beneficiaireId: selectedBenefId || null };
+  if (autoMatch === false) body.autoMatch = false;
+
+  const res = await fetch(API + '/transfer', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) });
+  const data = await res.json();
+
+  document.getElementById('ann-amount').value = '';
+  selectedBenefId = null;
+  _pendingAnnonce = null;
+  const bc = document.getElementById('benef-selected-create'); if(bc) bc.innerHTML = '';
+
+  if (res.ok) {
+   if (data.deal && data.deal.status === 'awaiting_approval') {
+    const partialMsg = data.isPartial ? ` · ${data.unmatchedEuro} € publiés dans le feed` : '';
+    showToast('Demande envoyée — en attente de confirmation ⏳' + partialMsg, 'var(--yellow)');
+    if (data.isPartial) loadFeed(true);
+    else setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2500);
+   } else if (data.deal) {
+    showToast('Match ! Code: ' + (data.deal.dealCode || ''), 'var(--yellow)');
+    setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2000);
+   } else {
+    showToast('Annonce publiée ');
+    loadFeed(true);
+   }
+  } else {
+   showToast(data.message || 'Erreur', '#ff5252');
+  }
+ } catch(e) {
+  showToast('Serveur inaccessible', '#ff5252');
+ }
+ if (btn) { btn.disabled = false; btn.innerHTML = 'Publier'; }
 }
 
 

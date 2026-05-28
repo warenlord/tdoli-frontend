@@ -709,6 +709,80 @@ function shareReferral(code, link) {
  }
 }
 
+function renderKycCard(user) {
+ const status = user.kycStatus || 'none';
+ if (status === 'approved') return '';
+
+ const statusConfig = {
+  none:     { icon: '🪪', label: 'Non soumis',        color: 'var(--text-3)', bg: 'var(--surface)', border: 'var(--border)' },
+  pending:  { icon: '⏳', label: 'En cours d\'examen', color: '#ffd740',       bg: 'rgba(255,215,64,0.06)', border: 'rgba(255,215,64,0.25)' },
+  rejected: { icon: '❌', label: 'Refusé',             color: '#ff5252',       bg: 'rgba(255,82,82,0.06)', border: 'rgba(255,82,82,0.25)' },
+ };
+ const s = statusConfig[status] || statusConfig.none;
+
+ const canSubmit = status === 'none' || status === 'rejected';
+ const rejectedBanner = status === 'rejected' && user.kycRejectedReason
+  ? `<div style="background:rgba(255,82,82,0.06);border:1px solid rgba(255,82,82,0.2);border-radius:10px;padding:10px 13px;margin-bottom:12px;font-size:12px;color:#ff7070;">
+      <strong>Motif :</strong> ${user.kycRejectedReason}
+     </div>`
+  : '';
+
+ return `<div class="limit-card" style="margin-bottom:14px;" id="kycCard">
+  <div class="limit-card-header">
+   <div class="limit-card-title">🪪 Vérification identité</div>
+   <div style="font-size:12px;font-weight:700;font-family:'Syne',sans-serif;padding:3px 10px;border-radius:20px;background:${s.bg};color:${s.color};border:1px solid ${s.border};">${s.icon} ${s.label}</div>
+  </div>
+  <div style="font-size:12px;color:var(--text-3);line-height:1.6;margin-bottom:12px;">
+   Débloque le <strong style="color:#CE93D8;">Niveau 3</strong> et un plafond plus élevé en soumettant une pièce d'identité valide (carte nationale, passeport).
+  </div>
+  ${rejectedBanner}
+  ${canSubmit ? `
+  <div id="kycDropZone" style="border:1.5px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:border-color 0.2s;margin-bottom:10px;" onclick="document.getElementById('kycFileInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--green)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleKycDrop(event)">
+   <div style="font-size:24px;margin-bottom:6px;">📄</div>
+   <div style="font-size:13px;font-weight:600;">Glisse ou clique pour sélectionner</div>
+   <div style="font-size:11px;color:var(--text-3);margin-top:4px;">JPG, PNG, PDF — max 10 Mo</div>
+  </div>
+  <input type="file" id="kycFileInput" accept="image/*,.pdf" style="display:none;" onchange="if(this.files[0])submitKyc(this.files[0])">
+  <div id="kycUploadStatus" style="display:none;font-size:12px;text-align:center;padding:8px;color:var(--text-3);">Envoi en cours…</div>
+  ` : status === 'pending' ? `<div style="font-size:12px;color:var(--text-3);text-align:center;padding:8px 0;">Ton document est en cours de vérification — nous te préviendrons par notification.</div>` : ''}
+ </div>`;
+}
+
+async function submitKyc(file) {
+ const statusEl = document.getElementById('kycUploadStatus');
+ const dropZone = document.getElementById('kycDropZone');
+ if (statusEl) { statusEl.style.display = 'block'; }
+ if (dropZone) { dropZone.style.display = 'none'; }
+
+ const token = localStorage.getItem('tdoli_token');
+ const form = new FormData();
+ form.append('document', file);
+ try {
+  const res = await fetch(API + '/kyc/submit', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: form });
+  const data = await res.json();
+  if (res.ok) {
+   showToast('Document envoyé — en cours de vérification ⏳', '#ffd740');
+   const card = document.getElementById('kycCard');
+   if (card) card.innerHTML = '<div style="text-align:center;padding:16px;font-size:13px;color:#ffd740;">⏳ Document en cours d\'examen</div>';
+  } else {
+   showToast(data.message || 'Erreur upload', '#ff5252');
+   if (statusEl) { statusEl.style.display = 'none'; }
+   if (dropZone) { dropZone.style.display = 'block'; }
+  }
+ } catch(e) {
+  showToast('Erreur réseau', '#ff5252');
+  if (statusEl) { statusEl.style.display = 'none'; }
+  if (dropZone) { dropZone.style.display = 'block'; }
+ }
+}
+
+function handleKycDrop(event) {
+ event.preventDefault();
+ document.getElementById('kycDropZone').style.borderColor = 'var(--border)';
+ const file = event.dataTransfer.files[0];
+ if (file) submitKyc(file);
+}
+
 function renderFull(user, txs) {
  const uname = user.username || email?.split('@')[0] || '?';
  const av = user.avatarUrl || localStorage.getItem('tdoli_avatar');
@@ -791,6 +865,7 @@ function renderFull(user, txs) {
  ${rankStatusHtml}
  ${statsHtml}
  ${renderLimitCard(user)}
+ ${renderKycCard(user)}
  ${renderReferralCard(user)}
 
  <div class="testimonials-section" id="testimonialsSection">

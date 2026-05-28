@@ -34,6 +34,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .deal-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;position:relative;overflow:hidden;}
 @keyframes cardIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 .deal-item:active{background:var(--surface);}
+.deal-item.awaiting_approval::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--yellow);}
 .deal-item.matched::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--yellow),var(--green));}
 .deal-item.completed::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--green);}
 .deal-item.dispute::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--red);}
@@ -48,6 +49,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .deal-amount-lg{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:2px;}
 .deal-dir-sm{font-size:12px;color:var(--text-3);}
 .deal-badge-right{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0;align-self:center;}
+.deal-badge-right.awaiting_approval{background:rgba(255,215,64,0.1);color:var(--yellow);border:1px solid rgba(255,215,64,0.3);}
 .deal-badge-right.matched{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
 .deal-badge-right.completed{background:rgba(41,121,255,0.08);color:var(--blue);border:1px solid rgba(41,121,255,0.25);}
 .deal-badge-right.dispute{background:rgba(255,23,68,0.08);color:var(--red);border:1px solid rgba(255,23,68,0.25);}
@@ -506,6 +508,7 @@ function timeAgo(d) {
 function convertToEur(amount,currency){const r={EUR:1,XAF:1/655.957,USD:0.92,CAD:0.68};return amount*(r[currency]||1);}
 
 function getStatusLabel(s) {
+ if(s==='awaiting_approval') return {cls:'awaiting_approval',label:'En attente ⏳'};
  if(s==='matched') return {cls:'matched',label:'En cours ●'};
  if(s==='completed') return {cls:'completed',label:'Complété '};
  if(s==='dispute') return {cls:'dispute',label:'Litige '};
@@ -528,7 +531,10 @@ function renderDeals(data) {
  const myCur = d.myCurrency || d.currency || '';
  const iConfirmed = d.iConfirmed || false;
  const ref = d.dealCode || ('#' + d._id.slice(-6).toUpperCase());
- const actionHtml = d.status==='matched'
+ const isSenderForCard = d.sender === email;
+ const actionHtml = d.status==='awaiting_approval'
+ ? (isSenderForCard ? '<span class="deal-action-hint" style="color:var(--yellow);">Accepter / Refuser →</span>' : '<span style="font-size:10px;color:var(--yellow);">En attente…</span>')
+ : d.status==='matched'
  ? (iConfirmed ? '<span style="font-size:10px;color:var(--green)"> Envoyé · En attente</span>' : '<span class="deal-action-hint">Action requise →</span>')
  : '<span style="font-size:10px;color:var(--text-3)">'+timeAgo(d.updatedAt||d.createdAt)+'</span>';
 
@@ -691,7 +697,9 @@ function openDeal(id) {
  }
 
  let instructionHtml = '';
- if(d.status==='matched') {
+ if(d.status==='awaiting_approval') {
+  instructionHtml = '';
+ } else if(d.status==='matched') {
  instructionHtml = '<div class="instruction-box"><div class="instruction-title">⏳ ACTION REQUISE</div><div class="instruction-text" style="margin-bottom:12px;">Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> selon les coordonnées ci-dessous :</div></div>'
  + otherInfoHtml + myInfoHtml;
  } else if(d.status==='completed') {
@@ -728,6 +736,32 @@ function openDeal(id) {
   const _btnDispute = '<button style="width:100%;padding:11px;background:transparent;color:var(--red);border:1px solid rgba(255,68,68,0.25);border-radius:12px;font-family:Syne,sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;" onclick="openDispute(\''+d._id+'\')">⚠ Signaler un litige</button>';
 
   let actionsHtml = '';
+  if(d.status==='awaiting_approval') {
+    if(isSender) {
+      // Person A : accepter ou refuser
+      const requestedAt = d.matchRequestedAt ? new Date(d.matchRequestedAt) : null;
+      const expiresAt = requestedAt ? new Date(requestedAt.getTime() + 60 * 60 * 1000) : null;
+      const timeLeft = expiresAt ? Math.max(0, Math.round((expiresAt - Date.now()) / 60000)) : null;
+      const countdownHtml = timeLeft !== null
+        ? `<div style="font-size:11px;color:var(--yellow);margin-bottom:12px;">⏱ ${timeLeft > 0 ? timeLeft + ' min restantes pour répondre' : 'Expiré bientôt'}</div>`
+        : '';
+      actionsHtml = countdownHtml +
+        `<div style="background:rgba(255,215,64,0.06);border:1px solid rgba(255,215,64,0.2);border-radius:12px;padding:14px;margin-bottom:14px;">
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--yellow);margin-bottom:6px;">🎯 ${otherName} veut matcher ton annonce</div>
+          <div style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Montant : <strong>${Number(otherAmount||amount).toLocaleString('fr-FR')} ${otherCurrency||currency}</strong> (≈ ${Number(d.amountEuro||0).toLocaleString('fr-FR')} €)</div>
+          <div style="display:flex;gap:8px;">
+           <button onclick="approveMatchDeal('${d._id}')" style="flex:1;padding:12px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">✅ Accepter</button>
+           <button onclick="refuseMatchDeal('${d._id}')" style="flex:1;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">❌ Refuser</button>
+          </div>
+         </div>`;
+    } else {
+      // Person B : en attente
+      actionsHtml = `<div style="background:rgba(255,215,64,0.06);border:1px solid rgba(255,215,64,0.2);border-radius:12px;padding:14px;margin-bottom:14px;text-align:center;">
+        <div style="font-size:14px;color:var(--yellow);margin-bottom:6px;">⏳ En attente de ${otherName}</div>
+        <div style="font-size:12px;color:var(--text-3);">${otherName} a 1h pour accepter ou refuser ton match.<br>Tu seras notifié dès qu'il répond.</div>
+       </div>`;
+    }
+  }
   if(d.status==='matched' || d.status==='completed') {
     const isDone = d.status==='completed';
 
@@ -854,6 +888,37 @@ async function confirmReceived(dealId, btn) {
     btn.disabled = false;
     btn.innerHTML = '✅ Jai recu les fonds';
   }
+}
+
+async function approveMatchDeal(dealId) {
+ try {
+  const r = await safeJson(await fetch(API+'/deal/'+dealId+'/approve-match', {
+   method:'POST', headers:{'Authorization':'Bearer '+token}
+  }));
+  if(r.ok) {
+   closeSheet('detailOverlay');
+   showToast('Match accepté ! Le deal démarre.', 'var(--green)');
+   setTimeout(loadDeals, 800);
+  } else {
+   showToast((r.data && r.data.message) || 'Erreur', '#ff5252');
+  }
+ } catch(e) { showToast('Erreur réseau', '#ff5252'); }
+}
+
+async function refuseMatchDeal(dealId) {
+ if(!confirm('Refuser ce match ? La demande sera annulée et ton annonce remise en ligne.')) return;
+ try {
+  const r = await safeJson(await fetch(API+'/deal/'+dealId+'/refuse-match', {
+   method:'POST', headers:{'Authorization':'Bearer '+token}
+  }));
+  if(r.ok) {
+   closeSheet('detailOverlay');
+   showToast('Match refusé — annonce remise en ligne', 'var(--text-3)');
+   setTimeout(loadDeals, 800);
+  } else {
+   showToast((r.data && r.data.message) || 'Erreur', '#ff5252');
+  }
+ } catch(e) { showToast('Erreur réseau', '#ff5252'); }
 }
 
 async function cancelDeal(dealId) {
