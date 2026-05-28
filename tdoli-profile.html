@@ -397,7 +397,7 @@ function computeBadges(user) {
 }
 function renderBadgesGrid(user) {
  const badges = computeBadges(user);
- if (!badges.length) return '<div style="font-size:12px;color:var(--text-3);padding:8px 0;text-align:center;">Aucun badge obtenu pour l\'instant</div>';
+ if (!badges.length) return '';
  return '<div style="display:flex;gap:10px;flex-wrap:wrap;">' + badges.map(b =>
   `<div style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 14px;border-radius:14px;background:${b.bg};border:1px solid ${b.border};min-width:76px;">
     <span style="font-size:22px;line-height:1;">${b.icon}</span>
@@ -648,23 +648,6 @@ function renderLimitCard(user) {
    </div>
   </div>
   ${nextHint}
-  <div class="limit-factors">
-   <div class="limit-factor">
-    <div class="limit-factor-icon">🔄</div>
-    <div class="limit-factor-label">${d.deals} deals</div>
-    <div class="limit-factor-val">${fmt(d.base)} €</div>
-   </div>
-   <div class="limit-factor">
-    <div class="limit-factor-icon">⭐</div>
-    <div class="limit-factor-label">${scoreLabel}</div>
-    ${repDisplay}
-   </div>
-   <div class="limit-factor">
-    <div class="limit-factor-icon">📱</div>
-    <div class="limit-factor-label">${user.phoneVerified ? 'Tél. vérifié' : 'Non vérifié'}</div>
-    ${phoneDisplay}
-   </div>
-  </div>
  </div>`;
 }
 
@@ -684,9 +667,6 @@ function renderReferralCard(user) {
     <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);letter-spacing:2px;">${code}</div>
    </div>
    <button onclick="copyRefCode('${code}')" style="padding:9px 14px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:10px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">Copier</button>
-  </div>
-  <div style="font-size:12px;color:var(--text-3);line-height:1.6;margin-bottom:12px;">
-   Invite tes amis avec ce code. Tu gagnes <strong style="color:var(--yellow);">+50 XP</strong> par inscription parrainée.
   </div>
   <button onclick="shareReferral('${code}','${link}')" style="width:100%;padding:11px;background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.3);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;"> Partager mon lien</button>
  </div>`;
@@ -855,15 +835,27 @@ function renderFull(user, txs) {
  <div class="profile-email">${email||''}</div>
  ${starsHtml}
  ${volumeHtml}
+ ${badgesHtml ? '<div style="margin-top:12px;">'+badgesHtml+'</div>' : ''}
  </div>
 
- <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;">
- <div style="font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Badges</div>
- ${badgesHtml}
+ <div class="status-section">
+ <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+ ${rank ? `<span class="rank-hero ${rank.cls}">${rank.label}</span>` : ''}
+ <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+ <div class="level-badge">${userLevel}</div>
+ <div style="font-size:12px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;">Niv.&nbsp;${userLevel}</div>
+ </div>
+ </div>
+ <div class="xp-bar-container" style="margin-bottom:12px;">
+ <div class="xp-bar"><div class="xp-bar-fill" style="width:${xpPercent}%"></div></div>
+ <div class="xp-label"><span>${userXp.toLocaleString('fr-FR')} XP</span><span>${userNextXp.toLocaleString('fr-FR')} XP</span></div>
+ </div>
+ <div style="display:flex;gap:10px;">
+ <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);">${user.completedDeals || 0}</div><div style="font-size:10px;color:var(--text-3);margin-top:3px;">Deals complétés</div></div>
+ <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);">${completionRate}%</div><div style="font-size:10px;color:var(--text-3);margin-top:3px;">Taux de réussite</div></div>
+ </div>
  </div>
 
- ${rankStatusHtml}
- ${statsHtml}
  ${renderLimitCard(user)}
  ${renderKycCard(user)}
  ${renderReferralCard(user)}
@@ -872,9 +864,7 @@ function renderFull(user, txs) {
  <div class="no-testimonial">Chargement des témoignages…</div>
  </div>
 
- ${txHtml}
-
- <div class="section-title" style="margin-top:${txHtml?'16':'0'}px;">Paramètres</div>
+ <div class="section-title" style="margin-top:16px;">Paramètres</div>
  <div class="settings-card">
  <div class="settings-item" onclick="window.location.href='/tdoli-beneficiaires.html'"><span class="settings-label"> Mes bénéficiaires</span><span class="settings-val">Gérer →</span></div>
  <div class="settings-item" onclick="openPhoneVerif()">
