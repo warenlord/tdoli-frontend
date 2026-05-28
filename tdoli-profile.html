@@ -28,6 +28,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .profile-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .avatar-large{width:72px;height:72px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin:0 auto 14px;border:2px solid var(--border-active);overflow:hidden;}
 .avatar-large img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.avatar-upload-wrap{position:relative;width:72px;margin:0 auto 14px;cursor:pointer;}
+.avatar-upload-wrap .avatar-large{margin:0;}
+.avatar-camera-badge{position:absolute;bottom:0;right:0;width:22px;height:22px;border-radius:50%;background:var(--green-dim);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;}
+.avatar-upload-spinner{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;}
+.avatar-upload-spinner.show{display:flex;}
 .profile-username{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:2px;}
 .profile-email{font-size:12px;color:var(--text-3);margin-bottom:12px;}
 .profile-badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
@@ -201,6 +206,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
  <div class="topbar-right"><button class="share-btn" onclick="shareApp()"> Parrainer</button></div>
 </div>
 
+<input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="if(this.files[0]) uploadAvatar(this.files[0])">
 <div class="content">
  <div id="profileContent"><div class="loading-wrap"><div class="loader"></div></div></div>
 </div>
@@ -298,6 +304,35 @@ function closeSheet(id){document.getElementById(id).classList.remove('open');}
 function closeOnOverlay(e,id){if(e.target===document.getElementById(id))closeSheet(id);}
 function showMsg(id,text,type){const el=document.getElementById(id);el.className='msg '+(type||'error')+' show';el.textContent=text;}
 function showToast(msg,color){const t=document.createElement('div');t.textContent=msg;t.style.cssText='position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:'+(color||'var(--green-dim)')+';color:#fff;font-family:Syne,sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:500;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4);';document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
+
+async function uploadAvatar(file) {
+ const spinner = document.getElementById('avatarSpinner');
+ if (spinner) spinner.classList.add('show');
+ try {
+  const fd = new FormData();
+  fd.append('avatar', file);
+  const res = await fetch(API + '/profile/avatar', {
+   method: 'POST',
+   headers: { 'Authorization': 'Bearer ' + token },
+   body: fd
+  });
+  const data = await res.json();
+  if (res.ok && data.avatarUrl) {
+   localStorage.setItem('tdoli_avatar', data.avatarUrl);
+   const large = document.getElementById('avatarLarge');
+   if (large) large.innerHTML = '<img src="' + data.avatarUrl + '" alt="avatar">';
+   const topBtn = document.getElementById('avatarBtn');
+   if (topBtn) topBtn.innerHTML = '<img src="' + data.avatarUrl + '" alt="avatar">';
+   showToast('Photo mise à jour !', '#00c853');
+  } else {
+   showToast(data.message || 'Erreur upload', '#ff1744');
+  }
+ } catch(e) {
+  showToast('Serveur inaccessible', '#ff1744');
+ } finally {
+  if (spinner) spinner.classList.remove('show');
+ }
+}
 
 // ── safeJson : jamais de crash sur réponse HTML ────────────────
 async function safeJson(res){
@@ -455,11 +490,20 @@ function renderTestimonials(testimonials) {
 }
 
 // ── Affichage immédiat depuis localStorage (pas d'attente réseau) ──
+function buildAvatarHtml(av, ini) {
+ const inner = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
+ return '<div class="avatar-upload-wrap" onclick="document.getElementById(\'avatarInput\').click()">'
+  + '<div class="avatar-large" id="avatarLarge">' + inner + '</div>'
+  + '<div class="avatar-camera-badge">📷</div>'
+  + '<div class="avatar-upload-spinner" id="avatarSpinner"><div style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;"></div></div>'
+  + '</div>';
+}
+
 function renderFromCache() {
  const uname = username;
  const av = localStorage.getItem('tdoli_avatar');
  const ini = getInitials(uname);
- const avatarHtml = av ? '<div class="avatar-large"><img src="'+av+'" alt="'+ini+'"></div>' : '<div class="avatar-large">'+ini+'</div>';
+ const avatarHtml = buildAvatarHtml(av, ini);
  document.getElementById('profileContent').innerHTML = `
  <div class="profile-hero">
  ${avatarHtml}
@@ -677,7 +721,7 @@ function renderFull(user, txs) {
  if (user.username) localStorage.setItem('tdoli_username', user.username);
  if (user.avatarUrl) localStorage.setItem('tdoli_avatar', user.avatarUrl);
 
- const avatarHtml = av ? '<div class="avatar-large"><img src="'+av+'" alt="'+ini+'"></div>' : '<div class="avatar-large">'+ini+'</div>';
+ const avatarHtml = buildAvatarHtml(av, ini);
  const starsHtml = rating > 0
  ? '<div class="profile-rating"><span class="stars-display">'+''.repeat(Math.round(rating))+''.repeat(5-Math.round(rating))+'</span><span class="rating-val">'+rating.toFixed(1)+'</span><span class="rating-count">('+ratingCount+' avis)</span></div>'
  : '<div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">Aucun avis</div>';
