@@ -419,6 +419,31 @@ firebase.initializeApp({
 
 <div class="toast" id="toast"></div>
 
+<!-- Confetti -->
+<div class="confetti-wrap" id="dcoConfetti"></div>
+
+<!-- Deal Complété Overlay -->
+<div class="deal-complete-overlay" id="dealCompleteOverlay">
+ <div class="dco-parrot"><img src="/TDOLI_APP.png" alt="🦜"></div>
+ <div class="dco-title">Deal complété ! 🎉</div>
+ <div class="dco-sub" id="dcoSub">Échange validé avec succès !</div>
+ <div class="dco-code" id="dcoCode" style="display:none;"></div>
+ <div class="dco-rating" id="dcoRating" style="display:none;">
+  <div class="dco-rating-title">Note ton partenaire</div>
+  <div class="dco-rating-name" id="dcoPartnerName"></div>
+  <div class="dco-stars">
+   <span class="dco-star" onclick="dcSetStar(1)">⭐</span>
+   <span class="dco-star" onclick="dcSetStar(2)">⭐</span>
+   <span class="dco-star" onclick="dcSetStar(3)">⭐</span>
+   <span class="dco-star" onclick="dcSetStar(4)">⭐</span>
+   <span class="dco-star" onclick="dcSetStar(5)">⭐</span>
+  </div>
+  <textarea class="dco-comment" id="dcoComment" placeholder="Commentaire (optionnel)..."></textarea>
+  <button class="dco-btn-rate" onclick="dcSubmitRating()">Envoyer la note ⭐</button>
+ </div>
+ <button class="dco-btn-later" id="dcoBtnLater" onclick="dcDismiss()">Fermer</button>
+</div>
+
 <script>
 const API = 'https://tdoli-backend.onrender.com';
 const token = localStorage.getItem('tdoli_token');
