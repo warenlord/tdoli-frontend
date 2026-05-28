@@ -271,6 +271,8 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .pub-test-stars{font-size:11px;color:var(--yellow);}
 .pub-test-text{font-size:12px;color:var(--text);line-height:1.5;font-style:italic;}
 .pub-empty{text-align:center;padding:20px;color:var(--text-3);font-size:13px;}
+.btn-load-more{display:block;width:100%;margin-top:12px;padding:13px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text-2);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background 0.2s;}
+.btn-load-more:active{background:var(--card);}
 /* Liquidités par corridor */
 .liquidity-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;}
 .liquidity-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
@@ -803,6 +805,7 @@ function initAvatar() {
 initAvatar();
 
 let allTransfers = [], liquidityData = [], currentFilter = 'all', pendingMatch = null, editingId = null, currentUser = null;
+let feedPage = 1, feedTotal = 0, feedHasMore = false, feedLoading = false;
 
 // ── Filtres avancés ───────────────────────────────────────────
 let advFilters = { currency: null, direction: null, minEur: null, maxEur: null, rank: null };
@@ -913,22 +916,6 @@ function applyAdvancedFilter(data) {
  }
  return true;
  });
-}
-
-function renderFeed() {
- let data = allTransfers;
- if (currentFilter === 'mine') data = data.filter(t => t.sender === email);
- else if (currentFilter === 'advanced') data = applyAdvancedFilter(data);
-
- const list = document.getElementById('feedList');
- const badge = document.getElementById('countBadge');
- if (data.length === 0) {
- badge.textContent = '0';
- list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
- return;
- }
- badge.textContent = data.length;
- list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
 }
 
 // ── Profil public ─────────────────────────────────────────────
@@ -1416,26 +1403,21 @@ async function executeMatch() {
  btn.disabled = false; btn.innerHTML = 'Confirmer le match';
 }
 
-function setFilter(filter, el) {
- currentFilter = filter;
- document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
- el.classList.add('active');
- renderFeed();
-}
-
 function renderFeed() {
  let data = allTransfers;
  if (currentFilter === 'mine') data = data.filter(t => t.sender === email);
- else if (currentFilter !== 'all') data = data.filter(t => t.currency === currentFilter);
+ else if (currentFilter === 'advanced') data = applyAdvancedFilter(data);
  const list = document.getElementById('feedList');
  const badge = document.getElementById('countBadge');
+ badge.textContent = feedTotal || data.length;
  if (data.length === 0) {
- badge.textContent = '0';
- list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
- return;
+   list.innerHTML = '<div class="empty-state"><div class="empty-title">Aucune annonce</div><div class="empty-sub">Publie via le bouton +</div></div>';
+   return;
  }
- badge.textContent = data.length;
- list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>';
+ const loadMoreHtml = feedHasMore && currentFilter === 'all'
+   ? '<button class="btn-load-more" onclick="loadMoreFeed()">Charger plus <span id="loadMoreCount">(' + (feedTotal - allTransfers.length) + ' restantes)</span></button>'
+   : '';
+ list.innerHTML = '<div class="annonce-list">' + renderList(data) + '</div>' + loadMoreHtml;
 }
 
 // safeJson — évite crash si backend renvoie HTML
@@ -1507,20 +1489,41 @@ async function loadUser() {
  }
 }
 
-async function loadFeed(silent) {
- if (!silent) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+async function loadFeed(silent, append) {
+ if (feedLoading) return;
+ feedLoading = true;
+ const page = append ? feedPage + 1 : 1;
+ if (!silent && !append) document.getElementById('feedList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
  try {
- const r = await safeJson(await fetch(API + '/transfers', { headers: { 'Authorization': 'Bearer ' + token } }));
+ const r = await safeJson(await fetch(API + '/transfers?page=' + page + '&limit=20', { headers: { 'Authorization': 'Bearer ' + token } }));
  if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
- allTransfers = Array.isArray(r.data) ? r.data : [];
- renderFeed();
- loadLiquidity();
- checkActiveDeals();
- loadWeeklyStats();
- loadActivityFeed();
- } catch (e) {
- if (!silent) document.getElementById('feedList').innerHTML = '<div class="empty-state"><div class="empty-title">Serveur inaccessible</div><div class="empty-sub">Vérifie ta connexion</div></div>';
+ const payload = r.data || {};
+ const newItems = Array.isArray(payload.transfers) ? payload.transfers : (Array.isArray(payload) ? payload : []);
+ if (append) {
+   allTransfers = allTransfers.concat(newItems);
+ } else {
+   allTransfers = newItems;
  }
+ feedPage    = payload.page    || page;
+ feedTotal   = payload.total   != null ? payload.total : allTransfers.length;
+ feedHasMore = payload.hasMore || false;
+ renderFeed();
+ if (!append) {
+   loadLiquidity();
+   checkActiveDeals();
+   loadWeeklyStats();
+   loadActivityFeed();
+ }
+ } catch (e) {
+ if (!silent && !append) document.getElementById('feedList').innerHTML = '<div class="empty-state"><div class="empty-title">Serveur inaccessible</div><div class="empty-sub">Vérifie ta connexion</div></div>';
+ } finally {
+   feedLoading = false;
+ }
+}
+
+async function loadMoreFeed() {
+ if (!feedHasMore || feedLoading) return;
+ await loadFeed(true, true);
 }
 
 // Phase 5 — Stats hebdomadaires
