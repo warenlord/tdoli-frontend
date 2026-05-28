@@ -1018,14 +1018,14 @@ async function openPublicProfile(senderEmail) {
 // FIX Phase 1: shareApp() fonctionnelle avec Web Share API + fallback copier
 function shareApp() {
  const refCode = localStorage.getItem('tdoli_ref') || username;
- const msg = ' TDOLI — Transfert d\'argent entre particuliers, sans frais cachés !\nInscris-toi avec mon code parrain : ' + refCode + '\nhttps://tdoli-frontend.pages.dev';
+ const link = 'https://tdoli-frontend.pages.dev/tdoli-auth.html?ref=' + refCode;
+ const msg = 'Rejoins TDOLI — transfert d\'argent P2P sans frais cachés !\nMon code parrain : ' + refCode + '\n' + link;
  if (navigator.share) {
- navigator.share({ title: 'TDOLI', text: msg, url: 'https://tdoli-frontend.pages.dev' })
- .catch(() => {});
+ navigator.share({ title: 'TDOLI', text: msg, url: link }).catch(() => {});
  } else {
  navigator.clipboard.writeText(msg)
  .then(() => showToast('Lien copié ! ', '#ffd740'))
- .catch(() => showToast('Partage: ' + msg.substring(0, 30) + '...', '#ffd740'));
+ .catch(() => showToast('Code : ' + refCode, '#ffd740'));
  }
 }
 

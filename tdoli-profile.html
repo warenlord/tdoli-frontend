@@ -277,8 +277,9 @@ function getInitials(n){const p=(n||'?').trim().split(' ').filter(x=>x.length>0)
 
 function shareApp(){
  const ref=localStorage.getItem('tdoli_ref')||username;
- const msg=' TDOLI\nhttps://tdoli-frontend.pages.dev\nCode parrain: '+ref;
- if(navigator.share) navigator.share({title:'TDOLI',text:msg}).catch(()=>{});
+ const link='https://tdoli-frontend.pages.dev/tdoli-auth.html?ref='+ref;
+ const msg='Rejoins TDOLI — transfert d\'argent P2P sans frais cachés !\nMon code parrain : '+ref+'\n'+link;
+ if(navigator.share) navigator.share({title:'TDOLI',text:msg,url:link}).catch(()=>{});
  else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#ffd740')).catch(()=>{});
 }
 
@@ -623,6 +624,47 @@ function renderLimitCard(user) {
  </div>`;
 }
 
+function renderReferralCard(user) {
+ const code = user.refCode || localStorage.getItem('tdoli_ref') || '—';
+ const count = user.referralCount || 0;
+ const link = 'https://tdoli-frontend.pages.dev/tdoli-auth.html?ref=' + code;
+
+ return `<div class="limit-card" style="margin-bottom:14px;">
+  <div class="limit-card-header">
+   <div class="limit-card-title"> Parrainage</div>
+   <div class="limit-card-amount" style="font-size:16px;">${count}<span style="font-size:13px;"> filleul${count !== 1 ? 's' : ''}</span></div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+   <div>
+    <div style="font-size:10px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Mon code</div>
+    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);letter-spacing:2px;">${code}</div>
+   </div>
+   <button onclick="copyRefCode('${code}')" style="padding:9px 14px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:10px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">Copier</button>
+  </div>
+  <div style="font-size:12px;color:var(--text-3);line-height:1.6;margin-bottom:12px;">
+   Invite tes amis avec ce code. Tu gagnes <strong style="color:var(--yellow);">+50 XP</strong> par inscription parrainée.
+  </div>
+  <button onclick="shareReferral('${code}','${link}')" style="width:100%;padding:11px;background:rgba(252,209,22,0.1);color:var(--yellow);border:1px solid rgba(252,209,22,0.3);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;"> Partager mon lien</button>
+ </div>`;
+}
+
+function copyRefCode(code) {
+ navigator.clipboard.writeText(code)
+  .then(() => showToast('Code copié : ' + code, '#ffd740'))
+  .catch(() => showToast(code, '#ffd740'));
+}
+
+function shareReferral(code, link) {
+ const msg = 'Rejoins TDOLI — transfert d\'argent P2P sans frais cachés !\nMon code parrain : ' + code + '\n' + link;
+ if (navigator.share) {
+  navigator.share({ title: 'TDOLI', text: msg, url: link }).catch(() => {});
+ } else {
+  navigator.clipboard.writeText(msg)
+   .then(() => showToast('Lien copié !', '#ffd740'))
+   .catch(() => showToast('Code : ' + code, '#ffd740'));
+ }
+}
+
 function renderFull(user, txs) {
  const uname = user.username || email?.split('@')[0] || '?';
  const av = user.avatarUrl || localStorage.getItem('tdoli_avatar');
@@ -705,6 +747,7 @@ function renderFull(user, txs) {
  ${rankStatusHtml}
  ${statsHtml}
  ${renderLimitCard(user)}
+ ${renderReferralCard(user)}
 
  <div class="testimonials-section" id="testimonialsSection">
  <div class="no-testimonial">Chargement des témoignages…</div>
@@ -783,6 +826,7 @@ async function loadProfile() {
  return;
  }
 
+ if (user.refCode) localStorage.setItem('tdoli_ref', user.refCode);
  const txs = await fetchMyTransfers();
  renderFull(user, txs);
 }
