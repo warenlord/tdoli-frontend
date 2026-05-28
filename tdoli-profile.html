@@ -164,6 +164,28 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .stat-detail-label{font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
 .achievement-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;}
 .achievement-badge{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,rgba(252,209,22,0.2),rgba(0,230,118,0.2));border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+
+/* ── CARTE LIMITE DYNAMIQUE ────────────────────────────────── */
+.limit-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden;}
+.limit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--yellow));}
+.limit-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.limit-card-title{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.limit-card-amount{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--yellow);}
+.limit-card-amount span{font-size:13px;color:var(--text-3);font-weight:600;margin-left:2px;}
+.limit-progress-wrap{margin-bottom:10px;}
+.limit-progress-track{height:6px;background:var(--surface);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
+.limit-progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow));border-radius:3px;transition:width 0.6s ease;}
+.limit-progress-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);margin-top:5px;font-family:'Syne',sans-serif;font-weight:600;}
+.limit-next-hint{font-size:12px;color:var(--green);margin-bottom:14px;font-weight:500;}
+.limit-factors{display:flex;gap:8px;}
+.limit-factor{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center;}
+.limit-factor-icon{font-size:16px;margin-bottom:4px;}
+.limit-factor-label{font-size:10px;color:var(--text-3);margin-bottom:3px;font-family:'Syne',sans-serif;font-weight:600;}
+.limit-factor-val{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text);}
+.limit-factor-val.pos{color:var(--green);}
+.limit-factor-val.neu{color:var(--yellow);}
+.limit-factor-val.neg{color:var(--red);}
+.limit-factor-val.muted{color:var(--text-3);}
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#05090a">
@@ -513,6 +535,94 @@ function reliabilityBadge(user) {
  return '<div class="reliability-badge orange"> Nouveau membre</div>';
 }
 
+function computeLimitDetails(user) {
+ const deals = user.completedDeals || 0;
+ const score = user.communityScore;
+ const phone = !!user.phoneVerified;
+ if (user.isAgent) return { limit:20000, base:20000, repMult:1.0, phoneMult:1.0, dealsToNext:0, limitNext:null, progress:100, deals };
+
+ const tiers = [
+  { min:0,   next:1,   base:150   },
+  { min:1,   next:5,   base:300   },
+  { min:5,   next:15,  base:600   },
+  { min:15,  next:30,  base:1500  },
+  { min:30,  next:60,  base:3000  },
+  { min:60,  next:100, base:6000  },
+  { min:100, next:null,base:12000 },
+ ];
+ const cur = [...tiers].reverse().find(t => deals >= t.min) || tiers[0];
+ const nxt = cur.next !== null ? tiers.find(t => t.min === cur.next) : null;
+
+ let repMult;
+ if (score === null || score === undefined) repMult = 1.0;
+ else if (score >= 85) repMult = 2.0;
+ else if (score >= 70) repMult = 1.6;
+ else if (score >= 50) repMult = 1.3;
+ else if (score >= 30) repMult = 1.0;
+ else repMult = 0.8;
+
+ const phoneMult = phone ? 1.15 : 1.0;
+ const limit = Math.min(Math.round(cur.base * repMult * phoneMult), 15000);
+ const limitNext = nxt ? Math.min(Math.round(nxt.base * repMult * phoneMult), 15000) : null;
+ const dealsToNext = nxt ? nxt.min - deals : 0;
+ const progress = nxt ? Math.round(((deals - cur.min) / (nxt.min - cur.min)) * 100) : 100;
+ return { limit, base:cur.base, repMult, phoneMult, dealsToNext, limitNext, progress:Math.max(0,Math.min(100,progress)), deals };
+}
+
+function renderLimitCard(user) {
+ const d = computeLimitDetails(user);
+ const fmt = n => Number(n).toLocaleString('fr-FR');
+
+ const nextHint = d.dealsToNext > 0 && d.limitNext
+  ? `<div class="limit-next-hint">+${d.dealsToNext} deal${d.dealsToNext > 1 ? 's' : ''} → ${fmt(d.limitNext)} €</div>`
+  : d.deals >= 100
+   ? '<div class="limit-next-hint">Palier max atteint — deviens Agent pour aller plus loin</div>'
+   : '';
+
+ const scoreLabel = (user.communityScore !== null && user.communityScore !== undefined)
+  ? 'Score ' + Math.round(user.communityScore)
+  : 'Aucun score';
+ const repClass = d.repMult >= 1.5 ? 'pos' : d.repMult >= 1.0 ? 'neu' : 'neg';
+ const repDisplay = (user.communityScore === null || user.communityScore === undefined)
+  ? '<span class="limit-factor-val muted">×1.0</span>'
+  : `<span class="limit-factor-val ${repClass}">×${d.repMult}</span>`;
+
+ const phoneClass = user.phoneVerified ? 'pos' : 'muted';
+ const phoneDisplay = `<span class="limit-factor-val ${phoneClass}">${user.phoneVerified ? '×1.15' : '×1.0'}</span>`;
+
+ return `<div class="limit-card">
+  <div class="limit-card-header">
+   <div class="limit-card-title">Limite par transaction</div>
+   <div class="limit-card-amount">${fmt(d.limit)}<span> €</span></div>
+  </div>
+  <div class="limit-progress-wrap">
+   <div class="limit-progress-track"><div class="limit-progress-fill" style="width:${d.progress}%"></div></div>
+   <div class="limit-progress-labels">
+    <span>${d.deals} deal${d.deals !== 1 ? 's' : ''}</span>
+    ${d.dealsToNext > 0 ? `<span>${d.deals + d.dealsToNext} deals → ${fmt(d.limitNext)} €</span>` : '<span>Palier max</span>'}
+   </div>
+  </div>
+  ${nextHint}
+  <div class="limit-factors">
+   <div class="limit-factor">
+    <div class="limit-factor-icon">🔄</div>
+    <div class="limit-factor-label">${d.deals} deals</div>
+    <div class="limit-factor-val">${fmt(d.base)} €</div>
+   </div>
+   <div class="limit-factor">
+    <div class="limit-factor-icon">⭐</div>
+    <div class="limit-factor-label">${scoreLabel}</div>
+    ${repDisplay}
+   </div>
+   <div class="limit-factor">
+    <div class="limit-factor-icon">📱</div>
+    <div class="limit-factor-label">${user.phoneVerified ? 'Tél. vérifié' : 'Non vérifié'}</div>
+    ${phoneDisplay}
+   </div>
+  </div>
+ </div>`;
+}
+
 function renderFull(user, txs) {
  const uname = user.username || email?.split('@')[0] || '?';
  const av = user.avatarUrl || localStorage.getItem('tdoli_avatar');
@@ -594,6 +704,7 @@ function renderFull(user, txs) {
 
  ${rankStatusHtml}
  ${statsHtml}
+ ${renderLimitCard(user)}
 
  <div class="testimonials-section" id="testimonialsSection">
  <div class="no-testimonial">Chargement des témoignages…</div>
