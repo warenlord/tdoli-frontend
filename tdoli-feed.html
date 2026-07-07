@@ -272,15 +272,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .notif-text{font-size:12px;color:var(--text-3);line-height:1.4;margin-bottom:4px;}
 .notif-time{font-size:10px;color:var(--text-3);}
 .notif-unread-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:5px;}
-/* Liquidités par corridor */
-.liquidity-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;}
-.liquidity-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
-.liquidity-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;}
-.liquidity-list{padding:0;}
-.liquidity-item{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);gap:8px;}
-.liquidity-item:last-child{border-bottom:none;}
-.liquidity-route{font-size:13px;color:var(--text-2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.liquidity-total{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--green);flex-shrink:0;}</style>
+</style>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#05090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -366,14 +358,6 @@ firebase.initializeApp({
       <div class="weekly-stat-lbl">échangés</div>
     </div>
   </div>
- </div>
-
- <div class="liquidity-panel" id="liquidityPanel" style="display:none;">
-  <div class="liquidity-header">
-    <div class="liquidity-title">Liquidités disponibles</div>
-    <div class="badge" id="liquidityBadge">—</div>
-  </div>
-  <div class="liquidity-list" id="liquidityList"><div class="loading-wrap"><div class="loader"></div></div></div>
  </div>
 
  <div class="filter-bar">
@@ -830,7 +814,7 @@ function initAvatar() {
 }
 initAvatar();
 
-let allTransfers = [], liquidityData = [], currentFilter = 'all', pendingMatch = null, editingId = null, currentUser = null;
+let allTransfers = [], currentFilter = 'all', pendingMatch = null, editingId = null, currentUser = null;
 let feedPage = 1, feedTotal = 0, feedHasMore = false, feedLoading = false;
 
 // ── Filtres avancés ───────────────────────────────────────────
@@ -1379,58 +1363,6 @@ async function safeJson(res) {
  catch(e) { return { ok: false, status: res.status, data: null }; }
 }
 
-function formatCurrencyLabel(currency) {
-  if (!currency) return '';
-  if (currency === 'EUR') return '€';
-  if (currency === 'XAF') return 'XAF';
-  if (currency === 'USD') return '$';
-  if (currency === 'CAD') return 'CAD';
-  return currency;
-}
-
-function renderLiquidity() {
- const panel = document.getElementById('liquidityPanel');
- const list = document.getElementById('liquidityList');
- if (!panel || !list) return;
- if (!liquidityData || liquidityData.length === 0) {
-   panel.style.display = 'none';
-   return;
- }
- const FLAGS = {
-   'France':'🇫🇷','Gabon':'🇬🇦','Cameroun':'🇨🇲','Burkina Faso':'🇧🇫',
-   'Belgique':'🇧🇪','Suisse':'🇨🇭','Etats-Unis':'🇺🇸','Canada':'🇨🇦',
-   'Congo':'🇨🇬','Sénégal':'🇸🇳','Côte d\'Ivoire':'🇨🇮','Maroc':'🇲🇦'
- };
- const fl = c => (FLAGS[c] || '') + ' ' + (c || '?');
- list.innerHTML = liquidityData.map(item => {
-   const route = item._id || {};
-   const amount = Number(item.total || 0).toLocaleString('fr-FR');
-   const cur = formatCurrencyLabel(route.currency);
-   return '<div class="liquidity-item">' +
-     '<div class="liquidity-route">' + fl(route.from) + ' → ' + fl(route.to) + '</div>' +
-     '<div class="liquidity-total">' + amount + ' ' + cur + '</div>' +
-     '</div>';
- }).join('');
- panel.style.display = 'block';
- const n = liquidityData.length;
- document.getElementById('liquidityBadge').textContent = n + ' corridor' + (n > 1 ? 's' : '');
-}
-
-async function loadLiquidity() {
- const panel = document.getElementById('liquidityPanel');
- const list = document.getElementById('liquidityList');
- if (!panel || !list) return;
- list.innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
- try {
-   const r = await safeJson(await fetch(API + '/liquidity', { headers: { 'Authorization': 'Bearer ' + token } }));
-   if (r.status === 401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
-   liquidityData = Array.isArray(r.data) ? r.data : [];
-   renderLiquidity();
- } catch (e) {
-   panel.style.display = 'none';
- }
-}
-
 async function loadUser() {
  try {
    const r = await safeJson(await fetch(API + '/auth', { headers: { 'Authorization': 'Bearer ' + token } }));
@@ -1461,7 +1393,6 @@ async function loadFeed(silent, append) {
  feedHasMore = payload.hasMore || false;
  renderFeed();
  if (!append) {
-   loadLiquidity();
    checkActiveDeals();
    loadWeeklyStats();
    loadActivityFeed();

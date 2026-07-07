@@ -177,11 +177,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .limit-card-title{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
 .limit-card-amount{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--yellow);}
 .limit-card-amount span{font-size:13px;color:var(--text-3);font-weight:600;margin-left:2px;}
-.limit-progress-wrap{margin-bottom:10px;}
-.limit-progress-track{height:6px;background:var(--surface);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
-.limit-progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow));border-radius:3px;transition:width 0.6s ease;}
-.limit-progress-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);margin-top:5px;font-family:'Syne',sans-serif;font-weight:600;}
-.limit-next-hint{font-size:12px;color:var(--green);margin-bottom:14px;font-weight:500;}
 .limit-factors{display:flex;gap:8px;}
 .limit-factor{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center;}
 .limit-factor-icon{font-size:16px;margin-bottom:4px;}
@@ -377,6 +372,17 @@ async function fetchMyTransfers() {
  } catch(e) {}
  }
  return [];
+}
+
+async function fetchReferralStats() {
+ try {
+ const r = await safeJson(await fetch(API+'/referral/stats', {
+ headers:{'Authorization':'Bearer '+token},
+ signal: AbortSignal.timeout(5000)
+ }));
+ if (r.ok && r.data) return r.data;
+ } catch(e) {}
+ return null;
 }
 
 function getLevelInfo(level){
@@ -580,80 +586,33 @@ function reliabilityBadge(user) {
  return '<div class="reliability-badge orange"> Nouveau membre</div>';
 }
 
-function computeLimitDetails(user) {
- const deals = user.completedDeals || 0;
- const score = user.communityScore;
- const phone = !!user.phoneVerified;
- if (user.isAgent) return { limit:20000, base:20000, repMult:1.0, phoneMult:1.0, dealsToNext:0, limitNext:null, progress:100, deals };
+function renderAgentReliabilityCard(user) {
+ if (!user.isAgent) return '';
+ const abandons = user.abandonCount || 0;
+ const disputesOpen = user.disputesOpen || 0;
+ const atRisk = user.isSuspended || abandons > 0 || disputesOpen > 0;
 
- const tiers = [
-  { min:0,   next:1,   base:150   },
-  { min:1,   next:5,   base:300   },
-  { min:5,   next:15,  base:600   },
-  { min:15,  next:30,  base:1500  },
-  { min:30,  next:60,  base:3000  },
-  { min:60,  next:100, base:6000  },
-  { min:100, next:null,base:12000 },
- ];
- const cur = [...tiers].reverse().find(t => deals >= t.min) || tiers[0];
- const nxt = cur.next !== null ? tiers.find(t => t.min === cur.next) : null;
+ const rows = [];
+ if (user.isSuspended) {
+  const until = user.suspensionUntil ? new Date(user.suspensionUntil).toLocaleDateString('fr-FR') : null;
+  rows.push(`<div class="limit-factor"><div class="limit-factor-icon">🚫</div><div class="limit-factor-label">Suspendu</div><div class="limit-factor-val neg">${until ? 'jusqu\'au ' + until : 'oui'}</div></div>`);
+ }
+ rows.push(`<div class="limit-factor"><div class="limit-factor-icon">⚠️</div><div class="limit-factor-label">Abandons</div><div class="limit-factor-val ${abandons > 0 ? 'neg' : 'pos'}">${abandons}</div></div>`);
+ rows.push(`<div class="limit-factor"><div class="limit-factor-icon">📋</div><div class="limit-factor-label">Litiges ouverts</div><div class="limit-factor-val ${disputesOpen > 0 ? 'neg' : 'pos'}">${disputesOpen}</div></div>`);
 
- let repMult;
- if (score === null || score === undefined) repMult = 1.0;
- else if (score >= 85) repMult = 2.0;
- else if (score >= 70) repMult = 1.6;
- else if (score >= 50) repMult = 1.3;
- else if (score >= 30) repMult = 1.0;
- else repMult = 0.8;
-
- const phoneMult = phone ? 1.15 : 1.0;
- const limit = Math.min(Math.round(cur.base * repMult * phoneMult), 15000);
- const limitNext = nxt ? Math.min(Math.round(nxt.base * repMult * phoneMult), 15000) : null;
- const dealsToNext = nxt ? nxt.min - deals : 0;
- const progress = nxt ? Math.round(((deals - cur.min) / (nxt.min - cur.min)) * 100) : 100;
- return { limit, base:cur.base, repMult, phoneMult, dealsToNext, limitNext, progress:Math.max(0,Math.min(100,progress)), deals };
-}
-
-function renderLimitCard(user) {
- const d = computeLimitDetails(user);
- const fmt = n => Number(n).toLocaleString('fr-FR');
-
- const nextHint = d.dealsToNext > 0 && d.limitNext
-  ? `<div class="limit-next-hint">+${d.dealsToNext} deal${d.dealsToNext > 1 ? 's' : ''} → ${fmt(d.limitNext)} €</div>`
-  : d.deals >= 100
-   ? '<div class="limit-next-hint">Palier max atteint — deviens Agent pour aller plus loin</div>'
-   : '';
-
- const scoreLabel = (user.communityScore !== null && user.communityScore !== undefined)
-  ? 'Score ' + Math.round(user.communityScore)
-  : 'Aucun score';
- const repClass = d.repMult >= 1.5 ? 'pos' : d.repMult >= 1.0 ? 'neu' : 'neg';
- const repDisplay = (user.communityScore === null || user.communityScore === undefined)
-  ? '<span class="limit-factor-val muted">×1.0</span>'
-  : `<span class="limit-factor-val ${repClass}">×${d.repMult}</span>`;
-
- const phoneClass = user.phoneVerified ? 'pos' : 'muted';
- const phoneDisplay = `<span class="limit-factor-val ${phoneClass}">${user.phoneVerified ? '×1.15' : '×1.0'}</span>`;
-
- return `<div class="limit-card">
+ return `<div class="limit-card" style="margin-bottom:14px;${atRisk ? 'border-color:rgba(255,82,82,0.35);' : ''}">
   <div class="limit-card-header">
-   <div class="limit-card-title">Limite par transaction</div>
-   <div class="limit-card-amount">${fmt(d.limit)}<span> €</span></div>
+   <div class="limit-card-title">⭐ Fiabilité Agent</div>
   </div>
-  <div class="limit-progress-wrap">
-   <div class="limit-progress-track"><div class="limit-progress-fill" style="width:${d.progress}%"></div></div>
-   <div class="limit-progress-labels">
-    <span>${d.deals} deal${d.deals !== 1 ? 's' : ''}</span>
-    ${d.dealsToNext > 0 ? `<span>${d.deals + d.dealsToNext} deals → ${fmt(d.limitNext)} €</span>` : '<span>Palier max</span>'}
-   </div>
-  </div>
-  ${nextHint}
+  ${atRisk ? '<div style="font-size:12px;color:var(--text-3);margin-bottom:12px;">Un abandon ou litige supplémentaire peut entraîner une suspension et le retrait du statut Agent.</div>' : '<div style="font-size:12px;color:var(--text-3);margin-bottom:12px;">Aucun incident — continue comme ça !</div>'}
+  <div class="limit-factors">${rows.join('')}</div>
  </div>`;
 }
 
-function renderReferralCard(user) {
+function renderReferralCard(user, referralStats) {
  const code = user.refCode || localStorage.getItem('tdoli_ref') || '—';
- const count = user.referralCount || 0;
+ const count = (referralStats && referralStats.referralCount) ?? (user.referralCount || 0);
+ const active = referralStats ? referralStats.activeReferrals : null;
  const link = 'https://tdoli-frontend.pages.dev/tdoli-auth.html?ref=' + code;
 
  return `<div class="limit-card" style="margin-bottom:14px;">
@@ -661,6 +620,7 @@ function renderReferralCard(user) {
    <div class="limit-card-title"> Parrainage</div>
    <div class="limit-card-amount" style="font-size:16px;">${count}<span style="font-size:13px;"> filleul${count !== 1 ? 's' : ''}</span></div>
   </div>
+  ${active !== null ? `<div style="font-size:12px;color:var(--text-3);margin:-6px 0 12px;">${active} filleul${active !== 1 ? 's' : ''} actif${active !== 1 ? 's' : ''} (a complété au moins 1 deal)</div>` : ''}
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
    <div>
     <div style="font-size:10px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Mon code</div>
@@ -763,7 +723,7 @@ function handleKycDrop(event) {
  if (file) submitKyc(file);
 }
 
-function renderFull(user, txs) {
+function renderFull(user, txs, referralStats) {
  const uname = user.username || email?.split('@')[0] || '?';
  const av = user.avatarUrl || localStorage.getItem('tdoli_avatar');
  const ini = getInitials(uname);
@@ -791,27 +751,9 @@ function renderFull(user, txs) {
  const xpPercent = Math.min(100, (userXp / userNextXp) * 100);
  const userLevel = user.level || 1;
 
- const rankStatusHtml = `<div class="status-section">
- <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
- ${rank ? `<span class="rank-hero ${rank.cls}">${rank.label}</span>` : ''}
- <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
- <div class="level-badge">${userLevel}</div>
- <div style="font-size:12px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;">Niv. ${userLevel}</div>
- </div>
- </div>
- <div class="xp-bar-container">
- <div class="xp-bar"><div class="xp-bar-fill" style="width:${xpPercent}%"></div></div>
- <div class="xp-label"><span>${userXp.toLocaleString('fr-FR')} XP</span><span>${userNextXp.toLocaleString('fr-FR')} XP</span></div>
- </div>
- </div>`;
-
  // ── Stats : deals + taux (pas de rating, déjà dans le hero) ──
  const completionRate = user.completedDeals && (user.completedDeals + (user.abandonCount || 0)) > 0
  ? Math.round((user.completedDeals / (user.completedDeals + (user.abandonCount || 0))) * 100) : 0;
- const statsHtml = `<div class="stats-detailed">
- <div class="stat-detail"><div class="stat-detail-val">${user.completedDeals || 0}</div><div class="stat-detail-label">Deals complétés</div></div>
- <div class="stat-detail"><div class="stat-detail-val">${completionRate}%</div><div class="stat-detail-label">Taux de réussite</div></div>
- </div>`;
 
  // ── Annonces récentes (3 max) ─────────────────────────────────
  let txHtml = '';
@@ -856,9 +798,10 @@ function renderFull(user, txs) {
  </div>
  </div>
 
- ${renderLimitCard(user)}
+ ${renderAgentReliabilityCard(user)}
  ${renderKycCard(user)}
- ${renderReferralCard(user)}
+ ${renderReferralCard(user, referralStats)}
+ ${txHtml}
 
  <div class="testimonials-section" id="testimonialsSection">
  <div class="no-testimonial">Chargement des témoignages…</div>
@@ -936,8 +879,8 @@ async function loadProfile() {
  }
 
  if (user.refCode) localStorage.setItem('tdoli_ref', user.refCode);
- const txs = await fetchMyTransfers();
- renderFull(user, txs);
+ const [txs, referralStats] = await Promise.all([fetchMyTransfers(), fetchReferralStats()]);
+ renderFull(user, txs, referralStats);
 }
 
 function logout(){
@@ -1007,7 +950,7 @@ async function verifyOtp(){
  const r=await safeJson(await fetch(API+'/auth/verify-sms',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({code,phone})}));
  if(r.ok){
  closeSheet('phoneOverlay');
- showToast('Téléphone vérifié ! Niveau 2 atteint ');
+ showToast('Téléphone vérifié ! Ta limite de transfert vient d\'augmenter ');
  setTimeout(() => window.location.reload(), 1500);
  }
  else showMsg('msg-otp',(r.data&&r.data.message)||'Code incorrect');

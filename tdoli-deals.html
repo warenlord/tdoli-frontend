@@ -306,7 +306,7 @@ firebase.initializeApp({
  <input type="file" id="proof-file-input" accept="image/*,.pdf" style="display:none" onchange="previewProof(this)">
  <div id="proof-preview-container"></div>
  <button class="btn-primary" id="btn-cash-confirm" style="display:none;background:linear-gradient(135deg,#b8860b,#ffd740);color:#000;" onclick="confirmCash()"> Je confirme avoir remis les espèces en main propre</button>
- <button class="btn-primary" id="btn-submit-proof" onclick="submitProof()" disabled>Confirmer la réception</button>
+ <button class="btn-primary" id="btn-submit-proof" onclick="submitProof()" disabled>Confirmer l'envoi</button>
  <button class="btn-cancel" onclick="closeSheet('proofOverlay')">Annuler</button>
  <div class="msg" id="msg-proof"></div>
  </div>
@@ -736,9 +736,6 @@ function openDeal(id) {
  }
 
 
-  const iReceived = isSender ? d.receivedBySender : d.receivedByReceiver;
-  const otherReceived = isSender ? d.receivedByReceiver : d.receivedBySender;
-
   const _si = (state, n) => {
     if(state==='done') return '<div style="width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#000;font-size:14px;font-weight:800;flex-shrink:0;">✓</div>';
     if(state==='active') return '<div style="width:32px;height:32px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;color:#000;font-size:12px;font-weight:800;flex-shrink:0;animation:stepGlow 1.5s ease infinite;">'+n+'</div>';
@@ -788,21 +785,59 @@ function openDeal(id) {
     }
   }
   if(d.status==='matched' || d.status==='completed') {
-    const isDone = d.status==='completed';
+    // Séquence imposée : l'utilisateur envoie en premier, l'agent confirme
+    // réception puis envoie à son tour, l'utilisateur confirme réception finale.
+    const stepDefs = [
+      {
+        done: !!d.confirmedByReceiver,
+        mine: !isSender,
+        title: 'Envoi des fonds par l’utilisateur',
+        actionSub: 'Envoie <strong>'+Number(amount).toLocaleString('fr-FR')+' '+currency+'</strong> puis confirme avec une preuve.',
+        action: '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="openProof(\''+d._id+'\')">📤 J\'ai envoyé — Ajouter une preuve</button>' + _btnDispute
+      },
+      {
+        done: !!d.receivedBySender,
+        mine: isSender,
+        title: 'Confirmation de réception par l’agent',
+        actionSub: 'As-tu bien reçu les fonds de '+otherName+' ?',
+        action: '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\''+d._id+'\',this)">✅ J\'ai reçu les fonds</button>' + _btnDispute
+      },
+      {
+        done: !!d.confirmedBySender,
+        mine: isSender,
+        title: 'Envoi des fonds par l’agent',
+        actionSub: 'Envoie les fonds à '+otherName+' puis confirme avec une preuve.',
+        action: '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="openProof(\''+d._id+'\')">📤 J\'ai envoyé — Ajouter une preuve</button>' + _btnDispute
+      },
+      {
+        done: !!d.receivedByReceiver,
+        mine: !isSender,
+        title: 'Confirmation de réception finale',
+        actionSub: 'As-tu bien reçu les fonds de '+otherName+' ?',
+        action: '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\''+d._id+'\',this)">✅ J\'ai reçu les fonds</button>' + _btnDispute
+      }
+    ];
 
-    const s2state = iReceived ? 'done' : 'active';
-    const s2sub = iReceived
-      ? 'Réception confirmée ✓' + (otherReceived ? '' : ' — en attente de '+otherName)
-      : 'As-tu reçu les fonds de '+otherName+' ?<br><span style="color:var(--text-3);font-size:11px;">Partage tes justificatifs dans le chat si besoin.</span>';
-    const s2act = iReceived ? '' : '<button class="btn-confirm" style="width:100%;margin-bottom:8px;" onclick="confirmReceived(\''+d._id+'\',this)">✅ J\'ai reçu les fonds</button>' + _btnDispute;
+    let activeFound = false;
+    const friseSteps = stepDefs.map((s, idx) => {
+      let state;
+      if (s.done) state = 'done';
+      else if (!activeFound) { state = 'active'; activeFound = true; }
+      else state = 'pending';
 
-    const s3state = isDone ? 'done' : 'pending';
+      let sub = '';
+      let action = '';
+      if (state === 'done') {
+        sub = 'Confirmé ✓';
+      } else if (state === 'active') {
+        if (s.mine) { sub = s.actionSub; action = s.action; }
+        else { sub = 'En attente de '+otherName+'.'; }
+      }
+      return _sr(state, idx + 2, s.title, sub, action, idx === stepDefs.length - 1);
+    });
 
-    const friseHtml = [
-      _sr('done', 1, 'Match confirmé', 'Deal '+tdlCode+' · Échangez vos coordonnées via le chat', '', false),
-      _sr(s2state, 2, 'Confirmer la réception', s2sub, s2act, false),
-      _sr(s3state, 3, 'Deal clôturé', isDone ? 'Échange réussi ! 🎉' : 'En attente des deux confirmations.', '', true)
-    ].join('');
+    const friseHtml = _sr('done', 1, 'Match confirmé', 'Deal '+tdlCode+' · Échangez vos coordonnées via le chat', '', false)
+      + friseSteps.join('');
 
     // ── Bloc annulation mutuelle ───────────────────────────────
     let cancelHtml = '';
@@ -1073,18 +1108,21 @@ async function submitProof() {
  if(r.data&&r.data.autoConfirmed) showToast(' Preuve validée automatiquement !','var(--green-dim)');
  else showToast('Preuve envoyée — vérification en cours','#b8960c');
  loadDeals(true);
+ } else if (r.data && r.data.code === 'OUT_OF_ORDER') {
+ showMsg('msg-proof', r.data.message);
  } else {
  // Fallback route classique
  const fd2=new FormData(); fd2.append('proof',proofFile);
  const res2=await fetch(API+'/deal/proof',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd2});
  const r2=await safeJson(res2);
  if(r2.ok&&r2.data&&r2.data.url) {
- await fetch(API+'/deal/'+currentProofDealId+'/confirm',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({proofUrl:r2.data.url})});
- closeSheet('proofOverlay'); showToast('Preuve envoyée '); loadDeals(true);
+ const r3=await safeJson(await fetch(API+'/deal/'+currentProofDealId+'/confirm',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({proofUrl:r2.data.url})}));
+ if (r3.ok) { closeSheet('proofOverlay'); showToast('Preuve envoyée '); loadDeals(true); }
+ else showMsg('msg-proof',(r3.data&&r3.data.message)||'Erreur confirmation');
  } else showMsg('msg-proof',(r.data&&r.data.message)||'Erreur upload');
  }
  } catch(e) { showMsg('msg-proof','Erreur réseau: '+e.message); }
- btn.disabled=false; btn.innerHTML='Confirmer la réception';
+ btn.disabled=false; btn.innerHTML='Confirmer l\'envoi';
 }
 
 function previewFiles(input) {
