@@ -161,19 +161,6 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .benef-selected-name{font-weight:600;color:var(--green);}
 .benef-selected-detail{font-size:11px;color:var(--text-3);}
 
-/* Phase 2 — Airtel Money */
-.airtel-box{background:rgba(252,209,22,0.05);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-top:10px;margin-bottom:4px;}
-.airtel-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:3px 0;}
-.airtel-divider{border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:7px;}
-.airtel-lbl{color:var(--text-3);}
-.airtel-val{font-weight:600;font-family:'Syne',sans-serif;font-size:12px;}
-.airtel-val.fees{color:var(--yellow);}
-.airtel-val.green{color:var(--green);}
-.airtel-val.bold{color:var(--text);font-size:13px;}
-.airtel-val.yellow{color:var(--yellow);}
-.airtel-scenario-title{font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:var(--text-2);margin-bottom:4px;margin-top:2px;}
-.airtel-highlight{background:rgba(0,0,0,0.15);border-radius:6px;padding:4px 6px;margin:2px -6px;}
-
 /* Phase 5 — Réputation communautaire */
 /* ── Carrousel deals communautaires ──────────────────────────── */
 .deal-carousel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:none;position:relative;min-height:72px;}
@@ -474,7 +461,6 @@ firebase.initializeApp({
    <span class="corridor-hint-text" id="corridorText"></span>
  </div>
  <div class="conv-preview" id="convPreview-create"><span class="conv-hint">Saisis un montant</span></div>
- <div id="airtel-preview-create"></div>
  <!-- Sélection bénéficiaire -->
  <div id="benef-selected-create" style="margin-bottom:8px;"></div>
  <button type="button" class="btn-cancel" style="margin-bottom:12px;" onclick="openBenefSheet('create')">👤 Choisir le bénéficiaire</button>
@@ -1160,80 +1146,6 @@ function renderRankBadge(score) {
  return '<span class="rank-badge ' + rank.cls + '">' + rank.label + '</span>';
 }
 
-function calcAirtelFees(xafAmount) {
- if (xafAmount <= 0) return 0;
- // Grille officielle Airtel Money Gabon
- if (xafAmount <= 1000) return 30;
- if (xafAmount <= 2000) return 60;
- if (xafAmount <= 3000) return 90;
- if (xafAmount <= 4000) return 120;
- if (xafAmount <= 5000) return 150;
- if (xafAmount <= 6000) return 180;
- if (xafAmount <= 7000) return 210;
- if (xafAmount <= 8000) return 240;
- if (xafAmount <= 9000) return 270;
- if (xafAmount <= 10000) return 300;
- if (xafAmount <= 15000) return 450;
- if (xafAmount <= 20000) return 600;
- if (xafAmount <= 25000) return 750;
- if (xafAmount <= 30000) return 900;
- if (xafAmount <= 50000) return 1500;
- if (xafAmount <= 60000) return 1800;
- if (xafAmount <= 70000) return 2100;
- if (xafAmount <= 80000) return 2400;
- if (xafAmount <= 90000) return 2700;
- // Plafonné à 5000 FCFA à partir de 100 000 FCFA
- return 5000;
-}
-
-function renderAirtelPreview(amount, currency, toCountry, fromCountry) {
- if (!amount || isNaN(amount) || amount <= 0) return '';
- const RATE = 655.957;
- const isGabonDest = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
- const isGabonSrc = fromCountry === 'Gabon' || fromCountry === 'Burkina Faso';
- if (!isGabonDest && !isGabonSrc) return '';
-
- if (currency === 'XAF') {
- // XAF → autre pays : envoyeur utilise Airtel pour envoyer
- const fees = calcAirtelFees(amount);
- const depot = amount + fees;
- const netSiDeduit = amount - fees;
- const eurNet = (netSiDeduit / RATE).toFixed(2);
- const eurBrut = (amount / RATE).toFixed(2);
-
- return '<div class="airtel-box">'+
- '<div class="airtel-scenario-title"> Scénario 1 — Tu envoies '+Number(depot).toLocaleString('fr-FR')+' FCFA</div>'+
- '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val green">'+Number(amount).toLocaleString('fr-FR')+' FCFA (≈ '+eurBrut+' €)</span></div>'+
- '<div style="height:10px"></div>'+
- '<div class="airtel-scenario-title"> Scénario 2 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' FCFA</div>'+
- '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(netSiDeduit).toLocaleString('fr-FR')+' FCFA (≈ '+eurNet+' €)</span></div>'+
- '</div>';
- }
-
- if (currency === 'EUR') {
- // EUR → Gabon : receveur retire via Airtel
- const xafBrut = Math.round(amount * RATE);
- const fees = calcAirtelFees(xafBrut);
- const xafNet = xafBrut - fees;
- const eurPourCouvrir = ((xafBrut + fees) / RATE).toFixed(2);
-
- return '<div class="airtel-box">'+
- '<div class="airtel-scenario-title"> Scénario 1 — Tu envoies '+Number(amount).toLocaleString('fr-FR')+' EUR</div>'+
- '<div class="airtel-row"><span class="airtel-lbl">Équiv. XAF</span><span class="airtel-val">'+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel Money</span><span class="airtel-val fees">−'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Receveur reçoit</span><span class="airtel-val yellow">'+Number(xafNet).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div style="height:10px"></div>'+
- '<div class="airtel-scenario-title"> Scénario 2 — Receveur reçoit '+Number(xafBrut).toLocaleString('fr-FR')+' FCFA</div>'+
- '<div class="airtel-row"><span class="airtel-lbl">Frais Airtel à couvrir</span><span class="airtel-val fees">+'+Number(fees).toLocaleString('fr-FR')+' FCFA</span></div>'+
- '<div class="airtel-row airtel-highlight"><span class="airtel-lbl">Tu envoies</span><span class="airtel-val green">'+eurPourCouvrir+' EUR</span></div>'+
- '</div>';
- }
-
- return '';
-}
-
 function convertToEur(amount, currency) {
  const rates = { EUR: 1, XAF: 1 / 655.957, USD: 0.92, CAD: 0.68 };
  return amount * (rates[currency] || 1);
@@ -1800,15 +1712,11 @@ function updatePreview(mode) {
  const currencyEl = document.getElementById(mode === 'create' ? 'ann-currency' : 'edit-currency');
  const toEl = document.getElementById('ann-to');
  const preview = document.getElementById('convPreview-' + mode);
- const airtelContainer = document.getElementById('airtel-preview-' + mode);
  if (!amountEl || !currencyEl || !preview) return;
  const amount = parseFloat(String(amountEl.value).replace(',','.'));
  const currency = currencyEl.value;
- const toCountry = toEl ? toEl.value : '';
- const isGabon = toCountry === 'Gabon' || toCountry === 'Burkina Faso';
  if (!amount || isNaN(amount)) {
  preview.innerHTML = '<span class="conv-hint">Saisis un montant</span>';
- if (airtelContainer) airtelContainer.innerHTML = '';
  return;
  }
  const eur = convertToEur(amount, currency);
@@ -1817,8 +1725,6 @@ function updatePreview(mode) {
  } else {
  preview.innerHTML = '<span class="conv-hint">Équivalent</span><span class="conv-amount">≈ ' + eur.toFixed(2) + ' EUR</span>';
  }
- const fromCountry = document.getElementById('ann-from')?.value || '';
- if (airtelContainer) airtelContainer.innerHTML = renderAirtelPreview(amount, currency, toCountry, fromCountry);
 }
 
 // Données en attente pour le choix match / publier
