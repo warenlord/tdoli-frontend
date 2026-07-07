@@ -542,7 +542,7 @@ firebase.initializeApp({
   <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Une annonce compatible a été trouvée dans le feed.</div>
   <div id="matchChoiceDetail" style="background:var(--surface);border:1px solid rgba(252,209,22,0.25);border-radius:12px;padding:14px 16px;margin-bottom:20px;"></div>
   <button class="btn-primary" id="btn-do-match" onclick="doSubmitAnnonce(true)" style="margin-bottom:10px;">🎯 Matcher maintenant</button>
-  <button class="btn-primary" onclick="doSubmitAnnonce(false)" style="background:var(--surface);border:1px solid var(--border);color:var(--text-2);">Publier mon annonce sans matcher</button>
+  <button class="btn-primary" id="btn-publish-anyway" onclick="doSubmitAnnonce(false)" style="background:var(--surface);border:1px solid var(--border);color:var(--text-2);">Publier mon annonce sans matcher</button>
   <button class="btn-cancel" onclick="closeSheet('matchChoiceOverlay')">Annuler</button>
  </div>
 </div>
@@ -1107,6 +1107,7 @@ function renderStars(r) {
 function computeBadges(user) {
  const deals = user.completedDeals || 0;
  const out = [];
+ if (user.isAgent) out.push({key:'agent',icon:'⭐',label:'Agent',color:'#FFD740',bg:'rgba(255,215,64,0.13)',border:'rgba(255,215,64,0.35)'});
  if (deals >= 50) out.push({key:'pilier',icon:'💎',label:'Pilier',color:'#CE93D8',bg:'rgba(206,147,216,0.13)',border:'rgba(206,147,216,0.35)'});
  if (deals >= 10) out.push({key:'confiance',icon:'🛡️',label:'Membre de confiance',color:'#82B1FF',bg:'rgba(130,177,255,0.13)',border:'rgba(130,177,255,0.35)'});
  if (deals >= 5) out.push({key:'reactif',icon:'⚡',label:'Très réactif',color:'#FFCC80',bg:'rgba(255,204,128,0.13)',border:'rgba(255,204,128,0.35)'});
@@ -1760,6 +1761,9 @@ function openCreateSheet() {
  updateCorridorHint();
  // Charger bénéficiaires en arrière-plan sans bloquer
  loadBeneficiaires().catch(() => {});
+ // Seuls les agents publient de la liquidité — les autres utilisateurs cherchent un match existant
+ const btn = document.getElementById('btn-submit');
+ if (btn) btn.textContent = currentUser?.isAgent ? 'Publier' : 'Chercher un match';
 }
 function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
 function closeOnOverlay(e, id) { if (e.target === document.getElementById(id)) closeSheet(id); }
@@ -1845,7 +1849,7 @@ async function submitAnnonce() {
     // Afficher la fiche match
     const stars = '⭐'.repeat(Math.round(match.rating || 0));
     const partialNote = match.isPartial
-     ? `<div style="font-size:11px;color:var(--yellow);margin-top:6px;">⚡ Match partiel — ${match.matchableEuro} € matchés, le reste sera publié dans le feed</div>`
+     ? `<div style="font-size:11px;color:var(--yellow);margin-top:6px;">⚡ Match partiel — ${match.matchableEuro} € matchés${currentUser?.isAgent ? ', le reste sera publié dans le feed' : ', il te faudra refaire une demande pour le reste'}</div>`
      : '';
     document.getElementById('matchChoiceDetail').innerHTML =
      `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -1861,8 +1865,11 @@ async function submitAnnonce() {
        <span style="font-weight:600;">${toCountry} → ${fromCountry}</span>
       </div>${partialNote}`;
     closeSheet('createOverlay');
+    // Seuls les agents peuvent publier une annonce — masquer l'option "publier sans matcher" sinon
+    const publishAnywayBtn = document.getElementById('btn-publish-anyway');
+    if (publishAnywayBtn) publishAnywayBtn.style.display = currentUser?.isAgent ? '' : 'none';
     document.getElementById('matchChoiceOverlay').classList.add('open');
-    btn.disabled = false; btn.innerHTML = 'Publier';
+    btn.disabled = false; btn.innerHTML = currentUser?.isAgent ? 'Publier' : 'Chercher un match';
     return;
    }
   }
@@ -1904,9 +1911,11 @@ async function doSubmitAnnonce(autoMatch) {
 
   if (res.ok) {
    if (data.deal && data.deal.status === 'awaiting_approval') {
-    const partialMsg = data.isPartial ? ` · ${data.unmatchedEuro} € publiés dans le feed` : '';
+    const partialMsg = data.isPartial
+     ? (currentUser?.isAgent ? ` · ${data.unmatchedEuro} € publiés dans le feed` : ` · ${data.unmatchedEuro} € restants à redemander`)
+     : '';
     showToast('Demande envoyée — en attente de confirmation ⏳' + partialMsg, 'var(--yellow)');
-    if (data.isPartial) loadFeed(true);
+    if (data.isPartial && currentUser?.isAgent) loadFeed(true);
     else setTimeout(() => { window.location.href = '/tdoli-deals.html'; }, 2500);
    } else if (data.deal) {
     showToast('Match ! Code: ' + (data.deal.dealCode || ''), 'var(--yellow)');
@@ -1921,7 +1930,7 @@ async function doSubmitAnnonce(autoMatch) {
  } catch(e) {
   showToast('Serveur inaccessible', '#ff5252');
  }
- if (btn) { btn.disabled = false; btn.innerHTML = 'Publier'; }
+ if (btn) { btn.disabled = false; btn.innerHTML = currentUser?.isAgent ? 'Publier' : 'Chercher un match'; }
 }
 
 

@@ -185,14 +185,23 @@ async function loadAgents(){
 function renderAgents(agents){
  const el=document.getElementById('agentsList');
  if(!agents||!agents.length){el.innerHTML='<div class="empty-state" style="padding:20px;font-size:13px;">Aucun agent pour l\'instant</div>';return;}
- el.innerHTML=agents.map(a=>`
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;">
+ el.innerHTML=agents.map(a=>{
+  const risk=(a.disputesOpen>0)||(a.abandonCount>0)||a.isSuspended;
+  const flags=[
+   a.isSuspended?`<span style="font-size:10px;color:#ff5252;background:rgba(255,23,68,0.1);padding:1px 7px;border-radius:10px;border:1px solid rgba(255,23,68,0.25);">Suspendu</span>`:'',
+   a.abandonCount>0?`<span style="font-size:10px;color:#ffd740;background:rgba(255,215,64,0.1);padding:1px 7px;border-radius:10px;border:1px solid rgba(255,215,64,0.25);">${a.abandonCount} abandon(s)</span>`:'',
+   a.disputesOpen>0?`<span style="font-size:10px;color:#ffd740;background:rgba(255,215,64,0.1);padding:1px 7px;border-radius:10px;border:1px solid rgba(255,215,64,0.25);">${a.disputesOpen} litige(s) ouvert(s)</span>`:''
+  ].filter(Boolean).join(' ');
+  return `
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface);border:1px solid ${risk?'rgba(255,82,82,0.35)':'var(--border)'};border-radius:10px;margin-bottom:8px;">
    <div>
     <div style="font-size:14px;font-weight:600;">${a.username||a.email}</div>
-    <div style="font-size:11px;color:var(--text-3);">${a.email} · ${a.completedDeals||0} deals</div>
+    <div style="font-size:11px;color:var(--text-3);">${a.email} · ${a.completedDeals||0} deals · ${a.disputesTotal||0} litige(s) au total</div>
+    ${flags?`<div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap;">${flags}</div>`:''}
    </div>
    <button onclick="revokeAgent('${a.email}')" style="padding:7px 14px;background:rgba(255,23,68,0.08);color:#ff5252;border:1px solid rgba(255,23,68,0.2);border-radius:8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;">Révoquer</button>
-  </div>`).join('');
+  </div>`;
+ }).join('');
 }
 let agentSearchTimeout=null;
 function agentSearch(q){
