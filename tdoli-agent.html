@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TDOLI — Espace Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.10);
+ --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+ --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px;overflow-x:hidden;}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.topbar-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.topbar-back{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text);text-decoration:none;flex-shrink:0;}
+.topbar-center{flex:1;text-align:center;}
+.topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
+.topbar-right{width:36px;flex-shrink:0;}
+
+.content{position:relative;z-index:1;padding:16px 20px 40px;max-width:480px;margin:0 auto;}
+.tabs{display:flex;gap:8px;margin-bottom:18px;}
+.tab{flex:1;text-align:center;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:24px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.tab.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
+.tab-panel{display:none;}
+.tab-panel.show{display:block;}
+
+.section-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin:18px 0 10px;}
+.section-label:first-child{margin-top:0;}
+
+.cap-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.cap-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.cap-role{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;}
+.cap-role.collector{background:rgba(41,121,255,0.1);color:var(--blue);border:1px solid rgba(41,121,255,0.25);}
+.cap-role.payer{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
+.cap-corridor{font-size:13px;font-weight:600;}
+.switch{position:relative;width:40px;height:22px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.switch-slider{position:absolute;cursor:pointer;inset:0;background:var(--surface);border:1px solid var(--border);border-radius:22px;transition:0.2s;}
+.switch-slider::before{content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:var(--text-3);border-radius:50%;transition:0.2s;}
+.switch input:checked + .switch-slider{background:var(--green-glow);border-color:var(--border-active);}
+.switch input:checked + .switch-slider::before{transform:translateX(18px);background:var(--green);}
+.cap-bar-wrap{background:var(--surface);border-radius:8px;height:6px;overflow:hidden;margin:8px 0 6px;}
+.cap-bar{height:100%;background:linear-gradient(90deg,var(--green-dim),var(--green));border-radius:8px;}
+.cap-nums{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);}
+.cap-nums strong{color:var(--text);}
+.btn-edit-cap{width:100%;padding:9px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;margin-top:10px;}
+
+.leg-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.leg-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.leg-amt{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
+.leg-badge{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.leg-badge.wait{background:rgba(255,215,64,0.1);color:var(--yellow);border:1px solid rgba(255,215,64,0.3);}
+.leg-badge.progress{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
+.leg-badge.done{background:rgba(41,121,255,0.08);color:var(--blue);border:1px solid rgba(41,121,255,0.25);}
+.leg-sub{font-size:12px;color:var(--text-3);margin-bottom:10px;}
+.leg-contrib{font-size:11px;color:var(--text-3);margin-bottom:10px;padding:8px 10px;background:var(--surface);border-radius:8px;}
+.payment-info-box{background:var(--surface);border:1px solid var(--border-active);border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.payment-info-title{font-size:11px;font-weight:700;font-family:'Syne',sans-serif;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
+.payment-info-row{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;}
+.payment-info-label{color:var(--text-3);font-size:11px;min-width:70px;}
+.payment-info-val{font-weight:600;color:var(--text);}
+.leg-actions{display:flex;gap:8px;}
+.leg-actions .btn-primary,.leg-actions .btn-cancel{margin-top:0;}
+
+.empty-state{text-align:center;padding:50px 20px;}
+.empty-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px;}
+.empty-sub{font-size:13px;color:var(--text-3);line-height:1.6;}
+.loading-wrap{display:flex;justify-content:center;padding:40px;}
+.loader{width:30px;height:30px;position:relative;}
+.loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
+.loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.btn-add{width:100%;padding:13px;background:var(--surface);border:1px dashed var(--border-active);border-radius:12px;color:var(--green);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;}
+
+.overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
+.overlay.open{display:flex;}
+.sheet{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);max-height:90vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.sheet-handle-row{padding:16px 0 18px;display:flex;justify-content:center;position:sticky;top:0;background:var(--card);z-index:1;}
+.sheet-handle{width:34px;height:3px;border-radius:2px;background:var(--border);}
+.sheet-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.form-input,.form-select{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;-webkit-appearance:none;}
+.form-row{display:flex;gap:10px;}.form-row .form-group{flex:1;}
+.btn-primary{width:100%;padding:14px;background:var(--green-dim);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-primary.danger{background:linear-gradient(135deg,#c0392b,#8e1a1a);}
+.btn-cancel{width:100%;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+.msg{display:none;padding:11px 14px;border-radius:10px;font-size:13px;margin-top:10px;}
+.msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6b6b;}
+.msg.show{display:block;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:400;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.proof-upload-area{border:2px dashed var(--border-active);border-radius:12px;padding:18px;text-align:center;cursor:pointer;margin-bottom:12px;}
+.proof-upload-area:active{background:var(--green-glow);}
+.not-agent{text-align:center;padding:80px 24px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="topbar-left"><a href="/tdoli-profile.html" class="topbar-back">‹</a></div>
+ <div class="topbar-center"><span class="topbar-title">Espace Agent</span></div>
+ <div class="topbar-right"></div>
+</div>
+
+<div class="content" id="agentContent">
+ <div class="loading-wrap"><div class="loader"></div></div>
+</div>
+
+<!-- Sheet ajouter/modifier capacité -->
+<div class="overlay" id="capOverlay" onclick="closeOnOverlay(event,'capOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title" id="capSheetTitle">Nouvelle capacité</div>
+ <div class="form-group"><label class="form-label">Rôle</label>
+ <select class="form-select" id="cap-role">
+ <option value="collector">Collecteur (je reçois l'utilisateur)</option>
+ <option value="payer">Payeur (je paie le bénéficiaire)</option>
+ </select>
+ </div>
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">Pays</label>
+ <select class="form-select" id="cap-country">
+ <option value="France">🇫🇷 France</option><option value="Gabon">🇬🇦 Gabon</option><option value="Etats-Unis">🇺🇸 Etats-Unis</option><option value="Canada">🇨🇦 Canada</option><option value="Burkina Faso">🇧🇫 Burkina Faso</option><option value="Belgique">🇧🇪 Belgique</option><option value="Suisse">🇨🇭 Suisse</option>
+ </select>
+ </div>
+ <div class="form-group"><label class="form-label">Devise</label>
+ <select class="form-select" id="cap-currency">
+ <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="XOF">XOF</option><option value="USD">USD</option><option value="CAD">CAD</option><option value="GBP">GBP</option><option value="MAD">MAD</option><option value="GHS">GHS</option><option value="NGN">NGN</option>
+ </select>
+ </div>
+ </div>
+ <div class="form-group"><label class="form-label">Capacité disponible (dans ta devise)</label><input class="form-input" type="text" id="cap-amount" placeholder="ex: 200000" inputmode="decimal"></div>
+ <button class="btn-primary" id="btn-save-cap" onclick="saveCapacity()">Enregistrer</button>
+ <button class="btn-cancel" onclick="closeSheet('capOverlay')">Annuler</button>
+ <div class="msg" id="msg-cap"></div>
+ </div>
+</div>
+
+<!-- Sheet preuve de paiement au bénéficiaire -->
+<div class="overlay" id="legProofOverlay" onclick="closeOnOverlay(event,'legProofOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Preuve de paiement</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Justifie que tu as bien payé le bénéficiaire.</div>
+ <div class="proof-upload-area" onclick="document.getElementById('leg-file-input').click()">
+ <div style="font-size:26px;margin-bottom:6px;">📎</div>
+ <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--green);">Ajouter la preuve</div>
+ <div style="font-size:11px;color:var(--text-3);margin-top:4px;">Photo ou PDF — max 10MB</div>
+ </div>
+ <input type="file" id="leg-file-input" accept="image/*,.pdf" style="display:none" onchange="previewLegProof(this)">
+ <div id="leg-proof-preview" style="font-size:12px;color:var(--green-dim);margin-bottom:12px;"></div>
+ <button class="btn-primary" id="btn-submit-leg-proof" onclick="submitLegProof()" disabled>Confirmer le paiement</button>
+ <button class="btn-cancel" onclick="closeSheet('legProofOverlay')">Annuler</button>
+ <div class="msg" id="msg-leg-proof"></div>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://tdoli-backend.onrender.com';
+const token = localStorage.getItem('tdoli_token');
+if (!token) { window.location.replace('/tdoli-auth.html'); }
+
+async function safeJson(res) {
+ const text = await res.text();
+ try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+ catch(e) { return { ok: false, status: res.status, data: null }; }
+}
+function showToast(msg, color) {
+ const t = document.getElementById('toast');
+ t.textContent=msg; t.style.background=color||'var(--green-dim)';
+ t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
+}
+function showMsg(id, text) { const el=document.getElementById(id); el.className='msg error show'; el.textContent=text; }
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+function closeOnOverlay(e,id) { if(e.target===document.getElementById(id)) closeSheet(id); }
+
+let currentTab = 'capacities';
+function setTab(t) {
+ currentTab = t;
+ document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.tab === t));
+ document.querySelectorAll('.tab-panel').forEach(el => el.classList.toggle('show', el.id === 'panel-'+t));
+}
+
+function renderShell() {
+ document.getElementById('agentContent').innerHTML = `
+  <div class="tabs">
+   <div class="tab active" data-tab="capacities" onclick="setTab('capacities')">Mes capacités</div>
+   <div class="tab" data-tab="legs" onclick="setTab('legs')">Jambes à traiter</div>
+  </div>
+  <div class="tab-panel show" id="panel-capacities">
+   <div id="capList"><div class="loading-wrap"><div class="loader"></div></div></div>
+   <button class="btn-add" onclick="openCapSheet()">+ Ajouter une capacité</button>
+  </div>
+  <div class="tab-panel" id="panel-legs">
+   <div id="legList"><div class="loading-wrap"><div class="loader"></div></div></div>
+  </div>
+ `;
+ loadCapacities();
+ loadLegs();
+}
+
+// ── Garde d'accès : réservé aux agents ──────────────────────────
+async function init() {
+ try {
+  const r = await safeJson(await fetch(API+'/auth', {headers:{'Authorization':'Bearer '+token}}));
+  if (r.status === 401 || r.status === 403) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+  if (!r.ok || !r.data || !r.data.isAgent) {
+   document.getElementById('agentContent').innerHTML = '<div class="not-agent"><div class="empty-title">Réservé aux agents</div><div class="empty-sub">Cette section est disponible une fois que tu as le statut Agent TDOLI.</div></div>';
+   return;
+  }
+  renderShell();
+ } catch(e) {
+  document.getElementById('agentContent').innerHTML = '<div class="empty-state"><div class="empty-title">Erreur réseau</div></div>';
+ }
+}
+
+// ── Capacités ────────────────────────────────────────────────────
+const roleLabel = { collector: 'Collecteur', payer: 'Payeur' };
+
+async function loadCapacities() {
+ try {
+  const r = await safeJson(await fetch(API+'/agent/capacity', {headers:{'Authorization':'Bearer '+token}}));
+  const caps = (r.ok && Array.isArray(r.data)) ? r.data : [];
+  if (!caps.length) {
+   document.getElementById('capList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucune capacité déclarée</div><div class="empty-sub">Déclare ta capacité par corridor pour recevoir des demandes.</div></div>';
+   return;
+  }
+  document.getElementById('capList').innerHTML = caps.map(c => {
+   const pct = c.totalCapacity > 0 ? Math.round((c.remainingAmount / c.totalCapacity) * 100) : 0;
+   return `<div class="cap-card">
+    <div class="cap-top">
+     <div><span class="cap-role ${c.role}">${roleLabel[c.role]}</span> <span class="cap-corridor">${c.country} · ${c.currency}</span></div>
+     <label class="switch"><input type="checkbox" ${c.isActive?'checked':''} onchange="toggleCapacity('${c._id}')"><span class="switch-slider"></span></label>
+    </div>
+    <div class="cap-bar-wrap"><div class="cap-bar" style="width:${pct}%"></div></div>
+    <div class="cap-nums"><span>Disponible : <strong>${Number(c.remainingAmount).toLocaleString('fr-FR')} ${c.currency}</strong></span><span>Total : ${Number(c.totalCapacity).toLocaleString('fr-FR')} ${c.currency}</span></div>
+    <button class="btn-edit-cap" onclick="openCapSheet('${c.role}','${c.country}','${c.currency}',${c.totalCapacity})">Modifier</button>
+   </div>`;
+  }).join('');
+ } catch(e) {
+  document.getElementById('capList').innerHTML = '<div class="empty-state"><div class="empty-title">Erreur réseau</div></div>';
+ }
+}
+
+async function toggleCapacity(id) {
+ try {
+  const r = await safeJson(await fetch(API+'/agent/capacity/'+id+'/toggle', {method:'POST', headers:{'Authorization':'Bearer '+token}}));
+  if (r.ok) { showToast(r.data.message); loadCapacities(); }
+  else { showToast((r.data&&r.data.message)||'Erreur', 'var(--red)'); loadCapacities(); }
+ } catch(e) { showToast('Erreur réseau', 'var(--red)'); }
+}
+
+function openCapSheet(role, country, currency, totalCapacity) {
+ document.getElementById('capSheetTitle').textContent = role ? 'Modifier la capacité' : 'Nouvelle capacité';
+ document.getElementById('cap-role').value = role || 'payer';
+ document.getElementById('cap-country').value = country || 'France';
+ document.getElementById('cap-currency').value = currency || 'EUR';
+ document.getElementById('cap-amount').value = totalCapacity != null ? totalCapacity : '';
+ document.getElementById('msg-cap').classList.remove('show');
+ document.getElementById('capOverlay').classList.add('open');
+}
+
+async function saveCapacity() {
+ const role = document.getElementById('cap-role').value;
+ const country = document.getElementById('cap-country').value;
+ const currency = document.getElementById('cap-currency').value;
+ const totalCapacity = parseFloat((document.getElementById('cap-amount').value||'').replace(',','.'));
+ if (!totalCapacity || totalCapacity < 0) { showMsg('msg-cap','Montant invalide'); return; }
+ const btn = document.getElementById('btn-save-cap');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Envoi…';
+ try {
+  const r = await safeJson(await fetch(API+'/agent/capacity', {
+   method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+   body: JSON.stringify({ role, country, currency, totalCapacity })
+  }));
+  if (r.ok) { closeSheet('capOverlay'); showToast('Capacité enregistrée'); loadCapacities(); }
+  else showMsg('msg-cap', (r.data&&r.data.message)||'Erreur');
+ } catch(e) { showMsg('msg-cap','Erreur réseau'); }
+ btn.disabled = false; btn.innerHTML = 'Enregistrer';
+}
+
+// ── Jambes à traiter ─────────────────────────────────────────────
+const legBadge = { assigned: {cls:'wait', label:'À accepter'}, accepted: {cls:'progress', label:'À payer'}, paid: {cls:'done', label:'En attente confirmation'}, confirmed: {cls:'done', label:'Confirmée'} };
+const methodIcons = { mobilemoney:'Mobile Money', virement:'Virement bancaire', paypal:'PayPal', wero:'Wero', especes:'Espèces' };
+
+function renderBeneficiaryInfo(info) {
+ if (!info) return '';
+ let html = '<div class="payment-info-box"><div class="payment-info-title">Bénéficiaire</div>';
+ if (info.method) html += '<div class="payment-info-row" style="margin-bottom:6px;"><span style="background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);border-radius:6px;padding:3px 10px;font-size:12px;font-family:Syne,sans-serif;font-weight:700;color:var(--yellow);">'+(methodIcons[info.method]||info.method)+'</span></div>';
+ if (info.name) html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">'+info.name+'</span></div>';
+ if (info.phone) html += '<div class="payment-info-row"><span class="payment-info-label">Numéro</span><span class="payment-info-val" style="color:var(--green);">'+info.phone+'</span></div>';
+ if (info.operateur) html += '<div class="payment-info-row"><span class="payment-info-label">Opérateur</span><span class="payment-info-val">'+info.operateur+'</span></div>';
+ if (info.iban) html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px;letter-spacing:1px;">'+info.iban+'</span></div>';
+ if (info.banque) html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">'+info.banque+'</span></div>';
+ if (info.paypal) html += '<div class="payment-info-row"><span class="payment-info-label">Email</span><span class="payment-info-val">'+info.paypal+'</span></div>';
+ if (info.wero) html += '<div class="payment-info-row"><span class="payment-info-label">Wero</span><span class="payment-info-val">'+info.wero+'</span></div>';
+ if (info.ville) html += '<div class="payment-info-row"><span class="payment-info-label">Ville</span><span class="payment-info-val">'+info.ville+'</span></div>';
+ html += '</div>';
+ return html;
+}
+
+async function loadLegs() {
+ try {
+  const r = await safeJson(await fetch(API+'/payout-legs/mine', {headers:{'Authorization':'Bearer '+token}}));
+  const legs = (r.ok && Array.isArray(r.data)) ? r.data.filter(l => ['assigned','accepted','paid'].includes(l.status)) : [];
+  if (!legs.length) {
+   document.getElementById('legList').innerHTML = '<div class="empty-state"><div class="empty-title">Rien à traiter</div><div class="empty-sub">Les demandes qui te sont assignées apparaîtront ici.</div></div>';
+   return;
+  }
+  document.getElementById('legList').innerHTML = legs.map(leg => {
+   const b = legBadge[leg.status] || {cls:'wait',label:leg.status};
+   const contribHtml = (leg.contributors && leg.contributors.length)
+    ? '<div class="leg-contrib">Alimenté par '+leg.contributors.length+' contributeur(s) — tu restes le seul agent face au bénéficiaire.</div>' : '';
+   let actions = '';
+   if (leg.status === 'assigned') {
+    actions = '<div class="leg-actions"><button class="btn-primary" onclick="acceptLeg(\''+leg._id+'\')">Accepter</button><button class="btn-cancel" onclick="refuseLeg(\''+leg._id+'\')">Refuser</button></div>';
+   } else if (leg.status === 'accepted') {
+    actions = '<button class="btn-primary" onclick="openLegProofSheet(\''+leg._id+'\')">J\'ai payé le bénéficiaire</button>';
+   } else if (leg.status === 'paid') {
+    actions = '<div class="empty-sub" style="text-align:left;padding:0;">Preuve envoyée — en attente de confirmation par le demandeur.</div>';
+   }
+   return `<div class="leg-card">
+    <div class="leg-top"><span class="leg-amt">${Number(leg.amount).toLocaleString('fr-FR')} ${leg.currency}</span><span class="leg-badge ${b.cls}">${b.label}</span></div>
+    <div class="leg-sub">Part totale : ${Number(leg.amountEuro).toLocaleString('fr-FR')} € · assignée ${new Date(leg.assignedAt||leg.createdAt).toLocaleDateString('fr-FR')}</div>
+    ${contribHtml}
+    ${renderBeneficiaryInfo(leg.beneficiaryPaymentInfo)}
+    ${actions}
+   </div>`;
+  }).join('');
+ } catch(e) {
+  document.getElementById('legList').innerHTML = '<div class="empty-state"><div class="empty-title">Erreur réseau</div></div>';
+ }
+}
+
+async function acceptLeg(id) {
+ try {
+  const r = await safeJson(await fetch(API+'/payout-leg/'+id+'/accept', {method:'POST', headers:{'Authorization':'Bearer '+token}}));
+  if (r.ok) { showToast('Jambe acceptée'); loadLegs(); }
+  else showToast((r.data&&r.data.message)||'Erreur', 'var(--red)');
+ } catch(e) { showToast('Erreur réseau', 'var(--red)'); }
+}
+async function refuseLeg(id) {
+ if (!confirm('Refuser cette jambe ? Elle sera réassignée à un autre agent.')) return;
+ try {
+  const r = await safeJson(await fetch(API+'/payout-leg/'+id+'/refuse', {method:'POST', headers:{'Authorization':'Bearer '+token}}));
+  if (r.ok) { showToast('Jambe refusée'); loadLegs(); }
+  else showToast((r.data&&r.data.message)||'Erreur', 'var(--red)');
+ } catch(e) { showToast('Erreur réseau', 'var(--red)'); }
+}
+
+let currentLegId = null, legProofFile = null;
+function openLegProofSheet(id) {
+ currentLegId = id; legProofFile = null;
+ document.getElementById('leg-proof-preview').textContent = '';
+ document.getElementById('btn-submit-leg-proof').disabled = true;
+ document.getElementById('msg-leg-proof').classList.remove('show');
+ document.getElementById('legProofOverlay').classList.add('open');
+}
+function previewLegProof(input) {
+ legProofFile = input.files[0] || null;
+ document.getElementById('leg-proof-preview').textContent = legProofFile ? ('📎 '+legProofFile.name) : '';
+ document.getElementById('btn-submit-leg-proof').disabled = !legProofFile;
+}
+async function submitLegProof() {
+ if (!legProofFile || !currentLegId) return;
+ const btn = document.getElementById('btn-submit-leg-proof');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Envoi…';
+ try {
+  const fd = new FormData(); fd.append('proof', legProofFile);
+  const r = await safeJson(await fetch(API+'/payout-leg/'+currentLegId+'/proof', {method:'POST', headers:{'Authorization':'Bearer '+token}, body: fd}));
+  if (r.ok) { closeSheet('legProofOverlay'); showToast('Preuve envoyée'); loadLegs(); }
+  else showMsg('msg-leg-proof', (r.data&&r.data.message)||'Erreur');
+ } catch(e) { showMsg('msg-leg-proof','Erreur réseau'); }
+ btn.disabled = false; btn.innerHTML = 'Confirmer le paiement';
+}
+
+init();
+</script>
+</body>
+</html>

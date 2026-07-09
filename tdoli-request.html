@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TDOLI — Demandes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#05090a;--surface:#0b1215;--card:#0f1a1e;
+ --green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.10);
+ --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
+ --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
+ --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
+ --r:14px;
+ --shadow:0 2px 20px rgba(0,0,0,0.5);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.topbar-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.topbar-center{flex:1;text-align:center;}
+.topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;width:38px;}
+.user-avatar-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;cursor:pointer;text-decoration:none;flex-shrink:0;border:1.5px solid var(--border-active);overflow:hidden;}
+.user-avatar-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+
+.content{position:relative;z-index:1;padding:16px 20px;max-width:480px;margin:0 auto;}
+.filter-tabs{display:flex;gap:8px;padding:0 20px 14px;overflow-x:auto;scrollbar-width:none;max-width:480px;margin:0 auto;}
+.filter-tabs::-webkit-scrollbar{display:none;}
+.filter-tab{flex-shrink:0;padding:7px 16px;background:var(--surface);border:1px solid var(--border);border-radius:24px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.filter-tab.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
+
+.req-list{display:flex;flex-direction:column;gap:8px;}
+.req-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;position:relative;overflow:hidden;}
+@keyframes cardIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.req-item:active{background:var(--surface);}
+.req-thumb{width:48px;height:48px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,rgba(0,200,83,0.12),rgba(41,121,255,0.12));border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.req-body{flex:1;min-width:0;}
+.req-code{font-size:10px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.5px;margin-bottom:2px;}
+.req-amt{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;letter-spacing:-0.3px;}
+.req-dir{font-size:12px;color:var(--text-2);margin-top:2px;}
+.req-badge{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0;align-self:center;white-space:nowrap;}
+.req-badge.wait{background:rgba(255,215,64,0.1);color:var(--yellow);border:1px solid rgba(255,215,64,0.3);}
+.req-badge.progress{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
+.req-badge.done{background:rgba(41,121,255,0.08);color:var(--blue);border:1px solid rgba(41,121,255,0.25);}
+.req-badge.fail{background:rgba(255,23,68,0.08);color:var(--red);border:1px solid rgba(255,23,68,0.25);}
+.req-badge.off{background:rgba(255,255,255,0.04);color:var(--text-3);border:1px solid var(--border);}
+
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.empty-sub{font-size:13px;color:var(--text-3);line-height:1.6;}
+.loading-wrap{display:flex;justify-content:center;padding:50px;}
+.loader{width:30px;height:30px;position:relative;}
+.loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spin 1s linear infinite;}
+.loader::before{border-top-color:var(--green);}.loader::after{border-bottom-color:var(--blue);animation-duration:1.5s;animation-direction:reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.fab{position:fixed;bottom:92px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:var(--green-dim);border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,83,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
+.fab:active{transform:scale(0.9);}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);padding:8px 0;display:flex;max-width:480px;margin:0 auto;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-3);font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none;transition:color 0.2s;}
+.nav-item.active{color:var(--green);}
+.nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+.nav-icon-wrap{position:relative;}
+.nav-badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;}.nav-badge.show{display:flex;}.nav-badge.red{background:var(--red);color:#fff;}
+svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+
+.overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:flex-end;}
+.overlay.open{display:flex;}
+.sheet{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border-active);border-radius:22px 22px 0 0;padding:0 22px 48px;width:100%;max-width:480px;margin:0 auto;animation:slideUp 0.35s cubic-bezier(0.19,1,0.22,1);box-shadow:0 -8px 40px rgba(0,0,0,0.5);max-height:90vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.sheet-handle-row{padding:16px 0 18px;display:flex;justify-content:center;position:sticky;top:0;background:var(--card);z-index:1;}
+.sheet-handle{width:34px;height:3px;border-radius:2px;background:var(--border);}
+.sheet-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px;}
+
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11px;font-weight:500;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.form-input,.form-select,.form-textarea{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;-webkit-appearance:none;transition:all 0.2s;}
+.form-textarea{resize:none;height:80px;font-size:14px;}
+.form-row{display:flex;gap:10px;}.form-row .form-group{flex:1;}
+.method-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.method-tab{padding:7px 12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-3);cursor:pointer;transition:all 0.2s;}
+.method-tab.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
+.method-fields{display:none;}.method-fields.show{display:block;}
+
+.btn-primary{width:100%;padding:14px;background:var(--green-dim);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;position:relative;overflow:hidden;}
+.btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-primary.danger{background:linear-gradient(135deg,#c0392b,#8e1a1a);}
+.btn-cancel{width:100%;padding:12px;background:transparent;color:var(--text-3);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+.msg{display:none;padding:11px 14px;border-radius:10px;font-size:13px;margin-top:10px;}
+.msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6b6b;}
+.msg.show{display:block;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.5s linear infinite;vertical-align:middle;margin-right:6px;}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(8px);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:11px 22px;border-radius:30px;z-index:400;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Détail demande */
+.detail-amount-row{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.detail-amt{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.detail-cur{font-size:13px;color:var(--text);font-family:'Syne',sans-serif;font-weight:700;margin-left:4px;}
+.detail-arrow{font-size:13px;color:var(--text-3);}
+.detail-code-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.detail-code{font-family:'Syne',sans-serif;font-size:13px;color:var(--text-3);letter-spacing:0.5px;}
+.section-label{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin:18px 0 10px;}
+.section-label:first-child{margin-top:0;}
+.stepper{display:flex;align-items:flex-start;margin-bottom:14px;}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;}
+.step:not(:last-child)::after{content:'';position:absolute;top:11px;left:50%;right:-50%;height:1px;background:var(--border);z-index:0;}
+.step.done:not(:last-child)::after{background:var(--green);opacity:0.4;}
+.step-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;z-index:1;position:relative;}
+.step-dot.done{background:var(--green);color:#000;}
+.step-dot.active{background:var(--yellow);color:#000;animation:stepGlow 1.5s ease infinite;}
+.step-dot.pending{background:var(--surface);color:var(--text-3);border:1px solid var(--border);}
+.step-dot.fail{background:var(--red);color:#fff;}
+@keyframes stepGlow{0%,100%{box-shadow:0 0 6px rgba(252,209,22,0.4);}50%{box-shadow:0 0 14px rgba(252,209,22,0.7);}}
+.step-label{font-size:9px;color:var(--text-3);text-align:center;line-height:1.3;max-width:56px;}
+.instruction-box{background:rgba(252,209,22,0.06);border:1px solid rgba(252,209,22,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.instruction-title{font-size:11px;font-weight:700;font-family:'Syne',sans-serif;color:var(--yellow);margin-bottom:4px;}
+.instruction-text{font-size:13px;color:var(--text-2);line-height:1.5;}
+.leg-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
+.leg-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.leg-amt{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
+.leg-sub{font-size:12px;color:var(--text-3);margin-bottom:10px;}
+.proof-upload-area{border:2px dashed var(--border-active);border-radius:12px;padding:18px;text-align:center;cursor:pointer;margin-bottom:12px;transition:all 0.2s;}
+.proof-upload-area:active{background:var(--green-glow);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="topbar-left"><a href="/tdoli-profile.html" class="user-avatar-btn" id="avatarBtn">?</a></div>
+ <div class="topbar-center"><span class="topbar-title">Mes Demandes</span></div>
+ <div class="topbar-right"></div>
+</div>
+
+<div class="filter-tabs">
+ <div class="filter-tab active" onclick="setFilter('all',this)">Toutes</div>
+ <div class="filter-tab" onclick="setFilter('progress',this)">En cours</div>
+ <div class="filter-tab" onclick="setFilter('done',this)">Terminées</div>
+ <div class="filter-tab" onclick="setFilter('fail',this)">Problème</div>
+</div>
+
+<div class="content"><div id="reqList"><div class="loading-wrap"><div class="loader"></div></div></div></div>
+
+<button class="fab" onclick="openCreateSheet()">+</button>
+
+<nav class="bottom-nav">
+  <a class="nav-item" href="/tdoli-feed.html" onclick="navTo(event,this)">
+    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <span>Feed</span>
+  </a>
+  <a class="nav-item active" href="/tdoli-request.html">
+    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+    <span>Demandes</span>
+  </a>
+  <a class="nav-item" href="/tdoli-deals.html" onclick="navTo(event,this)">
+    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+    <span>Deals</span>
+  </a>
+  <a class="nav-item" href="/tdoli-messages.html" onclick="navTo(event,this)">
+    <div class="nav-icon-wrap">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <div class="nav-badge red" id="msgBadge"></div>
+    </div>
+    <span>Messages</span>
+  </a>
+  <a class="nav-item" href="/tdoli-profile.html" onclick="navTo(event,this)">
+    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <span>Profil</span>
+  </a>
+</nav>
+
+<!-- Sheet créer une demande -->
+<div class="overlay" id="createOverlay" onclick="closeOnOverlay(event,'createOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Nouvelle demande</div>
+ <div style="font-size:12px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">TDOLI assigne automatiquement un agent collecteur puis un ou plusieurs agents payeurs — tu ne gères qu'une seule demande, jamais plusieurs agents à la fois.</div>
+
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">Tu envoies</label><input class="form-input" type="text" id="rq-amount" placeholder="ex: 50" inputmode="decimal"></div>
+ <div class="form-group"><label class="form-label">Devise</label>
+ <select class="form-select" id="rq-currency">
+ <option value="EUR">EUR</option><option value="XAF">XAF</option><option value="XOF">XOF</option><option value="USD">USD</option><option value="CAD">CAD</option><option value="GBP">GBP</option><option value="MAD">MAD</option><option value="GHS">GHS</option><option value="NGN">NGN</option>
+ </select>
+ </div>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">De</label>
+ <select class="form-select" id="rq-from">
+ <option value="France">🇫🇷 France</option><option value="Gabon">🇬🇦 Gabon</option><option value="Etats-Unis">🇺🇸 Etats-Unis</option><option value="Canada">🇨🇦 Canada</option><option value="Burkina Faso">🇧🇫 Burkina Faso</option><option value="Belgique">🇧🇪 Belgique</option><option value="Suisse">🇨🇭 Suisse</option>
+ </select>
+ </div>
+ <div class="form-group"><label class="form-label">Vers</label>
+ <select class="form-select" id="rq-to">
+ <option value="Gabon">🇬🇦 Gabon</option><option value="France">🇫🇷 France</option><option value="Etats-Unis">🇺🇸 Etats-Unis</option><option value="Canada">🇨🇦 Canada</option><option value="Burkina Faso">🇧🇫 Burkina Faso</option><option value="Belgique">🇧🇪 Belgique</option><option value="Suisse">🇨🇭 Suisse</option>
+ </select>
+ </div>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">Le bénéficiaire reçoit</label><input class="form-input" type="text" id="rq-target-amount" placeholder="ex: 32800" inputmode="decimal"></div>
+ <div class="form-group"><label class="form-label">Devise</label>
+ <select class="form-select" id="rq-target-currency">
+ <option value="XAF">XAF</option><option value="EUR">EUR</option><option value="XOF">XOF</option><option value="USD">USD</option><option value="CAD">CAD</option><option value="GBP">GBP</option><option value="MAD">MAD</option><option value="GHS">GHS</option><option value="NGN">NGN</option>
+ </select>
+ </div>
+ </div>
+
+ <div class="section-label">Coordonnées du bénéficiaire</div>
+ <div class="form-group"><label class="form-label">Nom complet</label><input class="form-input" type="text" id="rq-benef-name" placeholder="Jean Dupont"></div>
+ <div class="method-tabs">
+ <div class="method-tab active" id="rqm-mm" onclick="setReqMethod('mobilemoney',this)">Mobile Money</div>
+ <div class="method-tab" id="rqm-vir" onclick="setReqMethod('virement',this)">Virement</div>
+ <div class="method-tab" id="rqm-pp" onclick="setReqMethod('paypal',this)">PayPal</div>
+ <div class="method-tab" id="rqm-wero" onclick="setReqMethod('wero',this)">Wero</div>
+ <div class="method-tab" id="rqm-cash" onclick="setReqMethod('especes',this)">Espèces</div>
+ </div>
+ <div id="rq-fields-mobilemoney" class="method-fields show">
+ <div class="form-group"><label class="form-label">Numéro Mobile Money</label><input class="form-input" type="tel" id="rq-phone" placeholder="+241 06 00 00 00" inputmode="tel"></div>
+ <div class="form-group"><label class="form-label">Opérateur</label>
+ <select class="form-select" id="rq-operateur"><option value="">Sélectionner…</option><option value="Airtel Money">Airtel Money</option><option value="Moov Money">Moov Money</option><option value="Orange Money">Orange Money</option></select>
+ </div>
+ </div>
+ <div id="rq-fields-virement" class="method-fields">
+ <div class="form-group"><label class="form-label">IBAN</label><input class="form-input" type="text" id="rq-iban" placeholder="FR76…"></div>
+ <div class="form-group"><label class="form-label">Banque</label><input class="form-input" type="text" id="rq-banque" placeholder="BNP, Société Générale…"></div>
+ </div>
+ <div id="rq-fields-paypal" class="method-fields">
+ <div class="form-group"><label class="form-label">Email PayPal</label><input class="form-input" type="email" id="rq-paypal" placeholder="beneficiaire@email.com"></div>
+ </div>
+ <div id="rq-fields-wero" class="method-fields">
+ <div class="form-group"><label class="form-label">Numéro Wero</label><input class="form-input" type="tel" id="rq-wero" placeholder="+33 6 12 34 56 78" inputmode="tel"></div>
+ </div>
+ <div id="rq-fields-especes" class="method-fields">
+ <div class="form-group"><label class="form-label">Ville / lieu de remise</label><input class="form-input" type="text" id="rq-ville" placeholder="Ex: Libreville centre…"></div>
+ </div>
+
+ <button class="btn-primary" id="btn-create-request" onclick="submitRequest()">Envoyer la demande</button>
+ <button class="btn-cancel" onclick="closeSheet('createOverlay')">Annuler</button>
+ <div class="msg" id="msg-create"></div>
+ </div>
+</div>
+
+<!-- Sheet détail demande -->
+<div class="overlay" id="detailOverlay" onclick="closeOnOverlay(event,'detailOverlay')">
+ <div class="sheet"><div class="sheet-handle-row"><div class="sheet-handle"></div></div><div id="detailContent"></div></div>
+</div>
+
+<!-- Sheet preuve d'envoi (collecte) -->
+<div class="overlay" id="proofOverlay" onclick="closeOnOverlay(event,'proofOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title">Confirmer l'envoi</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Confirme que tu as bien envoyé tes fonds à l'agent collecteur.</div>
+ <div class="proof-upload-area" onclick="document.getElementById('rp-file-input').click()">
+ <div style="font-size:26px;margin-bottom:6px;">📎</div>
+ <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--green);">Ajouter une preuve (optionnel)</div>
+ <div style="font-size:11px;color:var(--text-3);margin-top:4px;">Photo ou PDF — max 10MB</div>
+ </div>
+ <input type="file" id="rp-file-input" accept="image/*,.pdf" style="display:none" onchange="previewReqProof(this)">
+ <div id="rp-preview" style="font-size:12px;color:var(--green-dim);margin-bottom:12px;"></div>
+ <button class="btn-primary" id="btn-rp-cash" onclick="confirmCollectSend(false)">Je confirme avoir envoyé (espèces / hors app)</button>
+ <button class="btn-primary" id="btn-rp-proof" onclick="confirmCollectSend(true)" style="display:none;background:linear-gradient(135deg,#b8860b,#ffd740);color:#000;">Confirmer avec la preuve jointe</button>
+ <button class="btn-cancel" onclick="closeSheet('proofOverlay')">Annuler</button>
+ <div class="msg" id="msg-proof"></div>
+ </div>
+</div>
+
+<!-- Sheet litige jambe -->
+<div class="overlay" id="disputeOverlay" onclick="closeOnOverlay(event,'disputeOverlay')">
+ <div class="sheet">
+ <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
+ <div class="sheet-title" style="color:var(--red);">Signaler un problème</div>
+ <div class="form-group"><textarea class="form-textarea" id="dispute-desc" placeholder="Décris ce qui s'est passé…"></textarea></div>
+ <button class="btn-primary danger" id="btn-submit-dispute" onclick="submitLegDispute()">Envoyer le signalement</button>
+ <button class="btn-cancel" onclick="closeSheet('disputeOverlay')">Annuler</button>
+ <div class="msg" id="msg-dispute"></div>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://tdoli-backend.onrender.com';
+const token = localStorage.getItem('tdoli_token');
+const email = localStorage.getItem('tdoli_email');
+const username = localStorage.getItem('tdoli_username') || email?.split('@')[0] || '?';
+
+if (!token) { window.location.replace('/tdoli-auth.html'); }
+
+function navTo(e, el) {
+ if (el.classList.contains('active')) return;
+ e.preventDefault();
+ if (navigator.vibrate) navigator.vibrate(30);
+ document.body.style.transition = 'opacity 0.13s ease';
+ document.body.style.opacity = '0';
+ setTimeout(() => { window.location.href = el.href; }, 130);
+}
+
+function getInitials(name) {
+ const p = (name||'?').trim().split(' ').filter(x=>x.length>0);
+ return p.length>=2 ? (p[0][0]+p[p.length-1][0]).toUpperCase() : (name||'??').substring(0,2).toUpperCase();
+}
+(function(){
+ const btn = document.getElementById('avatarBtn');
+ const av = localStorage.getItem('tdoli_avatar');
+ const ini = getInitials(username);
+ if(btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
+})();
+
+async function safeJson(res) {
+ const text = await res.text();
+ try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+ catch(e) { return { ok: false, status: res.status, data: null }; }
+}
+function showToast(msg, color) {
+ const t = document.getElementById('toast');
+ t.textContent=msg; t.style.background=color||'var(--green-dim)';
+ t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
+}
+function showMsg(id, text) { const el=document.getElementById(id); el.className='msg error show'; el.textContent=text; }
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); if(id==='detailOverlay') stopPolling(); }
+function closeOnOverlay(e,id) { if(e.target===document.getElementById(id)) closeSheet(id); }
+function timeAgo(d) {
+ if(!d) return '';
+ const diff=Date.now()-new Date(d).getTime(), m=Math.floor(diff/60000);
+ if(m<1) return "À l'instant"; if(m<60) return m+' min';
+ const h=Math.floor(m/60); if(h<24) return h+'h'; return Math.floor(h/24)+'j';
+}
+
+// ── Liste des demandes ──────────────────────────────────────────
+let allRequests = [], currentFilter = 'all';
+
+function statusGroup(status) {
+ if (['pending_collector','awaiting_collector_approval','collecting','dispatching_payers','paying_out'].includes(status)) return 'progress';
+ if (status === 'completed') return 'done';
+ if (['no_agent_available','no_liquidity_payout','partial_failure','dispute'].includes(status)) return 'fail';
+ if (status === 'cancelled') return 'off';
+ return 'progress';
+}
+function statusLabel(status) {
+ const map = {
+  pending_collector: 'Recherche agent…', awaiting_collector_approval: 'En attente agent',
+  collecting: 'Collecte en cours', dispatching_payers: 'Répartition…', paying_out: 'Paiement en cours',
+  completed: 'Terminée', no_agent_available: 'Aucun agent dispo', no_liquidity_payout: 'Liquidité insuffisante',
+  partial_failure: 'Partiellement payée', cancelled: 'Annulée', dispute: 'Litige'
+ };
+ return map[status] || status;
+}
+
+function renderRequests(data) {
+ if (!data.length) {
+  document.getElementById('reqList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucune demande</div><div class="empty-sub">Crée une demande et TDOLI s\'occupe de trouver les agents.</div></div>';
+  return;
+ }
+ const list = document.createElement('div');
+ list.className = 'req-list';
+ data.forEach((r,i) => {
+  const grp = statusGroup(r.status);
+  const div = document.createElement('div');
+  div.className = 'req-item';
+  div.style.animationDelay = (i*0.04)+'s';
+  div.addEventListener('click', () => openRequestDetail(r._id));
+  div.innerHTML =
+   '<div class="req-thumb">📨</div>'+
+   '<div class="req-body">'+
+   '<div class="req-code">'+(r.requestCode||'')+'</div>'+
+   '<div class="req-amt">'+Number(r.amount).toLocaleString('fr-FR')+' '+r.currency+'</div>'+
+   '<div class="req-dir">'+(r.fromCountry||'?')+' → '+(r.toCountry||'?')+'</div>'+
+   '</div>'+
+   '<div class="req-badge '+grp+'">'+statusLabel(r.status)+'</div>';
+  list.appendChild(div);
+ });
+ document.getElementById('reqList').innerHTML = '';
+ document.getElementById('reqList').appendChild(list);
+}
+
+function setFilter(f, el) {
+ currentFilter = f;
+ document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+ el.classList.add('active');
+ const filtered = f==='all' ? allRequests : allRequests.filter(r=>statusGroup(r.status)===f);
+ renderRequests(filtered);
+}
+
+async function loadRequests() {
+ document.getElementById('reqList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+ try {
+  const r = await safeJson(await fetch(API+'/requests/mine', {headers:{'Authorization':'Bearer '+token}}));
+  if (r.status===401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
+  allRequests = (r.ok && Array.isArray(r.data)) ? r.data : [];
+  const filtered = currentFilter==='all' ? allRequests : allRequests.filter(x=>statusGroup(x.status)===currentFilter);
+  renderRequests(filtered);
+ } catch(e) {
+  document.getElementById('reqList').innerHTML = '<div class="empty-state"><div class="empty-title">Erreur réseau</div><div class="empty-sub">Impossible de charger tes demandes.</div></div>';
+ }
+}
+
+// ── Créer une demande ───────────────────────────────────────────
+let reqMethod = 'mobilemoney';
+function setReqMethod(m, el) {
+ reqMethod = m;
+ document.querySelectorAll('.method-tab').forEach(t=>t.classList.remove('active'));
+ el.classList.add('active');
+ document.querySelectorAll('.method-fields').forEach(f=>f.classList.remove('show'));
+ document.getElementById('rq-fields-'+m).classList.add('show');
+}
+function openCreateSheet() { document.getElementById('createOverlay').classList.add('open'); }
+
+function buildBeneficiaryInfo() {
+ const name = document.getElementById('rq-benef-name').value.trim();
+ if (!name) return null;
+ const info = { name, method: reqMethod };
+ if (reqMethod === 'mobilemoney') {
+  info.phone = document.getElementById('rq-phone').value.trim();
+  info.operateur = document.getElementById('rq-operateur').value;
+ } else if (reqMethod === 'virement') {
+  info.iban = document.getElementById('rq-iban').value.trim();
+  info.banque = document.getElementById('rq-banque').value.trim();
+ } else if (reqMethod === 'paypal') {
+  info.paypal = document.getElementById('rq-paypal').value.trim();
+ } else if (reqMethod === 'wero') {
+  info.wero = document.getElementById('rq-wero').value.trim();
+ } else if (reqMethod === 'especes') {
+  info.ville = document.getElementById('rq-ville').value.trim();
+ }
+ return info;
+}
+
+async function submitRequest() {
+ const amount = parseFloat((document.getElementById('rq-amount').value||'').replace(',','.'));
+ const currency = document.getElementById('rq-currency').value;
+ const fromCountry = document.getElementById('rq-from').value;
+ const toCountry = document.getElementById('rq-to').value;
+ const targetAmountRaw = document.getElementById('rq-target-amount').value;
+ const targetAmount = targetAmountRaw ? parseFloat(targetAmountRaw.replace(',','.')) : amount;
+ const targetCurrency = document.getElementById('rq-target-currency').value;
+ const beneficiaryPaymentInfo = buildBeneficiaryInfo();
+
+ if (!amount || amount <= 0) { showMsg('msg-create','Montant invalide'); return; }
+ if (!beneficiaryPaymentInfo) { showMsg('msg-create','Renseigne le nom du bénéficiaire'); return; }
+
+ const btn = document.getElementById('btn-create-request');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Envoi…';
+ try {
+  const r = await safeJson(await fetch(API+'/request', {
+   method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+   body: JSON.stringify({ amount, currency, fromCountry, toCountry, targetAmount, targetCurrency, beneficiaryPaymentInfo })
+  }));
+  if (r.ok) {
+   closeSheet('createOverlay');
+   showToast('Demande envoyée — recherche d\'un agent…');
+   loadRequests();
+  } else {
+   showMsg('msg-create', (r.data&&r.data.message) || 'Erreur');
+  }
+ } catch(e) { showMsg('msg-create','Erreur réseau'); }
+ btn.disabled = false; btn.innerHTML = 'Envoyer la demande';
+}
+
+// ── Détail d'une demande ────────────────────────────────────────
+let currentRequestId = null, pollTimer = null;
+
+function openRequestDetail(id) {
+ currentRequestId = id;
+ document.getElementById('detailOverlay').classList.add('open');
+ document.getElementById('detailContent').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+ loadRequestDetail(id);
+ startPolling(id);
+}
+function startPolling(id) {
+ stopPolling();
+ pollTimer = setInterval(() => loadRequestDetail(id, true), 7000);
+}
+function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+
+function collectStepState(request, deal) {
+ // Retourne l'index de l'étape active (0-4) pour la frise de collecte.
+ if (!deal) return { steps: [
+   {label:'Recherche', done:true}, {label:'Agent trouvé', done:false},
+   {label:'Envoi', done:false}, {label:'Réception agent', done:false}
+ ], action: null };
+ const steps = [
+  {label:'Recherche', done:true},
+  {label:'Agent trouvé', done: deal.status !== 'awaiting_approval' || true},
+  {label:'Envoi', done: !!deal.confirmedByReceiver},
+  {label:'Réception agent', done: !!deal.receivedBySender}
+ ];
+ let active = steps.findIndex(s => !s.done);
+ if (active === -1) active = steps.length;
+ return steps.map((s,i) => ({...s, active: i===active}));
+}
+
+function legStatusLabel(s) {
+ const map = { assigned:'Agent en cours d\'assignation', accepted:'Agent en cours de paiement', paid:'Payé — en attente de ta confirmation', confirmed:'Confirmé ✓', refused:'Réassignation en cours', expired:'Réassignation en cours', disputed:'Litige en cours', cancelled:'Annulée' };
+ return map[s] || s;
+}
+function legStatusClass(s) {
+ if (s==='confirmed') return 'done'; if (s==='paid') return 'progress';
+ if (['refused','expired','disputed','cancelled'].includes(s)) return 'fail';
+ return 'wait';
+}
+
+async function loadRequestDetail(id, silent) {
+ try {
+  const r = await safeJson(await fetch(API+'/request/'+id, {headers:{'Authorization':'Bearer '+token}}));
+  if (!r.ok) { if(!silent) document.getElementById('detailContent').innerHTML = '<div class="empty-state"><div class="empty-title">Introuvable</div></div>'; return; }
+  renderRequestDetail(r.data.request, r.data.collectorDeal, r.data.legs || []);
+  if (['completed','cancelled','no_agent_available','no_liquidity_payout'].includes(r.data.request.status)) stopPolling();
+ } catch(e) { if(!silent) document.getElementById('detailContent').innerHTML = '<div class="empty-state"><div class="empty-title">Erreur réseau</div></div>'; }
+}
+
+function renderRequestDetail(request, deal, legs) {
+ currentRequestId = request._id;
+ const grp = statusGroup(request.status);
+ let html = '';
+ html += '<div class="detail-code-row"><div class="detail-code">'+(request.requestCode||'')+'</div><div class="req-badge '+grp+'">'+statusLabel(request.status)+'</div></div>';
+ html += '<div class="detail-amount-row"><div><span class="detail-amt">'+Number(request.amount).toLocaleString('fr-FR')+'</span><span class="detail-cur">'+request.currency+'</span></div><div class="detail-arrow">→</div><div><span class="detail-amt">'+Number(request.targetAmount).toLocaleString('fr-FR')+'</span><span class="detail-cur">'+request.targetCurrency+'</span></div></div>';
+ html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:6px;">'+(request.fromCountry||'?')+' → '+(request.toCountry||'?')+'</div>';
+
+ if (['no_agent_available','no_liquidity_payout'].includes(request.status)) {
+  html += '<div class="instruction-box" style="background:rgba(255,23,68,0.06);border-color:rgba(255,23,68,0.2);"><div class="instruction-title" style="color:var(--red);">Aucun agent disponible pour l\'instant</div><div class="instruction-text">Réessaie plus tard ou contacte le support si le problème persiste.</div></div>';
+ }
+
+ // ── Étape 1 : collecte ──
+ html += '<div class="section-label">Collecte</div>';
+ const cs = collectStepState(request, deal);
+ html += '<div class="stepper">' + cs.map(s => '<div class="step '+(s.done?'done':(s.active?'active':''))+'"><div class="step-dot '+(s.done?'done':(s.active?'active':'pending'))+'">'+(s.done?'✓':'')+'</div><div class="step-label">'+s.label+'</div></div>').join('') + '</div>';
+
+ if (deal && deal.status === 'matched' && !deal.confirmedByReceiver) {
+  html += '<div class="instruction-box"><div class="instruction-title">À toi de jouer</div><div class="instruction-text">Envoie tes fonds à l\'agent collecteur puis confirme ci-dessous.</div></div>';
+  html += '<button class="btn-primary" onclick="openProofSheet()">J\'ai envoyé mes fonds</button>';
+ } else if (deal && deal.confirmedByReceiver && !deal.receivedBySender) {
+  html += '<div class="instruction-box"><div class="instruction-title">En attente</div><div class="instruction-text">L\'agent collecteur doit confirmer avoir bien reçu tes fonds.</div></div>';
+ } else if (!deal && request.status === 'pending_collector') {
+  html += '<div class="instruction-box"><div class="instruction-title">Recherche en cours</div><div class="instruction-text">TDOLI cherche un agent collecteur disponible sur ce corridor.</div></div>';
+ } else if (deal && deal.status === 'awaiting_approval') {
+  html += '<div class="instruction-box"><div class="instruction-title">Agent trouvé</div><div class="instruction-text">En attente de son acceptation.</div></div>';
+ }
+
+ // ── Étape 2 : répartition / paiement ──
+ if (legs.length > 0) {
+  html += '<div class="section-label">Paiement au bénéficiaire</div>';
+  legs.forEach(leg => {
+   html += '<div class="leg-card">';
+   html += '<div class="leg-top"><span class="leg-amt">'+Number(leg.amount).toLocaleString('fr-FR')+' '+leg.currency+'</span><span class="req-badge '+legStatusClass(leg.status)+'">'+legStatusLabel(leg.status)+'</span></div>';
+   html += '<div class="leg-sub">'+timeAgo(leg.updatedAt||leg.createdAt)+'</div>';
+   if (leg.status === 'paid') {
+    html += '<button class="btn-primary" style="margin-top:0;" onclick="confirmLegReceived(\''+request._id+'\',\''+leg._id+'\')">Confirmer la réception</button>';
+    html += '<button class="btn-cancel" onclick="openDisputeSheet(\''+request._id+'\',\''+leg._id+'\')">Signaler un problème</button>';
+   }
+   html += '</div>';
+  });
+ } else if (['dispatching_payers','paying_out'].includes(request.status)) {
+  html += '<div class="section-label">Paiement au bénéficiaire</div><div class="instruction-box"><div class="instruction-text">Répartition en cours entre agents payeurs…</div></div>';
+ }
+
+ if (['pending_collector','awaiting_collector_approval','no_agent_available'].includes(request.status)) {
+  html += '<button class="btn-cancel" onclick="cancelRequest(\''+request._id+'\')">Annuler la demande</button>';
+ }
+
+ document.getElementById('detailContent').innerHTML = html;
+}
+
+let reqProofFile = null;
+function openProofSheet() { reqProofFile = null; document.getElementById('rp-preview').innerHTML=''; document.getElementById('btn-rp-proof').style.display='none'; document.getElementById('proofOverlay').classList.add('open'); }
+function previewReqProof(input) {
+ reqProofFile = input.files[0] || null;
+ document.getElementById('rp-preview').textContent = reqProofFile ? ('📎 '+reqProofFile.name) : '';
+ document.getElementById('btn-rp-proof').style.display = reqProofFile ? 'block' : 'none';
+}
+
+async function collectDealId() {
+ const r = await safeJson(await fetch(API+'/request/'+currentRequestId, {headers:{'Authorization':'Bearer '+token}}));
+ return (r.ok && r.data.collectorDeal) ? r.data.collectorDeal._id : null;
+}
+
+async function confirmCollectSend(withProof) {
+ const dealId = await collectDealId();
+ if (!dealId) { showMsg('msg-proof','Deal introuvable'); return; }
+ const btn = withProof ? document.getElementById('btn-rp-proof') : document.getElementById('btn-rp-cash');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Envoi…';
+ try {
+  let proofUrl = null;
+  if (withProof && reqProofFile) {
+   const fd = new FormData(); fd.append('proof', reqProofFile);
+   const up = await safeJson(await fetch(API+'/deal/'+dealId+'/proof-ocr', {method:'POST', headers:{'Authorization':'Bearer '+token}, body:fd}));
+   if (up.data && up.data.code === 'OUT_OF_ORDER') { showMsg('msg-proof', up.data.message); btn.disabled=false; btn.innerHTML = withProof?'Confirmer avec la preuve jointe':'Je confirme avoir envoyé (espèces / hors app)'; return; }
+   proofUrl = (up.data && up.data.proofUrl) || null;
+  }
+  const body = proofUrl ? { proofUrl } : { cashConfirmed: true };
+  const r = await safeJson(await fetch(API+'/deal/'+dealId+'/confirm', {
+   method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body: JSON.stringify(body)
+  }));
+  if (r.ok) {
+   closeSheet('proofOverlay');
+   showToast('Envoi confirmé — en attente de l\'agent');
+   loadRequestDetail(currentRequestId);
+  } else {
+   showMsg('msg-proof', (r.data&&r.data.message)||'Erreur');
+  }
+ } catch(e) { showMsg('msg-proof','Erreur réseau'); }
+ btn.disabled = false; btn.innerHTML = withProof?'Confirmer avec la preuve jointe':'Je confirme avoir envoyé (espèces / hors app)';
+}
+
+async function confirmLegReceived(requestId, legId) {
+ try {
+  const r = await safeJson(await fetch(API+'/request/'+requestId+'/leg/'+legId+'/confirm-received', {method:'POST', headers:{'Authorization':'Bearer '+token}}));
+  if (r.ok) { showToast('Réception confirmée '); loadRequestDetail(requestId); loadRequests(); }
+  else showToast((r.data&&r.data.message)||'Erreur', 'var(--red)');
+ } catch(e) { showToast('Erreur réseau', 'var(--red)'); }
+}
+
+let disputeRequestId = null, disputeLegId = null;
+function openDisputeSheet(requestId, legId) { disputeRequestId = requestId; disputeLegId = legId; document.getElementById('dispute-desc').value=''; document.getElementById('disputeOverlay').classList.add('open'); }
+async function submitLegDispute() {
+ const description = document.getElementById('dispute-desc').value.trim();
+ if (!description) { showMsg('msg-dispute','Décris le problème'); return; }
+ const btn = document.getElementById('btn-submit-dispute');
+ btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+ try {
+  const r = await safeJson(await fetch(API+'/request/'+disputeRequestId+'/leg/'+disputeLegId+'/dispute', {
+   method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body: JSON.stringify({description})
+  }));
+  if (r.ok) { closeSheet('disputeOverlay'); showToast('Signalement envoyé', 'var(--red)'); loadRequestDetail(disputeRequestId); }
+  else showMsg('msg-dispute',(r.data&&r.data.message)||'Erreur');
+ } catch(e) { showMsg('msg-dispute','Erreur réseau'); }
+ btn.disabled = false; btn.innerHTML = 'Envoyer le signalement';
+}
+
+async function cancelRequest(id) {
+ if (!confirm('Annuler cette demande ?')) return;
+ try {
+  const r = await safeJson(await fetch(API+'/request/'+id+'/cancel', {method:'POST', headers:{'Authorization':'Bearer '+token}}));
+  if (r.ok) { showToast('Demande annulée'); closeSheet('detailOverlay'); loadRequests(); }
+  else showToast((r.data&&r.data.message)||'Erreur', 'var(--red)');
+ } catch(e) { showToast('Erreur réseau', 'var(--red)'); }
+}
+
+loadRequests();
+</script>
+</body>
+</html>
