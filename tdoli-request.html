@@ -178,7 +178,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
  <div class="sheet">
  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
  <div class="sheet-title">Nouvelle demande</div>
- <div style="font-size:12px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">TDOLI assigne automatiquement un agent collecteur puis un ou plusieurs agents payeurs — tu ne gères qu'une seule demande, jamais plusieurs agents à la fois.</div>
+ <div style="font-size:12px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">TDOLI s'occupe de tout automatiquement — tu n'as qu'une seule demande à suivre, du début à la fin.</div>
 
  <div class="form-row">
  <div class="form-group"><label class="form-label">Tu envoies</label><input class="form-input" type="text" id="rq-amount" placeholder="ex: 50" inputmode="decimal"></div>
@@ -256,7 +256,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
  <div class="sheet">
  <div class="sheet-handle-row"><div class="sheet-handle"></div></div>
  <div class="sheet-title">Confirmer l'envoi</div>
- <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Confirme que tu as bien envoyé tes fonds à l'agent collecteur.</div>
+ <div style="font-size:13px;color:var(--text-3);margin-bottom:16px;line-height:1.5;">Confirme que tu as bien envoyé tes fonds.</div>
  <div class="proof-upload-area" onclick="document.getElementById('rp-file-input').click()">
  <div style="font-size:26px;margin-bottom:6px;">📎</div>
  <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--green);">Ajouter une preuve (optionnel)</div>
@@ -345,9 +345,9 @@ function statusGroup(status) {
 }
 function statusLabel(status) {
  const map = {
-  pending_collector: 'Recherche agent…', awaiting_collector_approval: 'En attente agent',
+  pending_collector: 'Traitement en cours…', awaiting_collector_approval: 'Traitement en cours',
   collecting: 'Collecte en cours', dispatching_payers: 'Répartition…', paying_out: 'Paiement en cours',
-  completed: 'Terminée', no_agent_available: 'Aucun agent dispo', no_liquidity_payout: 'Liquidité insuffisante',
+  completed: 'Terminée', no_agent_available: 'Indisponible pour l\'instant', no_liquidity_payout: 'Indisponible pour l\'instant',
   partial_failure: 'Partiellement payée', cancelled: 'Annulée', dispute: 'Litige'
  };
  return map[status] || status;
@@ -355,7 +355,7 @@ function statusLabel(status) {
 
 function renderRequests(data) {
  if (!data.length) {
-  document.getElementById('reqList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucune demande</div><div class="empty-sub">Crée une demande et TDOLI s\'occupe de trouver les agents.</div></div>';
+  document.getElementById('reqList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucune demande</div><div class="empty-sub">Crée une demande et TDOLI s\'occupe du reste.</div></div>';
   return;
  }
  const list = document.createElement('div');
@@ -454,7 +454,7 @@ async function submitRequest() {
   }));
   if (r.ok) {
    closeSheet('createOverlay');
-   showToast('Demande envoyée — recherche d\'un agent…');
+   showToast('Demande envoyée — traitement en cours…');
    loadRequests();
   } else {
    showMsg('msg-create', (r.data&&r.data.message) || 'Erreur');
@@ -482,14 +482,14 @@ function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = 
 function collectStepState(request, deal) {
  // Retourne l'index de l'étape active (0-4) pour la frise de collecte.
  if (!deal) return { steps: [
-   {label:'Recherche', done:true}, {label:'Agent trouvé', done:false},
-   {label:'Envoi', done:false}, {label:'Réception agent', done:false}
+   {label:'Traitement', done:true}, {label:'Pris en charge', done:false},
+   {label:'Envoi', done:false}, {label:'Réception', done:false}
  ], action: null };
  const steps = [
-  {label:'Recherche', done:true},
-  {label:'Agent trouvé', done: deal.status !== 'awaiting_approval' || true},
+  {label:'Traitement', done:true},
+  {label:'Pris en charge', done: deal.status !== 'awaiting_approval' || true},
   {label:'Envoi', done: !!deal.confirmedByReceiver},
-  {label:'Réception agent', done: !!deal.receivedBySender}
+  {label:'Réception', done: !!deal.receivedBySender}
  ];
  let active = steps.findIndex(s => !s.done);
  if (active === -1) active = steps.length;
@@ -497,7 +497,7 @@ function collectStepState(request, deal) {
 }
 
 function legStatusLabel(s) {
- const map = { assigned:'Agent en cours d\'assignation', accepted:'Agent en cours de paiement', paid:'Payé — en attente de ta confirmation', confirmed:'Confirmé ✓', refused:'Réassignation en cours', expired:'Réassignation en cours', disputed:'Litige en cours', cancelled:'Annulée' };
+ const map = { assigned:'Traitement en cours', accepted:'Paiement en cours', paid:'Payé — en attente de ta confirmation', confirmed:'Confirmé ✓', refused:'Nouvelle tentative en cours', expired:'Nouvelle tentative en cours', disputed:'Litige en cours', cancelled:'Annulée' };
  return map[s] || s;
 }
 function legStatusClass(s) {
@@ -524,7 +524,7 @@ function renderRequestDetail(request, deal, legs) {
  html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:6px;">'+(request.fromCountry||'?')+' → '+(request.toCountry||'?')+'</div>';
 
  if (['no_agent_available','no_liquidity_payout'].includes(request.status)) {
-  html += '<div class="instruction-box" style="background:rgba(255,23,68,0.06);border-color:rgba(255,23,68,0.2);"><div class="instruction-title" style="color:var(--red);">Aucun agent disponible pour l\'instant</div><div class="instruction-text">Réessaie plus tard ou contacte le support si le problème persiste.</div></div>';
+  html += '<div class="instruction-box" style="background:rgba(255,23,68,0.06);border-color:rgba(255,23,68,0.2);"><div class="instruction-title" style="color:var(--red);">Indisponible pour l\'instant</div><div class="instruction-text">Réessaie plus tard ou contacte le support si le problème persiste.</div></div>';
  }
 
  // ── Étape 1 : collecte ──
@@ -533,14 +533,14 @@ function renderRequestDetail(request, deal, legs) {
  html += '<div class="stepper">' + cs.map(s => '<div class="step '+(s.done?'done':(s.active?'active':''))+'"><div class="step-dot '+(s.done?'done':(s.active?'active':'pending'))+'">'+(s.done?'✓':'')+'</div><div class="step-label">'+s.label+'</div></div>').join('') + '</div>';
 
  if (deal && deal.status === 'matched' && !deal.confirmedByReceiver) {
-  html += '<div class="instruction-box"><div class="instruction-title">À toi de jouer</div><div class="instruction-text">Envoie tes fonds à l\'agent collecteur puis confirme ci-dessous.</div></div>';
+  html += '<div class="instruction-box"><div class="instruction-title">À toi de jouer</div><div class="instruction-text">Envoie tes fonds puis confirme ci-dessous.</div></div>';
   html += '<button class="btn-primary" onclick="openProofSheet()">J\'ai envoyé mes fonds</button>';
  } else if (deal && deal.confirmedByReceiver && !deal.receivedBySender) {
-  html += '<div class="instruction-box"><div class="instruction-title">En attente</div><div class="instruction-text">L\'agent collecteur doit confirmer avoir bien reçu tes fonds.</div></div>';
+  html += '<div class="instruction-box"><div class="instruction-title">En attente</div><div class="instruction-text">Confirmation de réception en cours.</div></div>';
  } else if (!deal && request.status === 'pending_collector') {
-  html += '<div class="instruction-box"><div class="instruction-title">Recherche en cours</div><div class="instruction-text">TDOLI cherche un agent collecteur disponible sur ce corridor.</div></div>';
+  html += '<div class="instruction-box"><div class="instruction-title">Traitement en cours</div><div class="instruction-text">TDOLI traite ta demande sur ce corridor.</div></div>';
  } else if (deal && deal.status === 'awaiting_approval') {
-  html += '<div class="instruction-box"><div class="instruction-title">Agent trouvé</div><div class="instruction-text">En attente de son acceptation.</div></div>';
+  html += '<div class="instruction-box"><div class="instruction-title">Prise en charge</div><div class="instruction-text">Validation en cours.</div></div>';
  }
 
  // ── Étape 2 : répartition / paiement ──
@@ -557,7 +557,7 @@ function renderRequestDetail(request, deal, legs) {
    html += '</div>';
   });
  } else if (['dispatching_payers','paying_out'].includes(request.status)) {
-  html += '<div class="section-label">Paiement au bénéficiaire</div><div class="instruction-box"><div class="instruction-text">Répartition en cours entre agents payeurs…</div></div>';
+  html += '<div class="section-label">Paiement au bénéficiaire</div><div class="instruction-box"><div class="instruction-text">Organisation du paiement en cours…</div></div>';
  }
 
  if (['pending_collector','awaiting_collector_approval','no_agent_available'].includes(request.status)) {
@@ -599,7 +599,7 @@ async function confirmCollectSend(withProof) {
   }));
   if (r.ok) {
    closeSheet('proofOverlay');
-   showToast('Envoi confirmé — en attente de l\'agent');
+   showToast('Envoi confirmé — traitement en cours');
    loadRequestDetail(currentRequestId);
   } else {
    showMsg('msg-proof', (r.data&&r.data.message)||'Erreur');
