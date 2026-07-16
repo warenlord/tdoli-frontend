@@ -1221,6 +1221,10 @@ async function savePaymentInfo() {
  btn.disabled = false; btn.innerHTML = 'Enregistrer';
 }
 
+function escapeHtml(s) {
+ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
 function renderPaymentInfo(info, label) {
  if (!info || (!info.name && !info.phone && !info.iban && !info.paypal && !info.wero)) {
  return '<div style="font-size:12px;color:var(--text-3);font-style:italic;">Pas encore renseigné</div>';
@@ -1234,7 +1238,7 @@ function renderPaymentInfo(info, label) {
  wero: ' Wero',
  especes: ' Espèces'
  };
- const methodLabel = info.method ? (methodIcons[info.method] || info.method) : null;
+ const methodLabel = info.method ? (methodIcons[info.method] || escapeHtml(info.method)) : null;
 
  let html = '<div class="payment-info-box">';
  html += '<div class="payment-info-title">' + label + '</div>';
@@ -1244,13 +1248,13 @@ function renderPaymentInfo(info, label) {
  html += '<div class="payment-info-row" style="margin-bottom:10px;"><span style="background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);border-radius:6px;padding:3px 10px;font-size:12px;font-family:Syne,sans-serif;font-weight:700;color:var(--yellow);">' + methodLabel + '</span></div>';
  }
 
- if (info.name) html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">' + info.name + '</span></div>';
- if (info.phone) html += '<div class="payment-info-row"><span class="payment-info-label">Numéro</span><span class="payment-info-val" style="color:var(--green);font-size:15px;font-family:Syne,sans-serif;">' + info.phone + '</span></div>';
- if (info.wero) html += '<div class="payment-info-row"><span class="payment-info-label">Wero</span><span class="payment-info-val" style="color:#a78bfa;font-size:15px;font-family:Syne,sans-serif;">' + info.wero + '</span></div>';
- if (info.paypal) html += '<div class="payment-info-row"><span class="payment-info-label">Email</span><span class="payment-info-val" style="color:#60a5fa;">' + info.paypal + '</span></div>';
- if (info.iban) html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px;letter-spacing:1px;">' + info.iban + '</span></div>';
- if (info.bankName)html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">' + info.bankName + '</span></div>';
- if (info.note) html += '<div class="payment-info-row"><span class="payment-info-label">Note</span><span class="payment-info-val" style="color:var(--text-3)">' + info.note + '</span></div>';
+ if (info.name) html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">' + escapeHtml(info.name) + '</span></div>';
+ if (info.phone) html += '<div class="payment-info-row"><span class="payment-info-label">Numéro</span><span class="payment-info-val" style="color:var(--green);font-size:15px;font-family:Syne,sans-serif;">' + escapeHtml(info.phone) + '</span></div>';
+ if (info.wero) html += '<div class="payment-info-row"><span class="payment-info-label">Wero</span><span class="payment-info-val" style="color:#a78bfa;font-size:15px;font-family:Syne,sans-serif;">' + escapeHtml(info.wero) + '</span></div>';
+ if (info.paypal) html += '<div class="payment-info-row"><span class="payment-info-label">Email</span><span class="payment-info-val" style="color:#60a5fa;">' + escapeHtml(info.paypal) + '</span></div>';
+ if (info.iban) html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px;letter-spacing:1px;">' + escapeHtml(info.iban) + '</span></div>';
+ if (info.bankName)html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">' + escapeHtml(info.bankName) + '</span></div>';
+ if (info.note) html += '<div class="payment-info-row"><span class="payment-info-label">Note</span><span class="payment-info-val" style="color:var(--text-3)">' + escapeHtml(info.note) + '</span></div>';
 
  html += '</div>';
  return html;

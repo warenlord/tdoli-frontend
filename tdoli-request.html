@@ -313,6 +313,9 @@ function getInitials(name) {
  if(btn) btn.innerHTML = av ? '<img src="'+av+'" alt="'+ini+'">' : ini;
 })();
 
+function escapeHtml(s) {
+ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 async function safeJson(res) {
  const text = await res.text();
  try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
@@ -369,9 +372,9 @@ function renderRequests(data) {
   div.innerHTML =
    '<div class="req-thumb">📨</div>'+
    '<div class="req-body">'+
-   '<div class="req-code">'+(r.requestCode||'')+'</div>'+
+   '<div class="req-code">'+escapeHtml(r.requestCode||'')+'</div>'+
    '<div class="req-amt">'+Number(r.amount).toLocaleString('fr-FR')+' '+r.currency+'</div>'+
-   '<div class="req-dir">'+(r.fromCountry||'?')+' → '+(r.toCountry||'?')+'</div>'+
+   '<div class="req-dir">'+escapeHtml(r.fromCountry||'?')+' → '+escapeHtml(r.toCountry||'?')+'</div>'+
    '</div>'+
    '<div class="req-badge '+grp+'">'+statusLabel(r.status)+'</div>';
   list.appendChild(div);
@@ -519,9 +522,9 @@ function renderRequestDetail(request, deal, legs) {
  currentRequestId = request._id;
  const grp = statusGroup(request.status);
  let html = '';
- html += '<div class="detail-code-row"><div class="detail-code">'+(request.requestCode||'')+'</div><div class="req-badge '+grp+'">'+statusLabel(request.status)+'</div></div>';
+ html += '<div class="detail-code-row"><div class="detail-code">'+escapeHtml(request.requestCode||'')+'</div><div class="req-badge '+grp+'">'+statusLabel(request.status)+'</div></div>';
  html += '<div class="detail-amount-row"><div><span class="detail-amt">'+Number(request.amount).toLocaleString('fr-FR')+'</span><span class="detail-cur">'+request.currency+'</span></div><div class="detail-arrow">→</div><div><span class="detail-amt">'+Number(request.targetAmount).toLocaleString('fr-FR')+'</span><span class="detail-cur">'+request.targetCurrency+'</span></div></div>';
- html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:6px;">'+(request.fromCountry||'?')+' → '+(request.toCountry||'?')+'</div>';
+ html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:6px;">'+escapeHtml(request.fromCountry||'?')+' → '+escapeHtml(request.toCountry||'?')+'</div>';
 
  if (['no_agent_available','no_liquidity_payout'].includes(request.status)) {
   html += '<div class="instruction-box" style="background:rgba(255,23,68,0.06);border-color:rgba(255,23,68,0.2);"><div class="instruction-title" style="color:var(--red);">Indisponible pour l\'instant</div><div class="instruction-text">Réessaie plus tard ou contacte le support si le problème persiste.</div></div>';

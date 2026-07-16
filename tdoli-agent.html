@@ -189,6 +189,7 @@ function closeSheet(id) { document.getElementById(id).classList.remove('open'); 
 function closeOnOverlay(e,id) { if(e.target===document.getElementById(id)) closeSheet(id); }
 
 let currentTab = 'capacities';
+let lastLoadedCaps = [];
 function setTab(t) {
  currentTab = t;
  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.tab === t));
@@ -239,16 +240,17 @@ async function loadCapacities() {
    document.getElementById('capList').innerHTML = '<div class="empty-state"><div class="empty-title">Aucune capacité déclarée</div><div class="empty-sub">Déclare ta capacité par corridor pour recevoir des demandes.</div></div>';
    return;
   }
-  document.getElementById('capList').innerHTML = caps.map(c => {
+  lastLoadedCaps = caps;
+  document.getElementById('capList').innerHTML = caps.map((c,i) => {
    const pct = c.totalCapacity > 0 ? Math.round((c.remainingAmount / c.totalCapacity) * 100) : 0;
    return `<div class="cap-card">
     <div class="cap-top">
-     <div><span class="cap-role ${c.role}">${roleLabel[c.role]}</span> <span class="cap-corridor">${c.country} · ${c.currency}</span></div>
+     <div><span class="cap-role ${c.role}">${roleLabel[c.role]}</span> <span class="cap-corridor">${escapeHtml(c.country)} · ${escapeHtml(c.currency)}</span></div>
      <label class="switch"><input type="checkbox" ${c.isActive?'checked':''} onchange="toggleCapacity('${c._id}')"><span class="switch-slider"></span></label>
     </div>
     <div class="cap-bar-wrap"><div class="cap-bar" style="width:${pct}%"></div></div>
-    <div class="cap-nums"><span>Disponible : <strong>${Number(c.remainingAmount).toLocaleString('fr-FR')} ${c.currency}</strong></span><span>Total : ${Number(c.totalCapacity).toLocaleString('fr-FR')} ${c.currency}</span></div>
-    <button class="btn-edit-cap" onclick="openCapSheet('${c.role}','${c.country}','${c.currency}',${c.totalCapacity})">Modifier</button>
+    <div class="cap-nums"><span>Disponible : <strong>${Number(c.remainingAmount).toLocaleString('fr-FR')} ${escapeHtml(c.currency)}</strong></span><span>Total : ${Number(c.totalCapacity).toLocaleString('fr-FR')} ${escapeHtml(c.currency)}</span></div>
+    <button class="btn-edit-cap" onclick="openCapSheetByIndex(${i})">Modifier</button>
    </div>`;
   }).join('');
  } catch(e) {
@@ -262,6 +264,12 @@ async function toggleCapacity(id) {
   if (r.ok) { showToast(r.data.message); loadCapacities(); }
   else { showToast((r.data&&r.data.message)||'Erreur', 'var(--red)'); loadCapacities(); }
  } catch(e) { showToast('Erreur réseau', 'var(--red)'); }
+}
+
+function openCapSheetByIndex(i) {
+ const c = lastLoadedCaps[i];
+ if (!c) return;
+ openCapSheet(c.role, c.country, c.currency, c.totalCapacity);
 }
 
 function openCapSheet(role, country, currency, totalCapacity) {
@@ -297,18 +305,22 @@ async function saveCapacity() {
 const legBadge = { assigned: {cls:'wait', label:'À accepter'}, accepted: {cls:'progress', label:'À payer'}, paid: {cls:'done', label:'En attente confirmation'}, confirmed: {cls:'done', label:'Confirmée'} };
 const methodIcons = { mobilemoney:'Mobile Money', virement:'Virement bancaire', paypal:'PayPal', wero:'Wero', especes:'Espèces' };
 
+function escapeHtml(s) {
+ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
 function renderBeneficiaryInfo(info) {
  if (!info) return '';
  let html = '<div class="payment-info-box"><div class="payment-info-title">Bénéficiaire</div>';
- if (info.method) html += '<div class="payment-info-row" style="margin-bottom:6px;"><span style="background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);border-radius:6px;padding:3px 10px;font-size:12px;font-family:Syne,sans-serif;font-weight:700;color:var(--yellow);">'+(methodIcons[info.method]||info.method)+'</span></div>';
- if (info.name) html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">'+info.name+'</span></div>';
- if (info.phone) html += '<div class="payment-info-row"><span class="payment-info-label">Numéro</span><span class="payment-info-val" style="color:var(--green);">'+info.phone+'</span></div>';
- if (info.operateur) html += '<div class="payment-info-row"><span class="payment-info-label">Opérateur</span><span class="payment-info-val">'+info.operateur+'</span></div>';
- if (info.iban) html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px;letter-spacing:1px;">'+info.iban+'</span></div>';
- if (info.banque) html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">'+info.banque+'</span></div>';
- if (info.paypal) html += '<div class="payment-info-row"><span class="payment-info-label">Email</span><span class="payment-info-val">'+info.paypal+'</span></div>';
- if (info.wero) html += '<div class="payment-info-row"><span class="payment-info-label">Wero</span><span class="payment-info-val">'+info.wero+'</span></div>';
- if (info.ville) html += '<div class="payment-info-row"><span class="payment-info-label">Ville</span><span class="payment-info-val">'+info.ville+'</span></div>';
+ if (info.method) html += '<div class="payment-info-row" style="margin-bottom:6px;"><span style="background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2);border-radius:6px;padding:3px 10px;font-size:12px;font-family:Syne,sans-serif;font-weight:700;color:var(--yellow);">'+escapeHtml(methodIcons[info.method]||info.method)+'</span></div>';
+ if (info.name) html += '<div class="payment-info-row"><span class="payment-info-label">Nom</span><span class="payment-info-val">'+escapeHtml(info.name)+'</span></div>';
+ if (info.phone) html += '<div class="payment-info-row"><span class="payment-info-label">Numéro</span><span class="payment-info-val" style="color:var(--green);">'+escapeHtml(info.phone)+'</span></div>';
+ if (info.operateur) html += '<div class="payment-info-row"><span class="payment-info-label">Opérateur</span><span class="payment-info-val">'+escapeHtml(info.operateur)+'</span></div>';
+ if (info.iban) html += '<div class="payment-info-row"><span class="payment-info-label">IBAN</span><span class="payment-info-val" style="font-size:11px;letter-spacing:1px;">'+escapeHtml(info.iban)+'</span></div>';
+ if (info.banque) html += '<div class="payment-info-row"><span class="payment-info-label">Banque</span><span class="payment-info-val">'+escapeHtml(info.banque)+'</span></div>';
+ if (info.paypal) html += '<div class="payment-info-row"><span class="payment-info-label">Email</span><span class="payment-info-val">'+escapeHtml(info.paypal)+'</span></div>';
+ if (info.wero) html += '<div class="payment-info-row"><span class="payment-info-label">Wero</span><span class="payment-info-val">'+escapeHtml(info.wero)+'</span></div>';
+ if (info.ville) html += '<div class="payment-info-row"><span class="payment-info-label">Ville</span><span class="payment-info-val">'+escapeHtml(info.ville)+'</span></div>';
  html += '</div>';
  return html;
 }
