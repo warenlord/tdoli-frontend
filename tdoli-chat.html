@@ -850,7 +850,6 @@ async function sendAttachment(input) {
 function computeBadges(user) {
  const deals = user.completedDeals || 0;
  const out = [];
- if (user.isAgent) out.push({key:'agent',icon:'⭐',label:'Agent',color:'#FFD740',bg:'rgba(255,215,64,0.13)',border:'rgba(255,215,64,0.35)'});
  if (deals >= 50) out.push({key:'pilier',icon:'💎',label:'Pilier',color:'#CE93D8',bg:'rgba(206,147,216,0.13)',border:'rgba(206,147,216,0.35)'});
  if (deals >= 10) out.push({key:'confiance',icon:'🛡️',label:'Membre de confiance',color:'#82B1FF',bg:'rgba(130,177,255,0.13)',border:'rgba(130,177,255,0.35)'});
  if (deals >= 5) out.push({key:'reactif',icon:'⚡',label:'Très réactif',color:'#FFCC80',bg:'rgba(255,204,128,0.13)',border:'rgba(255,204,128,0.35)'});
@@ -1091,6 +1090,9 @@ connectSocket();
 <nav class="bottom-nav">
  <a class="nav-item" href="/tdoli-feed.html">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
+ </a>
+ <a class="nav-item" href="/tdoli-request.html">
+ <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>Demandes
  </a>
  <a class="nav-item" href="/tdoli-deals.html">
  <div class="nav-icon-wrap">
