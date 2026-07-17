@@ -25,24 +25,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;transition:all 0.2s;}
 .back-btn:active{background:var(--card);}
 
-/* LISTE CONVERSATIONS */
+/* LISTE CONVERSATIONS — même patron que .deal-item sur tdoli-deals.html :
+   icône à gauche, corps empilé au centre, un seul badge à droite centré. */
 .conv-list{padding:12px 16px;max-width:480px;margin:0 auto;}
-.conv-item{background:var(--card);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;box-shadow:var(--shadow-card);border:1px solid var(--border);position:relative;}
-.conv-item:active{background:#f8faf9;transform:scale(0.98);}
+.conv-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;position:relative;overflow:hidden;}
+@keyframes cardIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.conv-item:active{background:var(--surface);}
 .conv-item.unread{border-left:3px solid var(--green);}
-.conv-avatar{width:48px;height:48px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;position:relative;}
-.conv-avatar-online{position:absolute;bottom:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#00d982;border:2px solid #fff;}
+.conv-avatar{width:52px;height:52px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;position:relative;border:1px solid var(--border-active);}
+.conv-avatar-online{position:absolute;bottom:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#00d982;border:2px solid var(--card);}
 .conv-body{flex:1;min-width:0;}
-.conv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
-.conv-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
-.conv-time{font-size:11px;color:var(--text-3);flex-shrink:0;}
-.conv-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.conv-preview{font-size:13px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.conv-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.conv-preview{font-size:12px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .conv-preview.unread{color:var(--text-2);font-weight:600;}
-.conv-badge{min-width:20px;height:20px;border-radius:10px;background:var(--green);color:#fff;font-size:11px;font-weight:700;font-family:'Syne',sans-serif;display:flex;align-items:center;justify-content:center;padding:0 5px;flex-shrink:0;}
-.conv-deal-tag{font-size:10px;padding:2px 8px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;margin-top:3px;display:inline-block;}
-.conv-deal-tag.matched{background:rgba(245,166,35,0.12);color:var(--yellow);}
-.conv-deal-tag.completed{background:rgba(0,184,92,0.1);color:var(--green);}
+.conv-badge{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0;align-self:center;white-space:nowrap;}
+.conv-badge.unread{background:var(--green);color:#fff;}
+.conv-badge.matched{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
+.conv-badge.completed{background:rgba(41,121,255,0.08);color:var(--blue);border:1px solid rgba(41,121,255,0.25);}
 
 svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 
@@ -218,16 +217,10 @@ function renderConvs(convs) {
  ${c.isOnline ? '<div class="conv-avatar-online"></div>' : ''}
  </div>
  <div class="conv-body">
- <div class="conv-top">
  <div class="conv-name">${c.otherUsername}</div>
- <div class="conv-time">${timeAgo(c.lastMessage?.createdAt)}</div>
+ <div class="conv-preview ${isUnread ? 'unread' : ''}">${preview} · ${timeAgo(c.lastMessage?.createdAt)}</div>
  </div>
- <div class="conv-bottom">
- <div class="conv-preview ${isUnread ? 'unread' : ''}">${preview}</div>
- ${isUnread ? `<div class="conv-badge">${c.unreadCount}</div>` : ''}
- </div>
- <span class="conv-deal-tag ${statusCls}">${statusLabel} · ${c.dealCode}</span>
- </div>
+ <div class="conv-badge ${isUnread ? 'unread' : statusCls}">${isUnread ? c.unreadCount : statusLabel}</div>
  </div>`;
  }).join('');
 }
