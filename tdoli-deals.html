@@ -1279,6 +1279,13 @@ function copyCode(code) {
 
 loadDeals();
 checkDealCompletedFlag();
+
+// ── Rafraîchissement automatique — évite d'avoir à quitter/revenir sur la
+// page pour voir un deal évoluer (accepté, payé, etc. par l'autre partie) ──
+setInterval(() => { if (document.visibilityState === 'visible') loadDeals(true); }, 18000);
+document.addEventListener('visibilitychange', () => {
+ if (document.visibilityState === 'visible') loadDeals(true);
+});
 </script>
 <script>
 // ── Deal Complété Overlay ─────────────────────────────────────

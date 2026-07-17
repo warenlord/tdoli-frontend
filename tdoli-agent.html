@@ -212,6 +212,20 @@ function renderShell() {
  `;
  loadCapacities();
  loadLegs();
+ startAgentPolling();
+}
+
+// ── Rafraîchissement automatique — une jambe peut être assignée à tout
+// moment par le dispatch, sans que l'agent n'ait rien à faire pour le voir ──
+let agentPollTimer = null;
+function startAgentPolling() {
+ if (agentPollTimer) return;
+ agentPollTimer = setInterval(() => {
+  if (document.visibilityState === 'visible') { loadCapacities(); loadLegs(); }
+ }, 15000);
+ document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') { loadCapacities(); loadLegs(); }
+ });
 }
 
 // ── Garde d'accès : réservé aux agents ──────────────────────────

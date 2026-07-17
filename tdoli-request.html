@@ -392,8 +392,8 @@ function setFilter(f, el) {
  renderRequests(filtered);
 }
 
-async function loadRequests() {
- document.getElementById('reqList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
+async function loadRequests(silent) {
+ if (!silent) document.getElementById('reqList').innerHTML = '<div class="loading-wrap"><div class="loader"></div></div>';
  try {
   const r = await safeJson(await fetch(API+'/requests/mine', {headers:{'Authorization':'Bearer '+token}}));
   if (r.status===401) { localStorage.clear(); window.location.replace('/tdoli-auth.html'); return; }
@@ -647,6 +647,15 @@ async function cancelRequest(id) {
 }
 
 loadRequests();
+
+// ── Rafraîchissement automatique de la liste — le statut d'une demande
+// évolue côté serveur sans action de l'utilisateur (agent trouvé, payé…) ──
+setInterval(() => {
+ if (document.visibilityState === 'visible' && !document.getElementById('detailOverlay').classList.contains('open')) loadRequests(true);
+}, 18000);
+document.addEventListener('visibilitychange', () => {
+ if (document.visibilityState === 'visible' && !document.getElementById('detailOverlay').classList.contains('open')) loadRequests(true);
+});
 </script>
 </body>
 </html>

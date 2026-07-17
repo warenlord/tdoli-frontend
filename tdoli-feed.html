@@ -1433,7 +1433,8 @@ async function loadMoreFeed() {
 const TYPE_ICON = {
  match: '🎯', deal_completed: '✅', message: '💬',
  deadline: '⏰', dispute: '⚠️', potential_match: '👀',
- cancel_request: '❌', referral: '🎁', info: '🔔'
+ cancel_request: '❌', referral: '🎁', info: '🔔',
+ leg_assignment: '📥', partial_payout: '💸', request_stalled: '⏳'
 };
 
 let notifData = [];
@@ -2019,6 +2020,13 @@ async function loadRates() {
  checkUnreadMessages();
  loadRates();
 })();
+
+// ── Rafraîchissement automatique — évite d'avoir à quitter/revenir sur la
+// page pour voir une nouvelle annonce, un match, ou une notification ──────
+setInterval(() => { if (document.visibilityState === 'visible') loadFeed(true); }, 18000);
+document.addEventListener('visibilitychange', () => {
+ if (document.visibilityState === 'visible') loadFeed(true);
+});
 
 
 </script>

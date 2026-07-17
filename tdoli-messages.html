@@ -290,6 +290,13 @@ async function checkDeals() {
 
 loadConversations();
 checkDeals();
+
+// ── Rafraîchissement automatique — un nouveau message peut arriver sans
+// action de l'utilisateur ────────────────────────────────────────────────
+setInterval(() => { if (document.visibilityState === 'visible') loadConversations(); }, 15000);
+document.addEventListener('visibilitychange', () => {
+ if (document.visibilityState === 'visible') loadConversations();
+});
 </script>
 
 
