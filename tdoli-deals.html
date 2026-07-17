@@ -1108,10 +1108,21 @@ async function submitProof() {
  const res=await fetch(API+'/deal/'+currentProofDealId+'/proof-ocr',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
  const r=await safeJson(res);
  if(r.ok) {
+ if (r.data && r.data.autoConfirmed) {
  closeSheet('proofOverlay');
- if(r.data&&r.data.autoConfirmed) showToast(' Preuve validée automatiquement !','var(--green-dim)');
- else showToast('Preuve envoyée — vérification en cours','#b8960c');
+ showToast(' Preuve validée automatiquement !','var(--green-dim)');
  loadDeals(true);
+ } else if (r.data && r.data.proofUrl) {
+ // L'OCR n'a pas auto-validé (score bas ou indisponible) — la preuve est déjà
+ // enregistrée mais RIEN d'autre ne se passe automatiquement derrière : sans
+ // cet appel explicite, confirmedBySender/Receiver reste à false pour
+ // toujours et le deal reste bloqué sans que personne ne soit notifié.
+ const r3=await safeJson(await fetch(API+'/deal/'+currentProofDealId+'/confirm',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({proofUrl:r.data.proofUrl})}));
+ if (r3.ok) { closeSheet('proofOverlay'); showToast('Preuve envoyée '); loadDeals(true); }
+ else showMsg('msg-proof',(r3.data&&r3.data.message)||'Erreur confirmation');
+ } else {
+ closeSheet('proofOverlay'); showToast('Preuve envoyée'); loadDeals(true);
+ }
  } else if (r.data && r.data.code === 'OUT_OF_ORDER') {
  showMsg('msg-proof', r.data.message);
  } else {
