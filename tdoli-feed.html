@@ -1139,6 +1139,17 @@ function convertToEur(amount, currency) {
  return amount * (rates[currency] || 1);
 }
 
+// remainingAmount est toujours stocké en EUR côté backend (base commune du
+// matching partiel, quelle que soit la devise native de l'annonce) — on
+// l'applique au montant natif via le même ratio de remplissage, sinon
+// l'annonce affiche indéfiniment son montant d'origine même après des
+// matches partiels déjà déduits en base.
+function getRemainingNative(t) {
+ if (t.remainingAmount == null || !t.amountEuro) return t.amount;
+ const ratio = t.remainingAmount / t.amountEuro;
+ return Math.round(t.amount * ratio * 100) / 100;
+}
+
 function formatMatchAmount(amount, currency, toCountry) {
  const eur = convertToEur(amount, currency);
  if (toCountry === 'Gabon' || toCountry === 'Burkina Faso') return Math.round(eur * 655.957).toLocaleString('fr-FR') + ' XAF';
@@ -1169,7 +1180,8 @@ function renderList(data) {
     const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
     const initials = getInitials(displayName);
 
-    const eurVal = convertToEur(t.amount, t.currency);
+    const remainingAmt = getRemainingNative(t);
+    const eurVal = convertToEur(remainingAmt, t.currency);
     const euroLabel = t.currency !== 'EUR' ? '≈' + eurVal.toFixed(0) + '€' : '';
     const topBadge = renderTopBadge({ isAgent: t.isAgent, completedDeals: t.completedDeals || 0, phoneVerified: t.phoneVerified });
     const ratingCount = t.ratingCount || 0;
@@ -1188,7 +1200,7 @@ function renderList(data) {
             </span>
 
             <span class="item-amount">
-              ${Number(t.amount).toLocaleString('fr-FR')}
+              ${Number(remainingAmt).toLocaleString('fr-FR')}
               <span class="item-currency">${t.currency}</span>
             </span>
           </div>
@@ -1220,9 +1232,10 @@ function openDetail(id) {
  const isOwn = t.sender === email;
  const displayName = t.senderUsername || t.sender?.split('@')[0] || 'Inconnu';
  const initials = getInitials(displayName);
- const eurVal = convertToEur(t.amount, t.currency);
+ const remainingAmt = getRemainingNative(t);
+ const eurVal = convertToEur(remainingAmt, t.currency);
  const euroLabel = t.currency !== 'EUR' ? '≈ ' + eurVal.toFixed(0) + ' EUR' : '';
- const matchAmt = formatMatchAmount(t.amount, t.currency, t.toCountry);
+ const matchAmt = formatMatchAmount(remainingAmt, t.currency, t.toCountry);
 
  let html = '<div class="detail-hero">' +
  '<div class="detail-user">' +
@@ -1233,11 +1246,13 @@ function openDetail(id) {
  (!isOwn ? '<div style="font-size:10px;color:var(--text-3);margin-top:2px;">Voir le profil →</div>' : '') +
  '</div></div>' +
  '<div class="detail-flow"><div class="detail-country">' + t.fromCountry + '</div><div class="detail-arrow">→</div><div class="detail-country">' + t.toCountry + '</div></div>' +
- '<div style="display:flex;align-items:baseline;gap:6px"><span class="detail-amount">' + Number(t.amount).toLocaleString('fr-FR') + '</span><span class="detail-currency">' + t.currency + '</span>' + (euroLabel ? '<span class="detail-eur">' + euroLabel + '</span>' : '') + '</div></div>';
+ '<div style="display:flex;align-items:baseline;gap:6px"><span class="detail-amount">' + Number(remainingAmt).toLocaleString('fr-FR') + '</span><span class="detail-currency">' + t.currency + '</span>' + (euroLabel ? '<span class="detail-eur">' + euroLabel + '</span>' : '') + '</div>' +
+ (remainingAmt < t.amount ? '<div style="font-size:11px;color:var(--text-3);margin-top:4px;">Sur ' + Number(t.amount).toLocaleString('fr-FR') + ' ' + t.currency + ' initialement</div>' : '') +
+ '</div>';
 
  if (!isOwn) {
  html += '<div class="match-info"><div class="match-row"><span class="match-label">Tu envoies</span><span class="match-val">' + matchAmt + '</span></div><div class="match-row"><span class="match-label">Sens</span><span class="match-val">' + t.toCountry + ' → ' + t.fromCountry + '</span></div></div>' +
- '<button class="btn-primary" onclick="showConfirm(\'' + t._id + '\',\'' + t.fromCountry + '\',\'' + t.toCountry + '\',\'' + t.currency + '\',' + t.amount + ',\'' + matchAmt + '\')">Matcher cette annonce</button>';
+ '<button class="btn-primary" onclick="showConfirm(\'' + t._id + '\',\'' + t.fromCountry + '\',\'' + t.toCountry + '\',\'' + t.currency + '\',' + remainingAmt + ',\'' + matchAmt + '\')">Matcher cette annonce</button>';
  } else {
  html += '<div class="my-actions"><button class="btn-edit" onclick="openEdit(\'' + t._id + '\',' + t.amount + ',\'' + t.currency + '\')"> Modifier</button><button class="btn-delete" onclick="deleteAnnonce(\'' + t._id + '\')"> Supprimer</button></div>';
  }
