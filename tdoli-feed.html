@@ -12,7 +12,7 @@
  --yellow:#ffd740;--blue:#2979ff;--red:#ff1744;
  --text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;
  --border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.22);
- --r:14px;
+ --r:12px;
  --shadow:0 2px 20px rgba(0,0,0,0.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -60,24 +60,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .filter-chip{flex-shrink:0;padding:7px 16px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text-3);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .filter-chip.active{background:var(--green-glow);border-color:var(--border-active);color:var(--green);}
 .annonce-list{display:flex;flex-direction:column;gap:8px;}
-.annonce-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;position:relative;overflow:hidden;}
+.annonce-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;animation:cardIn 0.35s cubic-bezier(0.19,1,0.22,1) both;position:relative;overflow:hidden;}
 @keyframes cardIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 .annonce-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--green),var(--blue));}
 .annonce-item.mine::before{background:var(--green);}
 .annonce-item:active{background:var(--surface);}
-.item-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
+.item-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;border:1px solid var(--border-active);}
 .item-body{flex:1;min-width:0;}
-.item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
-.item-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
-.item-amount{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
-.item-bottom{display:flex;align-items:center;justify-content:space-between;}
+.item-name{font-size:11px;color:var(--text-3);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.3px;margin-bottom:3px;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.item-amount{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text);letter-spacing:-0.3px;margin-bottom:2px;}
 .item-dir{font-size:12px;color:var(--text-2);font-weight:500;}
-.item-meta{display:flex;align-items:center;gap:6px;}
 .item-rating{font-size:11px;color:var(--yellow);font-weight:700;}
 .item-time{font-size:10px;color:var(--text-3);}
 .item-currency{font-size:12px;color:var(--yellow);font-weight:700;font-family:'Syne',sans-serif;margin-left:3px;}
+.item-badge{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0;align-self:center;white-space:nowrap;}
+.item-badge.open{background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
+.item-badge.partially_filled{background:rgba(255,215,64,0.1);color:var(--yellow);border:1px solid rgba(255,215,64,0.3);}
 .mine-tag{font-size:9px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:4px;padding:1px 6px;font-family:'Syne',sans-serif;font-weight:700;}
-.status-dot-sm{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
 .trust-line{font-size:10px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:4px;}
 .trust-line .trust-members{color:var(--green);font-weight:600;}
 .reactivity-inline{font-size:9px;padding:1px 6px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;}
@@ -140,7 +139,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 .conv-preview{background:var(--surface);border:1px solid var(--border-active);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;min-height:44px;}
 .conv-hint{font-size:12px;color:var(--text-3);}
 .conv-amount{font-family:'Syne',sans-serif;font-weight:700;color:var(--green);font-size:14px;}
-.btn-primary{width:100%;padding:16px;background:var(--green-dim);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:6px;transition:transform 0.15s,opacity 0.15s;}
+.btn-primary{width:100%;padding:15px;background:var(--green-dim);color:#fff;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;margin-top:4px;transition:transform 0.15s,opacity 0.15s;}
 .btn-primary::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--blue));}
 .btn-primary:active{transform:scale(0.97);}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
@@ -1186,41 +1185,36 @@ function renderList(data) {
     const topBadge = renderTopBadge({ isAgent: t.isAgent, completedDeals: t.completedDeals || 0, phoneVerified: t.phoneVerified });
     const ratingCount = t.ratingCount || 0;
 
+    const statusCls = t.status === 'partially_filled' ? 'partially_filled' : 'open';
+    const statusLabel = t.status === 'partially_filled' ? 'Partiel' : 'Disponible';
+
     return `
       <div class="annonce-item ${isOwn ? 'mine' : ''}" onclick="openDetail('${t._id}')">
 
         <div class="item-avatar">${initials}</div>
 
         <div class="item-body">
-
-          <div class="item-top">
-            <span class="item-name">
-              ${isOwn ? '<span class="mine-tag">Moi</span>' : ''}
-              ${displayName}
-            </span>
-
-            <span class="item-amount">
-              ${Number(remainingAmt).toLocaleString('fr-FR')}
-              <span class="item-currency">${t.currency}</span>
-            </span>
+          <div class="item-name">
+            ${isOwn ? '<span class="mine-tag">Moi</span>' : ''}
+            ${displayName}
+            ${t.rating ? `<span class="item-rating">★ ${t.rating.toFixed(1)}</span>` : ''}
+            <span class="item-time">· ${timeAgo(t.createdAt)}</span>
           </div>
 
-          <div class="item-bottom">
-            <span class="item-dir">
-              ${t.fromCountry} → ${t.toCountry}
-              ${euroLabel ? ` · <span style="color:var(--green)">${euroLabel}</span>` : ''}
-            </span>
+          <div class="item-amount">
+            ${Number(remainingAmt).toLocaleString('fr-FR')}
+            <span class="item-currency">${t.currency}</span>
+          </div>
 
-            <span class="item-meta">
-              ${t.rating ? `<span class="item-rating">★ ${t.rating.toFixed(1)}</span>` : ''}
-              <span class="item-time">${timeAgo(t.createdAt)}</span>
-              <div class="status-dot-sm"></div>
-            </span>
+          <div class="item-dir">
+            ${t.fromCountry} → ${t.toCountry}
+            ${euroLabel ? ` · <span style="color:var(--green)">${euroLabel}</span>` : ''}
           </div>
 
           ${topBadge ? `<div style="margin-top:5px;">${topBadge}</div>` : ''}
-
         </div>
+
+        <div class="item-badge ${statusCls}">${statusLabel}</div>
       </div>
     `;
   }).join('');
