@@ -280,10 +280,17 @@ function getInitials(n){const p=(n||'?').trim().split(' ').filter(x=>x.length>0)
  if(btn) btn.innerHTML=av?'<img src="'+av+'" alt="'+ini+'">':ini;
 })();
 
-function shareApp(){
- const ref=localStorage.getItem('tdoli_ref')||username;
- const link='https://tdoli-frontend.pages.dev/tdoli-auth.html?ref='+ref;
- const msg='Rejoins TDOLI — transfert d\'argent P2P sans frais cachés !\nMon code parrain : '+ref+'\n'+link;
+async function shareApp(){
+ let ref=localStorage.getItem('tdoli_ref');
+ if(!ref){
+  try{
+   const res=await fetch(API+'/referral/stats',{headers:{'Authorization':'Bearer '+token}});
+   const data=await res.json();
+   if(data.refCode){ref=data.refCode;localStorage.setItem('tdoli_ref',ref);}
+  }catch(e){}
+ }
+ const link='https://tdoli-frontend.pages.dev/tdoli-auth.html'+(ref?'?ref='+ref:'');
+ const msg='Rejoins TDOLI — transfert d\'argent P2P sans frais cachés !\n'+(ref?'Mon code parrain : '+ref+'\n':'')+link;
  if(navigator.share) navigator.share({title:'TDOLI',text:msg,url:link}).catch(()=>{});
  else navigator.clipboard.writeText(msg).then(()=>showToast('Lien copié ! ','#ffd740')).catch(()=>{});
 }
