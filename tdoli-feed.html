@@ -1029,16 +1029,23 @@ async function openPublicProfile(senderEmail) {
 }
 
 // FIX Phase 1: shareApp() fonctionnelle avec Web Share API + fallback copier
-function shareApp() {
- const refCode = localStorage.getItem('tdoli_ref') || username;
- const link = 'https://tdoli-frontend.pages.dev/tdoli-auth.html?ref=' + refCode;
- const msg = 'Rejoins TDOLI — transfert d\'argent P2P sans frais cachés !\nMon code parrain : ' + refCode + '\n' + link;
+async function shareApp() {
+ let refCode = localStorage.getItem('tdoli_ref');
+ if (!refCode) {
+  try {
+   const res = await fetch(API + '/referral/stats', { headers: { 'Authorization': 'Bearer ' + token } });
+   const data = await res.json();
+   if (data.refCode) { refCode = data.refCode; localStorage.setItem('tdoli_ref', refCode); }
+  } catch (e) {}
+ }
+ const link = 'https://tdoli-frontend.pages.dev/tdoli-auth.html' + (refCode ? '?ref=' + refCode : '');
+ const msg = 'Rejoins TDOLI — transfert d\'argent P2P sans frais cachés !\n' + (refCode ? 'Mon code parrain : ' + refCode + '\n' : '') + link;
  if (navigator.share) {
  navigator.share({ title: 'TDOLI', text: msg, url: link }).catch(() => {});
  } else {
  navigator.clipboard.writeText(msg)
  .then(() => showToast('Lien copié ! ', '#ffd740'))
- .catch(() => showToast('Code : ' + refCode, '#ffd740'));
+ .catch(() => showToast(refCode ? 'Code : ' + refCode : link, '#ffd740'));
  }
 }
 

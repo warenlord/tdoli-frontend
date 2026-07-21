@@ -400,10 +400,18 @@ function initAvatar(){
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAvatar);}
 else{initAvatar();}
 window.addEventListener('storage',initAvatar);
-function shareApp(){
- const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'un ami';
- const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\nhttps://tdoli.com\nParrainé par '+username;
- if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:'https://tdoli.com'});}
+async function shareApp(){
+ let code=localStorage.getItem('tdoli_ref');
+ if(!code){
+  try{
+   const res=await fetch(API+'/referral/stats',{headers:{'Authorization':'Bearer '+localStorage.getItem('tdoli_token')}});
+   const data=await res.json();
+   if(data.refCode){code=data.refCode;localStorage.setItem('tdoli_ref',code);}
+  }catch(e){}
+ }
+ const link='https://tdoli-frontend.pages.dev/tdoli-auth.html'+(code?'?ref='+code:'');
+ const msg='Rejoins-moi sur TDOLI — transfert P2P pour la diaspora africaine !\n'+(code?'Mon code parrain : '+code+'\n':'')+link;
+ if(navigator.share){navigator.share({title:'TDOLI',text:msg,url:link});}
  else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
 }
 </script>
