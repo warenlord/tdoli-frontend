@@ -377,10 +377,6 @@ firebase.initializeApp({
     <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
     <span>Feed</span>
   </a>
-  <a class="nav-item" href="/tdoli-request.html" onclick="navTo(event,this)">
-    <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
-    <span>Demandes</span>
-  </a>
   <a class="nav-item" href="/tdoli-deals.html" onclick="navTo(event,this)">
     <div class="nav-icon-wrap">
       <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
@@ -1327,7 +1323,7 @@ function showConfirm(id, fromCountry, toCountry, currency, amount, matchAmount) 
 
 async function executeMatch() {
  if (!pendingMatch) return;
- if (!pendingMatch.beneficiaireId) { showToast('Choisis ton bénéficiaire avant de matcher', '#ff1744'); return; }
+ if (!pendingMatch.beneficiaireId) { showToast('Choisis ton compte vérifié avant de matcher', '#ff1744'); return; }
  const btn = document.getElementById('btn-confirm-match');
  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Matching...';
  try {
@@ -1816,27 +1812,30 @@ function getBenefDetail(b) {
 function renderBenefSelectList(onSelect) {
  const list = document.getElementById('benefSelectList');
  if(!list) return;
- 
- if(allBeneficiaires.length === 0) {
- list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;">Aucun bénéficiaire enregistré</div>' +
- '<button class="btn-primary" style="margin-top:8px;" onclick="openInlineBenefForm()">+ Créer un bénéficiaire</button>';
+
+ // Option A : seul un compte "moi" vérifié et approuvé peut recevoir les fonds du match —
+ // pas de bénéficiaire tiers dans ce flux.
+ const eligible = allBeneficiaires.filter(b => b.type === 'moi' && b.verifStatus === 'approved');
+
+ if(eligible.length === 0) {
+ list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;line-height:1.6;">Aucun compte vérifié à ton nom.<br>Ajoute ton compte et fais-le vérifier pour pouvoir publier ou matcher une annonce.</div>' +
+ '<a href="/tdoli-beneficiaires.html" class="btn-primary" style="display:block;text-align:center;text-decoration:none;margin-top:8px;">Ajouter mon compte</a>';
  return;
  }
 
- list.innerHTML = allBeneficiaires.map(b => {
+ list.innerHTML = eligible.map(b => {
  const ini = (b.nom||'?').substring(0,2).toUpperCase();
  const detail = getBenefDetail(b);
- const type = b.type === 'moi' ? ' ' : '';
  return `<div class="benef-select-item ${selectedBenefId === b._id ? 'selected' : ''}" onclick="selectBenef('${b._id}','${onSelect}')">
  <div class="benef-select-avatar">${ini}</div>
  <div>
- <div class="benef-select-name">${type}${b.nom}</div>
+ <div class="benef-select-name"> ${b.nom}</div>
  <div class="benef-select-detail">${detail}${b.pays ? ' · '+b.pays : ''}</div>
  </div>
  ${selectedBenefId === b._id ? '<span style="margin-left:auto;color:var(--green);"></span>' : ''}
  </div>`;
  }).join('') +
- '<button onclick="openInlineBenefForm()" style="background:none;border:none;color:var(--text-3);font-size:12px;cursor:pointer;width:100%;margin-top:12px;">+ Nouveau bénéficiaire</button>';
+ '<a href="/tdoli-beneficiaires.html" style="display:block;text-align:center;color:var(--text-3);font-size:12px;cursor:pointer;width:100%;margin-top:12px;text-decoration:none;">Gérer mes comptes vérifiés</a>';
 }
 
 function selectBenef(id, context) {

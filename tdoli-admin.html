@@ -154,6 +154,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   </div>
   <div id="kycList"><div class="loading-wrap"><div class="loader"></div></div></div>
  </div>
+ <div class="section-title">Comptes vérifiés — Propriété des comptes de réception</div>
+ <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:28px;">
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+   <button class="filter-btn active va-filter-btn" onclick="setVaFilter('pending',this)">En attente</button>
+   <button class="filter-btn va-filter-btn" onclick="setVaFilter('rejected',this)">Refusés</button>
+   <button class="filter-btn va-filter-btn" onclick="setVaFilter('approved',this)">Approuvés</button>
+  </div>
+  <div id="vaList"><div class="loading-wrap"><div class="loader"></div></div></div>
+ </div>
  <div class="section-title">Litiges</div>
  <div class="filter-bar">
  <div class="filter-btn active" onclick="setFilter('all',this)">Tous</div>
@@ -172,7 +181,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 const API='https://tdoli-backend.onrender.com';
 let adminToken=localStorage.getItem('tdoli_admin_token');
 let allDisputes=[],currentFilter='all';
-if(adminToken){document.getElementById('loginScreen').style.display='none';document.getElementById('adminScreen').style.display='block';loadDisputes();loadAgents();loadKyc();}
+if(adminToken){document.getElementById('loginScreen').style.display='none';document.getElementById('adminScreen').style.display='block';loadDisputes();loadAgents();loadKyc();loadVa();}
 
 // ── Gestion des agents ────────────────────────────────────────
 async function loadAgents(){
@@ -247,7 +256,7 @@ async function revokeAgent(email){
 async function adminLogin(){
  const password=document.getElementById('admin-password').value;
  try{const res=await fetch(API+'/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password})});const data=await res.json();
- if(res.ok){adminToken=data.token;localStorage.setItem('tdoli_admin_token',adminToken);document.getElementById('loginScreen').style.display='none';document.getElementById('adminScreen').style.display='block';loadDisputes();loadAgents();loadKyc();}
+ if(res.ok){adminToken=data.token;localStorage.setItem('tdoli_admin_token',adminToken);document.getElementById('loginScreen').style.display='none';document.getElementById('adminScreen').style.display='block';loadDisputes();loadAgents();loadKyc();loadVa();}
  else{document.getElementById('msg-login').textContent=data.message||'Mot de passe incorrect';document.getElementById('msg-login').className='msg error';}
  }catch(e){document.getElementById('msg-login').textContent='Serveur inaccessible';document.getElementById('msg-login').className='msg error';}
 }
@@ -386,6 +395,73 @@ async function rejectKyc(emailEnc,uid){
  }catch(e){alert('Erreur réseau');}
 }
 
+// ── Comptes vérifiés ────────────────────────────────────────────
+let vaFilter='pending';
+async function loadVa(){
+ try{
+  const res=await fetch(API+'/admin/verified-accounts?status='+vaFilter,{headers:{'x-admin-token':adminToken}});
+  if(res.status===401){adminLogout();return;}
+  const {requests}=await res.json();
+  renderVaList(requests);
+ }catch(e){document.getElementById('vaList').innerHTML='<div class="empty-state">Erreur de chargement</div>';}
+}
+function setVaFilter(f,btn){
+ vaFilter=f;
+ document.querySelectorAll('.va-filter-btn').forEach(b=>b.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+ loadVa();
+}
+function renderVaList(requests){
+ const el=document.getElementById('vaList');
+ if(!requests||!requests.length){el.innerHTML='<div class="empty-state" style="padding:20px;font-size:13px;">Aucune demande</div>';return;}
+ el.innerHTML=requests.map(r=>{
+  const b=r.beneficiaire;
+  const isPdf=b.verifDocUrl&&b.verifDocUrl.toLowerCase().includes('.pdf');
+  const docHtml=b.verifDocUrl?(isPdf
+   ?`<a href="${b.verifDocUrl}" target="_blank" class="justif-pdf" style="margin-bottom:12px;"><span class="justif-pdf-icon">📄</span><span class="justif-pdf-label">PDF</span></a>`
+   :`<img src="${b.verifDocUrl}" class="justif-thumb" style="margin-bottom:12px;width:120px;height:90px;" onclick="viewImg('${b.verifDocUrl}')">`
+  ):'<div style="font-size:12px;color:var(--text-3);margin-bottom:12px;">Pas de document</div>';
+  const submittedAt=b.verifSubmittedAt?new Date(b.verifSubmittedAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
+  const isPending=b.verifStatus==='pending';
+  const detail=b.iban?b.iban:(b.phone?b.phone+(b.operateur?' · '+b.operateur:''):(b.paypal||b.wero||''));
+  return `<div class="dispute-card" style="margin-bottom:12px;">
+   <div class="dispute-header">
+    <div>
+     <div style="font-size:14px;font-weight:600;">${r.username||r.email} — ${b.nom}</div>
+     <div style="font-size:11px;color:var(--text-3);">${r.email} · ${detail}${b.pays?' · '+b.pays:''} · Soumis le ${submittedAt}</div>
+    </div>
+    <span class="status-badge ${b.verifStatus==='pending'?'pending':b.verifStatus==='approved'?'resolved_sender':'cancelled'}">${b.verifStatus==='pending'?'En attente':b.verifStatus==='approved'?'Approuvé':'Refusé'}</span>
+   </div>
+   ${docHtml}
+   ${isPending?`<div class="actions-row">
+    <button class="btn-action btn-resolve-s" onclick="approveVa('${encodeURIComponent(r.email)}','${b._id}')">✅ Approuver</button>
+    <div style="flex:1;"></div>
+    <input class="form-input" id="vaRejectReason_${b._id}" placeholder="Motif de refus…" style="margin-bottom:0;flex:2;font-size:12px;padding:8px 12px;">
+    <button class="btn-action btn-cancel-d" onclick="rejectVa('${encodeURIComponent(r.email)}','${b._id}')">❌ Refuser</button>
+   </div>`:''}
+   ${b.verifStatus==='rejected'&&b.verifRejectedReason?`<div class="resolved-note"><div class="resolved-label">Motif</div><div class="resolved-text">${b.verifRejectedReason}</div></div>`:''}
+  </div>`;
+ }).join('');
+}
+async function approveVa(emailEnc,id){
+ if(!confirm('Approuver ce compte vérifié ?'))return;
+ try{
+  const res=await fetch(API+'/admin/verified-accounts/'+emailEnc+'/'+id+'/approve',{method:'POST',headers:{'x-admin-token':adminToken}});
+  if(res.ok)loadVa();
+  else{const d=await res.json();alert(d.message||'Erreur');}
+ }catch(e){alert('Erreur réseau');}
+}
+async function rejectVa(emailEnc,id){
+ const reasonEl=document.getElementById('vaRejectReason_'+id);
+ const reason=(reasonEl?reasonEl.value.trim():'')||'Document non conforme';
+ if(!confirm('Refuser ce compte ? Motif : '+reason))return;
+ try{
+  const res=await fetch(API+'/admin/verified-accounts/'+emailEnc+'/'+id+'/reject',{method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({reason})});
+  if(res.ok)loadVa();
+  else{const d=await res.json();alert(d.message||'Erreur');}
+ }catch(e){alert('Erreur réseau');}
+}
+
 function initAvatar(){
  const username=localStorage.getItem('tdoli_username')||localStorage.getItem('tdoli_email')||'';
  let initials='?';
@@ -420,9 +496,6 @@ async function shareApp(){
 <nav class="bottom-nav">
  <a class="nav-item active" href="/tdoli-feed.html">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
- </a>
- <a class="nav-item" href="/tdoli-request.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>Demandes
  </a>
  <a class="nav-item" href="/tdoli-deals.html">
  <div class="nav-icon-wrap">

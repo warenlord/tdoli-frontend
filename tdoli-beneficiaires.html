@@ -38,6 +38,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .btn-icon{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:background 0.2s;}
 .btn-icon:active{background:var(--card);}
 .btn-icon.del{border-color:rgba(255,68,68,0.2);color:var(--red);}
+.verif-badge{font-size:9px;font-family:'Syne',sans-serif;font-weight:700;padding:2px 7px;border-radius:8px;flex-shrink:0;white-space:nowrap;}
+.verif-approved{background:rgba(0,230,118,0.1);color:var(--green);}
+.verif-pending{background:rgba(255,215,64,0.1);color:var(--yellow);}
+.verif-rejected{background:rgba(255,23,68,0.1);color:var(--red);}
+.verif-none{background:var(--surface);color:var(--text-3);border:1px solid var(--border);}
+.btn-icon.verify{border-color:rgba(255,215,64,0.25);color:var(--yellow);font-size:15px;}
 .empty-state{text-align:center;padding:32px 20px;color:var(--text-3);font-size:13px;line-height:1.6;background:var(--surface);border:1px dashed var(--border);border-radius:12px;}
 .empty-icon{font-size:32px;margin-bottom:10px;}
 .loading-wrap{display:flex;justify-content:center;padding:30px;}
@@ -129,6 +135,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <link rel="stylesheet" href="/tdoli-theme.css">
 </head>
 <body>
+
+<input type="file" id="verifDocInput" accept="image/*,.pdf" style="display:none;" onchange="if(this.files[0]) submitVerifDoc(this.files[0])">
 
 <div class="topbar">
  <div class="topbar-left"><a onclick="history.back()" href="javascript:void(0)" class="back-btn" aria-label="Retour">←</a></div>
@@ -313,18 +321,32 @@ function getInitials(name) {
 }
 
 // Rendu 
+function getVerifLabel(status) {
+ const labels = { approved: '✓ Vérifié', pending: 'En attente', rejected: 'Rejeté', none: 'Non vérifié' };
+ return labels[status || 'none'];
+}
+
 function renderCard(b) {
  const ini = getInitials(b.nom);
  const detail = getBenefDetail(b);
  const pays = b.pays ? ' · ' + b.pays : '';
+ const isMoi = b.type === 'moi';
+ const verifStatus = b.verifStatus || 'none';
+ const verifBadge = isMoi
+  ? `<span class="verif-badge verif-${verifStatus}" title="${verifStatus === 'rejected' && b.verifRejectedReason ? b.verifRejectedReason.replace(/"/g,'') : ''}">${getVerifLabel(verifStatus)}</span>`
+  : '';
+ const verifAction = isMoi && (verifStatus === 'none' || verifStatus === 'rejected')
+  ? `<div class="btn-icon verify" onclick="triggerVerif('${b._id}')" title="Faire vérifier ce compte">📎</div>`
+  : '';
  return `
  <div class="benef-card type-${b.type}">
  <div class="benef-avatar type-${b.type}">${ini}</div>
  <div class="benef-body">
- <div class="benef-name">${b.nom} <span class="benef-method m-${b.methode}">${getMethodLabel(b.methode)}</span></div>
+ <div class="benef-name">${b.nom} <span class="benef-method m-${b.methode}">${getMethodLabel(b.methode)}</span>${verifBadge}</div>
  <div class="benef-detail">${detail}${pays}</div>
  </div>
  <div class="benef-actions">
+ ${verifAction}
  <div class="btn-icon" onclick="editBenef('${b._id}')"></div>
  <div class="btn-icon del" onclick="deleteBenef('${b._id}', '${b.nom.replace(/'/g, "\\'")}')"></div>
  </div>
@@ -514,6 +536,31 @@ async function deleteBenef(id, nom) {
  } catch(e) { showToast('Erreur réseau', '#ff1744'); }
 }
 
+let verifTargetId = null;
+function triggerVerif(id) {
+ verifTargetId = id;
+ document.getElementById('verifDocInput').click();
+}
+
+async function submitVerifDoc(file) {
+ if (!verifTargetId) return;
+ const id = verifTargetId;
+ verifTargetId = null;
+ document.getElementById('verifDocInput').value = '';
+ showToast('Envoi du document…', '#ffd740');
+ try {
+  const formData = new FormData();
+  formData.append('document', file);
+  const r = await safeJson(await fetch(API + '/beneficiaires/' + id + '/verify', {
+   method: 'POST',
+   headers: { 'Authorization': 'Bearer ' + token },
+   body: formData
+  }));
+  if (r.ok) { showToast('Document envoyé — en cours de vérification', '#ffd740'); await loadBenef(); }
+  else showToast((r.data && r.data.message) || 'Erreur lors de l\'envoi', '#ff1744');
+ } catch(e) { showToast('Erreur réseau', '#ff1744'); }
+}
+
 // Démarrage
 loadBenef();
 
@@ -600,9 +647,6 @@ document.querySelectorAll('.overlay').forEach(overlay => {
 <nav class="bottom-nav">
  <a class="nav-item" href="/tdoli-feed.html">
  <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Feed
- </a>
- <a class="nav-item" href="/tdoli-request.html">
- <div class="nav-icon"><svg viewBox="0 0 24 24" width="20" height="20"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>Demandes
  </a>
  <a class="nav-item" href="/tdoli-deals.html">
  <div class="nav-icon-wrap">
