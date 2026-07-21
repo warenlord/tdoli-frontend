@@ -401,7 +401,6 @@ function getLevelInfo(level){
 function computeBadges(user) {
  const deals = user.completedDeals || 0;
  const out = [];
- if (user.isAgent) out.push({key:'agent',icon:'⭐',label:'Agent',color:'#FFD740',bg:'rgba(255,215,64,0.13)',border:'rgba(255,215,64,0.35)'});
  if (deals >= 50) out.push({key:'pilier',icon:'💎',label:'Pilier',color:'#CE93D8',bg:'rgba(206,147,216,0.13)',border:'rgba(206,147,216,0.35)'});
  if (deals >= 10) out.push({key:'confiance',icon:'🛡️',label:'Membre de confiance',color:'#82B1FF',bg:'rgba(130,177,255,0.13)',border:'rgba(130,177,255,0.35)'});
  if (deals >= 5) out.push({key:'reactif',icon:'⚡',label:'Très réactif',color:'#FFCC80',bg:'rgba(255,204,128,0.13)',border:'rgba(255,204,128,0.35)'});
