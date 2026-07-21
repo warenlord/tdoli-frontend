@@ -9,9 +9,12 @@
 :root{--bg:#05090a;--surface:#0b1215;--card:#0f1a1e;--green:#00e676;--green-dim:#00c853;--green-glow:rgba(0,230,118,0.10);--yellow:#ffd740;--blue:#2979ff;--red:#ff1744;--purple:#8250ff;--text:#ecf4f0;--text-2:#90a8a0;--text-3:#4a6860;--border:rgba(255,255,255,0.06);--border-active:rgba(0,230,118,0.2);--r:12px;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:88px;overflow-x:hidden;}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,13,9,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
-.back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;}
-.topbar-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;flex:1;}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(5,9,10,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.topbar-left{display:flex;align-items:center;flex-shrink:0;}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-2);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;}
+.topbar-center{flex:1;text-align:center;}
+.topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-2);}
+.topbar-right{flex-shrink:0;}
 .btn-add{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--green-glow);color:var(--green);border:1px solid var(--border-active);border-radius:20px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
 .content{padding:16px 20px;max-width:480px;margin:0 auto;}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin:16px 0 10px;}
@@ -128,9 +131,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <body>
 
 <div class="topbar">
- <a onclick="history.back()" href="javascript:void(0)" class="back-btn" aria-label="Retour">←</a>
- <div class="topbar-title">Mes Bénéficiaires</div>
- <button class="btn-add" onclick="openSheet()">+ Ajouter</button>
+ <div class="topbar-left"><a onclick="history.back()" href="javascript:void(0)" class="back-btn" aria-label="Retour">←</a></div>
+ <div class="topbar-center"><span class="topbar-title">Mes Bénéficiaires</span></div>
+ <div class="topbar-right"><button class="btn-add" onclick="openSheet()">+ Ajouter</button></div>
 </div>
 
 <div class="content">
